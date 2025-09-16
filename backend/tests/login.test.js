@@ -21,4 +21,13 @@ describe('POST /login', () => {
         expect(res.body).toHaveProperty('error', 'Falta el usuario');
     });
 
+    it('should return 400 when password has no received', async () => {
+      const res = await request(app)
+          .post('/login')
+          .send({ user: 'user1'});
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body).toHaveProperty('error', 'Falta la contraseña');
+  });
+
 });
