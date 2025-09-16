@@ -12,5 +12,9 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0"
-  }
+  },
+  "devDependencies": {
+      "jest": "^29.0.0",
+      "supertest": "^6.3.3"
+    }
 }
