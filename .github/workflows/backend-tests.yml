@@ -1,0 +1,33 @@
+name: Backend Tests
+
+on:
+  pull_request:
+    paths:
+      - "backend/**" # Se ejecuta en PRs solo si cambió algo dentro de backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      # 4. Ejecutar tests (si falla, el workflow se marca como FAILED)
+      - name: Run tests
+        run: |
+          cd backend
+          npm test
