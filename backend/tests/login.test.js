@@ -23,7 +23,7 @@ describe('POST /login', () => {
 
   it('should return 200 and tokens for valid credentials', async () => {
     const res = await request(app)
-      .post('/logn')
+      .post('/login')
       .send({ user: 'user3', password: 'Casa28930' });
 
     expect(res.statusCode).toBe(200);
