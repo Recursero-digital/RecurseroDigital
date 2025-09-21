@@ -26,9 +26,6 @@ function App() {
 
   return (
     <>
-      <h1 style={{ textAlign: 'center', color: '#333', fontFamily: 'sans-serif' }}>
-        Probando el Recursero Digital
-      </h1>
       <JuegoOrdenamiento />
     </>
   );
