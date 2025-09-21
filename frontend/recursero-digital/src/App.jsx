@@ -1,8 +1,9 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+//import reactLogo from './assets/react.svg'
+//import viteLogo from '/vite.svg'
+//import './App.css'
+import JuegoOrdenamiento from './components/games/JuegoOrdenamiento.jsx';
 
-function App() {
+/*function App() {
 
   return (
     <>
@@ -19,6 +20,18 @@ function App() {
       Una plataforma interactiva con juegos y recursos educativos para hacer el aprendizaje más dinámico, accesible y divertido. 🚀      </p>
     </>
   )
+}*/
+
+function App() {
+
+  return (
+    <>
+      <h1 style={{ textAlign: 'center', color: '#333', fontFamily: 'sans-serif' }}>
+        Probando el Recursero Digital
+      </h1>
+      <JuegoOrdenamiento />
+    </>
+  );
 }
 
 export default App

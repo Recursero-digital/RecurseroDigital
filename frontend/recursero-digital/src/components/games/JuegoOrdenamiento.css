@@ -1,0 +1,12 @@
+.draggable-box {
+    transition: all 0.3s ease;
+}
+.draggable-box:active {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    cursor: grabbing;
+}
+.target-area {
+    min-height: 80px;
+    transition: all 0.3s ease;
+}
