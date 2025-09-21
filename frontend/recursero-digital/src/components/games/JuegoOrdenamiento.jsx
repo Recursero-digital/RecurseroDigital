@@ -68,7 +68,8 @@ const JuegoOrdenarNumeros = () => {
 
         const sortableOptions = {
             animation: 150,
-            ghostClass: 'bg-indigo-100',
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
             group: 'shared',
             onEnd: checkOrder,
         };
@@ -96,58 +97,70 @@ const JuegoOrdenarNumeros = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-indigo-700 mb-2">Ordenamiento Numérico</h1>
-                <p className="text-lg text-gray-600">Arrastra los números para ordenarlos de mayor a menor</p>
+        <div className="juego-container">
+            <div className="juego-titulo">
+                <h1>Ordenamiento Numérico</h1>
+                <p>Arrastra los números para ordenarlos de mayor a menor</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-lg p-6 mb-8" data-aos="fade-up">
-                <div className="flex justify-between items-center mb-6">
-                    <div><span className="text-gray-600">Nivel:</span><span className="ml-2 text-xl font-bold text-indigo-600">{gameState.currentLevel}</span></div>
-                    <div><span className="text-gray-600">Intentos:</span><span className="ml-2 text-xl font-bold text-indigo-600">{gameState.attempts}</span></div>
-                    <div><span className="text-gray-600">Puntuación:</span><span className="ml-2 text-xl font-bold text-indigo-600">{gameState.score}</span></div>
+            <div className="juego-panel" data-aos="fade-up">
+                <div className="juego-stats">
+                    <div className="stat-item">
+                        <span className="stat-label">Nivel:</span>
+                        <span className="stat-value">{gameState.currentLevel}</span>
+                    </div>
+                    <div className="stat-item">
+                        <span className="stat-label">Intentos:</span>
+                        <span className="stat-value">{gameState.attempts}</span>
+                    </div>
+                    <div className="stat-item">
+                        <span className="stat-label">Puntuación:</span>
+                        <span className="stat-value">{gameState.score}</span>
+                    </div>
                 </div>
 
-
-                <div className="mb-8">
-                    <div className="flex justify-between mb-2"><span className="text-gray-600">Progreso:</span><span>{gameState.currentLevel}/{levelRanges.length}</span></div>
-                    <div className="w-full bg-gray-200 rounded-full h-4"><div className="bg-indigo-500 h-4 rounded-full" style={{ width: `${(gameState.currentLevel / levelRanges.length) * 100}%` }}></div></div>
+                <div className="progress-container">
+                    <div className="progress-label">
+                        <span>Progreso:</span>
+                        <span>{gameState.currentLevel}/{levelRanges.length}</span>
+                    </div>
+                    <div className="progress-bar">
+                        <div className="progress-fill" style={{ width: `${(gameState.currentLevel / levelRanges.length) * 100}%` }}></div>
+                    </div>
                 </div>
-
 
                 {!(showLevelComplete || showGameComplete) && (
                     <div id="game-container">
-                        <div ref={targetAreaUpRef} className="target-area border-2 border-dashed border-gray-300 rounded-lg p-4 mb-6 flex flex-wrap gap-3">
-                            <p className="text-gray-500 w-full text-center">Arrastra los números aquí (de mayor a menor)</p>
+                        <div ref={targetAreaUpRef} className="target-area">
+                            <p className="target-area-label">Arrastra los números aquí (de mayor a menor)</p>
                         </div>
-                        <div ref={numbersContainerRef} className="flex flex-wrap gap-4 justify-center mb-8">
+                        <div ref={numbersContainerRef} className="numbers-container">
                             {numbers.map(num => (
-                                <div key={num} className="draggable-box bg-indigo-500 text-white font-bold text-xl w-16 h-16 rounded-lg flex items-center justify-center cursor-move shadow-md hover:shadow-lg" data-value={num}>
+                                <div key={num} className="draggable-box" data-value={num}>
                                     {num}
                                 </div>
                             ))}
                         </div>
-                        <div ref={targetAreaDownRef} className="target-area border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-wrap gap-3">
-                            <p className="text-gray-500 w-full text-center">Área alternativa de ordenamiento</p>
+                        <div ref={targetAreaDownRef} className="target-area">
+                            <p className="target-area-label">Área alternativa de ordenamiento</p>
                         </div>
                     </div>
                 )}
                 
                 {showLevelComplete && (
-                     <div className="text-center py-12">
-                        <h2 className="text-3xl font-bold text-green-600 mb-4">¡Nivel Completado!</h2>
-                        <button onClick={handleNextLevel} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition-all">Siguiente Nivel</button>
+                     <div className="level-complete">
+                        <h2>¡Nivel Completado!</h2>
+                        <button onClick={handleNextLevel} className="btn">Siguiente Nivel</button>
                     </div>
                 )}
 
             </div>
             
             {showGameComplete && (
-                <div className="bg-white rounded-xl shadow-lg p-8 text-center" data-aos="zoom-in">
-                    <h2 className="text-4xl font-bold text-indigo-700 mb-4">¡Juego Completado!</h2>
-                    <p className="text-xl text-gray-600 mb-6">Puntuación final: <span className="font-bold text-indigo-600">{gameState.score}</span></p>
-                    <button onClick={handleRestartGame} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition-all">Jugar de Nuevo</button>
+                <div className="game-complete" data-aos="zoom-in">
+                    <h2>¡Juego Completado!</h2>
+                    <p>Puntuación final: <span className="final-score">{gameState.score}</span></p>
+                    <button onClick={handleRestartGame} className="btn">Jugar de Nuevo</button>
                 </div>
             )}
         </div>
