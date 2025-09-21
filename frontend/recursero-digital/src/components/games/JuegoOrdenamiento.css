@@ -14,7 +14,7 @@
     margin-bottom: 2rem;
 }
 
-.juego-titulo h1 {
+.game-title h1 {
     font-size: 3rem;
     font-weight: bold;
     color: white;
@@ -22,23 +22,21 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.juego-titulo p {
+.game-title p {
     font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
+    opacity: 0.9;
 }
 
-/* Panel principal del juego */
-.juego-panel {
+.game-card {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-radius: 1.5rem;
     padding: 2rem;
-    margin-bottom: 2rem;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
 }
 
-/* Estadísticas del juego */
-.juego-stats {
+.game-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,65 +45,39 @@
     gap: 1rem;
 }
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    background: linear-gradient(145deg, #f0f9ff, #e0f2fe);
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    min-width: 120px;
+.game-info div {
+    text-align: center;
 }
 
-.stat-label {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
+.game-info div span:first-child {
+    display: block;
+    color: #6B7280;
+    margin-bottom: 0.5rem;
 }
 
-.stat-value {
-    color: #4f46e5;
+.game-info div span:last-child {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #6366F1;
 }
 
-/* Barra de progreso */
-.progress-container {
-    margin-bottom: 2rem;
-}
-
-.progress-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    color: #64748b;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 12px;
-    background: #e2e8f0;
-    border-radius: 6px;
+.progress-bar-container {
+    background: #E5E7EB;
+    height: 0.5rem;
+    border-radius: 1rem;
+    margin: 1rem 0 2rem;
     overflow: hidden;
 }
 
-.progress-fill {
+.progress-bar {
+    background: #6366F1;
     height: 100%;
     background: linear-gradient(90deg, #4f46e5, #7c3aed);
     border-radius: 6px;
     transition: width 0.3s ease;
 }
 
-/* Área de destino para arrastrar */
-.target-area {
-    min-height: 100px;
-    border: 3px dashed #cbd5e1;
-    border-radius: 15px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    background: linear-gradient(145deg, #f8fafc, #f1f5f9);
-    transition: all 0.3s ease;
+.numbers-area {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -138,8 +110,9 @@
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
-    margin-bottom: 2rem;
     padding: 1rem;
+    background: #F3F4F6;
+    border-radius: 15px;
 }
 
 /* Cajas arrastrables de números */
@@ -255,7 +228,92 @@
     z-index: 1000;
 }
 
-/* Responsive design */
+.game-play-area {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sorting-zone {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.sorting-area {
+    width: 100%;
+    max-width: 600px;
+    height: 60px;
+    border: 2px solid #6366F1; /* Changed from dashed to solid */
+    border-radius: 10px;
+    padding: 0.5rem;
+    background: rgba(99, 102, 241, 0.05);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    align-items: center;
+    transition: all 0.3s ease;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Remove or comment out the sorting instruction styles if you don't want them */
+.sorting-instruction {
+    display: none; /* Hide the instruction text */
+}
+
+.sorting-area::-webkit-scrollbar {
+    height: 4px;
+}
+
+.sorting-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sorting-area::-webkit-scrollbar-thumb {
+    background: #6366F1;
+    border-radius: 2px;
+}
+
+.numbers-source {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.numbers-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 0.5rem;
+    background: #F3F4F6;
+    border-radius: 10px;
+    min-height: 60px; /* Added min-height */
+}
+
+.number-box {
+    background: #4F46E5;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+    min-width: 45px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    flex-shrink: 0; /* Prevent number boxes from shrinking */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .juego-container {
         padding: 1rem;
@@ -282,7 +340,218 @@
     .numbers-container {
         gap: 0.5rem;
     }
+
+    .sorting-area {
+        padding: 1rem;
+        min-height: 100px;
+    }
+
+    .sorting-instruction {
+        font-size: 1rem;
+    }
+
+    .level-up-message {
+        padding: 1.5rem 2rem;
+        width: 90%;
+    }
+
+    .level-up-message h2 {
+        font-size: 1.5rem;
+    }
+
+    .level-up-message p {
+        font-size: 1rem;
+    }
 }
+
+.game-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.game-content {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.game-header h1 {
+    font-size: 2.5rem;
+    color: #4F46E5;
+    margin-bottom: 0.5rem;
+}
+
+.game-header p {
+    color: #6B7280;
+    font-size: 1.2rem;
+}
+
+.game-status {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #F3F4F6;
+    border-radius: 15px;
+}
+
+.status-item {
+    text-align: center;
+}
+
+.status-label {
+    display: block;
+    color: #6B7280;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4F46E5;
+}
+
+.progress-container {
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: 4px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #4F46E5;
+    transition: width 0.3s ease;
+}
+
+.game-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    min-height: 200px;
+    padding: 2rem;
+    background: #F9FAFB;
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.number-box {
+    background: #4F46E5;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.number-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.number-box:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.game-complete {
+    text-align: center;
+    padding: 2rem;
+}
+
+.game-complete h2 {
+    font-size: 2.5rem;
+    color: #4F46E5;
+    margin-bottom: 1rem;
+}
+
+.game-complete p {
+    font-size: 1.5rem;
+    color: #6B7280;
+    margin-bottom: 2rem;
+}
+
+.game-complete button {
+    background: #4F46E5;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.game-complete button:hover {
+    background: #4338CA;
+}
+
+.level-up-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.level-up-message h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.level-up-message p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -60%); }
+    20% { opacity: 1; transform: translate(-50%, -50%); }
+    80% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -40%); }
+}
+
 .level-complete {
     animation: pulse 2s infinite;
 }
