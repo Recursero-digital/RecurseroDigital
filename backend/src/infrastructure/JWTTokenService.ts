@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { TokenService } from './TokenService';
+import { TokenService } from '../core/infrastructure/TokenService';
 
 export class JWTTokenService implements TokenService {
   private readonly secretKey: string;

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { LoginUseCase } from '../../core/usecases/loginUseCase';
-import { InMemoryUserRepository } from '../../core/infrastructure/InMemoryUserRepository';
-import { BcryptPasswordEncoder } from '../../core/infrastructure/BcryptPasswordEncoder';
-import { JWTTokenService } from '../../core/infrastructure/JWTTokenService';
+import { InMemoryUserRepository } from '../../infrastructure/InMemoryUserRepository';
+import { BcryptPasswordEncoder } from '../../infrastructure/BcryptPasswordEncoder';
+import { JWTTokenService } from '../../infrastructure/JWTTokenService';
 import { InvalidCredentials } from '../../core/models/exceptions/InvalidCredentials';
 
 interface LoginRequest {
