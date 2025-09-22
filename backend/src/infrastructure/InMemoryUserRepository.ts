@@ -1,4 +1,4 @@
-import { UserRepository, User } from './UserRepository';
+import { UserRepository, User } from '../core/infrastructure/UserRepository';
 
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = [];
