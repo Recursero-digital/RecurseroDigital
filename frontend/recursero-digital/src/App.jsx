@@ -1,7 +1,11 @@
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 //import './App.css'
+<<<<<<< HEAD
 //import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
+=======
+// import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
+>>>>>>> 9a82d1aa40a85364896dfdcdbd3e6870f1762827
 import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
 
 /*function App() {
