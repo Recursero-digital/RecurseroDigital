@@ -23,6 +23,7 @@ import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenam
   )
 }*/
 
+
 function App() {
 
   return (
@@ -32,6 +33,7 @@ function App() {
     
   );
 }
+
 // function App() {
 
 //   return (
