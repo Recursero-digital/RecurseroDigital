@@ -1,7 +1,8 @@
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 //import './App.css'
-import JuegoOrdenamiento from './components/games/JuegoOrdenamiento.jsx';
+//import JuegoOrdenamiento from './components/games/JuegoOrdenamiento.jsx';
+import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
 
 /*function App() {
 
@@ -22,12 +23,22 @@ import JuegoOrdenamiento from './components/games/JuegoOrdenamiento.jsx';
   )
 }*/
 
-function App() {
+/*function App() {
 
   return (
     <>
       <JuegoOrdenamiento />
     </>
+    
+  );
+}*/
+function App() {
+
+  return (
+    <>
+      <JuegoEscritura />
+    </>
+    
   );
 }
 
