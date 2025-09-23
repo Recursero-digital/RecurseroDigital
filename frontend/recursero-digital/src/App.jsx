@@ -2,7 +2,7 @@
 //import viteLogo from '/vite.svg'
 //import './App.css'
 import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
-// import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
+//import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
 
 /*function App() {
 
