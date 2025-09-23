@@ -1,8 +1,5 @@
 import { Request, Response } from 'express';
-import { LoginUseCase } from '../../core/usecases/loginUseCase';
-import { InMemoryUserRepository } from '../../infrastructure/InMemoryUserRepository';
-import { BcryptPasswordEncoder } from '../../infrastructure/BcryptPasswordEncoder';
-import { JWTTokenService } from '../../infrastructure/JWTTokenService';
+import { DependencyContainer } from '../../config/DependencyContainer';
 import { InvalidCredentials } from '../../core/models/exceptions/InvalidCredentials';
 
 interface LoginRequest {
@@ -15,11 +12,9 @@ interface LoginResponse {
     error?: string;
 }
 
-// Instanciar las dependencias
-const userRepository = new InMemoryUserRepository();
-const passwordEncoder = new BcryptPasswordEncoder();
-const tokenService = new JWTTokenService();
-const loginUseCase = new LoginUseCase(userRepository, passwordEncoder, tokenService);
+// Obtener las dependencias del contenedor
+const dependencyContainer = DependencyContainer.getInstance();
+const loginUseCase = dependencyContainer.loginUseCase;
 
 const login = async (req: Request<{}, LoginResponse, LoginRequest>, res: Response<LoginResponse>): Promise<void> => {
     const { user, password } = req.body;
