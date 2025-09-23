@@ -1,8 +1,8 @@
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 //import './App.css'
-//import JuegoOrdenamiento from './components/games/JuegoOrdenamiento.jsx';
-import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
+import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
+// import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
 
 /*function App() {
 
@@ -23,7 +23,7 @@ import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx
   )
 }*/
 
-/*function App() {
+function App() {
 
   return (
     <>
@@ -31,15 +31,15 @@ import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx
     </>
     
   );
-}*/
-function App() {
-
-  return (
-    <>
-      <JuegoEscritura />
-    </>
-    
-  );
 }
+// function App() {
+
+//   return (
+//     <>
+//       <JuegoEscritura />
+//     </>
+    
+//   );
+// }
 
 export default App
