@@ -20,14 +20,17 @@ const JuegoEscritura = () => {
     const [correctAnswer, setCorrectAnswer] = useState([]);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     
-    useEffect(() => { AOS.init(); }, []);
+    useEffect(() => { 
+        AOS.init(); 
+    }, []);
     
-       const startNewActivity = useCallback(() => {
+    const startNewActivity = useCallback(() => {
         const range = levelRanges[currentLevel];
         if (!range) return;
 
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-        const correctAnswerWords = numberToWords(randomNumber).split(' ');
+        const correctAnswerText = numberToWords(randomNumber);
+        const correctAnswerWords = correctAnswerText.split(' ');
         const newOptions = generateOptions(correctAnswerWords);
 
         setTargetNumber(randomNumber);
@@ -36,10 +39,6 @@ const JuegoEscritura = () => {
         setSelectedOptions([]);
     }, [currentLevel]);
     
-    useEffect(() => {
-        AOS.init();
-    }, []);
-
     useEffect(() => {
         if (gameState === 'game') {
             startNewActivity();
@@ -53,20 +52,44 @@ const JuegoEscritura = () => {
         setGameState('game');
     };
     
+    const handleSelectOption = (word) => {
+        setSelectedOptions(prev => [...prev, word]);
+        setOptions(prev => prev.filter(option => option !== word));
+    };
+    
+    const handleRemoveOption = (index) => {
+        const removedWord = selectedOptions[index];
+        setSelectedOptions(prev => prev.filter((_, i) => i !== index));
+        setOptions(prev => [...prev, removedWord]);
+    };
+    
     const handleCheckAnswer = () => {
         const isCorrect = selectedOptions.join(' ') === correctAnswer.join(' ');
         if (isCorrect) {
             setPoints(prev => prev + (currentLevel + 1) * 10);
             if (currentActivity < 4) {
-                setFeedback({ title: '✅ ¡Correcto!', text: '¡Muy bien! Avanza a la siguiente actividad.', isCorrect: true });
+                setFeedback({ 
+                    title: '✅ ¡Correcto!', 
+                    text: '¡Muy bien! Avanza a la siguiente actividad.', 
+                    isCorrect: true 
+                });
                 setGameState('feedback');
             } else {
                 setGameState('congrats');
             }
         } else {
-            setFeedback({ title: '❌ Incorrecto', text: `La respuesta correcta es: "${correctAnswer.join(' ')}".`, isCorrect: false });
+            setFeedback({ 
+                title: '❌ Incorrecto', 
+                text: `La respuesta correcta es: "${correctAnswer.join(' ')}".`, 
+                isCorrect: false 
+            });
             setGameState('feedback');
         }
+    };
+    
+    const handleClear = () => {
+        setOptions(prev => [...prev, ...selectedOptions]);
+        setSelectedOptions([]);
     };
     
     const handleContinue = () => {
@@ -89,9 +112,10 @@ const JuegoEscritura = () => {
                 targetNumber={targetNumber}
                 options={options}
                 selected={selectedOptions}
-                onSelect={(word) => setSelectedOptions(prev => [...prev, word])}
+                onSelect={handleSelectOption}
+                onRemove={handleRemoveOption}
                 onCheck={handleCheckAnswer}
-                onClear={() => setSelectedOptions([])}
+                onClear={handleClear}
             />}
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}

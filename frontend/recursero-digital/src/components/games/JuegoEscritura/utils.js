@@ -1,35 +1,84 @@
-const numberWords = {1: "uno",
-2: "dos", 3: "tres",  4: "cuatro", 5: "cinco", 6: "seis", 7: "siete", 8: "ocho", 9: "nueve",10: "diez", 11: "once", 12: "doce", 13: "trece",   14: "catorce",   15: "quince",    16: "dieciséis",    17: "diecisiete",    18: "dieciocho",    19: "diecinueve",    20: "veinte",    21: "veintiuno",    22: "veintidós",    23: "veintitrés",    24: "veinticuatro",    25: "veinticinco",     26: "veintiséis",     27: "veintisiete",     28: "veintiocho",     29: "veintinueve",     30: "treinta",     31: "treinta y uno",      32: "treinta y dos",      33: "treinta y tres",     34: "treinta y cuatro",      35: "treinta y cinco",      36: "treinta y seis",       37: "treinta y siete",       38: "treinta y ocho",       39: "treinta y nueve",       40: "cuarenta",       41: "cuarenta y uno",       42: "cuarenta y dos",        43: "cuarenta y tres",        44: "cuarenta y cuatro",        45: "cuarenta y cinco",        46: "cuarenta y seis",        47: "cuarenta y siete",        48: "cuarenta y ocho",        49: "cuarenta y nueve",        50: "cincuenta",        51: "cincuenta y uno",        52: "cincuenta y dos",        53: "cincuenta y tres",         54: "cincuenta y cuatro",         55: "cincuenta y cinco",          56: "cincuenta y seis",         57: "cincuenta y siete",         58: "cincuenta y ocho",         59: "cincuenta y nueve",         60: "sesenta",         61: "sesenta y uno",         62: "sesenta y dos",         63: "sesenta y tres",         64: "sesenta y cuatro",         65: "sesenta y cinco",         66: "sesenta y seis",        67: "sesenta y siete",    68: "sesenta y ocho", 69: "sesenta y nueve",    70: "setenta",    71: "setenta y uno",     72: "setenta y dos",     73: "setenta y tres",       74: "setenta y cuatro",       75: "setenta y cinco",     76: "setenta y seis",     77: "setenta y siete", 78: "setenta y ocho" ,  79: "setenta y nueve", 80: "ochenta",  81: "ochenta y uno",82: "ochenta y dos",        83: "ochenta y tres",84: "ochenta y cuatro",85: "ochenta y cinco", 86: "ochenta y seis",87: "ochenta y siete",88: "ochenta y ocho",89: "ochenta y nueve",90: "noventa",91: "noventa y uno",92: "noventa y dos",93: "noventa y tres",94: "noventa y cuatro",95: "noventa y cinco",96: "noventa y seis",97: "noventa y siete",98: "noventa y ocho", 99: "noventa y nueve",100: "cien",200: "doscientos",300: "trescientos",400: "cuatrocientos",500: "quinientos",600: "seiscientos",700: "setecientos", 800: "ochocientos",900: "novecientos", 1000: "mil" };
+const numberWords = {
+    1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 6: "seis", 7: "siete", 8: "ocho", 9: "nueve",
+    10: "diez", 11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince", 16: "dieciséis",
+    17: "diecisiete", 18: "dieciocho", 19: "diecinueve", 20: "veinte", 21: "veintiuno", 22: "veintidós",
+    23: "veintitrés", 24: "veinticuatro", 25: "veinticinco", 26: "veintiséis", 27: "veintisiete",
+    28: "veintiocho", 29: "veintinueve", 30: "treinta", 40: "cuarenta", 50: "cincuenta",
+    60: "sesenta", 70: "setenta", 80: "ochenta", 90: "noventa", 100: "cien", 101: "ciento uno",
+    200: "doscientos", 300: "trescientos", 400: "cuatrocientos", 500: "quinientos",
+    600: "seiscientos", 700: "setecientos", 800: "ochocientos", 900: "novecientos", 1000: "mil"
+};
+
 
 export const levelRanges = [
-    { min: 50, max: 100 }, { min: 101, max: 350 }, { min: 351, max: 500 },
-    { min: 501, max: 750 }, { min: 751, max: 1000 }
+    { min: 50, max: 100 },
+    { min: 101, max: 350 },
+    { min: 351, max: 500 },
+    { min: 501, max: 750 },
+    { min: 751, max: 1000 }
 ];
 
+
 export function numberToWords(num) {
+  
     if (num in numberWords) {
         return numberWords[num];
     }
-    if (num < 100) {
+    
+    
+    if (num >= 31 && num <= 99) {
         const tens = Math.floor(num / 10) * 10;
         const ones = num % 10;
         return `${numberWords[tens]} y ${numberWords[ones]}`;
     }
-    if (num < 1000) {
+    
+  
+    if (num >= 101 && num <= 999) {
         const hundreds = Math.floor(num / 100) * 100;
         const remainder = num % 100;
-        if (remainder === 0) return numberWords[hundreds];
-        const connector = hundreds === 100 ? 'to ' : ' ';
-        return `${numberWords[hundreds]}${connector}${numberToWords(remainder)}`;
+        
+        if (remainder === 0) {
+            return numberWords[hundreds];
+        }
+        
+        let hundredsWord = hundreds === 100 ? 'ciento' : numberWords[hundreds];
+        let remainderWord = numberToWords(remainder);
+        
+        return `${hundredsWord} ${remainderWord}`;
     }
+    
+
+    if (num > 1000) {
+        return num.toString();
+    }
+    
     return "";
 }
 
 export function generateOptions(correctAnswer) {
-    let currentOptions = new Set(correctAnswer);
-    while (currentOptions.size < 8) {
-        const randomKey = Object.keys(numberWords)[Math.floor(Math.random() * Object.keys(numberWords).length)];
-        currentOptions.add(numberWords[randomKey]);
-    }
-    return Array.from(currentOptions).sort(() => Math.random() - 0.5);
+
+    const correctWords = Array.isArray(correctAnswer) ? correctAnswer : correctAnswer.split(' ');
+    
+   
+    const allPossibleWords = [
+        'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve',
+        'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve',
+        'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis', 'veintisiete', 'veintiocho', 'veintinueve',
+        'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa',
+        'cien', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos',
+        'mil', 'y'
+    ];
+    
+
+    const correctWordsSet = new Set(correctWords);
+    
+    const incorrectWords = allPossibleWords.filter(word => !correctWordsSet.has(word));
+    
+    const shuffledIncorrect = incorrectWords.sort(() => Math.random() - 0.5);
+    const numIncorrectWords = Math.max(4, 8 - correctWords.length);
+    const selectedIncorrect = shuffledIncorrect.slice(0, numIncorrectWords);
+    
+    const allOptions = [...correctWords, ...selectedIncorrect];
+
+    return allOptions.sort(() => Math.random() - 0.5);
 }
