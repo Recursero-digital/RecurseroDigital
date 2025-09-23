@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+.game-wrapper {
+    font-family: 'Comic Neue', cursive;
+    width: 100%;
+    max-width: 896px;
+    margin: auto;
+    text-align: center;
+}
+.chalkboard {
+    background-color: #2a2a2a;
+    border: 15px solid #5a3d2b;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: white;
+    padding: 32px;
+    margin-bottom: 32px;
+}
+.chalkboard h1 {
+    font-size: 3.5rem; font-weight: 700; margin-bottom: 24px; color: #fef08a;
+}
+.chalkboard h2 {
+    font-size: 2.25rem; font-weight: 700; margin-bottom: 24px; color: #fef08a;
+}
+.chalkboard p {
+    font-size: 1.5rem; margin-bottom: 32px;
+}
+.paper-note {
+    background: #fffacd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: rotate(-2deg); padding: 15px; margin: 10px; border: 1px solid #ffe4b5;
+    transition: all 0.3s ease; color: #1f2937;
+}
+.paper-note:hover {
+    transform: rotate(0deg) scale(1.05); box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+.btn {
+    font-weight: 700; padding: 12px 32px; font-size: 1.5rem;
+    transition: all 0.2s ease; cursor: pointer; border: none;
+}
+.btn:hover { transform: scale(1.05); }
+.btn-start { background-color: #facc15; color: black; border-radius: 9999px; }
+.btn-start:hover { background-color: #eab308; }
+.level-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.level-btn { border-radius: 8px; padding: 16px 8px; font-size: 1.125rem; color: white; }
+.level-1 { background-color: #22c55e; } .level-1:hover { background-color: #16a34a; }
+.level-2 { background-color: #3b82f6; } .level-2:hover { background-color: #2563eb; }
+.level-3 { background-color: #8b5cf6; } .level-3:hover { background-color: #7c3aed; }
+.level-4 { background-color: #ef4444; } .level-4:hover { background-color: #dc2626; }
+.level-5 { background-color: #eab308; } .level-5:hover { background-color: #d97706; }
+.game-hud {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px; font-size: 1.25rem; font-weight: 700; color: #fef08a;
+}
+.target-number { font-size: 4.5rem; font-weight: 700; text-align: center; margin-bottom: 16px; }
+.options-container, .selected-container { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; min-height: 80px; }
+.number-option { cursor: pointer; } .number-option:hover { background-color: #ffeb3b; }
+.selected-word { background-color: #dbeafe; display: flex; align-items: center; }
+.remove-btn { margin-left: 8px; color: #ef4444; font-size: 0.875rem; cursor: pointer; }
+.button-group { display: flex; justify-content: center; gap: 16px; }
+.btn-verify { background-color: #22c55e; color: white; border-radius: 8px; }
+.btn-verify:hover { background-color: #16a34a; }
+.btn-clear { background-color: #eab308; color: white; border-radius: 8px; }
+.btn-clear:hover { background-color: #d97706; }
+.modal-overlay {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background-color: rgba(0,0,0,0.5); z-index: 50;
+}
+.modal-content { max-width: 512px; margin: auto; padding: 32px; }
+.feedback-correct { color: #16a34a; font-size: 1.875rem; font-weight: 700; text-align: center; margin-bottom: 16px; }
+.feedback-incorrect { color: #dc2626; font-size: 1.875rem; font-weight: 700; text-align: center; margin-bottom: 16px; }
+.modal-content p { font-size: 1.25rem; text-align: center; margin-bottom: 24px; }
+.btn-continue { background-color: #3b82f6; color: white; border-radius: 8px; }
+.btn-continue:hover { background-color: #2563eb; }
+.congrats { animation: pulse 1.5s infinite; }
+.congrats h2 { font-size: 2.25rem; font-weight: 700; color: #16a34a; margin-bottom: 16px; }
+.congrats p { font-size: 1.5rem; margin-bottom: 8px; }
+.btn-next-level { background-color: #8b5cf6; color: white; }
+.btn-next-level:hover { background-color: #7c3aed; }
+@keyframes pulse {
+    0% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.05) rotate(-2deg); } 100% { transform: scale(1) rotate(-2deg); }
+}
