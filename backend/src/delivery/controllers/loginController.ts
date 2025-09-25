@@ -16,6 +16,7 @@ interface LoginResponse {
 const dependencyContainer = DependencyContainer.getInstance();
 const loginTeacherUseCase = dependencyContainer.loginTeacherUseCase;
 const loginStudentUseCase = dependencyContainer.loginStudentUseCase;
+const loginAdminUseCase = dependencyContainer.loginAdminsUseCase;
 
 
 const loginTeacher = async (req: Request<{}, LoginResponse, LoginRequest>, res: Response<LoginResponse>): Promise<void> => {
@@ -68,4 +69,29 @@ const loginStudent = async (req: Request<{}, LoginResponse, LoginRequest>, res: 
     }
 };
 
-export const loginController = { loginTeacher: loginTeacher, loginStudent: loginStudent };
+const loginAdmin = async (req: Request<{}, LoginResponse, LoginRequest>, res: Response<LoginResponse>): Promise<void> => {
+    const { user, password } = req.body;
+
+    if (!user) {
+        res.status(400).json({ error: 'Falta el usuario' });
+        return;
+    }
+
+    if (!password) {
+        res.status(400).json({ error: 'Falta la contraseña' });
+        return;
+    }
+
+    try {
+        const token = await loginAdminUseCase.execute(user, password);
+        res.status(200).json({ token });
+    } catch (error) {
+        if (error instanceof InvalidCredentials) {
+            res.status(401).json({ error: 'Credenciales inválidas' });
+            return;
+        }
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+export const loginController = { loginTeacher: loginTeacher, loginStudent: loginStudent, loginAdmin: loginAdmin };

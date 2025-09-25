@@ -1,9 +1,12 @@
 import { LoginTeacherUseCase } from '../core/usecases/./loginTeacherUseCase';
 import { InMemoryTeacherRepository } from '../infrastructure/InMemoryTeacherRepository';
 import { InMemoryStudentRepository } from '../infrastructure/InMemoryStudentRepository';
+import { InMemoryAdminRepository } from '../infrastructure/InMemoryAdminRepository';
 import { BcryptPasswordEncoder } from '../infrastructure/BcryptPasswordEncoder';
 import { JWTTokenService } from '../infrastructure/JWTTokenService';
 import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
+import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
+
 
 /**
  * Contenedor simple de dependencias
@@ -15,10 +18,12 @@ export class DependencyContainer {
     // Instancias singleton
     private _teacherRepository: InMemoryTeacherRepository | null = null;
     private _studentRepository: InMemoryStudentRepository | null = null;
+    private _adminRepository: InMemoryAdminRepository | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
     private _loginTeacherUseCase: LoginTeacherUseCase | null = null;
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
+    private _loginAdminUseCase: LoginAdminUseCase | null = null;
 
     private constructor() {}
 
@@ -42,6 +47,13 @@ export class DependencyContainer {
             this._studentRepository = new InMemoryStudentRepository();
         }
         return this._studentRepository;
+    }
+
+    public get adminRepository(): InMemoryAdminRepository {
+        if (!this._adminRepository) {
+            this._adminRepository = new InMemoryAdminRepository();
+        }
+        return this._adminRepository;
     }
 
     public get passwordEncoder(): BcryptPasswordEncoder {
@@ -78,5 +90,16 @@ export class DependencyContainer {
             );
         }
         return this._loginStudentUseCase;
+    }
+
+    public get loginAdminsUseCase(): LoginAdminUseCase {
+        if (!this._loginAdminUseCase) {
+            this._loginAdminUseCase = new LoginAdminUseCase(
+                this.adminRepository,
+                this.passwordEncoder,
+                this.tokenService
+            );
+        }
+        return this._loginAdminUseCase;
     }
 }
