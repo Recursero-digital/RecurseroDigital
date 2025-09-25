@@ -1,0 +1,42 @@
+.card{
+    display: flex;
+    flex-direction: row;
+    row-gap: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    padding: 10px;
+   
+}
+.imagegame{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    height: 300px;
+    width: 400px;
+    
+}
+.textgame{
+    display: flex;
+    flex-direction: column ;
+    row-gap: 25px;
+    padding-right: 100px;
+    padding-top: 25px;
+
+   
+    
+}
+.buttongame{
+    background-color: #6255bc;
+    width: 150px;
+    color: white;
+    border-radius: 30px;
+    
+}
+.titlegame{
+    font-size: 30px;
+    margin-bottom: 1rem;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
