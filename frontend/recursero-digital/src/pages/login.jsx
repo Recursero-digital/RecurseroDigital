@@ -1,5 +1,4 @@
-/*import { useState } from "react";
-import { useNavigate } from "react-router-dom";*/
+import { useNavigate } from "react-router-dom";
 
 
 /*export default function Login() {
@@ -23,15 +22,14 @@ import { useNavigate } from "react-router-dom";*/
   );
 }*/
 import "../styles/login.css"
+
 export default function RoleSelection() {
+  const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    // Redirect to login page based on role
-    if (role === "alumno") {
-      window.location.href = "/alumno";
-    } else if (role === "docente") {
-      window.location.href = "/docente";
-    }}
+    // Redirect to login form page
+    navigate("/login-form", { state: { role } });
+  }
 
   return (
       <div className="role-selection-container">
