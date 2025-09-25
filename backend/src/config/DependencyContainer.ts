@@ -1,7 +1,9 @@
 import { LoginTeacherUseCase } from '../core/usecases/./loginTeacherUseCase';
 import { InMemoryTeacherRepository } from '../infrastructure/InMemoryTeacherRepository';
+import { InMemoryStudentRepository } from '../infrastructure/InMemoryStudentRepository';
 import { BcryptPasswordEncoder } from '../infrastructure/BcryptPasswordEncoder';
 import { JWTTokenService } from '../infrastructure/JWTTokenService';
+import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 
 /**
  * Contenedor simple de dependencias
@@ -12,9 +14,11 @@ export class DependencyContainer {
     
     // Instancias singleton
     private _teacherRepository: InMemoryTeacherRepository | null = null;
+    private _studentRepository: InMemoryStudentRepository | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
     private _loginTeacherUseCase: LoginTeacherUseCase | null = null;
+    private _loginStudentUseCase: LoginStudentUseCase | null = null;
 
     private constructor() {}
 
@@ -31,6 +35,13 @@ export class DependencyContainer {
             this._teacherRepository = new InMemoryTeacherRepository();
         }
         return this._teacherRepository;
+    }
+
+    public get studentRepository(): InMemoryStudentRepository {
+        if (!this._studentRepository) {
+            this._studentRepository = new InMemoryStudentRepository();
+        }
+        return this._studentRepository;
     }
 
     public get passwordEncoder(): BcryptPasswordEncoder {
@@ -56,5 +67,16 @@ export class DependencyContainer {
             );
         }
         return this._loginTeacherUseCase;
+    }
+
+    public get loginStudentUseCase(): LoginStudentUseCase {
+        if (!this._loginStudentUseCase) {
+            this._loginStudentUseCase = new LoginStudentUseCase(
+                this.studentRepository,
+                this.passwordEncoder,
+                this.tokenService
+            );
+        }
+        return this._loginStudentUseCase;
     }
 }
