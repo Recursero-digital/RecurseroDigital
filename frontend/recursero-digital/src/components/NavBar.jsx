@@ -1,19 +1,27 @@
-import "../styles/navbar.css"
+import { useNavigate } from "react-router-dom";
+import "../styles/navbar.css";
 
+export function NavBar({ tabs, activeTab, onTabChange}) {
+  const navigate = useNavigate();
 
-export function NavBar() {
+  const handleTabClick = (tab) => {
+    onTabChange(tab.id);
+    navigate(tab.path);
+  };
 
-    return(
-        <>
-        <nav className="navbar">
-            <div className="elements-navbar">
-                <button className="botones">INICIO</button>
-                <button className="botones">JUEGOS</button>
-                <button className="botones">PERFIL</button>
-
-            </div>
-        </nav>
-        
-        </>
-    )
+  return (
+    <nav className="navbar">
+      <div className="navbar-tabs">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
+            onClick={() => handleTabClick(tab)} 
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
 }
