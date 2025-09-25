@@ -14,9 +14,9 @@ interface LoginResponse {
 
 // Obtener las dependencias del contenedor
 const dependencyContainer = DependencyContainer.getInstance();
-const loginUseCase = dependencyContainer.loginUseCase;
+const loginTeacherUseCase = dependencyContainer.loginTeacherUseCase;
 
-const login = async (req: Request<{}, LoginResponse, LoginRequest>, res: Response<LoginResponse>): Promise<void> => {
+const loginTeacher = async (req: Request<{}, LoginResponse, LoginRequest>, res: Response<LoginResponse>): Promise<void> => {
     const { user, password } = req.body;
 
     if (!user) {
@@ -30,7 +30,7 @@ const login = async (req: Request<{}, LoginResponse, LoginRequest>, res: Respons
     } 
     
     try {
-        const token = await loginUseCase.execute(user, password);
+        const token = await loginTeacherUseCase.execute(user, password);
         res.status(200).json({ token });
     } catch (error) {
         if (error instanceof InvalidCredentials) {
@@ -41,4 +41,4 @@ const login = async (req: Request<{}, LoginResponse, LoginRequest>, res: Respons
     }
 };
 
-export const loginController = { login };
+export const loginController = { loginTeacher: loginTeacher };

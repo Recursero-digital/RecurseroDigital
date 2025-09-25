@@ -1,5 +1,5 @@
-import { LoginUseCase } from '../core/usecases/loginUseCase';
-import { InMemoryUserRepository } from '../infrastructure/InMemoryUserRepository';
+import { LoginTeacherUseCase } from '../core/usecases/./loginTeacherUseCase';
+import { InMemoryTeacherRepository } from '../infrastructure/InMemoryTeacherRepository';
 import { BcryptPasswordEncoder } from '../infrastructure/BcryptPasswordEncoder';
 import { JWTTokenService } from '../infrastructure/JWTTokenService';
 
@@ -11,10 +11,10 @@ export class DependencyContainer {
     private static instance: DependencyContainer;
     
     // Instancias singleton
-    private _userRepository: InMemoryUserRepository | null = null;
+    private _teacherRepository: InMemoryTeacherRepository | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
-    private _loginUseCase: LoginUseCase | null = null;
+    private _loginTeacherUseCase: LoginTeacherUseCase | null = null;
 
     private constructor() {}
 
@@ -26,11 +26,11 @@ export class DependencyContainer {
     }
 
     // Getters lazy para las dependencias
-    public get userRepository(): InMemoryUserRepository {
-        if (!this._userRepository) {
-            this._userRepository = new InMemoryUserRepository();
+    public get teacherRepository(): InMemoryTeacherRepository {
+        if (!this._teacherRepository) {
+            this._teacherRepository = new InMemoryTeacherRepository();
         }
-        return this._userRepository;
+        return this._teacherRepository;
     }
 
     public get passwordEncoder(): BcryptPasswordEncoder {
@@ -47,14 +47,14 @@ export class DependencyContainer {
         return this._tokenService;
     }
 
-    public get loginUseCase(): LoginUseCase {
-        if (!this._loginUseCase) {
-            this._loginUseCase = new LoginUseCase(
-                this.userRepository,
+    public get loginTeacherUseCase(): LoginTeacherUseCase {
+        if (!this._loginTeacherUseCase) {
+            this._loginTeacherUseCase = new LoginTeacherUseCase(
+                this.teacherRepository,
                 this.passwordEncoder,
                 this.tokenService
             );
         }
-        return this._loginUseCase;
+        return this._loginTeacherUseCase;
     }
 }

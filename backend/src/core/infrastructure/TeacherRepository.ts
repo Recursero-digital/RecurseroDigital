@@ -5,6 +5,6 @@ export interface User {
     role: string;
 }
 
-export interface UserRepository {
+export interface TeacherRepository {
     findByUserName(userName: string): Promise<User | null>;
 }

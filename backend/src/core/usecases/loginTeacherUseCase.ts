@@ -1,25 +1,25 @@
 import { InvalidCredentials } from '../models/exceptions/InvalidCredentials';
-import { UserRepository, User } from '../infrastructure/UserRepository';
+import { TeacherRepository, User } from '../infrastructure/TeacherRepository';
 import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { TokenService } from '../infrastructure/TokenService';
 
-export class LoginUseCase {
-    private userRepository: UserRepository;
+export class LoginTeacherUseCase {
+    private teacherRepository: TeacherRepository;
     private passwordEncoder: PasswordEncoder;
     private tokenService: TokenService;
 
     constructor(
-        userRepository: UserRepository,
+        teacherRepository: TeacherRepository,
         passwordEncoder: PasswordEncoder,
         tokenService: TokenService
     ) {
-        this.userRepository = userRepository;
+        this.teacherRepository = teacherRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
     }
 
     async execute(userName: string, password: string): Promise<string> {
-        const user = await this.userRepository.findByUserName(userName);
+        const user = await this.teacherRepository.findByUserName(userName);
         if (!user || !(await this.passwordEncoder.compare(password, user.password))) {
             throw new InvalidCredentials();
         }

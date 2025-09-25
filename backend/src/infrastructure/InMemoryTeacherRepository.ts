@@ -1,35 +1,35 @@
-import { UserRepository, User } from '../core/infrastructure/UserRepository';
+import { TeacherRepository, User } from '../core/infrastructure/TeacherRepository';
 
-export class InMemoryUserRepository implements UserRepository {
-  private users: User[] = [];
+export class InMemoryTeacherRepository implements TeacherRepository {
+  private teachers: User[] = [];
 
   constructor() {
     // Usuario de prueba: admin con password abcd1234
-    this.users = [
+    this.teachers = [
       {
         id: '1',
-        username: 'admin',
+        username: 'Mariana',
         password: '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni', // hash de 'abcd1234'
-        role: 'admin'
+        role: 'docente'
       }
     ];
   }
 
   async findByUserName(userName: string): Promise<User | null> {
-    const user = this.users.find(u => u.username === userName);
+    const user = this.teachers.find(u => u.username === userName);
     return user || null;
   }
 
   // Métodos auxiliares para testing y administración
   async addUser(user: User): Promise<void> {
-    this.users.push(user);
+    this.teachers.push(user);
   }
 
   async getAllUsers(): Promise<User[]> {
-    return [...this.users];
+    return [...this.teachers];
   }
 
   async clearUsers(): Promise<void> {
-    this.users = [];
+    this.teachers = [];
   }
 }

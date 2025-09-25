@@ -1,6 +1,6 @@
-import { UserRepository, User } from '../../src/core/infrastructure/UserRepository';
+import { TeacherRepository, User } from '../../src/core/infrastructure/TeacherRepository';
 
-export class MockUserRepository implements UserRepository {
+export class MockUserRepository implements TeacherRepository {
   private users: User[] = [];
 
   constructor(users: User[] = []) {

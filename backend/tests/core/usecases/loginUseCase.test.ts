@@ -1,12 +1,12 @@
-import { LoginUseCase } from '../../../src/core/usecases/loginUseCase';
+import { LoginTeacherUseCase } from '../../../src/core/usecases/./loginTeacherUseCase';
 import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidCredentials';
 import { MockUserRepository } from '../../mocks/UserRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/infrastructure/UserRepository';
+import { User } from '../../../src/core/infrastructure/TeacherRepository';
 
-describe('LoginUseCase', () => {
-  let loginUseCase: LoginUseCase;
+describe('LoginTeacherUseCase', () => {
+  let loginUseCase: LoginTeacherUseCase;
   let mockUserRepository: MockUserRepository;
   let mockPasswordEncoder: MockPasswordEncoder;
   let mockTokenService: MockTokenService;
@@ -16,7 +16,7 @@ describe('LoginUseCase', () => {
     mockPasswordEncoder = new MockPasswordEncoder();
     mockTokenService = new MockTokenService();
     
-    loginUseCase = new LoginUseCase(
+    loginUseCase = new LoginTeacherUseCase(
       mockUserRepository,
       mockPasswordEncoder,
       mockTokenService
