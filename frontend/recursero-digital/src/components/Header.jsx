@@ -2,7 +2,13 @@
 import Logo from '../assets/logo.png';
 import '../styles/header.css';
 import '../styles/darkMode.css';
+import { useNavigate } from 'react-router-dom';
 export function Header({ isDarkMode, toggleDarkMode }) {
+  const navigate = useNavigate();
+
+  const handleCerrarSesion = () => {
+    navigate("/"); // Te lleva a la ruta "/"
+  };
 
     return (
       <header className="header">
@@ -20,6 +26,9 @@ export function Header({ isDarkMode, toggleDarkMode }) {
             <input type="checkbox" checked={isDarkMode} onChange={toggleDarkMode} />
             <span className="slider round"></span>
           </label>
+        </div>
+        <div className='boton-cerrar'>
+          <button className='cerrar-sesion' onClick={handleCerrarSesion}>Cerrar Sesion</button>
         </div>
       </div>
       </header>

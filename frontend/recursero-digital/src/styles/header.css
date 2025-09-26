@@ -5,7 +5,7 @@
 }
 .header{
   display: flex;
-  padding-right: 35px;
+
   justify-content:flex-start;
   align-items: center;
   padding: 1rem 2rem;
@@ -16,7 +16,7 @@
 .search-and-mode {
   display: flex;
   align-items: center;
-  gap: 150px;
+  gap: 1.7rem;
   margin-left:20px; /* Empuja este contenedor hacia la derecha */
 }
 
@@ -118,3 +118,29 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.boton-cerrar{
+  display: flex;
+  padding-left: 20px;
+  
+
+}
+.cerrar-sesion{
+  cursor: pointer;
+  display: end;
+  justify-content: end;
+  margin: 1rem;
+  padding: 0.6rem;
+  background-color: rgb(153, 124, 180);
+  font-size: small;
+  border-radius: 2rem;
+  transition: all 0.2s ease-in-out;
+}
+.cerrar-sesion:hover {
+  background: rgba(105, 92, 243, 0.801);
+}
+
+.cerrar-sesion.active {
+  background: rgb(186, 118, 218);
+  color: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
