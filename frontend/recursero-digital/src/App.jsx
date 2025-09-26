@@ -8,6 +8,7 @@ import HomeDocente from "./pages/homeDocente";
 import MainLayout from "./layouts/MainLayout";
 //import DocenteConCurso from "./pages/docenteConCurso";
 import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
+import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         {/* Rutas adicionales para tabs */}
 
         <Route path="/alumno/juegos" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
+        <Route path="/alumno/juegos/ordenamiento" element={<MainLayout userRole="alumno"><JuegoOrdenamiento /></MainLayout>} />
+        <Route path="/alumno/juegos/escritura" element={<MainLayout userRole="alumno"><JuegoEscritura /></MainLayout>} />
         <Route path="/alumno/perfil" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente/estudiantes" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/juegos" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />

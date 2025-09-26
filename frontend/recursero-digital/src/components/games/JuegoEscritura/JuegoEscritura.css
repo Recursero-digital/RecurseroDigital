@@ -106,6 +106,16 @@ body, html {
     background-color: #eab308;
 }
 
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border-radius: 8px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
 .level-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

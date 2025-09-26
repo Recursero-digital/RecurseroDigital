@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import "./JuegoOrdenamiento.css";
 
 const JuegoOrdenamiento = () => {
+  const navigate = useNavigate();
   const [gameState, setGameState] = useState({
     currentLevel: 1,
     attempts: 0,
@@ -217,9 +219,18 @@ const JuegoOrdenamiento = () => {
         
         {/* Header */}
         <header className="game-header">
-          <h1 className="game-title">
-            🎯 Ordenamiento Numérico
-          </h1>
+          <div className="header-top">
+            <h1 className="game-title">
+              🎯 Ordenamiento Numérico
+            </h1>
+            <button 
+              className="btn-volver-dashboard"
+              onClick={() => navigate('/alumno/juegos')}
+              title="Volver al Dashboard"
+            >
+              🏠 Volver al Dashboard
+            </button>
+          </div>
           <p className="game-instruction">
             {getOrderInstruction(gameState.currentLevel)}
           </p>
