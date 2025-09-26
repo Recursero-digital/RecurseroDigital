@@ -1,28 +1,179 @@
+/* Variables CSS para modo oscuro */
 .dark-mode {
-  --primary-bg-color: #5b4f5e;
-  --secondary-bg-color: #8a7d93;
+  --primary-bg-color: #1a1a1a;
+  --secondary-bg-color: #2d2d2d;
+  --tertiary-bg-color: #3a3a3a;
   --text-color: #ffffff;
-  --placeholder-color: #9c94a1;
-  --border-color: #8d748d;
-  --dark-gray-top-bar: #6d4e67;
+  --text-secondary: #b0b0b0;
+  --placeholder-color: #888888;
+  --border-color: #4a4a4a;
+  --accent-color: #6366f1;
+  --accent-hover: #4f46e5;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
 }
 
-.dark-mode .search-bar {
-  background-color: #795d74;
-  border: #795d74;
-  color: white;
+/* Aplicar modo oscuro al body */
+.dark-mode body {
+  background-color: var(--primary-bg-color) !important;
+  color: var(--text-color) !important;
 }
-.dark-mode .search-bar button {
-  background-color: #e4c7e7;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+
+/* Header en modo oscuro */
+.dark-mode .header {
+  background-color: var(--secondary-bg-color) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-mode .app-logo {
+  filter: brightness(1.2);
+}
+
+/* Search bar en modo oscuro */
+.dark-mode .search-bar {
+  background-color: var(--tertiary-bg-color) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+.dark-mode .search-bar input {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
 }
 
 .dark-mode .search-bar input::placeholder {
-  color: var(--text-color);
+  color: var(--placeholder-color) !important;
 }
 
-.dark-mode .button{
-  background-color: #c89245;
+.dark-mode .search-bar button {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dark-mode .search-bar button:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* Dark mode toggle en modo oscuro */
+.dark-mode .mode-text {
+  color: var(--text-color) !important;
+}
+
+.dark-mode .slider {
+  background-color: var(--tertiary-bg-color) !important;
+}
+
+.dark-mode .slider:before {
+  background-color: var(--accent-color) !important;
+}
+
+.dark-mode input:checked + .slider {
+  background-color: var(--accent-color) !important;
+}
+
+/* Botón cerrar sesión en modo oscuro */
+.dark-mode .cerrar-sesion {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dark-mode .cerrar-sesion:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* Main content en modo oscuro */
+.dark-mode .main-content {
+  background-color: var(--primary-bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Container en modo oscuro */
+.dark-mode .container {
+  background-color: var(--primary-bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Botones en modo oscuro */
+.dark-mode button {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  border: 1px solid var(--border-color);
+}
+
+.dark-mode button:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* Cards en modo oscuro */
+.dark-mode .contenedor-card {
+  background-color: var(--primary-bg-color) !important;
+}
+
+.dark-mode .card {
+  background-color: var(--secondary-bg-color) !important;
+  border: 1px solid var(--border-color);
+  color: var(--text-color) !important;
+}
+
+.dark-mode .card:hover {
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2) !important;
+}
+
+.dark-mode .titlegame {
+  color: var(--text-color) !important;
+}
+
+.dark-mode .descriptiongame {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .buttongame {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dark-mode .buttongame:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* NavBar en modo oscuro */
+.dark-mode .navbar {
+  background-color: var(--secondary-bg-color) !important;
+  border-top: 1px solid var(--border-color);
+}
+
+.dark-mode .nav-item {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .nav-item.active {
+  color: var(--accent-color) !important;
+}
+
+.dark-mode .nav-item:hover {
+  color: var(--text-color) !important;
+}
+
+/* Scrollbar en modo oscuro */
+.dark-mode ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: var(--secondary-bg-color);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--tertiary-bg-color);
+  border-radius: 4px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Transiciones suaves */
+.dark-mode * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

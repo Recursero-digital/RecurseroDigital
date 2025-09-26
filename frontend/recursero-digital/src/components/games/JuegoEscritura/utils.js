@@ -11,11 +11,11 @@ const numberWords = {
 
 
 export const levelRanges = [
-    { min: 50, max: 100 },
-    { min: 101, max: 350 },
-    { min: 351, max: 500 },
-    { min: 501, max: 750 },
-    { min: 751, max: 1000 }
+    { min: 1, max: 50 },
+    { min: 51, max: 200 },
+    { min: 201, max: 500 },
+    { min: 501, max: 800 },
+    { min: 801, max: 1000 }
 ];
 
 
@@ -66,7 +66,7 @@ export function generateOptions(correctAnswer) {
         'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis', 'veintisiete', 'veintiocho', 'veintinueve',
         'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa',
         'cien', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos',
-        'mil', 'y'
+        'mil'
     ];
     
 

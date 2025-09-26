@@ -66,7 +66,6 @@ const JuegoEscritura = () => {
     const handleCheckAnswer = () => {
         const isCorrect = selectedOptions.join(' ') === correctAnswer.join(' ');
         if (isCorrect) {
-            setPoints(prev => prev + (currentLevel + 1) * 10);
             if (currentActivity < 4) {
                 setFeedback({ 
                     title: '✅ ¡Correcto!', 
@@ -75,6 +74,8 @@ const JuegoEscritura = () => {
                 });
                 setGameState('feedback');
             } else {
+                // Solo otorgar puntos cuando se complete toda la actividad (5 ejercicios)
+                setPoints(prev => prev + (currentLevel + 1) * 50);
                 setGameState('congrats');
             }
         } else {
