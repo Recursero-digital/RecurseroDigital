@@ -8,6 +8,7 @@ import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
 
 
+
 /**
  * Contenedor simple de dependencias
  * Centraliza la creación de instancias para mantener la separación de responsabilidades
@@ -24,6 +25,7 @@ export class DependencyContainer {
     private _loginTeacherUseCase: LoginTeacherUseCase | null = null;
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
+
 
     private constructor() {}
 
@@ -102,4 +104,6 @@ export class DependencyContainer {
         }
         return this._loginAdminUseCase;
     }
+
+
 }
