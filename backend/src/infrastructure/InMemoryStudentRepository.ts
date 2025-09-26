@@ -7,8 +7,8 @@ export class InMemoryStudentRepository implements StudentRepository {
     // Usuario de prueba: alumno con password abcd1234
     this.students = [
         {
-            id: '2',
-            username: 'nico',
+            id: '1',
+            username: 'nico@gmail.com',
             password: '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // hash de 'Recursero2025!'
             role: 'alumno'
         }

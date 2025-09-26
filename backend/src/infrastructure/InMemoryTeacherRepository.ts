@@ -8,7 +8,7 @@ export class InMemoryTeacherRepository implements TeacherRepository {
     this.teachers = [
       {
         id: '1',
-        username: 'Mariana',
+        username: 'Mariana@gmail.com',
         password: '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni', // hash de 'abcd1234'
         role: 'docente'
       }
