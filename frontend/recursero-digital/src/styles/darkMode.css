@@ -1,0 +1,28 @@
+.dark-mode {
+  --primary-bg-color: #5b4f5e;
+  --secondary-bg-color: #8a7d93;
+  --text-color: #ffffff;
+  --placeholder-color: #9c94a1;
+  --border-color: #8d748d;
+  --dark-gray-top-bar: #6d4e67;
+}
+
+.dark-mode .search-bar {
+  background-color: #795d74;
+  border: #795d74;
+  color: white;
+}
+.dark-mode .search-bar button {
+  background-color: #e4c7e7;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dark-mode .search-bar input::placeholder {
+  color: var(--text-color);
+}
+
+.dark-mode .button{
+  background-color: #c89245;
+}
