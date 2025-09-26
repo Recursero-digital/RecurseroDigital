@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { apiRequest, AUTH_ENDPOINTS } from "../config/api";
 import "../styles/loginForm.css";
 
 export default function LoginForm() {
@@ -7,6 +8,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [activeTab, setActiveTab] = useState("alumno");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,16 +23,41 @@ export default function LoginForm() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     
-    // Simular autenticación
-    setTimeout(() => {
-      if (activeTab === "alumno") {
-        navigate("/alumno");
+    try {
+      // Determinar el endpoint según el tipo de usuario
+      const endpoint = activeTab === "alumno" ? AUTH_ENDPOINTS.LOGIN_STUDENT : AUTH_ENDPOINTS.LOGIN_TEACHER;
+      
+      // Petición al backend
+      const response = await apiRequest(endpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          user: email,
+          password: password
+        })
+      });
+
+      if (response.ok) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userType', activeTab);
+        localStorage.setItem('userEmail', email);
+        
+        //Navegar según el tipo de usuario
+        if (activeTab === "alumno") {
+          navigate("/alumno");
+        } else {
+          navigate("/docente");
+        }
       } else {
-        navigate("/docente");
+        setError(response.data.error || 'Error al iniciar sesión');
       }
+    } catch (error) {
+      console.error('Error en la petición:', error);
+      setError('Error de conexión. Verifica que el servidor esté ejecutándose.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -44,6 +71,12 @@ export default function LoginForm() {
 
         
         <form onSubmit={handleLogin} className="login-form">
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+          
           <div className="form-group">
             <label htmlFor="email" className="form-label">Email</label>
             <input
