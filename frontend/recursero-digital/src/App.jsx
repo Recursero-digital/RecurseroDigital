@@ -6,6 +6,7 @@ import LoginForm from "./pages/LoginForm";
 import HomeAlumno from "./pages/homeAlumno";
 import HomeDocente from "./pages/homeDocente";
 import MainLayout from "./layouts/MainLayout";
+//import DocenteConCurso from "./pages/docenteConCurso";
 
 function App() {
   return (
@@ -16,11 +17,13 @@ function App() {
         <Route path="/alumno" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         {/* Rutas adicionales para tabs */}
+        
         <Route path="/alumno/juegos" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/alumno/perfil" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente/estudiantes" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/juegos" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/perfil" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
+       
       </Routes>
     </Router>
   );
