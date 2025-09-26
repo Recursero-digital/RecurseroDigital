@@ -12,19 +12,13 @@ import JuegoEscritura from './components/games/JuegoEscritura/JuegoEscritura.jsx
 
 function App() {
   return (
-      //Descomentar para correr juego y comentar lo del Router
-      //return (
-      //     <>
-      //       <JuegoOrdenamiento />
-      //     </>
+  
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login-form" element={<LoginForm />} />
         <Route path="/alumno" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
-        {/* Rutas adicionales para tabs */}
-
         <Route path="/alumno/juegos" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/alumno/juegos/ordenamiento" element={<MainLayout userRole="alumno"><JuegoOrdenamiento /></MainLayout>} />
         <Route path="/alumno/juegos/escritura" element={<MainLayout userRole="alumno"><JuegoEscritura /></MainLayout>} />
