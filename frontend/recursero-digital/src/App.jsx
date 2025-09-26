@@ -7,9 +7,15 @@ import HomeAlumno from "./pages/homeAlumno";
 import HomeDocente from "./pages/homeDocente";
 import MainLayout from "./layouts/MainLayout";
 //import DocenteConCurso from "./pages/docenteConCurso";
+import JuegoOrdenamiento from './components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx';
 
 function App() {
   return (
+      //Descomentar para correr juego y comentar lo del Router
+      //return (
+      //     <>
+      //       <JuegoOrdenamiento />
+      //     </>
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -17,13 +23,13 @@ function App() {
         <Route path="/alumno" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         {/* Rutas adicionales para tabs */}
-        
+
         <Route path="/alumno/juegos" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/alumno/perfil" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente/estudiantes" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/juegos" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/perfil" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
-       
+
       </Routes>
     </Router>
   );

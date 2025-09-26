@@ -1,0 +1,359 @@
+/* Contenedor principal */
+.game-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.game-content {
+  max-width: 1200px;
+  width: 100%;
+  height: calc(100vh - 40px);
+  margin: 0 auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.game-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.game-title {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.game-instruction {
+  color: #666;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Status Bar */
+.game-status {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.status-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.status-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.status-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.5s ease;
+  border-radius: 4px;
+}
+
+/* Game Play Area */
+.game-play-area {
+  margin-top: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Drop Target */
+.drop-target {
+  min-height: 120px;
+  border: 3px dashed #ccc;
+  border-radius: 12px;
+  padding: 30px;
+  margin: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.drop-target:hover,
+.drop-target.drag-over {
+  border-color: #4CAF50;
+  background-color: #f0f8f0;
+  transform: scale(1.02);
+}
+
+.drop-hint {
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+  text-align: center;
+}
+
+/* Number Box */
+.number-box {
+  padding: 18px 24px;
+  margin: 8px;
+  background-color: #2196F3;
+  color: white;
+  border-radius: 10px;
+  cursor: grab;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  user-select: none;
+  border: 2px solid transparent;
+  min-width: 90px;
+  text-align: center;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.number-box:hover {
+  transform: scale(1.1);
+  border-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.number-box:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.number-box.in-target {
+  background-color: #4CAF50;
+  cursor: pointer;
+}
+
+.number-box.in-target:hover {
+  background-color: #45a049;
+}
+
+/* Numbers Section */
+.numbers-section {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.numbers-title {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.numbers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Game Complete */
+.game-complete {
+  text-align: center;
+  padding: 40px;
+}
+
+.complete-title {
+  color: #4CAF50;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.complete-message {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.final-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.restart-button {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.restart-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+/* Level Up Modal */
+.level-up-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease;
+}
+
+.level-up-modal {
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  animation: slideIn 0.5s ease;
+}
+
+.level-up-title {
+  color: #4CAF50;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.level-up-message {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.level-up-instruction {
+  font-size: 1rem;
+  color: #666;
+  padding: 10px;
+  background-color: #f0f8f0;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 10px;
+  }
+  
+  .game-content {
+    padding: 20px;
+  }
+  
+  .game-title {
+    font-size: 2rem;
+  }
+  
+  .game-instruction {
+    font-size: 1rem;
+  }
+  
+  .game-status {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .numbers-container {
+    gap: 5px;
+  }
+  
+  .number-box {
+    padding: 12px 16px;
+    font-size: 16px;
+    min-width: 70px;
+  }
+  
+  .level-up-modal {
+    margin: 20px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .complete-title {
+    font-size: 2rem;
+  }
+  
+  .level-up-title {
+    font-size: 1.5rem;
+  }
+  
+  .number-box {
+    padding: 10px 14px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+}

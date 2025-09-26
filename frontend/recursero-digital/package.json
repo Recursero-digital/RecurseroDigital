@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
     "class-variance-authority": "^0.7.1",
@@ -19,7 +20,8 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "sortablejs": "^1.15.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
