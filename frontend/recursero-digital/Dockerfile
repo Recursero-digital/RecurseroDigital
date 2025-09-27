@@ -20,5 +20,5 @@ RUN npm run build
 EXPOSE 5173
 
 # Comando para servir la aplicación construida
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "5173"]
+CMD ["npx", "serve", "-s", "dist", "-l", "tcp://0.0.0.0:5173"]
 
