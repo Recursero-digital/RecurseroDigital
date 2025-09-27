@@ -30,5 +30,54 @@ Ofrecer a las y los docentes reportes detallados sobre el desempeño del grupo y
   - 🧭 React Router DOM (gestión de rutas)  
   - 🔗 Axios (peticiones HTTP)  
 
+- **Containerización**
+  - 🐳 Docker & Docker Compose
+  - 📦 Servicios separados (Backend y Frontend)
+  - 🌐 Red personalizada para comunicación entre servicios
 
 ---
+## 🐳 Instalación con Docker (Recomendado)
+
+### Requisitos
+- Docker Desktop instalado
+- Docker Compose
+
+### Pasos de instalación
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone <url-del-repositorio>
+   cd RecurseroDigital
+   ```
+
+2. **Ejecutar con Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
+
+3. **Acceder a la aplicación**
+   - **Frontend**: http://localhost:5173
+   - **Backend**: http://localhost:3000
+
+### Comandos útiles de Docker
+
+```bash
+# Ejecutar en segundo plano
+docker-compose up -d --build
+
+# Ver logs
+docker-compose logs -f
+
+# Detener servicios
+docker-compose down
+
+# Reconstruir un servicio específico
+docker-compose up --build backend
+```
+
+Para más detalles sobre la configuración de Docker, consulta el archivo [DOCKER.md](./DOCKER.md).
+
+---
+## 🛠️ Instalación manual (Desarrollo)
+
+Si prefieres ejecutar el proyecto sin Docker:
