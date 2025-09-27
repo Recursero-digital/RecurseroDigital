@@ -31,4 +31,4 @@ npx concurrently \
   --prefix "[{name}]" \
   --names "backend,frontend" \
   "cd backend && npm start" \
-  "cd frontend/recursero-digital && npm run preview -- --host 0.0.0.0 --port 5173"
+  "cd frontend/recursero-digital && npm install -g serve && serve -s dist -l 5173"
