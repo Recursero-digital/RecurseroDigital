@@ -40,7 +40,7 @@ export function Card() {
         </div>
         </scroll>
         
-        
+
         </>
     )
 }
