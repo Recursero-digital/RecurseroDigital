@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import LevelResultsModal from './LevelResultsModal';
+import ActivityFeedbackModal from './ActivityFeedbackModal';
+import { useUserProgress } from '../../hooks/useUserProgress';
 
 const JuegoOrdenamiento = () => {
-  const navigate = useNavigate();
+  const { unlockLevel } = useUserProgress();
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
@@ -16,6 +17,8 @@ const JuegoOrdenamiento = () => {
   const [sortedNumbers, setSortedNumbers] = useState([]);
   const [showGameComplete, setShowGameComplete] = useState(false);
   const [showLevelUp, setShowLevelUp] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [levelResults, setLevelResults] = useState([]);
 
@@ -96,34 +99,47 @@ const JuegoOrdenamiento = () => {
     setAttempts(0);
     setTargetNumbers([]);
     
-    if (newActivity < 5) {
-      setCurrentActivity(newActivity);
-      generateNumbers(currentLevel);
-    } else {
-      // Nivel completado
-      setShowLevelUp(true);
-      setTimeout(() => {
-        if (currentLevel >= levelRanges.length - 1) {
-          setShowGameComplete(true);
-        } else {
-          setCurrentLevel(prev => prev + 1);
-          setCurrentActivity(0);
-          setLevelResults([]);
-          generateNumbers(currentLevel + 1);
-          setShowLevelUp(false);
-        }
-      }, 2000);
-    }
-  }, [currentLevel, currentActivity, points, attempts, levelRanges.length, generateNumbers]);
+    // Mostrar feedback de éxito
+    setFeedbackSuccess(true);
+    setShowFeedback(true);
+    
+    setTimeout(() => {
+      setShowFeedback(false);
+      if (newActivity < 5) {
+        setCurrentActivity(newActivity);
+        generateNumbers(currentLevel);
+      } else {
+        // Nivel completado - desbloquear siguiente nivel
+        unlockLevel('ordenamiento', currentLevel + 2);
+        setShowLevelUp(true);
+        setTimeout(() => {
+          if (currentLevel >= levelRanges.length - 1) {
+            setShowGameComplete(true);
+          } else {
+            setCurrentLevel(prev => prev + 1);
+            setCurrentActivity(0);
+            setLevelResults([]);
+            generateNumbers(currentLevel + 1);
+            setShowLevelUp(false);
+          }
+        }, 2000);
+      }
+    }, 1500);
+  }, [currentLevel, currentActivity, points, attempts, levelRanges.length, generateNumbers, unlockLevel]);
 
   // Manejar intento fallido
   const handleFailedAttempt = useCallback(() => {
     setAttempts(prev => prev + 1);
     
+    // Mostrar feedback de error
+    setFeedbackSuccess(false);
+    setShowFeedback(true);
+    
     setTimeout(() => {
+      setShowFeedback(false);
       setTargetNumbers([]);
       generateNumbers(currentLevel);
-    }, 500);
+    }, 1500);
   }, [currentLevel, generateNumbers]);
 
   // Manejar drop de número
@@ -257,6 +273,18 @@ const JuegoOrdenamiento = () => {
     setShowLevelUp(false);
   };
 
+  // Manejar continuar después del feedback
+  const handleContinueFeedback = () => {
+    setShowFeedback(false);
+  };
+
+  // Manejar reintentar después del feedback de error
+  const handleRetryFeedback = () => {
+    setShowFeedback(false);
+    setTargetNumbers([]);
+    generateNumbers(currentLevel);
+  };
+
   return (
     <div className="game-container">
       {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
@@ -267,18 +295,9 @@ const JuegoOrdenamiento = () => {
         <div className="game-content">
           {/* Header */}
           <header className="game-header">
-            <div className="header-top">
-              <h1 className="game-title">
-                🎯 Ordenamiento Numérico
-              </h1>
-              <button 
-                className="btn-volver-dashboard"
-                onClick={() => navigate('/alumno/juegos')}
-                title="Volver al Dashboard"
-              >
-                🏠 Volver al Dashboard
-              </button>
-            </div>
+            <h1 className="game-title">
+              🎯 Ordenamiento Numérico
+            </h1>
             <p className="game-instruction">
               {getOrderInstruction(currentLevel + 1)}
             </p>
@@ -364,6 +383,14 @@ const JuegoOrdenamiento = () => {
           totalScore={points}
           onNextLevel={handleNextLevel}
           onBackToLevels={handleBackToLevels}
+        />
+      )}
+
+      {showFeedback && (
+        <ActivityFeedbackModal
+          isSuccess={feedbackSuccess}
+          onContinue={handleContinueFeedback}
+          onRetry={handleRetryFeedback}
         />
       )}
     </div>

@@ -436,6 +436,114 @@
 .level-5 { background: linear-gradient(135deg, #eab308 0%, #d97706 100%); }
 .level-5:hover { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
 
+/* Niveles bloqueados */
+.level-btn.locked {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.level-btn.locked:hover {
+  transform: none !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.level-btn.locked .level-number {
+  opacity: 0.7;
+}
+
+.level-btn.locked .level-range,
+.level-btn.locked .level-difficulty {
+  opacity: 0.5;
+}
+
+.locked-message {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Activity Feedback Modal */
+.activity-feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.activity-feedback-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: slideIn 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.activity-feedback-modal.success {
+  border: 3px solid #22c55e;
+}
+
+.activity-feedback-modal.error {
+  border: 3px solid #ef4444;
+}
+
+.activity-feedback-modal h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.activity-feedback-modal.success h2 {
+  color: #22c55e;
+}
+
+.activity-feedback-modal.error h2 {
+  color: #ef4444;
+}
+
+.activity-feedback-modal p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #666;
+}
+
+.activity-feedback-modal .btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.activity-feedback-modal .btn-success {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+}
+
+.activity-feedback-modal .btn-retry {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.activity-feedback-modal .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 /* Level Results Modal */
 .level-results-overlay {
   position: fixed;

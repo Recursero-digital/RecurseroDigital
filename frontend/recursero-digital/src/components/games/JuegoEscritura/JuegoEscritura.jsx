@@ -8,8 +8,10 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
+import { useUserProgress } from '../../hooks/useUserProgress';
 
 const JuegoEscritura = () => {
+    const { unlockLevel } = useUserProgress();
     const [gameState, setGameState] = useState('start');
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
@@ -76,6 +78,8 @@ const JuegoEscritura = () => {
             } else {
                 // Solo otorgar puntos cuando se complete toda la actividad (5 ejercicios)
                 setPoints(prev => prev + (currentLevel + 1) * 50);
+                // Desbloquear siguiente nivel
+                unlockLevel('escritura', currentLevel + 2);
                 setGameState('congrats');
             }
         } else {

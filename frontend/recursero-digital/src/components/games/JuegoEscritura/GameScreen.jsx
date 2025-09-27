@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const GameScreen = ({ 
     level, 
@@ -13,26 +12,11 @@ const GameScreen = ({
     onCheck, 
     onClear 
 }) => {
-    const navigate = useNavigate();
-
-    const handleVolverDashboard = () => {
-        navigate('/alumno/juegos');
-    };
-
     return (
         <div className="chalkboard">
-            <div className="game-header">
-                <div className="game-hud">
-                    <div>Nivel: <span>{level}</span> | Actividad: <span>{activity}</span>/5</div>
-                    <div>Puntos: <span>{points}</span></div>
-                </div>
-                <button 
-                    className="btn-volver-dashboard-floating"
-                    onClick={handleVolverDashboard}
-                    title="Volver al Dashboard"
-                >
-                    🏠
-                </button>
+            <div className="game-hud">
+                <div>Nivel: <span>{level}</span> | Actividad: <span>{activity}</span>/5</div>
+                <div>Puntos: <span>{points}</span></div>
             </div>
         
         <div className="paper-note" data-aos="zoom-in">
