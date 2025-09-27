@@ -1,0 +1,53 @@
+name: Deploy to Supabase
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies and build
+      run: |
+        # Backend
+        cd backend
+        npm ci
+        npm run build
+        cd ..
+        
+        # Frontend
+        cd frontend/recursero-digital
+        npm ci
+        npm run build
+        cd ../..
+        
+    - name: Deploy to Supabase
+      uses: supabase/supabase-github-action@v0.0.2
+      with:
+        supabase-url: ${{ secrets.SUPABASE_URL }}
+        supabase-service-role-key: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        project-path: '.'
+        
+    - name: Deploy database migrations
+      run: |
+        npx supabase db push --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        
+    - name: Deploy frontend static files
+      run: |
+        cd frontend/recursero-digital
+        npx supabase projects deploy --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --include-all
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
