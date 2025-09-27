@@ -10,9 +10,33 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=recurseroDigitalDB
+      - DB_USER=admindb
+      - DB_PASSWORD=recursero2025
     networks:
       - recursero-network
+    depends_on:
+      - postgres
     restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-container
+    restart: always
+    environment:
+      POSTGRES_DB: recurseroDigitalDB
+      POSTGRES_USER: admindb
+      POSTGRES_PASSWORD: recursero2025
+      POSTGRES_ROOT_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - recursero-network
 
   frontend:
     build:
@@ -26,6 +50,7 @@ services:
       - recursero-network
     restart: unless-stopped
 
+
 networks:
   recursero-network:
     driver: bridge
@@ -33,4 +58,5 @@ networks:
 volumes:
   backend_node_modules:
   frontend_node_modules:
+  postgres_data:
 
