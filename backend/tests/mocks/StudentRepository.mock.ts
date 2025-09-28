@@ -1,7 +1,8 @@
-import { StudentRepository, User } from '../../src/core/infrastructure/StudentRepository';
+import { StudentRepository, User, StudentData } from '../../src/core/infrastructure/StudentRepository';
 
 export class MockStudentRepository implements StudentRepository {
   private users: User[] = [];
+  private students: StudentData[] = [];
 
   constructor(users: User[] = []) {
     this.users = users;
@@ -12,6 +13,15 @@ export class MockStudentRepository implements StudentRepository {
     return user || null;
   }
 
+  async addStudent(studentData: StudentData): Promise<void> {
+    this.students.push(studentData);
+    this.users.push({
+      id: studentData.id,
+      username: studentData.username,
+      password: studentData.password,
+      role: 'STUDENT'
+    });
+  }
 
   addUser(user: User): void {
     this.users.push(user);
@@ -19,9 +29,10 @@ export class MockStudentRepository implements StudentRepository {
 
   clearUsers(): void {
     this.users = [];
+    this.students = [];
   }
 
-  getAllUsers(): User[] {
-    return [...this.users];
+  getAllStudents(): StudentData[] {
+    return [...this.students];
   }
 }

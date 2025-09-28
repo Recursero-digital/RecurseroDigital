@@ -12,16 +12,11 @@ export class MockUserRepository implements TeacherRepository {
     return user || null;
   }
 
-  // Métodos auxiliares para testing
   addUser(user: User): void {
     this.users.push(user);
   }
 
   clearUsers(): void {
     this.users = [];
-  }
-
-  getAllUsers(): User[] {
-    return [...this.users];
   }
 }

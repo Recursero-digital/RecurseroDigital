@@ -1,14 +1,21 @@
 import { Usuario } from './Usuario';
 
 export class Docente extends Usuario {
+    name: string;
+    surname: string;
+    email: string;
 
     constructor(
         id: string, 
-        name: string,
+        userName: string,
         email: string, 
-        passwordHash: string
+        passwordHash: string,
+        name: string,
+        surname: string
     ) {
-        super(id, name, email, passwordHash);
-
+        super(id, userName, passwordHash, 'TEACHER');
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
     }
 }

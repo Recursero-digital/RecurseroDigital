@@ -1,4 +1,4 @@
-import { StudentRepository, User } from '../core/infrastructure/StudentRepository';
+import { StudentRepository, User, StudentData } from '../core/infrastructure/StudentRepository';
 
 export class InMemoryStudentRepository implements StudentRepository {
   private students: User[] = [];
@@ -20,16 +20,12 @@ export class InMemoryStudentRepository implements StudentRepository {
     return user || null;
   }
 
-  // Métodos auxiliares para testing y administración
-  async addUser(user: User): Promise<void> {
-    this.students.push(user);
-  }
-
-  async getAllUsers(): Promise<User[]> {
-    return [...this.students];
-  }
-
-  async clearUsers(): Promise<void> {
-    this.students = [];
+  async addStudent(studentData: StudentData): Promise<void> {
+    this.students.push({
+      id: studentData.id,
+      username: studentData.username,
+      password: studentData.password,
+      role: 'STUDENT'
+    });
   }
 }

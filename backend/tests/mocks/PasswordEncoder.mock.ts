@@ -10,12 +10,10 @@ export class MockPasswordEncoder implements PasswordEncoder {
   }
 
   async compare(password: string, hashedPassword: string): Promise<boolean> {
-    // Simular comparación de contraseñas
     const expectedHash = this.passwordMap.get(password);
     return expectedHash === hashedPassword;
   }
 
-  // Métodos auxiliares para testing
   setPasswordMatch(password: string, hashedPassword: string): void {
     this.passwordMap.set(password, hashedPassword);
   }
