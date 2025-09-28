@@ -4,7 +4,7 @@ import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import LevelResultsModal from './LevelResultsModal';
 import ActivityFeedbackModal from './ActivityFeedbackModal';
-import { useUserProgress } from '../../hooks/useUserProgress';
+import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const JuegoOrdenamiento = () => {
   const { unlockLevel } = useUserProgress();
@@ -23,22 +23,28 @@ const JuegoOrdenamiento = () => {
   const [levelResults, setLevelResults] = useState([]);
 
   const levelRanges = useMemo(() => [
-    { min: 10, max: 250 },
+    { min: 25, max: 250 },
     { min: 251, max: 500 },
     { min: 501, max: 750 },
     { min: 751, max: 1000 },
     { min: 1001, max: 1500 },
   ], []);
 
-  const numbersCount = 6;
+ 
+  const getNumbersCount = useCallback((level) => {
+    return 6 + (level * 2);
+  }, []);
+
+  const numbersCount = getNumbersCount(currentLevel);
   const targetAreaRef = useRef(null);
 
-  // Generar números únicos para el nivel actual
+
   const generateNumbers = useCallback((level) => {
     const { min, max } = levelRanges[level];
+    const currentNumbersCount = getNumbersCount(level);
     const generatedNumbers = new Set();
 
-    while (generatedNumbers.size < numbersCount) {
+    while (generatedNumbers.size < currentNumbersCount) {
       const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
       generatedNumbers.add(newNum);
     }
@@ -49,16 +55,16 @@ const JuegoOrdenamiento = () => {
 
     setNumbers(shuffledNumbers);
     setSortedNumbers(sorted);
-  }, [levelRanges]);
+  }, [levelRanges, getNumbersCount]);
 
-  // Obtener instrucción de ordenamiento para el nivel
+  
   const getOrderInstruction = useCallback((level) => {
     return level % 2 === 0
-      ? "Ordena los números de menor a mayor"
-      : "Ordena los números de mayor a menor";
+      ? "📈 ORDENA DE MENOR A MAYOR 📈"
+      : "📉 ORDENA DE MAYOR A MENOR 📉";
   }, []);
 
-  // Verificar si el ordenamiento es correcto
+  
   const checkOrder = useCallback((currentNumbers) => {
     const isEvenLevel = (currentLevel + 1) % 2 === 0;
     const correctOrder = [...sortedNumbers].sort((a, b) =>
@@ -67,7 +73,7 @@ const JuegoOrdenamiento = () => {
     return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
   }, [currentLevel, sortedNumbers]);
 
-  // Manejar inicio del juego
+ 
   const handleStartGame = (level) => {
     setCurrentLevel(level - 1);
     setCurrentActivity(0);
@@ -77,7 +83,7 @@ const JuegoOrdenamiento = () => {
     setGameState('game');
   };
 
-  // Manejar completar actividad
+ 
   const handleActivityComplete = useCallback(() => {
     const baseScore = 50 * (currentLevel + 1);
     const penaltyForAttempts = attempts * 5;
@@ -86,7 +92,7 @@ const JuegoOrdenamiento = () => {
     const newPoints = points + activityScore;
     const newActivity = currentActivity + 1;
     
-    // Guardar resultado de la actividad
+   
     const result = {
       activity: currentActivity + 1,
       score: activityScore,
@@ -99,7 +105,7 @@ const JuegoOrdenamiento = () => {
     setAttempts(0);
     setTargetNumbers([]);
     
-    // Mostrar feedback de éxito
+       
     setFeedbackSuccess(true);
     setShowFeedback(true);
     
@@ -108,30 +114,18 @@ const JuegoOrdenamiento = () => {
       if (newActivity < 5) {
         setCurrentActivity(newActivity);
         generateNumbers(currentLevel);
-      } else {
-        // Nivel completado - desbloquear siguiente nivel
+      } else {  
         unlockLevel('ordenamiento', currentLevel + 2);
         setShowLevelUp(true);
-        setTimeout(() => {
-          if (currentLevel >= levelRanges.length - 1) {
-            setShowGameComplete(true);
-          } else {
-            setCurrentLevel(prev => prev + 1);
-            setCurrentActivity(0);
-            setLevelResults([]);
-            generateNumbers(currentLevel + 1);
-            setShowLevelUp(false);
-          }
-        }, 2000);
       }
     }, 1500);
-  }, [currentLevel, currentActivity, points, attempts, levelRanges.length, generateNumbers, unlockLevel]);
+  }, [currentLevel, currentActivity, points, attempts, levelRanges.length, generateNumbers, unlockLevel, getNumbersCount]);
 
-  // Manejar intento fallido
+  
   const handleFailedAttempt = useCallback(() => {
     setAttempts(prev => prev + 1);
     
-    // Mostrar feedback de error
+   
     setFeedbackSuccess(false);
     setShowFeedback(true);
     
@@ -142,7 +136,7 @@ const JuegoOrdenamiento = () => {
     }, 1500);
   }, [currentLevel, generateNumbers]);
 
-  // Manejar drop de número
+ 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
     setTargetNumbers(newTargetNumbers);
@@ -156,12 +150,12 @@ const JuegoOrdenamiento = () => {
     }
   }, [targetNumbers, numbersCount, checkOrder, handleActivityComplete, handleFailedAttempt]);
 
-  // Manejar remoción de número
+ 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
   }, []);
 
-  // Inicializar nivel
+ 
   useEffect(() => {
     if (gameState === 'game') {
       generateNumbers(currentLevel);
@@ -169,7 +163,7 @@ const JuegoOrdenamiento = () => {
     }
   }, [gameState, currentLevel, generateNumbers]);
 
-  // Componente NumberBox con drag and drop nativo
+ 
   const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
     const handleDragStart = (e) => {
       e.dataTransfer.setData('text/plain', number.toString());
@@ -197,7 +191,7 @@ const JuegoOrdenamiento = () => {
     );
   });
 
-  // Área de destino con drag and drop nativo
+ 
   const DropTarget = () => {
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -213,7 +207,7 @@ const JuegoOrdenamiento = () => {
 
     const handleDragLeave = (e) => {
       e.preventDefault();
-      // Solo cambiar si realmente salimos del contenedor
+     
       if (!e.currentTarget.contains(e.relatedTarget)) {
         setIsDragOver(false);
       }
@@ -258,27 +252,31 @@ const JuegoOrdenamiento = () => {
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
   const progressPercentage = ((currentLevel + 1) / levelRanges.length) * 100;
 
-  // Manejar continuar al siguiente nivel
+     
   const handleNextLevel = () => {
-    setCurrentLevel(prev => prev + 1);
-    setCurrentActivity(0);
-    setLevelResults([]);
     setShowLevelUp(false);
-    generateNumbers(currentLevel + 1);
+    if (currentLevel >= levelRanges.length - 1) {
+      setShowGameComplete(true);
+    } else {
+      setCurrentLevel(prev => prev + 1);
+      setCurrentActivity(0);
+      setLevelResults([]);
+      generateNumbers(currentLevel + 1);
+    }
   };
 
-  // Manejar volver a selección de niveles
+     
   const handleBackToLevels = () => {
     setGameState('level-select');
     setShowLevelUp(false);
   };
 
-  // Manejar continuar después del feedback
+     
   const handleContinueFeedback = () => {
     setShowFeedback(false);
   };
 
-  // Manejar reintentar después del feedback de error
+   
   const handleRetryFeedback = () => {
     setShowFeedback(false);
     setTargetNumbers([]);
@@ -327,7 +325,6 @@ const JuegoOrdenamiento = () => {
             </div>
           </div>
 
-          {/* Progress Bar */}
           <div className="progress-container">
             <div 
               className="progress-bar"
@@ -337,12 +334,10 @@ const JuegoOrdenamiento = () => {
 
           {!showGameComplete ? (
             <div className="game-play-area">
-              {/* Drop Target */}
               <DropTarget />
               
-              {/* Available Numbers */}
               <div className="numbers-section">
-                <h3 className="numbers-title">Números disponibles:</h3>
+                <h3 className="numbers-title">Números a ordenar:</h3>
                 <div className="numbers-container">
                   {availableNumbers.map(number => (
                     <NumberBox 

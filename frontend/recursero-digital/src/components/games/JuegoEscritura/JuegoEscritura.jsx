@@ -8,7 +8,7 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
-import { useUserProgress } from '../../hooks/useUserProgress';
+import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const JuegoEscritura = () => {
     const { unlockLevel } = useUserProgress();

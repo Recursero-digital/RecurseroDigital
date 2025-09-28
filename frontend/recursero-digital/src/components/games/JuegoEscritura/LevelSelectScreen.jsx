@@ -1,6 +1,6 @@
 import React from 'react';
 import { levelRanges } from './utils';
-import { useUserProgress } from '../../hooks/useUserProgress';
+import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const LevelSelectScreen = ({ onSelectLevel }) => {
     const { isLevelUnlocked, getMaxUnlockedLevel } = useUserProgress();

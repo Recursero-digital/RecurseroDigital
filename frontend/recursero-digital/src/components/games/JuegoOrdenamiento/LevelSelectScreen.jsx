@@ -1,11 +1,11 @@
 import React from 'react';
-import { useUserProgress } from '../../hooks/useUserProgress';
+import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const LevelSelectScreen = ({ onSelectLevel }) => {
     const { isLevelUnlocked, getMaxUnlockedLevel } = useUserProgress();
     
     const levels = [
-        { number: 1, range: "10 - 250", difficulty: "Fácil", color: "level-1" },
+        { number: 1, range: "25 - 250", difficulty: "Fácil", color: "level-1" },
         { number: 2, range: "251 - 500", difficulty: "Intermedio", color: "level-2" },
         { number: 3, range: "501 - 750", difficulty: "Avanzado", color: "level-3" },
         { number: 4, range: "751 - 1000", difficulty: "Experto", color: "level-4" },
