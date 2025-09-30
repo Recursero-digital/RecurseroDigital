@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { levelRanges } from './utils';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const LevelSelectScreen = ({ onSelectLevel }) => {
-    const { isLevelUnlocked, getMaxUnlockedLevel } = useUserProgress();
+    const navigate = useNavigate();
+    const { isLevelUnlocked } = useUserProgress();
     
     const levels = [
         { difficulty: "Fácil", color: "level-1" },
@@ -15,6 +17,15 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
 
     return (
         <div className="chalkboard">
+            <div className="header-controls">
+                <button 
+                    className="btn-back-to-levels"
+                    onClick={() => navigate('/games')}
+                    title="Volver a juegos"
+                >
+                    ← Juegos
+                </button>
+            </div>
             <h2>Elige un nivel</h2>
             <div className="level-grid">
                 {levelRanges.map((range, index) => {

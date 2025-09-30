@@ -1,25 +1,42 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const GameScreen = ({ 
     level, 
     activity, 
     points,
     attempts,
-    numbers,
-    wordPairs,
-    dragAnswers,
+    numbers, 
+    wordPairs, 
+    dragAnswers, 
     usedNumbers,
-    onDragStart,
-    onDragOver,
-    onDrop,
+    onDragStart, 
+    onDragOver, 
+    onDrop, 
     onRemoveNumber,
-    onCheck, 
-    onClear 
+    onCheck
 }) => {
+    const navigate = useNavigate();
     return (
         <div className="chalkboard">
+            <div className="header-controls">
+                <button 
+                    className="btn-back-to-levels"
+                    onClick={() => navigate('/games')}
+                    title="Volver a niveles"
+                >
+                    ← Niveles
+                </button>
+                <button 
+                    className="btn-back-to-dashboard"
+                    onClick={() => navigate('/dashboard')}
+                    title="Volver al dashboard"
+                >
+                    🏠
+                </button>
+            </div>
             <div className="game-hud">
-                <div>Nivel: <span>{level}</span> | Actividad: <span>{activity}</span>/5</div>
+                <div>Nivel: <span>{level}</span> | Actividad: <span>{activity}</span>/3</div>
                 <div>Puntos: <span>{points}</span> | Intentos: <span>{attempts}</span></div>
             </div>
         
@@ -28,10 +45,9 @@ const GameScreen = ({
                 <div className="instruction-text">Arrastra cada número a su palabra correspondiente</div>
             </div>
             
-            {/* Números para arrastrar */}
+
             <div className="numbers-container">
                 {numbers.map((number, index) => {
-                    // Solo mostrar números que no están siendo usados
                     if (usedNumbers.has(number)) {
                         return null;
                     }
@@ -49,7 +65,6 @@ const GameScreen = ({
                 })}
             </div>
             
-            {/* Palabras con campos de arrastre */}
             <div className="words-container">
                 {wordPairs.map((wordPair, index) => (
                     <div key={`word-${index}`} className="word-pair">
@@ -74,13 +89,6 @@ const GameScreen = ({
                     disabled={Object.keys(dragAnswers).length !== wordPairs.length}
                 >
                     Enviar respuestas
-                </button>
-                <button 
-                    onClick={onClear} 
-                    className="btn btn-clear"
-                    disabled={Object.keys(dragAnswers).length === 0}
-                >
-                    Limpiar
                 </button>
             </div>
         </div>

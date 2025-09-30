@@ -21,6 +21,7 @@ const JuegoEscritura = () => {
     const [dragAnswers, setDragAnswers] = useState({});
     const [usedNumbers, setUsedNumbers] = useState(new Set());
     const [attempts, setAttempts] = useState(0);
+    const [showHelp, setShowHelp] = useState(false);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     
     useEffect(() => { 
@@ -84,7 +85,13 @@ const JuegoEscritura = () => {
             }));
         } else {
             // Si no es correcto, incrementamos intentos
-            setAttempts(prev => prev + 1);
+            const newAttempts = attempts + 1;
+            setAttempts(newAttempts);
+            
+            // Mostrar ayuda después de 5 intentos fallidos
+            if (newAttempts >= 5) {
+                setShowHelp(true);
+            }
         }
     };
     
@@ -120,15 +127,20 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            if (currentActivity < 4) {
+            const baseScore = 50 * (currentLevel + 1);
+            const penaltyForAttempts = attempts * 5;
+            const activityScore = Math.max(0, baseScore - penaltyForAttempts);
+            
+            setPoints(prev => prev + activityScore);
+            
+            if (currentActivity < 2) {
                 setFeedback({ 
                     title: '✅ ¡Perfecto!', 
-                    text: '¡Excelente! Todas las respuestas son correctas. Avanza a la siguiente actividad.', 
+                    text: `¡Excelente! Todas las respuestas son correctas. Ganaste ${activityScore} puntos. Avanza a la siguiente actividad.`, 
                     isCorrect: true 
                 });
                 setGameState('feedback');
             } else {
-                setPoints(prev => prev + (currentLevel + 1) * 50);
                 unlockLevel('escritura', currentLevel + 2);
                 setGameState('congrats');
             }
@@ -159,10 +171,9 @@ const JuegoEscritura = () => {
         }
     };
 
-    const handleClear = () => {
-        setDragAnswers({});
-        setUsedNumbers(new Set());
-        setAttempts(0);
+
+    const handleCloseHelp = () => {
+        setShowHelp(false);
     };
     
     const handleContinue = () => {
@@ -192,12 +203,42 @@ const JuegoEscritura = () => {
                 onDrop={handleDrop}
                 onRemoveNumber={handleRemoveNumber}
                 onCheck={handleCheckAnswer}
-                onClear={handleClear}
             />}
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
             
             {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} onNextLevel={() => setGameState('level-select')} />}
+            
+            {showHelp && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2 className="help-title">💡 Ayuda - Pista para completar la actividad</h2>
+                        <div className="help-content">
+                            <p>Has tenido 5 intentos fallidos. Aquí tienes una pista:</p>
+                            <div className="help-example">
+                                <p><strong>Ejemplo:</strong> El número <span className="example-number">123</span> se escribe como <span className="example-word">"ciento veintitres"</span></p>
+                                <p><strong>Consejo:</strong> Lee cada palabra cuidadosamente y encuentra el número que le corresponde.</p>
+                            </div>
+                            <div className="help-numbers">
+                                <p><strong>Números en esta actividad:</strong></p>
+                                <div className="help-numbers-list">
+                                    {wordPairs.map((pair, index) => (
+                                        <div key={index} className="help-number-pair">
+                                            <span className="help-number">{pair.number}</span> → <span className="help-word">{pair.word}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <button 
+                            className="btn btn-continue"
+                            onClick={handleCloseHelp}
+                        >
+                            Entendido, continuar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
@@ -7,6 +8,7 @@ import ActivityFeedbackModal from './ActivityFeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const JuegoOrdenamiento = () => {
+  const navigate = useNavigate();
   const { unlockLevel } = useUserProgress();
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
@@ -21,6 +23,44 @@ const JuegoOrdenamiento = () => {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [levelResults, setLevelResults] = useState([]);
+
+  const resetGame = useCallback(() => {
+    setGameState('start');
+    setCurrentLevel(0);
+    setCurrentActivity(0);
+    setPoints(0);
+    setAttempts(0);
+    setNumbers([]);
+    setSortedNumbers([]);
+    setShowGameComplete(false);
+    setShowLevelUp(false);
+    setShowFeedback(false);
+    setFeedbackSuccess(false);
+    setTargetNumbers([]);
+    setLevelResults([]);
+  }, []);
+
+
+  const handleBackToGames = useCallback(() => {
+    resetGame();
+    navigate('/games', { replace: true });
+  }, [navigate, resetGame]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (gameState !== 'start') {
+        setGameState('start');
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [gameState]);
+
+  useEffect(() => {
+    return () => {
+      resetGame();
+    };
+  }, [resetGame]);
 
   const levelRanges = useMemo(() => [
     { min: 25, max: 250 },
@@ -83,6 +123,7 @@ const JuegoOrdenamiento = () => {
     setGameState('game');
   };
 
+
  
   const handleActivityComplete = useCallback(() => {
     const baseScore = 50 * (currentLevel + 1);
@@ -111,7 +152,7 @@ const JuegoOrdenamiento = () => {
     
     setTimeout(() => {
       setShowFeedback(false);
-      if (newActivity < 5) {
+      if (newActivity < 3) {
         setCurrentActivity(newActivity);
         generateNumbers(currentLevel);
       } else {  
@@ -266,10 +307,10 @@ const JuegoOrdenamiento = () => {
   };
 
      
-  const handleBackToLevels = () => {
-    setGameState('level-select');
-    setShowLevelUp(false);
-  };
+  const handleBackToLevels = useCallback(() => {
+    resetGame();
+    navigate('/games', { replace: true });
+  }, [navigate, resetGame]);
 
      
   const handleContinueFeedback = () => {
@@ -285,14 +326,30 @@ const JuegoOrdenamiento = () => {
 
   return (
     <div className="game-container">
-      {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
+      {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} onBackToGames={handleBackToGames} />}
       
-      {gameState === 'level-select' && <LevelSelectScreen onSelectLevel={handleStartGame} />}
+      {gameState === 'level-select' && <LevelSelectScreen onSelectLevel={handleStartGame} onBackToGames={handleBackToGames} />}
       
       {gameState === 'game' && (
         <div className="game-content">
           {/* Header */}
           <header className="game-header">
+            <div className="header-controls">
+              <button 
+                className="btn-back-to-levels"
+                onClick={() => setGameState('level-select')}
+                title="Volver a niveles"
+              >
+                ← Niveles
+              </button>
+              <button 
+                className="btn-back-to-dashboard"
+                onClick={handleBackToGames}
+                title="Volver a juegos"
+              >
+                ← Juegos
+              </button>
+            </div>
             <h1 className="game-title">
               🎯 Ordenamiento Numérico
             </h1>
@@ -311,7 +368,7 @@ const JuegoOrdenamiento = () => {
             <div className="status-item">
               <div className="status-icon">🎯</div>
               <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/5</div>
+              <div className="status-value">{currentActivity + 1}/3</div>
             </div>
             <div className="status-item">
               <div className="status-icon">🎯</div>
@@ -362,7 +419,7 @@ const JuegoOrdenamiento = () => {
               </p>
               <button 
                 className="restart-button"
-                onClick={() => window.location.reload()}
+                onClick={() => setGameState('start')}
               >
                 🔄 Jugar de nuevo
               </button>

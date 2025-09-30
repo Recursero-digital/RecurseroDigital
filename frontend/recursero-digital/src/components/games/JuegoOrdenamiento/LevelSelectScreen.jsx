@@ -1,7 +1,7 @@
 import React from 'react';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 
-const LevelSelectScreen = ({ onSelectLevel }) => {
+const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
     const { isLevelUnlocked, getMaxUnlockedLevel } = useUserProgress();
     
     const levels = [
@@ -16,6 +16,15 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
 
     return (
         <div className="level-select-screen">
+            <div className="header-controls">
+                <button 
+                    className="btn-back-to-levels"
+                    onClick={onBackToGames}
+                    title="Volver a juegos"
+                >
+                    ← Juegos
+                </button>
+            </div>
             <h1>Selecciona un Nivel</h1>
             <p>Elige el rango de números que quieres ordenar</p>
             <div className="level-grid">

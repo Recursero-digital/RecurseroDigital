@@ -15,13 +15,17 @@
 
 .game-container {
   min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e3a8a 75%, #7c3aed 100%);
   padding: 8px;
   font-family: 'Fredoka', cursive;
   box-sizing: border-box;
   overflow-y: auto;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .game-container::before {
@@ -31,18 +35,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.8"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.8"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
   pointer-events: none;
-  animation: twinkle 3s ease-in-out infinite alternate;
-}
-
-@keyframes twinkle {
-  0% { opacity: 0.7; }
-  100% { opacity: 1; }
 }
 
 .game-content {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   min-height: calc(100vh - 16px);
   margin: 0 auto;
@@ -59,7 +57,8 @@
   backdrop-filter: blur(10px);
   border: 4px solid #fbbf24;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  justify-content: center;
 }
 
 .game-content::before {
@@ -69,12 +68,6 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem;
-  animation: rocketFloat 2s ease-in-out infinite alternate;
-}
-
-@keyframes rocketFloat {
-  0% { transform: translateX(-50%) translateY(0px); }
-  100% { transform: translateX(-50%) translateY(-10px); }
 }
 /* Header - Panel de control de la nave */
 .game-header {
@@ -83,19 +76,47 @@
   position: relative;
 }
 
+.header-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 100;
+}
+
+.btn-back-to-levels,
+.btn-back-to-dashboard {
+  background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+  color: white;
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back-to-levels:hover,
+.btn-back-to-dashboard:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-back-to-dashboard {
+  font-size: 18px;
+  padding: 8px 10px;
+}
+
 .game-title {
   color: #fbbf24;
   font-size: 2.2rem;
   font-weight: 700;
   margin: 0;
   text-shadow: 3px 3px 0px #1e3a8a, 6px 6px 0px rgba(0, 0, 0, 0.3);
-  animation: titleGlow 2s ease-in-out infinite alternate;
 }
 
-@keyframes titleGlow {
-  0% { filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5)); }
-  100% { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.8)); }
-}
 
 
 .game-instruction {
@@ -112,7 +133,6 @@
     0 6px 20px rgba(236, 72, 153, 0.4),
     inset 0 2px 5px rgba(255, 255, 255, 0.3);
   text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
-  animation: missionPulse 1.5s ease-in-out infinite alternate;
   position: relative;
 }
 
@@ -134,10 +154,6 @@
   font-size: 1.5rem;
 }
 
-@keyframes missionPulse {
-  0% { transform: scale(1); box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4); }
-  100% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(236, 72, 153, 0.6); }
-}
 
 .game-status {
   display: flex;
@@ -159,13 +175,8 @@
   top: -15px;
   left: 20px;
   font-size: 1.5rem;
-  animation: ufoFloat 3s ease-in-out infinite;
 }
 
-@keyframes ufoFloat {
-  0%, 100% { transform: translateX(0px); }
-  50% { transform: translateX(20px); }
-}
 
 .status-item {
   text-align: center;
@@ -234,42 +245,38 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.8rem;
-  animation: sparkle 1s ease-in-out infinite alternate;
 }
 
-@keyframes sparkle {
-  0% { opacity: 0.5; transform: translateY(-50%) scale(1); }
-  100% { opacity: 1; transform: translateY(-50%) scale(1.2); }
-}
 
 .game-play-area {
-  margin-top: 10px;
+  margin-top: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
   position: relative;
-  gap: 8px;
+  gap: 30px;
+  min-height: 400px;
 }
 
 .drop-target {
-  height: 120px;
+  height: 140px;
   border: 4px dashed #7c3aed;
   border-radius: 25px;
-  padding: 25px;
+  padding: 30px;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
-  transition: all 0.3s ease;
   box-shadow: 
     0 8px 25px rgba(124, 58, 237, 0.4),
     inset 0 2px 10px rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  min-width: 600px;
 }
 
 .drop-target::before {
@@ -294,7 +301,6 @@
 .drop-target.drag-over {
   border-color: #fbbf24;
   background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%);
-  transform: scale(1.02);
   box-shadow: 
     0 12px 35px rgba(251, 191, 36, 0.5),
     inset 0 2px 10px rgba(255, 255, 255, 0.3);
@@ -306,15 +312,10 @@
   margin: 0;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  animation: hintPulse 2s ease-in-out infinite;
   text-align: center;
   width: 100%;
 }
 
-@keyframes hintPulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
 
 
 .numbers-section {
@@ -335,18 +336,22 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
+  min-height: 90px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  margin-bottom: 20px;
 }
 
 .number-box {
   background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%);
   border: 3px solid #1e3a8a;
   border-radius: 20px;
-  padding: 18px 25px;
+  padding: 20px 28px;
   cursor: grab;
-  transition: all 0.3s ease;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -355,7 +360,7 @@
     inset 0 2px 5px rgba(255, 255, 255, 0.2);
   position: relative;
   user-select: none;
-  min-height: 60px;
+  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -367,16 +372,10 @@
   top: -8px;
   left: -8px;
   font-size: 1rem;
-  animation: rocketSpin 2s linear infinite;
 }
 
-@keyframes rocketSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 
 .number-box:hover {
-  transform: translateY(-5px) scale(1.05);
   box-shadow: 
     0 10px 25px rgba(30, 58, 138, 0.5),
     inset 0 2px 5px rgba(255, 255, 255, 0.3);
@@ -385,20 +384,13 @@
 
 .number-box:active {
   cursor: grabbing;
-  transform: scale(0.95);
 }
 
 .number-box.in-target {
   background: linear-gradient(135deg, #10b981 0%, #22c55e 50%, #16a34a 100%);
   border-color: #fbbf24;
-  animation: successPulse 0.6s ease-in-out;
 }
 
-@keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
 
 .number-box.in-target:hover {
   background: linear-gradient(135deg, #16a34a 0%, #10b981 50%, #22c55e 100%);
@@ -427,7 +419,6 @@
   left: 20px;
   font-size: 2rem;
   opacity: 0.6;
-  animation: float 3s ease-in-out infinite;
 }
 
 .start-screen::after {
@@ -437,26 +428,16 @@
   right: 20px;
   font-size: 2rem;
   opacity: 0.6;
-  animation: float 3s ease-in-out infinite reverse;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
 
 .start-screen h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
   color: #fbbf24;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
-  animation: titleBounce 2s ease-in-out infinite;
 }
 
-@keyframes titleBounce {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-}
 
 .start-screen p {
   font-size: 1.3rem;
@@ -479,7 +460,6 @@
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -512,7 +492,6 @@
 }
 
 .btn-start:hover {
-  transform: translateY(-3px) scale(1.05);
   box-shadow: 
     0 10px 30px rgba(16, 185, 129, 0.6),
     inset 0 2px 5px rgba(255, 255, 255, 0.3);
@@ -559,7 +538,6 @@
   border-radius: 20px;
   padding: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
   color: white;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -576,16 +554,10 @@
   top: -10px;
   left: -10px;
   font-size: 2rem;
-  animation: planetOrbit 4s linear infinite;
 }
 
-@keyframes planetOrbit {
-  0% { transform: rotate(0deg) translateX(20px) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
-}
 
 .level-btn:hover {
-  transform: translateY(-5px) scale(1.05);
   box-shadow: 
     0 10px 25px rgba(30, 58, 138, 0.5),
     inset 0 2px 5px rgba(255, 255, 255, 0.3);
@@ -652,7 +624,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease;
 }
 
 .activity-feedback-modal {
@@ -662,7 +633,6 @@
   text-align: center;
   max-width: 400px;
   width: 90%;
-  animation: modalBounce 0.5s ease;
   box-shadow: 
     0 15px 40px rgba(251, 191, 36, 0.5),
     inset 0 2px 10px rgba(255, 255, 255, 0.3);
@@ -670,11 +640,6 @@
   position: relative;
 }
 
-@keyframes modalBounce {
-  0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-  50% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
 
 .activity-feedback-modal.success {
   background: linear-gradient(135deg, #10b981 0%, #22c55e 100%);
@@ -707,7 +672,6 @@
   border-radius: 20px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
   font-weight: bold;
   color: white;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -724,7 +688,6 @@
 }
 
 .activity-feedback-modal .btn:hover {
-  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -740,7 +703,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease;
 }
 
 .level-results-modal {
@@ -750,7 +712,6 @@
   text-align: center;
   max-width: 500px;
   width: 90%;
-  animation: modalBounce 0.5s ease;
   box-shadow: 
     0 15px 40px rgba(30, 58, 138, 0.5),
     inset 0 2px 10px rgba(255, 255, 255, 0.2);
@@ -917,10 +878,6 @@
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
 
 
 .number-box:nth-child(odd)::before {
@@ -941,5 +898,4 @@
   top: -5px;
   right: -5px;
   font-size: 0.8rem;
-  animation: sparkle 0.5s ease-in-out infinite alternate;
 }

@@ -25,6 +25,7 @@ body, html {
     align-items: center;
     position: relative;
     overflow-x: hidden;
+    z-index: 1;
 }
 
 .game-wrapper::before {
@@ -52,7 +53,42 @@ body, html {
     flex-direction: column;
     justify-content: center;
     position: relative;
-    z-index: 1;
+    z-index: 10;
+}
+
+.header-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+}
+
+.btn-back-to-levels,
+.btn-back-to-dashboard {
+    background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+    color: white;
+    border: 2px solid #fbbf24;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back-to-levels:hover,
+.btn-back-to-dashboard:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-back-to-dashboard {
+    font-size: 18px;
+    padding: 8px 10px;
 }
 
 .chalkboard h1 {
@@ -485,7 +521,7 @@ body, html {
     align-items: center;
     justify-content: center;
     background-color: rgba(0,0,0,0.5);
-    z-index: 50;
+    z-index: 1000;
     padding: 20px;
 }
 
@@ -555,10 +591,144 @@ body, html {
     background-color: #7c3aed;
 }
 
+/* Estilos para el modal de ayuda */
+.help-title {
+    color: #1e3a8a;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.help-content {
+    margin-bottom: 24px;
+}
+
+.help-content p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.help-example {
+    background: linear-gradient(135deg, #fffacd 0%, #fef3c7 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.example-number {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.example-word {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.help-numbers {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 2px solid #9ca3af;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.help-numbers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.help-number-pair {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.help-number {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    min-width: 40px;
+    text-align: center;
+}
+
+.help-word {
+    background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+    color: #1f2937;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
 @keyframes pulse {
     0% { transform: scale(1) rotate(-2deg); }
     50% { transform: scale(1.05) rotate(-2deg); }
     100% { transform: scale(1) rotate(-2deg); }
+}
+
+/* Responsividad para diferentes dispositivos */
+@media (max-width: 1200px) {
+    .chalkboard {
+        width: 98%;
+        padding: 20px;
+        min-height: 70vh;
+    }
+    
+    .words-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 992px) {
+    .chalkboard {
+        width: 98%;
+        padding: 18px;
+        min-height: 75vh;
+    }
+    
+    .numbers-container {
+        gap: 10px;
+        padding: 18px;
+    }
+    
+    .number-box {
+        width: 70px;
+        height: 70px;
+        font-size: 1.3rem;
+    }
+    
+    .words-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 600px;
+    }
+    
+    .word-pair {
+        padding: 14px;
+        gap: 12px;
+    }
+    
+    .drop-zone {
+        width: 55px;
+        height: 55px;
+        font-size: 1.2rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -568,8 +738,24 @@ body, html {
     
     .chalkboard {
         width: 95%;
-        padding: 20px;
+        padding: 16px;
         min-height: 80vh;
+    }
+    
+    .header-controls {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .btn-back-to-levels,
+    .btn-back-to-dashboard {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .btn-back-to-dashboard {
+        font-size: 16px;
+        padding: 6px 8px;
     }
     
     .level-grid {
