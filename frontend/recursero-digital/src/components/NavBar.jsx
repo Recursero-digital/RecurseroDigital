@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
 
-export function NavBar({ tabs, activeTab, onTabChange}) {
+export function NavBar({ tabs, activeTab, onTabChange, userRole}) {
   const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
@@ -10,7 +10,7 @@ export function NavBar({ tabs, activeTab, onTabChange}) {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${userRole}`}>
       <div className="navbar-tabs">
         {tabs.map((tab) => (
           <button

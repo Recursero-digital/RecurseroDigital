@@ -1,13 +1,10 @@
-import React from 'react';
-import JuegoOrdenarNumeros from '../components/games/JuegoOrdenarNumeros'; // Importamos el juego
-
+import Card from "../components/Card";
+import "../styles/homeAlumno.css";
 function DashboardAlumno() {
   return (
     <div className="dashboard-alumno">
-      <h1 className="text-2xl font-bold mb-4">¡Bienvenido! Aquí están tus actividades</h1>
-      
-      <JuegoOrdenarNumeros />
-    
+
+      <Card/>
     </div>
   );
 }

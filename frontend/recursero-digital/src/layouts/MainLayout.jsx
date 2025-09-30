@@ -23,7 +23,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
   const tabs = userRole === "alumno" 
     ? [
         { id: "home", label: "🏠 Inicio", path: "/alumno" },
-        { id: "games", label: "🎮 Juegos", path: "/alumno/juegos" },
+        { id: "games", label: "🎮 Juegos", path: "/alumno/dashboard" },
         { id: "profile", label: "👤 Perfil", path: "/alumno/perfil" }
       ]
     : [

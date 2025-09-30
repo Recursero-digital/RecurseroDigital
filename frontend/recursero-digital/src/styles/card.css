@@ -1,42 +1,82 @@
-.card{
-    display: flex;
-    flex-direction: row;
-    row-gap: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    margin: 10px;
-    padding: 10px;
-   
+.card {
+  display: flex;
+  flex-direction: row;
+  row-gap: 10px;
+  box-shadow: 0 4px 8px 0 rgba(102, 17, 172, 0.45);
+  margin: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
 }
-.imagegame{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    height: 300px;
-    width: 400px;
-    
+.contenedor-card {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
 }
-.textgame{
-    display: flex;
-    flex-direction: column ;
-    row-gap: 25px;
-    padding-right: 100px;
-    padding-top: 25px;
+.imagegame {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  height: 300px;
+  width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+}
+.textgame {
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  padding-right: 100px;
+  padding-top: 25px;
+}
+.textgame button {
+  margin: 20px auto;
+  background: linear-gradient(45deg, #966cf8, #9897e7);
+  color: black;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  text-align: justify;
+}
+.buttongame:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+.buttongame:after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 20px;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(30deg);
+  transition: all 0.5s;
+}
 
-   
-    
+.buttongame:hover:after {
+  left: 120%;
 }
-.buttongame{
-    background-color: #6255bc;
-    width: 150px;
-    color: white;
-    border-radius: 30px;
-    
+.textgame h2 {
+  font-size: 35px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  text-align: justify;
 }
-.titlegame{
-    font-size: 30px;
-    margin-bottom: 1rem;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
+.textgame p {
+  font-size: x-large;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

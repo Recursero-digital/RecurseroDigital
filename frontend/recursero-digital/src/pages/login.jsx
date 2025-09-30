@@ -1,28 +1,7 @@
 import { useNavigate } from "react-router-dom";
-
-
-/*export default function Login() {
-  const [role, setRole] = useState("alumno");
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    if (role === "alumno") navigate("/alumno");
-    else navigate("/docente");
-  };
-
-  return (
-    <div>
-      <h1>Recursera Digital - Login</h1>
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="alumno">Alumno</option>
-        <option value="docente">Docente</option>
-      </select>
-      <button onClick={handleLogin}>Ingresar</button>
-    </div>
-  );
-}*/
-
 import "../styles/login.css"
+import { PiStudentFill } from "react-icons/pi";
+
 
 export default function RoleSelection() {
   const navigate = useNavigate();
@@ -44,7 +23,7 @@ export default function RoleSelection() {
         <div className="cards-container">
           <div className="role-card">
             <div className="card-header">
-              <div className="card-emoji">🎓</div>
+              <div className="card-emoji"> <PiStudentFill/></div>
               <h2 className="card-title student">Estudiante</h2>
               <p className="card-description student">¡Aprende matemáticas jugando!</p>
             </div>
