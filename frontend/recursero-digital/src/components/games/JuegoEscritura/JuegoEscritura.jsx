@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './JuegoEscritura.css';
-import { numberToWords, levelRanges, generateOptions } from './utils'; 
+import { generateDragDropActivity, validateNumberWordPair } from './utils'; 
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -16,10 +16,11 @@ const JuegoEscritura = () => {
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
     const [points, setPoints] = useState(0);
-    const [targetNumber, setTargetNumber] = useState(0);
-    const [options, setOptions] = useState([]);
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [correctAnswer, setCorrectAnswer] = useState([]);
+    const [numbers, setNumbers] = useState([]);
+    const [wordPairs, setWordPairs] = useState([]);
+    const [dragAnswers, setDragAnswers] = useState({});
+    const [usedNumbers, setUsedNumbers] = useState(new Set());
+    const [attempts, setAttempts] = useState(0);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     
     useEffect(() => { 
@@ -27,18 +28,12 @@ const JuegoEscritura = () => {
     }, []);
     
     const startNewActivity = useCallback(() => {
-        const range = levelRanges[currentLevel];
-        if (!range) return;
-
-        const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-        const correctAnswerText = numberToWords(randomNumber);
-        const correctAnswerWords = correctAnswerText.split(' ');
-        const newOptions = generateOptions(correctAnswerWords);
-
-        setTargetNumber(randomNumber);
-        setCorrectAnswer(correctAnswerWords);
-        setOptions(newOptions);
-        setSelectedOptions([]);
+        const activityData = generateDragDropActivity(currentLevel);
+        setNumbers(activityData.numbers);
+        setWordPairs(activityData.wordPairs);
+        setDragAnswers({});
+        setUsedNumbers(new Set());
+        setAttempts(0);
     }, [currentLevel]);
     
     useEffect(() => {
@@ -54,47 +49,120 @@ const JuegoEscritura = () => {
         setGameState('game');
     };
     
-    const handleSelectOption = (word) => {
-        setSelectedOptions(prev => [...prev, word]);
-        setOptions(prev => prev.filter(option => option !== word));
+    const handleDragStart = (e, number) => {
+        e.dataTransfer.setData('text/plain', number.toString());
     };
-    
-    const handleRemoveOption = (index) => {
-        const removedWord = selectedOptions[index];
-        setSelectedOptions(prev => prev.filter((_, i) => i !== index));
-        setOptions(prev => [...prev, removedWord]);
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (e, wordPairIndex) => {
+        e.preventDefault();
+        const draggedNumber = parseInt(e.dataTransfer.getData('text/plain'));
+        const targetWordPair = wordPairs[wordPairIndex];
+        
+        // Validar si el número coincide con la palabra
+        const isCorrect = validateNumberWordPair(draggedNumber, targetWordPair.word);
+        
+        if (isCorrect) {
+            // Si es correcto, lo colocamos
+            const currentNumber = dragAnswers[wordPairIndex];
+            if (currentNumber) {
+                setUsedNumbers(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(currentNumber);
+                    return newSet;
+                });
+            }
+            
+            setUsedNumbers(prev => new Set([...prev, draggedNumber]));
+            
+            setDragAnswers(prev => ({
+                ...prev,
+                [wordPairIndex]: draggedNumber
+            }));
+        } else {
+            // Si no es correcto, incrementamos intentos
+            setAttempts(prev => prev + 1);
+        }
     };
     
     const handleCheckAnswer = () => {
-        const isCorrect = selectedOptions.join(' ') === correctAnswer.join(' ');
-        if (isCorrect) {
+        // Verificar si todos los campos están llenos
+        const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
+        
+        if (!allAnswersProvided) {
+            setFeedback({ 
+                title: '⚠️ Faltan respuestas', 
+                text: 'Por favor completa todos los campos antes de verificar.', 
+                isCorrect: false 
+            });
+            setGameState('feedback');
+            return;
+        }
+
+        // Verificar cada respuesta
+        let correctCount = 0;
+        let incorrectAnswers = [];
+
+        wordPairs.forEach((wordPair, index) => {
+            const userAnswer = dragAnswers[index];
+            const isCorrect = validateNumberWordPair(userAnswer, wordPair.word);
+            
+            if (isCorrect) {
+                correctCount++;
+            } else {
+                incorrectAnswers.push(`${userAnswer} → ${wordPair.word}`);
+            }
+        });
+
+        const allCorrect = correctCount === wordPairs.length;
+
+        if (allCorrect) {
             if (currentActivity < 4) {
                 setFeedback({ 
-                    title: '✅ ¡Correcto!', 
-                    text: '¡Muy bien! Avanza a la siguiente actividad.', 
+                    title: '✅ ¡Perfecto!', 
+                    text: '¡Excelente! Todas las respuestas son correctas. Avanza a la siguiente actividad.', 
                     isCorrect: true 
                 });
                 setGameState('feedback');
             } else {
-                // Solo otorgar puntos cuando se complete toda la actividad (5 ejercicios)
                 setPoints(prev => prev + (currentLevel + 1) * 50);
-                // Desbloquear siguiente nivel
                 unlockLevel('escritura', currentLevel + 2);
                 setGameState('congrats');
             }
         } else {
             setFeedback({ 
-                title: '❌ Incorrecto', 
-                text: `La respuesta correcta es: "${correctAnswer.join(' ')}".`, 
+                title: '❌ Algunas respuestas incorrectas', 
+                text: `Tienes ${correctCount}/${wordPairs.length} correctas. Revisa las respuestas marcadas.`, 
                 isCorrect: false 
             });
             setGameState('feedback');
         }
     };
     
+    const handleRemoveNumber = (wordPairIndex) => {
+        const numberToRemove = dragAnswers[wordPairIndex];
+        if (numberToRemove) {
+            setUsedNumbers(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(numberToRemove);
+                return newSet;
+            });
+            
+            setDragAnswers(prev => {
+                const newAnswers = { ...prev };
+                delete newAnswers[wordPairIndex];
+                return newAnswers;
+            });
+        }
+    };
+
     const handleClear = () => {
-        setOptions(prev => [...prev, ...selectedOptions]);
-        setSelectedOptions([]);
+        setDragAnswers({});
+        setUsedNumbers(new Set());
+        setAttempts(0);
     };
     
     const handleContinue = () => {
@@ -114,11 +182,15 @@ const JuegoEscritura = () => {
                 level={currentLevel + 1}
                 activity={currentActivity + 1}
                 points={points}
-                targetNumber={targetNumber}
-                options={options}
-                selected={selectedOptions}
-                onSelect={handleSelectOption}
-                onRemove={handleRemoveOption}
+                attempts={attempts}
+                numbers={numbers}
+                wordPairs={wordPairs}
+                dragAnswers={dragAnswers}
+                usedNumbers={usedNumbers}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onRemoveNumber={handleRemoveNumber}
                 onCheck={handleCheckAnswer}
                 onClear={handleClear}
             />}
