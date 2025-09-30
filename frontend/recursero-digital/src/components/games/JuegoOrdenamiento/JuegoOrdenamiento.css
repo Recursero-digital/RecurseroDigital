@@ -899,3 +899,162 @@
   right: -5px;
   font-size: 0.8rem;
 }
+
+/* ===== MODAL DE PISTAS ===== */
+.hint-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.hint-modal {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.4s ease-out;
+  border: 3px solid var(--star-gold);
+}
+
+.hint-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.hint-header h2 {
+  color: var(--star-gold);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hint-header p {
+  color: white;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.hint-content {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.hint-message {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--space-blue);
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hint-visual p {
+  color: white;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.numbers-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.number-preview {
+  background: var(--star-gold);
+  color: var(--space-blue);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hint-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hint-btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+}
+
+.hint-btn-continue {
+  background: linear-gradient(45deg, var(--space-green), #34d399);
+  color: white;
+}
+
+.hint-btn-continue:hover {
+  background: linear-gradient(45deg, #059669, var(--space-green));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive para el modal de pistas */
+@media (max-width: 768px) {
+  .hint-modal {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .hint-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .hint-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hint-btn {
+    width: 100%;
+    max-width: 250px;
+  }
+}
