@@ -16,7 +16,7 @@ export default function RoleSelection() {
       <div className="role-selection-content">
         <div className="header-section">
           <img src="src\assets\logo.png" alt="Recursera Digital" className="logo-image" />
-          <h1 className="main-title">¡Recursera Digital!</h1>
+          <h1 className="main-title">¡Recursero Digital!</h1>
           <p className="subtitle">Selecciona tu rol para comenzar</p>
         </div>
 

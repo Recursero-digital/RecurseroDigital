@@ -65,7 +65,7 @@ export default function LoginForm() {
       <div className="login-form-content">
         <div className="header-section">
           <img src="src/assets/logo.png" alt="Recursera Digital" className="imagen-logo" />
-          <h1 className="titulo">¡Recursera Digital!</h1>
+          <h1 className="titulo">¡Recursero Digital!</h1>
           <p className="subtitulo">Inicia sesión para continuar</p>
         </div>
 
