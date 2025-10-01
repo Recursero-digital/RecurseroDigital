@@ -203,6 +203,7 @@ const JuegoEscritura = () => {
                 onDrop={handleDrop}
                 onRemoveNumber={handleRemoveNumber}
                 onCheck={handleCheckAnswer}
+                onBackToLevels={() => setGameState('level-select')}
             />}
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}

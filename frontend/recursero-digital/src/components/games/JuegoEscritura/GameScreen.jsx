@@ -14,7 +14,8 @@ const GameScreen = ({
     onDragOver, 
     onDrop, 
     onRemoveNumber,
-    onCheck
+    onCheck,
+    onBackToLevels
 }) => {
     const navigate = useNavigate();
     return (
@@ -22,14 +23,14 @@ const GameScreen = ({
             <div className="header-controls">
                 <button 
                     className="btn-back-to-levels"
-                    onClick={() => navigate('/games')}
+                    onClick={onBackToLevels}
                     title="Volver a niveles"
                 >
                     ← Niveles
                 </button>
                 <button 
                     className="btn-back-to-dashboard"
-                    onClick={() => navigate('/dashboard')}
+                    onClick={() => navigate('/alumno')}
                     title="Volver al dashboard"
                 >
                     🏠

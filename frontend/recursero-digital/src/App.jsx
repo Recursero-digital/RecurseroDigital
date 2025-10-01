@@ -20,8 +20,8 @@ function App() {
         <Route path="/alumno" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/alumno/juegos" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
-        <Route path="/alumno/juegos/ordenamiento" element={<MainLayout userRole="alumno"><JuegoOrdenamiento /></MainLayout>} />
-        <Route path="/alumno/juegos/escritura" element={<MainLayout userRole="alumno"><JuegoEscritura /></MainLayout>} />
+        <Route path="/alumno/juegos/ordenamiento" element={<JuegoOrdenamiento />} />
+        <Route path="/alumno/juegos/escritura" element={<JuegoEscritura />} />
         <Route path="/alumno/perfil" element={<MainLayout userRole="alumno"><HomeAlumno /></MainLayout>} />
         <Route path="/docente/estudiantes" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />
         <Route path="/docente/juegos" element={<MainLayout userRole="docente"><HomeDocente /></MainLayout>} />

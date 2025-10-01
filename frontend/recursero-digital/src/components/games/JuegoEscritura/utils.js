@@ -111,33 +111,61 @@ export function validateAnswer(userAnswer, correctAnswer) {
     
     return normalizedUserAnswer === normalizedCorrectAnswer;
 }
+
+// Función auxiliar para mezclar arrays usando Fisher-Yates
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
 // Función para generar un conjunto de números y palabras para drag and drop
 export function generateDragDropActivity(level) {
     const range = levelRanges[level];
     if (!range) return { numbers: [], wordPairs: [] };
     
-    // Generar 7 números aleatorios únicos
-    const numbers = [];
-    const wordPairs = [];
+    // Generar 5 números para las parejas correctas
+    const baseNumbers = [];
     const usedNumbers = new Set();
     
-    while (numbers.length < 7) {
+    while (baseNumbers.length < 5) {
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
         
         // Solo agregar si no está duplicado
         if (!usedNumbers.has(randomNumber)) {
-            const wordText = numberToWords(randomNumber);
-            
-            numbers.push(randomNumber);
-            wordPairs.push({
-                number: randomNumber,
-                word: wordText
-            });
+            baseNumbers.push(randomNumber);
             usedNumbers.add(randomNumber);
         }
     }
     
-    return { numbers, wordPairs };
+    // Generar 3 números adicionales como distractores
+    const distractorNumbers = [];
+    while (distractorNumbers.length < 3) {
+        const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        
+        // Solo agregar si no está duplicado y no está en baseNumbers
+        if (!usedNumbers.has(randomNumber)) {
+            distractorNumbers.push(randomNumber);
+            usedNumbers.add(randomNumber);
+        }
+    }
+    
+    // Crear las parejas de palabras (solo para los números correctos)
+    const wordPairs = baseNumbers.map(number => ({
+        number: number,
+        word: numberToWords(number)
+    }));
+    
+    // Mezclar el orden de las palabras para mayor desafío
+    const shuffledWordPairs = shuffleArray(wordPairs);
+    
+    // Combinar todos los números y mezclarlos
+    const allNumbers = [...baseNumbers, ...distractorNumbers];
+    const shuffledNumbers = shuffleArray(allNumbers);
+    
+    return { numbers: shuffledNumbers, wordPairs: shuffledWordPairs };
 }
 
 // Función para validar si un número corresponde a una palabra

@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
 
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 :root {
   --space-blue: #1e3a8a;
   --space-purple: #7c3aed;
@@ -158,6 +166,7 @@
 .game-status {
   display: flex;
   justify-content: space-around;
+  margin-top: 60px;
   margin-bottom: 10px;
   padding: 15px;
   background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
@@ -846,6 +855,10 @@
   .btn {
     padding: 12px 24px;
     font-size: 1rem;
+  }
+  
+  .game-status {
+    margin-top: 50px;
   }
 }
 

@@ -20,7 +20,7 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
             <div className="header-controls">
                 <button 
                     className="btn-back-to-levels"
-                    onClick={() => navigate('/games')}
+                    onClick={() => navigate('/alumno')}
                     title="Volver a juegos"
                 >
                     ← Juegos
