@@ -35,7 +35,7 @@ export default function HomeAlumno() {
           hoy mismo!
         </p>
       </section>
-      <button className="botonJugar" onClick={() => navigate("/alumno/dashboard")}>
+      <button className="botonJugar" onClick={() => navigate("/alumno/juegos")}>
         <IoLogoGameControllerA />
         Ir a Jugar
       </button>
