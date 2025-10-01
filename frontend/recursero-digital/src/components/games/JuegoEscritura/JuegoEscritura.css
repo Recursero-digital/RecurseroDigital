@@ -9,6 +9,8 @@
 body, html {
     height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
 }
 
@@ -16,16 +18,20 @@ body, html {
     font-family: 'Comic Neue', cursive;
     min-height: 100vh;
     width: 100vw;
-    padding: 10px;
+    margin: 0;
+    padding: 10px 0;
     text-align: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     overflow-x: hidden;
-    z-index: 1;
+    overflow-y: hidden;
+    z-index: 1000;
 }
 
 .game-wrapper::before {
@@ -41,19 +47,20 @@ body, html {
 
 .chalkboard {
     background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    border: 12px solid #5a3d2b;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 2px 10px rgba(255,255,255,0.1);
+    border: 10px solid #5a3d2b;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 2px 8px rgba(255,255,255,0.1);
     color: white;
-    padding: 24px;
-    width: 95%;
-    max-width: 1200px;
-    min-height: 75vh;
+    padding: 15px 12px 12px 12px;
+    width: 96%;
+    max-width: 1300px;
+    min-height: calc(100vh - 30px);
+    max-height: calc(100vh - 30px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     position: relative;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .header-controls {
@@ -112,12 +119,12 @@ body, html {
 
 .paper-note {
     background: linear-gradient(135deg, #fffacd 0%, #fef3c7 100%);
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.1);
-    transform: rotate(-2deg);
-    padding: 12px;
-    margin: 8px;
-    border: 2px solid #fbbf24;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transform: rotate(-0.5deg);
+    padding: 8px 12px;
+    margin: 4px 0;
+    border: 1px solid #fbbf24;
     transition: all 0.3s ease;
     color: #1f2937;
     display: inline-block;
@@ -143,8 +150,8 @@ body, html {
 
 .btn {
     font-weight: 700;
-    padding: 12px 32px;
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    padding: 14px 36px;
+    font-size: 1.3rem;
     transition: all 0.2s ease;
     cursor: pointer;
     border: none;
@@ -220,7 +227,6 @@ body, html {
 .level-5 { background-color: #eab308; }
 .level-5:hover { background-color: #d97706; }
 
-/* Niveles bloqueados */
 .level-btn.locked {
   background-color: #6b7280 !important;
   opacity: 0.6;
@@ -254,8 +260,9 @@ body, html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    margin-top: 60px;
+    margin-bottom: 15px;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #fef08a;
     flex-wrap: wrap;
@@ -310,18 +317,18 @@ body, html {
     font-style: italic;
 }
 
-/* Estilos para drag and drop */
 .activity-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: 1.3rem;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 8px;
+    margin-bottom: 3px;
 }
 
 .instruction-text {
-    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-size: 0.95rem;
     color: #4b5563;
     font-style: italic;
+    margin: 0;
 }
 
 .numbers-container {
@@ -329,33 +336,37 @@ body, html {
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
-    margin: 24px 0;
-    padding: 20px;
+    margin: 12px 0;
+    padding: 15px;
     border: 2px dashed #fbbf24;
-    border-radius: 12px;
+    border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
 }
 
 .number-box {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: 1.5rem;
     font-weight: 700;
     color: white;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: grab;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.number-box:hover {
+    transform: scale(1.05);
 }
 
 .number-box:active {
     cursor: grabbing;
 }
 
-/* Colores para las cajas de números */
 .color-0 { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
 .color-1 { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
 .color-2 { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
@@ -366,34 +377,47 @@ body, html {
 
 .words-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin: 24px 0;
-    max-width: 800px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 12px 0;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
+}
+
+@media (min-width: 1200px) {
+    .words-container {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1200px;
+    }
 }
 
 .word-pair {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
+    gap: 10px;
+    padding: 10px 12px;
     background: linear-gradient(135deg, #fffacd 0%, #fef3c7 100%);
-    border-radius: 12px;
-    border: 2px solid #fbbf24;
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+    border-radius: 6px;
+    border: 1px solid #fbbf24;
+    box-shadow: 0 1px 4px rgba(251, 191, 36, 0.1);
+    transition: all 0.2s ease;
+}
+
+.word-pair:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
 }
 
 .drop-zone {
-    width: 60px;
-    height: 60px;
-    border: 3px dashed #9ca3af;
-    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    border: 2px dashed #9ca3af;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-size: 1.2rem;
     font-weight: 700;
     color: #1f2937;
     background-color: rgba(255, 255, 255, 0.8);
@@ -426,7 +450,7 @@ body, html {
 }
 
 .word-text {
-    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-size: 1.05rem;
     font-weight: 600;
     color: #1f2937;
     flex: 1;
@@ -490,14 +514,17 @@ body, html {
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
-    margin-top: auto;
-    padding-top: 15px;
+    margin-top: 15px;
+    padding-top: 10px;
 }
 
 .btn-verify {
     background-color: #22c55e;
     color: white;
     border-radius: 8px;
+    z-index: 10;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
 .btn-verify:hover:not(:disabled) {
@@ -680,7 +707,6 @@ body, html {
     100% { transform: scale(1) rotate(-2deg); }
 }
 
-/* Responsividad para diferentes dispositivos */
 @media (max-width: 1200px) {
     .chalkboard {
         width: 98%;
@@ -738,8 +764,9 @@ body, html {
     
     .chalkboard {
         width: 95%;
-        padding: 16px;
-        min-height: 80vh;
+        padding: 12px;
+        height: calc(100vh - 20px);
+        max-height: calc(100vh - 20px);
     }
     
     .header-controls {
@@ -765,7 +792,8 @@ body, html {
     
     .numbers-container {
         gap: 8px;
-        padding: 15px;
+        padding: 10px;
+        margin: 10px 0;
     }
     
     .number-box {
@@ -777,6 +805,7 @@ body, html {
     .words-container {
         grid-template-columns: 1fr;
         gap: 12px;
+        margin: 10px 0;
     }
     
     .word-pair {
@@ -829,5 +858,7 @@ body, html {
         flex-direction: column;
         gap: 5px;
         font-size: 1rem;
+        margin-top: 35px;
+        margin-bottom: 10px;
     }
 }

@@ -111,36 +111,55 @@ export function validateAnswer(userAnswer, correctAnswer) {
     
     return normalizedUserAnswer === normalizedCorrectAnswer;
 }
-// Función para generar un conjunto de números y palabras para drag and drop
+
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 export function generateDragDropActivity(level) {
     const range = levelRanges[level];
     if (!range) return { numbers: [], wordPairs: [] };
     
-    // Generar 7 números aleatorios únicos
-    const numbers = [];
-    const wordPairs = [];
+    const baseNumbers = [];
     const usedNumbers = new Set();
     
-    while (numbers.length < 7) {
+    while (baseNumbers.length < 5) {
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-        
-        // Solo agregar si no está duplicado
+
         if (!usedNumbers.has(randomNumber)) {
-            const wordText = numberToWords(randomNumber);
-            
-            numbers.push(randomNumber);
-            wordPairs.push({
-                number: randomNumber,
-                word: wordText
-            });
+            baseNumbers.push(randomNumber);
+            usedNumbers.add(randomNumber);
+        }
+    }
+
+    const distractorNumbers = [];
+    while (distractorNumbers.length < 3) {
+        const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+
+        if (!usedNumbers.has(randomNumber)) {
+            distractorNumbers.push(randomNumber);
             usedNumbers.add(randomNumber);
         }
     }
     
-    return { numbers, wordPairs };
+    const wordPairs = baseNumbers.map(number => ({
+        number: number,
+        word: numberToWords(number)
+    }));
+    
+    const shuffledWordPairs = shuffleArray(wordPairs);
+    const allNumbers = [...baseNumbers, ...distractorNumbers];
+    const shuffledNumbers = shuffleArray(allNumbers);
+    
+    return { numbers: shuffledNumbers, wordPairs: shuffledWordPairs };
 }
 
-// Función para validar si un número corresponde a una palabra
+
 export function validateNumberWordPair(number, word) {
     const correctWord = numberToWords(number);
     return normalizeText(word) === normalizeText(correctWord);

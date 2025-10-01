@@ -62,12 +62,9 @@ const JuegoEscritura = () => {
         e.preventDefault();
         const draggedNumber = parseInt(e.dataTransfer.getData('text/plain'));
         const targetWordPair = wordPairs[wordPairIndex];
-        
-        // Validar si el número coincide con la palabra
         const isCorrect = validateNumberWordPair(draggedNumber, targetWordPair.word);
         
         if (isCorrect) {
-            // Si es correcto, lo colocamos
             const currentNumber = dragAnswers[wordPairIndex];
             if (currentNumber) {
                 setUsedNumbers(prev => {
@@ -84,11 +81,8 @@ const JuegoEscritura = () => {
                 [wordPairIndex]: draggedNumber
             }));
         } else {
-            // Si no es correcto, incrementamos intentos
             const newAttempts = attempts + 1;
             setAttempts(newAttempts);
-            
-            // Mostrar ayuda después de 5 intentos fallidos
             if (newAttempts >= 5) {
                 setShowHelp(true);
             }
@@ -96,7 +90,6 @@ const JuegoEscritura = () => {
     };
     
     const handleCheckAnswer = () => {
-        // Verificar si todos los campos están llenos
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
         if (!allAnswersProvided) {
@@ -108,8 +101,6 @@ const JuegoEscritura = () => {
             setGameState('feedback');
             return;
         }
-
-        // Verificar cada respuesta
         let correctCount = 0;
         let incorrectAnswers = [];
 
@@ -203,6 +194,7 @@ const JuegoEscritura = () => {
                 onDrop={handleDrop}
                 onRemoveNumber={handleRemoveNumber}
                 onCheck={handleCheckAnswer}
+                onBackToLevels={() => setGameState('level-select')}
             />}
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
