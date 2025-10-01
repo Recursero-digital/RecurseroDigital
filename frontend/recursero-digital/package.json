@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "start": "serve -s dist"
   },
+  
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@react-icons/all-files": "^4.1.0",

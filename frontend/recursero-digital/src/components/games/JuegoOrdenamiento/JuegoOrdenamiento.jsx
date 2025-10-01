@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import LevelResultsModal from './LevelResultsModal';
+import ActivityFeedbackModal from './ActivityFeedbackModal';
+import { useUserProgress } from '../../../hooks/useUserProgress';
 
 const JuegoOrdenamiento = () => {
   const navigate = useNavigate();
+  const { unlockLevel } = useUserProgress();
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
@@ -16,26 +19,57 @@ const JuegoOrdenamiento = () => {
   const [sortedNumbers, setSortedNumbers] = useState([]);
   const [showGameComplete, setShowGameComplete] = useState(false);
   const [showLevelUp, setShowLevelUp] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [levelResults, setLevelResults] = useState([]);
+  const [showHintModal, setShowHintModal] = useState(false);
+  const [consecutiveFailures, setConsecutiveFailures] = useState(0);
+
+  const resetGame = useCallback(() => {
+    setCurrentLevel(0);
+    setCurrentActivity(0);
+    setPoints(0);
+    setAttempts(0);
+    setNumbers([]);
+    setSortedNumbers([]);
+    setShowGameComplete(false);
+    setShowLevelUp(false);
+    setShowFeedback(false);
+    setFeedbackSuccess(false);
+    setTargetNumbers([]);
+    setLevelResults([]);
+    setShowHintModal(false);
+    setConsecutiveFailures(0);
+  }, []);
+
+  const handleBackToGames = useCallback(() => {
+    navigate('/alumno/juegos', { replace: true });
+  }, [navigate]);
 
   const levelRanges = useMemo(() => [
-    { min: 10, max: 250 },
+    { min: 25, max: 250 },
     { min: 251, max: 500 },
     { min: 501, max: 750 },
     { min: 751, max: 1000 },
     { min: 1001, max: 1500 },
   ], []);
 
-  const numbersCount = 6;
+ 
+  const getNumbersCount = useCallback((level) => {
+    return 6 + (level * 2);
+  }, []);
+
+  const numbersCount = getNumbersCount(currentLevel);
   const targetAreaRef = useRef(null);
 
-  // Generar números únicos para el nivel actual
+
   const generateNumbers = useCallback((level) => {
     const { min, max } = levelRanges[level];
+    const currentNumbersCount = getNumbersCount(level);
     const generatedNumbers = new Set();
 
-    while (generatedNumbers.size < numbersCount) {
+    while (generatedNumbers.size < currentNumbersCount) {
       const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
       generatedNumbers.add(newNum);
     }
@@ -46,16 +80,41 @@ const JuegoOrdenamiento = () => {
 
     setNumbers(shuffledNumbers);
     setSortedNumbers(sorted);
-  }, [levelRanges]);
+  }, [levelRanges, getNumbersCount]);
 
-  // Obtener instrucción de ordenamiento para el nivel
+  
   const getOrderInstruction = useCallback((level) => {
     return level % 2 === 0
-      ? "Ordena los números de menor a mayor"
-      : "Ordena los números de mayor a menor";
+      ? "📈 ORDENA DE MENOR A MAYOR 📈"
+      : "📉 ORDENA DE MAYOR A MENOR 📉";
   }, []);
 
-  // Verificar si el ordenamiento es correcto
+  // Función para generar pistas inteligentes
+  const generateHint = useCallback(() => {
+    const isEvenLevel = (currentLevel + 1) % 2 === 0;
+    const sortedArray = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
+    
+    const hints = [];
+    
+    if (isEvenLevel) {
+      hints.push(`💡 Recuerda: Debes ordenar de MENOR a MAYOR`);
+      hints.push(`🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`);
+      hints.push(`🔢 El número más grande es: ${Math.max(...sortedNumbers)}`);
+      hints.push(`➡️ Comienza colocando el número ${sortedArray[0]} primero`);
+      hints.push(`🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`);
+    } else {
+      hints.push(`💡 Recuerda: Debes ordenar de MAYOR a MENOR`);
+      hints.push(`🔢 El número más grande es: ${Math.max(...sortedNumbers)}`);
+      hints.push(`🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`);
+      hints.push(`➡️ Comienza colocando el número ${sortedArray[0]} primero`);
+      hints.push(`🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`);
+    }
+    
+    // Mostrar una pista aleatoria
+    return hints[Math.floor(Math.random() * hints.length)];
+  }, [currentLevel, sortedNumbers]);
+
+  
   const checkOrder = useCallback((currentNumbers) => {
     const isEvenLevel = (currentLevel + 1) % 2 === 0;
     const correctOrder = [...sortedNumbers].sort((a, b) =>
@@ -64,17 +123,19 @@ const JuegoOrdenamiento = () => {
     return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
   }, [currentLevel, sortedNumbers]);
 
-  // Manejar inicio del juego
-  const handleStartGame = (level) => {
+ 
+  const handleStartGame = useCallback((level) => {
     setCurrentLevel(level - 1);
     setCurrentActivity(0);
     setPoints(0);
     setAttempts(0);
     setLevelResults([]);
+    setConsecutiveFailures(0); // Resetear contador al empezar nuevo nivel
     setGameState('game');
-  };
+  }, []);
 
-  // Manejar completar actividad
+
+ 
   const handleActivityComplete = useCallback(() => {
     const baseScore = 50 * (currentLevel + 1);
     const penaltyForAttempts = attempts * 5;
@@ -83,7 +144,9 @@ const JuegoOrdenamiento = () => {
     const newPoints = points + activityScore;
     const newActivity = currentActivity + 1;
     
-    // Guardar resultado de la actividad
+    // Resetear contador de fallos consecutivos al completar exitosamente
+    setConsecutiveFailures(0);
+    
     const result = {
       activity: currentActivity + 1,
       score: activityScore,
@@ -96,37 +159,47 @@ const JuegoOrdenamiento = () => {
     setAttempts(0);
     setTargetNumbers([]);
     
-    if (newActivity < 5) {
-      setCurrentActivity(newActivity);
-      generateNumbers(currentLevel);
-    } else {
-      // Nivel completado
-      setShowLevelUp(true);
-      setTimeout(() => {
-        if (currentLevel >= levelRanges.length - 1) {
-          setShowGameComplete(true);
-        } else {
-          setCurrentLevel(prev => prev + 1);
-          setCurrentActivity(0);
-          setLevelResults([]);
-          generateNumbers(currentLevel + 1);
-          setShowLevelUp(false);
-        }
-      }, 2000);
-    }
-  }, [currentLevel, currentActivity, points, attempts, levelRanges.length, generateNumbers]);
-
-  // Manejar intento fallido
-  const handleFailedAttempt = useCallback(() => {
-    setAttempts(prev => prev + 1);
+    setFeedbackSuccess(true);
+    setShowFeedback(true);
     
     setTimeout(() => {
-      setTargetNumbers([]);
-      generateNumbers(currentLevel);
-    }, 500);
-  }, [currentLevel, generateNumbers]);
+      setShowFeedback(false);
+      if (newActivity < 3) {
+        setCurrentActivity(newActivity);
+        generateNumbers(currentLevel); // Generar nuevos números para la siguiente actividad
+        setTargetNumbers([]);
+        setConsecutiveFailures(0); // Resetear contador al generar nueva secuencia
+      } else {  
+        unlockLevel('ordenamiento', currentLevel + 2);
+        setShowLevelUp(true);
+      }
+    }, 1500);
+  }, [currentLevel, currentActivity, points, attempts, generateNumbers, unlockLevel]);
 
-  // Manejar drop de número
+  
+  const handleFailedAttempt = useCallback(() => {
+    const newConsecutiveFailures = consecutiveFailures + 1;
+    setConsecutiveFailures(newConsecutiveFailures);
+    setAttempts(prev => prev + 1);
+    
+    // Mostrar pista después de 3 intentos fallidos
+    if (newConsecutiveFailures >= 3) {
+      setShowHintModal(true);
+      setConsecutiveFailures(0); // Resetear contador después de mostrar pista
+    } else {
+      // Feedback normal de fallo - SOLO limpiar área, NO regenerar números
+      setFeedbackSuccess(false);
+      setShowFeedback(true);
+      
+      setTimeout(() => {
+        setShowFeedback(false);
+        setTargetNumbers([]); // Solo limpiar el área de destino
+        // NO regenerar números aquí - mantener los mismos para que el usuario pueda intentar de nuevo
+      }, 1500);
+    }
+  }, [consecutiveFailures]);
+
+ 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
     setTargetNumbers(newTargetNumbers);
@@ -140,12 +213,12 @@ const JuegoOrdenamiento = () => {
     }
   }, [targetNumbers, numbersCount, checkOrder, handleActivityComplete, handleFailedAttempt]);
 
-  // Manejar remoción de número
+ 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
   }, []);
 
-  // Inicializar nivel
+ 
   useEffect(() => {
     if (gameState === 'game') {
       generateNumbers(currentLevel);
@@ -153,7 +226,7 @@ const JuegoOrdenamiento = () => {
     }
   }, [gameState, currentLevel, generateNumbers]);
 
-  // Componente NumberBox con drag and drop nativo
+ 
   const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
     const handleDragStart = (e) => {
       e.dataTransfer.setData('text/plain', number.toString());
@@ -181,7 +254,7 @@ const JuegoOrdenamiento = () => {
     );
   });
 
-  // Área de destino con drag and drop nativo
+ 
   const DropTarget = () => {
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -197,7 +270,7 @@ const JuegoOrdenamiento = () => {
 
     const handleDragLeave = (e) => {
       e.preventDefault();
-      // Solo cambiar si realmente salimos del contenedor
+     
       if (!e.currentTarget.contains(e.relatedTarget)) {
         setIsDragOver(false);
       }
@@ -242,49 +315,95 @@ const JuegoOrdenamiento = () => {
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
   const progressPercentage = ((currentLevel + 1) / levelRanges.length) * 100;
 
-  // Manejar continuar al siguiente nivel
+     
   const handleNextLevel = () => {
-    setCurrentLevel(prev => prev + 1);
-    setCurrentActivity(0);
-    setLevelResults([]);
     setShowLevelUp(false);
-    generateNumbers(currentLevel + 1);
+    if (currentLevel >= levelRanges.length - 1) {
+      setShowGameComplete(true);
+    } else {
+      setCurrentLevel(prev => prev + 1);
+      setCurrentActivity(0);
+      setLevelResults([]);
+      setConsecutiveFailures(0); // Resetear contador al pasar de nivel
+      // Generar números para el nuevo nivel
+      setTimeout(() => {
+        generateNumbers(currentLevel + 1);
+      }, 100);
+    }
   };
 
-  // Manejar volver a selección de niveles
-  const handleBackToLevels = () => {
+     
+  const handleBackToLevels = useCallback(() => {
     setGameState('level-select');
-    setShowLevelUp(false);
+  }, []);
+
+     
+  const handleBackToStart = useCallback(() => {
+    resetGame();
+    setGameState('start');
+  }, [resetGame]);
+
+  // Funciones para manejar el modal de pistas
+  const handleCloseHint = useCallback(() => {
+    setShowHintModal(false);
+    setTargetNumbers([]);
+    // NO regenerar números aquí - mantener los mismos para que la pista siga siendo válida
+  }, []);
+
+     
+  const handleContinueFeedback = () => {
+    setShowFeedback(false);
+  };
+
+   
+  const handleRetryFeedback = () => {
+    setShowFeedback(false);
+    setTargetNumbers([]);
+    // NO regenerar números aquí - mantener los mismos para seguir intentando
   };
 
   return (
     <div className="game-container">
-      {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
+      {gameState === 'start' && (
+        <StartScreen 
+          onStart={() => setGameState('level-select')} 
+          onBackToGames={handleBackToGames} 
+        />
+      )}
       
-      {gameState === 'level-select' && <LevelSelectScreen onSelectLevel={handleStartGame} />}
+      {gameState === 'level-select' && (
+        <LevelSelectScreen 
+          onSelectLevel={handleStartGame} 
+          onBackToGames={handleBackToGames} 
+        />
+      )}
       
       {gameState === 'game' && (
         <div className="game-content">
-          {/* Header */}
           <header className="game-header">
-            <div className="header-top">
-              <h1 className="game-title">
-                🎯 Ordenamiento Numérico
-              </h1>
+            <div className="header-controls">
               <button 
-                className="btn-volver-dashboard"
-                onClick={() => navigate('/alumno/juegos')}
-                title="Volver al Dashboard"
+                className="btn-back-to-levels"
+                onClick={() => setGameState('level-select')}
+                title="Volver a niveles"
               >
-                🏠 Volver al Dashboard
+                ← Niveles
+              </button>
+              <button 
+                className="btn-back-to-dashboard"
+                onClick={handleBackToGames}
+                title="Volver a juegos"
+              >
+                ← Juegos
               </button>
             </div>
+            <h1 className="game-title">
+              🎯 Ordenamiento Numérico
+            </h1>
             <p className="game-instruction">
               {getOrderInstruction(currentLevel + 1)}
             </p>
           </header>
-
-          {/* Status */}
           <div className="game-status">
             <div className="status-item">
               <div className="status-icon">📊</div>
@@ -294,7 +413,7 @@ const JuegoOrdenamiento = () => {
             <div className="status-item">
               <div className="status-icon">🎯</div>
               <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/5</div>
+              <div className="status-value">{currentActivity + 1}/3</div>
             </div>
             <div className="status-item">
               <div className="status-icon">🎯</div>
@@ -308,7 +427,6 @@ const JuegoOrdenamiento = () => {
             </div>
           </div>
 
-          {/* Progress Bar */}
           <div className="progress-container">
             <div 
               className="progress-bar"
@@ -318,12 +436,10 @@ const JuegoOrdenamiento = () => {
 
           {!showGameComplete ? (
             <div className="game-play-area">
-              {/* Drop Target */}
               <DropTarget />
               
-              {/* Available Numbers */}
               <div className="numbers-section">
-                <h3 className="numbers-title">Números disponibles:</h3>
+                <h3 className="numbers-title">Números a ordenar:</h3>
                 <div className="numbers-container">
                   {availableNumbers.map(number => (
                     <NumberBox 
@@ -348,7 +464,7 @@ const JuegoOrdenamiento = () => {
               </p>
               <button 
                 className="restart-button"
-                onClick={() => window.location.reload()}
+                onClick={handleBackToStart}
               >
                 🔄 Jugar de nuevo
               </button>
@@ -365,6 +481,49 @@ const JuegoOrdenamiento = () => {
           onNextLevel={handleNextLevel}
           onBackToLevels={handleBackToLevels}
         />
+      )}
+
+      {showFeedback && (
+        <ActivityFeedbackModal
+          isSuccess={feedbackSuccess}
+          onContinue={handleContinueFeedback}
+          onRetry={handleRetryFeedback}
+        />
+      )}
+
+      {showHintModal && (
+        <div className="hint-modal-overlay">
+          <div className="hint-modal">
+            <div className="hint-header">
+              <h2>💡 ¡Pista Especial!</h2>
+              <p>Has intentado 3 veces seguidas. ¡Te ayudamos un poco!</p>
+            </div>
+            
+            <div className="hint-content">
+              <div className="hint-message">
+                {generateHint()}
+              </div>
+              
+              <div className="hint-visual">
+                <p><strong>Números actuales:</strong></p>
+                <div className="numbers-preview">
+                  {numbers.map(num => (
+                    <span key={num} className="number-preview">{num}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="hint-actions">
+              <button 
+                className="hint-btn hint-btn-continue"
+                onClick={handleCloseHint}
+              >
+                💪 ¡Intentar de nuevo!
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
