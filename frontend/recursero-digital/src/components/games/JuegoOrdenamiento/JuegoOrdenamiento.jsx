@@ -84,9 +84,7 @@ const JuegoOrdenamiento = () => {
 
   
   const getOrderInstruction = useCallback((level) => {
-    return level % 2 === 0
-      ? "📈 ORDENA DE MENOR A MAYOR 📈"
-      : "📉 ORDENA DE MAYOR A MENOR 📉";
+    return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
   }, []);
 
   // Función para generar pistas inteligentes
