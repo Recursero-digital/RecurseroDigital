@@ -14,7 +14,6 @@
   overflow-x: hidden;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .main-content {
     padding: 0.5rem;

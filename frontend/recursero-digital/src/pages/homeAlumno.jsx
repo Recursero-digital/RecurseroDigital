@@ -9,7 +9,6 @@ export default function HomeAlumno() {
   const userNameOrEmail = useMemo(() => {
     const storedEmail = localStorage.getItem("userEmail");
     const storedName = localStorage.getItem("userName");
-    // Prioritize userName, extract name from email if no userName
     if (storedName) return storedName.toUpperCase();
     if (storedEmail) {
       const nameFromEmail = storedEmail.split('@')[0];
@@ -33,12 +32,13 @@ export default function HomeAlumno() {
       <section class="motivation-section">
         <h2>¡Aprender matemáticas nunca fue tan divertido!</h2>
         <p>
-          Nuestros juegos están diseñados especialmente para que los niños
-          desarrollen habilidades matemáticas mientras se divierten. Cada juego
-          incluye personajes coloridos, animaciones emocionantes y recompensas
-          que mantendrán a los niños motivados. ¡Comienza tu aventura matemática
-          hoy mismo!
+          Estos juegos están diseñados  para que ustedes desarrollen habilidades matemáticas mientras se divierten. Cada juego
+          tiene 5 niveles y 3 actividades, numeros impresionantes y acumula puntos para ser el mejor de la clase.
+          
         </p>
+        <h3>
+          ¡Comienza tu aventura en las matemáticas ¡Hoy mismo!
+        </h3>
       </section>
       <button className="botonJugar" onClick={() => navigate("/alumno/juegos")}>
         <IoLogoGameControllerA />
