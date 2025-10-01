@@ -19,10 +19,6 @@ export default function HomeAlumno() {
   return (
     <div className="container">
       <section class="card-header">
-        <div class="math-animation">+</div>
-        <div class="math-animation">−</div>
-        <div class="math-animation">×</div>
-        <div class="math-animation">÷</div>
         <h1>¡Bienvenido {userNameOrEmail}!</h1>
         <p>
           ¿Estás preparado para jugar y aprender con estos juegos de matemática?

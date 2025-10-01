@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
 
 .app-logo {
   width: 250px;
@@ -6,18 +6,27 @@
   position: relative;
   z-index: 1;
 }
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e3a8a 75%, #7c3aed 100%);
-  font-family: 'Fredoka', cursive;
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e3a8a 75%,
+    #7c3aed 100%
+  );
+  font-family: "Fredoka", cursive;
   position: relative;
+
+  
 }
 
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -49,7 +58,7 @@
 .mode-text {
   font-size: 0.9rem;
   color: white;
-  font-family: 'Fredoka', cursive;
+  font-family: "Fredoka", cursive;
   font-weight: 500;
 }
 
@@ -113,20 +122,21 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.boton-cerrar{
+.boton-cerrar {
   display: flex;
   padding-left: 20px;
-  
-
 }
-.cerrar-sesion{
+.cerrar-sesion {
   cursor: pointer;
   display: end;
   justify-content: end;
   margin: 1rem;
   padding: 0.6rem;
-  background-color: rgb(153, 124, 180);
-  font-size: small;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  color: white;
+  border-radius: 2rem;
+  font-size: 18px;
   border-radius: 2rem;
   transition: all 0.2s ease-in-out;
 }
