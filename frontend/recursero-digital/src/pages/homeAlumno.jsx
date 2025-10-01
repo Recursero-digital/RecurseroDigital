@@ -27,14 +27,13 @@ export default function HomeAlumno() {
         <p>
           ¿Estás preparado para jugar y aprender con estos juegos de matemática?
         </p>
-        <p>¡Descubre el mundo mágico de los números mientras te diviertes!</p>
+        <p>¡Descubre el mundo mágico de los números mientras te divertís!</p>
       </section>
       <section class="motivation-section">
         <h2>¡Aprender matemáticas nunca fue tan divertido!</h2>
         <p>
-          Estos juegos están diseñados  para que ustedes desarrollen habilidades matemáticas mientras se divierten. Cada juego
-          tiene 5 niveles y 3 actividades, numeros impresionantes y acumula puntos para ser el mejor de la clase.
-          
+          Los juegos son para que ustedes aprendan habilidades matemáticas mientras se divierten. Cada juego
+          tiene 5 niveles y 3 actividades, numeros impresionantes y acumula puntos ¡A JUGAR!
         </p>
         <h3>
           ¡Comienza tu aventura en las matemáticas ¡Hoy mismo!
