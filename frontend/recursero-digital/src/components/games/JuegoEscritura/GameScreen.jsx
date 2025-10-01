@@ -43,7 +43,7 @@ const GameScreen = ({
         
             <div className="paper-note" data-aos="zoom-in">
                 <div className="activity-title">Números para Arrastrar</div>
-                <div className="instruction-text">Arrastra cada número a su palabra correspondiente</div>
+                <div className="instruction-text">Arrastra cada número a su palabra que corresponde</div>
             </div>
             
 
@@ -74,7 +74,7 @@ const GameScreen = ({
                             onDragOver={onDragOver}
                             onDrop={(e) => onDrop(e, index)}
                             onClick={() => dragAnswers[index] && onRemoveNumber(index)}
-                            title={dragAnswers[index] ? "Haz clic para remover" : "Arrastra un número aquí"}
+                            title={dragAnswers[index] ? "Hacé clic para sacar " : "Arrastra un número aquí"}
                         >
                             {dragAnswers[index] ? dragAnswers[index] : ''}
                         </div>
