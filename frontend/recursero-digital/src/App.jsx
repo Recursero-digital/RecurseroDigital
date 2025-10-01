@@ -84,10 +84,10 @@ function App() {
 
         {/* Nueva ruta para DashboardAlumno */}
         <Route
-          path="/alumno/dashboard"
+          path="/alumno/juegos"
           element={
             <MainLayout userRole="alumno">
-              <DashboardAlumno />
+              <DashboardAlumno/>
             </MainLayout>
           }
         />
