@@ -24,7 +24,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
     ? [
         { id: "home", label: "🏠 Inicio", path: "/alumno" },
         { id: "games", label: "🎮 Juegos", path: "/alumno/juegos" },
-        { id: "profile", label: "👤 Perfil", path: "/alumno/perfil" }
+        { id: "profile", label: "🎓 Perfil", path: "/alumno/perfil" }
       ]
     : [
         { id: "home", label: "🏠 Inicio", path: "/docente" },

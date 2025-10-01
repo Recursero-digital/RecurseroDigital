@@ -7,10 +7,15 @@ export default function HomeAlumno() {
   const navigate = useNavigate();
 
   const userNameOrEmail = useMemo(() => {
-    // If you store name elsewhere, replace this with that key
     const storedEmail = localStorage.getItem("userEmail");
     const storedName = localStorage.getItem("userName");
-    return (storedName || storedEmail || "Alumno").toUpperCase();
+    // Prioritize userName, extract name from email if no userName
+    if (storedName) return storedName.toUpperCase();
+    if (storedEmail) {
+      const nameFromEmail = storedEmail.split('@')[0];
+      return nameFromEmail.toUpperCase();
+    }
+    return "ALUMNO";
   }, []);
   return (
     <div className="container">

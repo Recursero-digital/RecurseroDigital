@@ -1,12 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+.main-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: 'Fredoka', cursive;
+  color: rgb(255, 255, 255);
+  margin-bottom: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-family: 'Fredoka', cursive;
+  font-weight: 400;
+}
+
 .role-selection-container {
   height: 100vh;
-  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #10b981 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e3a8a 75%, #7c3aed 100%);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
+  font-family: 'Fredoka', cursive;
   overflow: hidden;
+}
+
+.role-selection-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+  pointer-events: none;
+  z-index: 0;
 }
 
 
@@ -18,6 +48,8 @@
   max-width: 50rem;
   height: 100%;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .header-section {
@@ -29,17 +61,6 @@
   width: 20rem;
   height: 5rem;
   margin: 0 auto 1rem auto;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .main-title {
@@ -85,13 +106,14 @@
 }
 
 .card-emoji {
-  font-size: 3.75rem;
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
 .card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: 'Fredoka', cursive;
   margin-bottom: 0.5rem;
 }
 
@@ -105,11 +127,13 @@
 
 .card-description {
   margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-family: 'Fredoka', cursive;
+  font-weight: 400;
 }
 
 .card-description.student {
   color: #8b5cf6;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .card-description.teacher {
