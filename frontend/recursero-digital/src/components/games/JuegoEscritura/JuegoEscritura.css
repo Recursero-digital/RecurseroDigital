@@ -624,85 +624,118 @@ body, html {
 
 /* Estilos para el modal de ayuda */
 .help-title {
-    color: #1e3a8a;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: #1f2937;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .help-content {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .help-content p {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    margin-bottom: 12px;
-    line-height: 1.5;
+    color: #374151;
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-weight: 500;
 }
 
 .help-example {
-    background: linear-gradient(135deg, #fffacd 0%, #fef3c7 100%);
-    border: 2px solid #fbbf24;
-    border-radius: 12px;
-    padding: 16px;
-    margin: 16px 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px solid #3b82f6;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 14px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #374151;
 }
 
 .example-number {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
     color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    min-height: 1.2em;
+    white-space: nowrap;
+    overflow: visible;
 }
 
 .example-word {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
     color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    min-height: 1.2em;
+    white-space: nowrap;
+    overflow: visible;
 }
 
 .help-numbers {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    border: 2px solid #9ca3af;
-    border-radius: 12px;
-    padding: 16px;
-    margin: 16px 0;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 2px solid #6b7280;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 14px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    color: #374151;
 }
 
 .help-numbers-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
     margin-top: 12px;
 }
 
 .help-number-pair {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1rem;
+    gap: 10px;
+    font-size: 0.95rem;
+    padding: 4px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #374151;
 }
 
 .help-number {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 700;
-    min-width: 40px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    min-width: 42px;
     text-align: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .help-word {
-    background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-    color: #1f2937;
-    padding: 4px 8px;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
     font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes pulse {

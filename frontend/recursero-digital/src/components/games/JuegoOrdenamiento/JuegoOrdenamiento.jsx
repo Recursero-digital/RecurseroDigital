@@ -6,15 +6,23 @@ import LevelSelectScreen from './LevelSelectScreen';
 import LevelResultsModal from './LevelResultsModal';
 import ActivityFeedbackModal from './ActivityFeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
+import useGameScoring from '../../../hooks/useGameScoring';
 
 const JuegoOrdenamiento = () => {
   const navigate = useNavigate();
   const { unlockLevel } = useUserProgress();
+  const { 
+    points, 
+    attempts, 
+    incrementAttempts, 
+    resetAttempts, 
+    resetScoring, 
+    completeActivity 
+  } = useGameScoring();
+
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
-  const [points, setPoints] = useState(0);
-  const [attempts, setAttempts] = useState(0);
   const [numbers, setNumbers] = useState([]);
   const [sortedNumbers, setSortedNumbers] = useState([]);
   const [showGameComplete, setShowGameComplete] = useState(false);
@@ -29,8 +37,7 @@ const JuegoOrdenamiento = () => {
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
     setCurrentActivity(0);
-    setPoints(0);
-    setAttempts(0);
+    resetScoring();
     setNumbers([]);
     setSortedNumbers([]);
     setShowGameComplete(false);
@@ -41,7 +48,7 @@ const JuegoOrdenamiento = () => {
     setLevelResults([]);
     setShowHintModal(false);
     setConsecutiveFailures(0);
-  }, []);
+  }, [resetScoring]);
 
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
@@ -127,21 +134,16 @@ const JuegoOrdenamiento = () => {
   const handleStartGame = useCallback((level) => {
     setCurrentLevel(level - 1);
     setCurrentActivity(0);
-    setPoints(0);
-    setAttempts(0);
+    resetScoring();
     setLevelResults([]);
     setConsecutiveFailures(0); // Resetear contador al empezar nuevo nivel
     setGameState('game');
-  }, []);
+  }, [resetScoring]);
 
 
  
   const handleActivityComplete = useCallback(() => {
-    const baseScore = 50 * (currentLevel + 1);
-    const penaltyForAttempts = attempts * 5;
-    const activityScore = Math.max(0, baseScore - penaltyForAttempts);
-    
-    const newPoints = points + activityScore;
+    const activityScore = completeActivity(currentLevel);
     const newActivity = currentActivity + 1;
     
     // Resetear contador de fallos consecutivos al completar exitosamente
@@ -155,8 +157,6 @@ const JuegoOrdenamiento = () => {
     };
     
     setLevelResults(prev => [...prev, result]);
-    setPoints(newPoints);
-    setAttempts(0);
     setTargetNumbers([]);
     
     setFeedbackSuccess(true);
@@ -174,13 +174,13 @@ const JuegoOrdenamiento = () => {
         setShowLevelUp(true);
       }
     }, 1500);
-  }, [currentLevel, currentActivity, points, attempts, generateNumbers, unlockLevel]);
+  }, [currentLevel, currentActivity, completeActivity, generateNumbers, unlockLevel]);
 
   
   const handleFailedAttempt = useCallback(() => {
     const newConsecutiveFailures = consecutiveFailures + 1;
     setConsecutiveFailures(newConsecutiveFailures);
-    setAttempts(prev => prev + 1);
+    incrementAttempts();
     
     // Mostrar pista después de 3 intentos fallidos
     if (newConsecutiveFailures >= 3) {
