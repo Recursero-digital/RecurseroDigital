@@ -72,12 +72,9 @@ const JuegoEscritura = () => {
         e.preventDefault();
         const draggedNumber = parseInt(e.dataTransfer.getData('text/plain'));
         const targetWordPair = wordPairs[wordPairIndex];
-        
-        // Validar si el número coincide con la palabra
         const isCorrect = validateNumberWordPair(draggedNumber, targetWordPair.word);
         
         if (isCorrect) {
-            // Si es correcto, lo colocamos
             const currentNumber = dragAnswers[wordPairIndex];
             if (currentNumber) {
                 setUsedNumbers(prev => {
@@ -105,7 +102,6 @@ const JuegoEscritura = () => {
     };
     
     const handleCheckAnswer = () => {
-        // Verificar si todos los campos están llenos
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
         if (!allAnswersProvided) {
@@ -117,8 +113,6 @@ const JuegoEscritura = () => {
             setGameState('feedback');
             return;
         }
-
-        // Verificar cada respuesta
         let correctCount = 0;
         let incorrectAnswers = [];
 

@@ -77,7 +77,7 @@ body, html {
   transform: translateX(-50%);
   font-size: 2rem;
 }
-/* Header - Panel de control de la nave */
+
 .game-header {
   text-align: center;
   margin-bottom: 15px;
@@ -131,7 +131,7 @@ body, html {
   color: #1e3a8a;
   font-size: 24px;
   font-weight: 700;
-  margin: 10px 0;
+  margin: 12px 0;
   text-align: center;
   background: linear-gradient(135deg, #ec4899 0%, #f97316 50%, #fbbf24 100%);
   padding: 12px 20px;
@@ -325,8 +325,6 @@ body, html {
   width: 100%;
 }
 
-
-
 .numbers-section {
   text-align: center;
   margin-top: 0px;
@@ -348,9 +346,6 @@ body, html {
   gap: 8px;
   align-items: center;
   min-height: 90px;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
   margin-bottom: 20px;
 }
 
@@ -913,7 +908,6 @@ body, html {
   font-size: 0.8rem;
 }
 
-/* ===== MODAL DE PISTAS ===== */
 .hint-modal-overlay {
   position: fixed;
   top: 0;
@@ -1050,7 +1044,6 @@ body, html {
   }
 }
 
-/* Responsive para el modal de pistas */
 @media (max-width: 768px) {
   .hint-modal {
     padding: 1.5rem;

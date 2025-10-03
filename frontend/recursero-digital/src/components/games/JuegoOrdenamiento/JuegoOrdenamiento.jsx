@@ -91,12 +91,9 @@ const JuegoOrdenamiento = () => {
 
   
   const getOrderInstruction = useCallback((level) => {
-    return level % 2 === 0
-      ? "📈 ORDENA DE MENOR A MAYOR 📈"
-      : "📉 ORDENA DE MAYOR A MENOR 📉";
-  }, []);
+    return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
+ }, []);
 
-  // Función para generar pistas inteligentes
   const generateHint = useCallback(() => {
     const isEvenLevel = (currentLevel + 1) % 2 === 0;
     const sortedArray = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
@@ -117,7 +114,6 @@ const JuegoOrdenamiento = () => {
       hints.push(`🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`);
     }
     
-    // Mostrar una pista aleatoria
     return hints[Math.floor(Math.random() * hints.length)];
   }, [currentLevel, sortedNumbers]);
 
@@ -136,7 +132,7 @@ const JuegoOrdenamiento = () => {
     setCurrentActivity(0);
     resetScoring();
     setLevelResults([]);
-    setConsecutiveFailures(0); // Resetear contador al empezar nuevo nivel
+    setConsecutiveFailures(0); 
     setGameState('game');
   }, [resetScoring]);
 
@@ -146,7 +142,6 @@ const JuegoOrdenamiento = () => {
     const activityScore = completeActivity(currentLevel);
     const newActivity = currentActivity + 1;
     
-    // Resetear contador de fallos consecutivos al completar exitosamente
     setConsecutiveFailures(0);
     
     const result = {
@@ -166,9 +161,9 @@ const JuegoOrdenamiento = () => {
       setShowFeedback(false);
       if (newActivity < 3) {
         setCurrentActivity(newActivity);
-        generateNumbers(currentLevel); // Generar nuevos números para la siguiente actividad
+        generateNumbers(currentLevel); 
         setTargetNumbers([]);
-        setConsecutiveFailures(0); // Resetear contador al generar nueva secuencia
+        setConsecutiveFailures(0); 
       } else {  
         unlockLevel('ordenamiento', currentLevel + 2);
         setShowLevelUp(true);
@@ -182,19 +177,17 @@ const JuegoOrdenamiento = () => {
     setConsecutiveFailures(newConsecutiveFailures);
     incrementAttempts();
     
-    // Mostrar pista después de 3 intentos fallidos
     if (newConsecutiveFailures >= 3) {
       setShowHintModal(true);
-      setConsecutiveFailures(0); // Resetear contador después de mostrar pista
+      setConsecutiveFailures(0); 
     } else {
-      // Feedback normal de fallo - SOLO limpiar área, NO regenerar números
+      
       setFeedbackSuccess(false);
       setShowFeedback(true);
       
       setTimeout(() => {
         setShowFeedback(false);
-        setTargetNumbers([]); // Solo limpiar el área de destino
-        // NO regenerar números aquí - mantener los mismos para que el usuario pueda intentar de nuevo
+        setTargetNumbers([]); 
       }, 1500);
     }
   }, [consecutiveFailures]);
@@ -324,8 +317,7 @@ const JuegoOrdenamiento = () => {
       setCurrentLevel(prev => prev + 1);
       setCurrentActivity(0);
       setLevelResults([]);
-      setConsecutiveFailures(0); // Resetear contador al pasar de nivel
-      // Generar números para el nuevo nivel
+      setConsecutiveFailures(0);
       setTimeout(() => {
         generateNumbers(currentLevel + 1);
       }, 100);
@@ -343,11 +335,9 @@ const JuegoOrdenamiento = () => {
     setGameState('start');
   }, [resetGame]);
 
-  // Funciones para manejar el modal de pistas
   const handleCloseHint = useCallback(() => {
     setShowHintModal(false);
     setTargetNumbers([]);
-    // NO regenerar números aquí - mantener los mismos para que la pista siga siendo válida
   }, []);
 
      
@@ -359,7 +349,6 @@ const JuegoOrdenamiento = () => {
   const handleRetryFeedback = () => {
     setShowFeedback(false);
     setTargetNumbers([]);
-    // NO regenerar números aquí - mantener los mismos para seguir intentando
   };
 
   return (
@@ -496,7 +485,7 @@ const JuegoOrdenamiento = () => {
           <div className="hint-modal">
             <div className="hint-header">
               <h2>💡 ¡Pista Especial!</h2>
-              <p>Has intentado 3 veces seguidas. ¡Te ayudamos un poco!</p>
+              <p>Lo intentaste 3 veces seguidas. ¡Te ayudamos un poco!</p>
             </div>
             
             <div className="hint-content">
@@ -519,7 +508,7 @@ const JuegoOrdenamiento = () => {
                 className="hint-btn hint-btn-continue"
                 onClick={handleCloseHint}
               >
-                💪 ¡Intentar de nuevo!
+                💪Intentar de nuevo
               </button>
             </div>
           </div>

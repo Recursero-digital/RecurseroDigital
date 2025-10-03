@@ -227,7 +227,6 @@ body, html {
 .level-5 { background-color: #eab308; }
 .level-5:hover { background-color: #d97706; }
 
-/* Niveles bloqueados */
 .level-btn.locked {
   background-color: #6b7280 !important;
   opacity: 0.6;
@@ -318,7 +317,6 @@ body, html {
     font-style: italic;
 }
 
-/* Estilos para drag and drop */
 .activity-title {
     font-size: 1.3rem;
     font-weight: 700;
@@ -369,7 +367,6 @@ body, html {
     cursor: grabbing;
 }
 
-/* Colores para las cajas de números */
 .color-0 { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
 .color-1 { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
 .color-2 { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
@@ -388,7 +385,6 @@ body, html {
     margin-right: auto;
 }
 
-/* Para pantallas muy anchas, usar 4 columnas */
 @media (min-width: 1200px) {
     .words-container {
         grid-template-columns: repeat(4, 1fr);
@@ -744,7 +740,6 @@ body, html {
     100% { transform: scale(1) rotate(-2deg); }
 }
 
-/* Responsividad para diferentes dispositivos */
 @media (max-width: 1200px) {
     .chalkboard {
         width: 98%;
