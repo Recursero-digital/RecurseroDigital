@@ -14,6 +14,10 @@ export function Card() {
         navigate('/alumno/juegos/escritura');
     };
 
+    const handleJugarDescomposicion = () => {
+        navigate('/alumno/juegos/descomposicion');
+    };
+
     return(
         <>
         <scroll>
@@ -33,6 +37,16 @@ export function Card() {
                     <h2 className="titlegame">Escribir Números en Palabras</h2>  
                     <p className="descriptiongame">¡Aprende a escribir los números en palabras! Arrastra las palabras para formar la respuesta correcta.</p>
                     <button className="buttongame" onClick={handleJugarEscritura}>Jugar</button>
+                </div>
+  
+            </box>
+            
+            <box className="card">
+                <img src={Juego} alt="Descomposicion"  className="imagegame"/>
+                <div className='textgame'>
+                    <h2 className="titlegame">Descomposición y Composición</h2>  
+                    <p className="descriptiongame">¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.</p>
+                    <button className="buttongame" onClick={handleJugarDescomposicion}>Jugar</button>
                 </div>
   
             </box>
