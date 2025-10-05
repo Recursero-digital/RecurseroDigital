@@ -5,8 +5,6 @@ import logoutRoutes from '../delivery/routes/logoutRoutes';
 import studentRoutes from '../delivery/routes/studentRoutes';
 
 const app: Application = express();
-const PORT = 4000;
-
 
 app.use(cors({
     origin: (origin, callback) => {

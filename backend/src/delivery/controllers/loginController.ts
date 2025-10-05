@@ -40,6 +40,7 @@ const loginTeacher = async (req: Request<{}, LoginResponse, LoginRequest>, res: 
             res.status(401).json({ error: 'Credenciales inválidas' });
             return;
         }
+        console.error('Error en loginTeacher:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
@@ -65,6 +66,7 @@ const loginStudent = async (req: Request<{}, LoginResponse, LoginRequest>, res: 
             res.status(401).json({ error: 'Credenciales inválidas' });
             return;
         }
+        console.error('Error en loginStudent:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
@@ -90,6 +92,7 @@ const loginAdmin = async (req: Request<{}, LoginResponse, LoginRequest>, res: Re
             res.status(401).json({ error: 'Credenciales inválidas' });
             return;
         }
+        console.error('Error en loginAdmin:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
