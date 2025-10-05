@@ -6,6 +6,8 @@ import { BcryptPasswordEncoder } from '../infrastructure/BcryptPasswordEncoder';
 import { JWTTokenService } from '../infrastructure/JWTTokenService';
 import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
+import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
+import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
 
 
 
@@ -22,9 +24,11 @@ export class DependencyContainer {
     private _adminRepository: InMemoryAdminRepository | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
+    private _uuidGenerator: UUIDGenerator | null = null;
     private _loginTeacherUseCase: LoginTeacherUseCase | null = null;
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
+    private _addStudentUseCase: AddStudentUseCase | null = null;
 
 
     private constructor() {}
@@ -72,6 +76,13 @@ export class DependencyContainer {
         return this._tokenService;
     }
 
+    public get uuidGenerator(): UUIDGenerator {
+        if (!this._uuidGenerator) {
+            this._uuidGenerator = new UUIDGenerator();
+        }
+        return this._uuidGenerator;
+    }
+
     public get loginTeacherUseCase(): LoginTeacherUseCase {
         if (!this._loginTeacherUseCase) {
             this._loginTeacherUseCase = new LoginTeacherUseCase(
@@ -105,5 +116,15 @@ export class DependencyContainer {
         return this._loginAdminUseCase;
     }
 
+    public get addStudentUseCase(): AddStudentUseCase {
+        if (!this._addStudentUseCase) {
+            this._addStudentUseCase = new AddStudentUseCase(
+                this.studentRepository,
+                this.passwordEncoder,
+                this.uuidGenerator
+            );
+        }
+        return this._addStudentUseCase;
+    }
 
 }
