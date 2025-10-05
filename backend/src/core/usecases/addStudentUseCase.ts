@@ -2,12 +2,32 @@
 import { StudentRepository, StudentData } from '../infrastructure/StudentRepository';
 import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { IdGenerator } from '../infrastructure/IdGenerator';
+import {StudentInvalidRequestError} from "../models/exceptions/StudentInvalidRequestError";
 
 export interface AddStudentRequest {
     name: string;
     lastName: string;
-    email: string;
+    username: string;
     password: string;
+    dni: string;
+}
+
+function validateStudentRequest(request: AddStudentRequest) {
+    if(!request.name) {
+        throw new StudentInvalidRequestError('El nombre del estudiante es obligatorio');
+    }
+    if(!request.lastName) {
+        throw new StudentInvalidRequestError('El apellido del estudiante es obligatorio');
+    }
+    if(!request.username) {
+        throw new StudentInvalidRequestError('El nombre de usuario es obligatorio');
+    }
+    if(!request.password) {
+        throw new StudentInvalidRequestError('La contraseña del estudiante es obligatoria');
+    }
+    if(!request.dni) {
+        throw new StudentInvalidRequestError('El DNI del estudiante es obligatorio');
+    }
 }
 
 export class AddStudentUseCase {
@@ -26,15 +46,18 @@ export class AddStudentUseCase {
     }
 
     async execute(request: AddStudentRequest): Promise<void> {
+        validateStudentRequest(request);
         const hashedPassword = await this.passwordEncoder.encode(request.password);
         const id = this.idGenerator.generate();
         
         const studentData: StudentData = {
             id,
-            username: request.email,
+            username: request.username,
             password: hashedPassword,
             name: request.name,
-            surname: request.lastName
+            lastname: request.lastName,
+            dni: request.dni,
+            role: 'STUDENT'
         };
 
         await this.studentRepository.addStudent(studentData);

@@ -19,6 +19,7 @@ export class MockStudentRepository implements StudentRepository {
       id: studentData.id,
       username: studentData.username,
       password: studentData.password,
+      dni: studentData.dni,
       role: 'STUDENT'
     });
   }

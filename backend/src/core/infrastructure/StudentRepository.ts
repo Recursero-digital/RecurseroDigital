@@ -2,6 +2,7 @@ export interface User {
     id: string;
     username: string;
     password: string;
+    dni: string;
     role: string;
 }
 
@@ -10,7 +11,9 @@ export interface StudentData {
     username: string;
     password: string;
     name: string;
-    surname: string;
+    lastname: string;
+    dni: string;
+    role: string
 }
 
 export interface StudentRepository {

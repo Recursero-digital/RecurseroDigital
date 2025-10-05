@@ -27,12 +27,13 @@ describe('AddStudentUseCase', () => {
         mockIdGenerator.reset();
     });
 
-    describe('execute', () => {
-        it('debe dar de alta un alumno exitosamente', async () => {
+    describe('When execute', () => {
+        it('should add student successfully', async () => {
             const request: AddStudentRequest = {
                 name: 'Juan',
                 lastName: 'Pérez',
-                email: 'juan.perez@email.com',
+                username: 'pepito123',
+                dni: '12345678',
                 password: 'password123'
             };
 
@@ -44,11 +45,83 @@ describe('AddStudentUseCase', () => {
             const createdStudent = allStudents[0];
             expect(createdStudent).toEqual({
                 id: '00000000-0000-4000-8000-0000000100000000',
-                username: request.email,
+                username: request.username,
                 password: expect.any(String),
                 name: request.name,
-                surname: request.lastName
+                lastname: request.lastName,
+                dni: request.dni,
+                role: 'STUDENT'
             });
+        });
+
+        it('should show error when username is no received', async () => {
+            const request: AddStudentRequest = {
+                name: 'Juan',
+                lastName: 'Pérez',
+                dni: '12345678',
+                username: '',
+                password: 'password123'
+            };
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('El nombre de usuario es obligatorio');
+        });
+
+        it('should show error when student name is no received', async () => {
+            const request: AddStudentRequest = {
+                name: '',
+                lastName: 'Pérez',
+                dni: '12345678',
+                username: 'pepito123',
+                password: 'password123'
+            };
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('El nombre del estudiante es obligatorio');
+        });
+
+        it('should show error when student lastname is no received', async () => {
+            const request: AddStudentRequest = {
+                name: 'pepito',
+                lastName: '',
+                dni: '12345678',
+                username: 'pepito123',
+                password: 'password123'
+            };
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('El apellido del estudiante es obligatorio');
+        });
+
+        it('should show error when student dni is no received', async () => {
+            const request: AddStudentRequest = {
+                name: 'pepito',
+                lastName: 'Perez',
+                dni: '',
+                username: 'pepito123',
+                password: 'password123'
+            };
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('El DNI del estudiante es obligatorio');
+        });
+
+        it('should show error when student password is no received', async () => {
+            const request: AddStudentRequest = {
+                name: 'pepito',
+                lastName: 'Perez',
+                dni: '56738093',
+                username: 'pepito123',
+                password: ''
+            };
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('La contraseña del estudiante es obligatoria');
         });
     });
 });

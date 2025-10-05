@@ -1,19 +1,22 @@
-import { Usuario } from './Usuario';
+import { User } from './User';
 
-export class Alumno extends Usuario {
+export class Student extends User {
 
     name: string;
-    surname: string;
+    lastname: string;
+    dni: String;
 
     constructor(
         id: string, 
         username: string,
         passwordHash: string,
         name: string,
-        surname: string
+        lastname: string,
+        dni: String
     ) {
         super(id, username, passwordHash, 'STUDENT');
         this.name = name;
-        this.surname = surname;
+        this.lastname = lastname;
+        this.dni = dni;
     }
 }

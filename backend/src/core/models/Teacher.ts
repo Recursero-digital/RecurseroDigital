@@ -1,6 +1,6 @@
-import { Usuario } from './Usuario';
+import { User } from './User';
 
-export class Docente extends Usuario {
+export class Teacher extends User {
     name: string;
     surname: string;
     email: string;
