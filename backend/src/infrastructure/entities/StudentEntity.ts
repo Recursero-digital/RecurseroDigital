@@ -1,6 +1,8 @@
-import { User } from './User';
 
-export class Student extends User {
+export class StudentEntity {
+    id: string;
+    username: string;
+    passwordHash: string;
     name: string;
     lastname: string;
     dni: String;
@@ -13,9 +15,11 @@ export class Student extends User {
         lastname: string,
         dni: String
     ) {
-        super(id, username, passwordHash, 'STUDENT');
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;
+        this.username = username;
+        this.passwordHash = passwordHash;
     }
 }

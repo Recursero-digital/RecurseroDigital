@@ -1,39 +1,66 @@
-import { StudentRepository, User, StudentData } from '../../src/core/infrastructure/StudentRepository';
+import { StudentRepository } from '../../src/core/infrastructure/StudentRepository';
+import {Student} from "../../src/core/models/Student";
+import {StudentEntity} from "../../src/infrastructure/entities/StudentEntity";
+import { User } from '../../src/core/models/User';
 
 export class MockStudentRepository implements StudentRepository {
-  private users: User[] = [];
-  private students: StudentData[] = [];
+  private students: StudentEntity[];
 
-  constructor(users: User[] = []) {
-    this.users = users;
+  constructor(students: StudentEntity[] = []) {
+    this.students = students;
   }
 
-  async findByUserName(userName: string): Promise<User | null> {
-    const user = this.users.find(u => u.username === userName);
-    return user || null;
+  async findByUserName(userName: string): Promise<Student | null> {
+      const student = this.students.find(u => u.username === userName);
+      if(student) {
+          return new Student(
+              student.id,
+              student.username,
+              student.passwordHash,
+              student.name,
+              student.lastname,
+              student.dni
+          );
+      }
+      return null;
   }
 
-  async addStudent(studentData: StudentData): Promise<void> {
-    this.students.push(studentData);
-    this.users.push({
-      id: studentData.id,
-      username: studentData.username,
-      password: studentData.password,
-      dni: studentData.dni,
-      role: 'STUDENT'
-    });
+  async addStudent(studentData: Student): Promise<void> {
+      const studentEntity = new StudentEntity(
+          studentData.id,
+          studentData.username,
+          studentData.passwordHash,
+          studentData.name,
+          studentData.lastname,
+          studentData.dni
+      );
+      this.students.push(studentEntity);
   }
 
-  addUser(user: User): void {
-    this.users.push(user);
-  }
-
-  clearUsers(): void {
-    this.users = [];
+  clearStudents(): void {
     this.students = [];
   }
 
-  getAllStudents(): StudentData[] {
-    return [...this.students];
+  addUser(user: User): void {
+    const studentEntity = new StudentEntity(
+      user.id,
+      user.username,
+      user.passwordHash,
+      'Test',
+      'User',
+      '12345678'
+    );
+    this.students.push(studentEntity);
+  }
+
+  getAllStudents(): Student[] {
+    return this.students.map(student => new Student(
+        student.id,
+        student.username,
+        student.passwordHash,
+        student.name,
+        student.lastname,
+        student.dni
+    ));
   }
 }

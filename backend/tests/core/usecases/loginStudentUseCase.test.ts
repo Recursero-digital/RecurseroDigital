@@ -3,7 +3,7 @@ import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidC
 import { MockStudentRepository } from '../../mocks/StudentRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/infrastructure/StudentRepository';
+import { User } from '../../../src/core/models/User';
 
 describe('LoginStudentUseCase', () => {
   let loginUseCase: LoginStudentUseCase;
@@ -24,7 +24,7 @@ describe('LoginStudentUseCase', () => {
   });
 
   afterEach(() => {
-    mockUserRepository.clearUsers();
+    mockUserRepository.clearStudents();
     mockPasswordEncoder.clearPasswords();
     mockTokenService.reset();
   });
@@ -43,7 +43,7 @@ describe('LoginStudentUseCase', () => {
       const user: User = {
         id: '1',
         username: 'studentuser',
-        password: 'hashed_correct_password',
+        passwordHash: 'hashed_correct_password',
         role: 'student'
       };
       
@@ -62,7 +62,7 @@ describe('LoginStudentUseCase', () => {
       const user: User = {
         id: '1',
         username: 'studentuser',
-        password: 'hashed_correct_password',
+        passwordHash: 'hashed_correct_password',
         role: 'student'
       };
       

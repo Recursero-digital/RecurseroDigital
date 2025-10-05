@@ -1,8 +1,9 @@
 
-import { StudentRepository, StudentData } from '../infrastructure/StudentRepository';
+import { StudentRepository } from '../infrastructure/StudentRepository';
 import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { IdGenerator } from '../infrastructure/IdGenerator';
 import {StudentInvalidRequestError} from "../models/exceptions/StudentInvalidRequestError";
+import {Student} from "../models/Student";
 
 export interface AddStudentRequest {
     name: string;
@@ -50,16 +51,15 @@ export class AddStudentUseCase {
         const hashedPassword = await this.passwordEncoder.encode(request.password);
         const id = this.idGenerator.generate();
         
-        const studentData: StudentData = {
+        const student = new Student(
             id,
-            username: request.username,
-            password: hashedPassword,
-            name: request.name,
-            lastname: request.lastName,
-            dni: request.dni,
-            role: 'STUDENT'
-        };
+            request.username,
+            hashedPassword,
+            request.name,
+            request.lastName,
+            request.dni
+        )
 
-        await this.studentRepository.addStudent(studentData);
+        await this.studentRepository.addStudent(student);
     }
 }

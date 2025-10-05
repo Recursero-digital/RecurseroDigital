@@ -1,31 +1,47 @@
-import { StudentRepository, User, StudentData } from '../core/infrastructure/StudentRepository';
+import { StudentRepository } from '../core/infrastructure/StudentRepository';
+import { StudentEntity } from './entities/StudentEntity';
+import {Student} from "../core/models/Student";
 
 export class InMemoryStudentRepository implements StudentRepository {
-  private students: User[] = [];
+  private students: StudentEntity[] = [];
 
   constructor() {
-    // Usuario de prueba: alumno con password abcd1234
     this.students = [
-        {
-            id: '1',
-            username: 'nico@gmail.com',
-            password: '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // hash de 'Recursero2025!'
-            role: 'alumno'
-        }
+        new StudentEntity(
+            '1',
+            'nico@gmail.com',
+            '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // hash de 'Recursero2025!'
+            'Nicolás',
+            'García',
+            '12345678'
+        )
     ];
   }
 
-  async findByUserName(userName: string): Promise<User | null> {
-    const user = this.students.find(u => u.username === userName);
-    return user || null;
+  async findByUserName(userName: string): Promise<Student | null> {
+    const student = this.students.find(u => u.username === userName);
+    if(student) {
+        return new Student(
+            student.id,
+            student.username,
+            student.passwordHash,
+            student.name,
+            student.lastname,
+            student.dni
+        );
+    }
+    return null;
   }
 
-  async addStudent(studentData: StudentData): Promise<void> {
-    this.students.push({
-      id: studentData.id,
-      username: studentData.username,
-      password: studentData.password,
-      role: 'STUDENT'
-    });
+  async addStudent(studentData: Student): Promise<void> {
+    const studentEntity = new StudentEntity(
+      studentData.id,
+      studentData.username,
+      studentData.passwordHash,
+      studentData.name,
+      studentData.lastname,
+      studentData.dni
+    );
+    this.students.push(studentEntity);
   }
 }

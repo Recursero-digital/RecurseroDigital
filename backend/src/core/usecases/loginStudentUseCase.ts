@@ -1,5 +1,6 @@
 import { InvalidCredentials } from '../models/exceptions/InvalidCredentials';
-import { StudentRepository, User } from '../infrastructure/StudentRepository';
+import { StudentRepository } from '../infrastructure/StudentRepository';
+import { Student } from '../models/Student';
 import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { TokenService } from '../infrastructure/TokenService';
 
@@ -19,14 +20,14 @@ export class LoginStudentUseCase {
     }
 
     async execute(userName: string, password: string): Promise<string> {
-        const user = await this.studentRepository.findByUserName(userName);
-        if (!user || !(await this.passwordEncoder.compare(password, user.password))) {
+        const student = await this.studentRepository.findByUserName(userName);
+        if (!student || !(await this.passwordEncoder.compare(password, student.passwordHash))) {
             throw new InvalidCredentials();
         }
         return this.tokenService.generate({
-            id: user.id,
-            username: user.username,
-            role: user.role
+            id: student.id,
+            username: student.username,
+            role: student.role
         });
     }
 }

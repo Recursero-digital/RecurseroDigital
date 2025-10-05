@@ -1,7 +1,7 @@
 export class User {
     id: string;
     username: string;
-    role: string
+    role: string;
     passwordHash: string;
 
     constructor(id: string, username: string, passwordHash: string, role: string) {

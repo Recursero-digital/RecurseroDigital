@@ -19,14 +19,14 @@ export class LoginTeacherUseCase {
     }
 
     async execute(userName: string, password: string): Promise<string> {
-        const user = await this.teacherRepository.findByUserName(userName);
-        if (!user || !(await this.passwordEncoder.compare(password, user.password))) {
+        const teacher = await this.teacherRepository.findByUserName(userName);
+        if (!teacher || !(await this.passwordEncoder.compare(password, teacher.password))) {
             throw new InvalidCredentials();
         }
         return this.tokenService.generate({
-            id: user.id,
-            username: user.username,
-            role: user.role
+            id: teacher.id,
+            username: teacher.username,
+            role: teacher.role
         });
     }
 }

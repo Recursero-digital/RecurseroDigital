@@ -22,7 +22,7 @@ describe('AddStudentUseCase', () => {
     });
 
     afterEach(() => {
-        mockStudentRepository.clearUsers();
+        mockStudentRepository.clearStudents();
         mockPasswordEncoder.clearPasswords();
         mockIdGenerator.reset();
     });
@@ -46,7 +46,7 @@ describe('AddStudentUseCase', () => {
             expect(createdStudent).toEqual({
                 id: '00000000-0000-4000-8000-0000000100000000',
                 username: request.username,
-                password: expect.any(String),
+                passwordHash: expect.any(String),
                 name: request.name,
                 lastname: request.lastName,
                 dni: request.dni,
