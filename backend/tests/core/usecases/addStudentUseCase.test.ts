@@ -2,6 +2,8 @@ import { AddStudentUseCase, AddStudentRequest } from "../../../src/core/usecases
 import { MockStudentRepository } from '../../mocks/StudentRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockIdGenerator } from '../../mocks/IdGenerator.mock';
+import {StudentInvalidRequestError} from "../../../src/core/models/exceptions/StudentInvalidRequestError";
+import {StudentAlreadyExistsError} from "../../../src/core/models/exceptions/StudentAlreadyExistsError";
 
 describe('AddStudentUseCase', () => {
     let addStudentUseCase: AddStudentUseCase;
@@ -54,7 +56,7 @@ describe('AddStudentUseCase', () => {
             });
         });
 
-        it('should show error when username is no received', async () => {
+        it('should throw error when username is no received', async () => {
             const request: AddStudentRequest = {
                 name: 'Juan',
                 lastName: 'Pérez',
@@ -65,10 +67,14 @@ describe('AddStudentUseCase', () => {
 
             await expect(addStudentUseCase.execute(request))
                 .rejects
+                .toThrow(StudentInvalidRequestError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
                 .toThrow('El nombre de usuario es obligatorio');
         });
 
-        it('should show error when student name is no received', async () => {
+        it('should throw error when student name is no received', async () => {
             const request: AddStudentRequest = {
                 name: '',
                 lastName: 'Pérez',
@@ -79,10 +85,14 @@ describe('AddStudentUseCase', () => {
 
             await expect(addStudentUseCase.execute(request))
                 .rejects
+                .toThrow(StudentInvalidRequestError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
                 .toThrow('El nombre del estudiante es obligatorio');
         });
 
-        it('should show error when student lastname is no received', async () => {
+        it('should throw error when student lastname is no received', async () => {
             const request: AddStudentRequest = {
                 name: 'pepito',
                 lastName: '',
@@ -93,10 +103,14 @@ describe('AddStudentUseCase', () => {
 
             await expect(addStudentUseCase.execute(request))
                 .rejects
+                .toThrow(StudentInvalidRequestError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
                 .toThrow('El apellido del estudiante es obligatorio');
         });
 
-        it('should show error when student dni is no received', async () => {
+        it('should throw error when student dni is no received', async () => {
             const request: AddStudentRequest = {
                 name: 'pepito',
                 lastName: 'Perez',
@@ -107,10 +121,14 @@ describe('AddStudentUseCase', () => {
 
             await expect(addStudentUseCase.execute(request))
                 .rejects
+                .toThrow(StudentInvalidRequestError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
                 .toThrow('El DNI del estudiante es obligatorio');
         });
 
-        it('should show error when student password is no received', async () => {
+        it('should throw error when student password is no received', async () => {
             const request: AddStudentRequest = {
                 name: 'pepito',
                 lastName: 'Perez',
@@ -121,7 +139,30 @@ describe('AddStudentUseCase', () => {
 
             await expect(addStudentUseCase.execute(request))
                 .rejects
+                .toThrow(StudentInvalidRequestError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
                 .toThrow('La contraseña del estudiante es obligatoria');
         });
+
+        it('should throw error when student with same username already exists', async () => {
+            const request: AddStudentRequest = {
+                name: 'Juan',
+                lastName: 'Pérez',
+                username: 'pepito123',
+                dni: '12345678',
+                password: 'password123'
+            }
+            await addStudentUseCase.execute(request);
+
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow(StudentAlreadyExistsError);
+            
+            await expect(addStudentUseCase.execute(request))
+                .rejects
+                .toThrow('El nombre de usuario ya existe');
+        })
     });
 });

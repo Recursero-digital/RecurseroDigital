@@ -4,6 +4,7 @@ import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { IdGenerator } from '../infrastructure/IdGenerator';
 import {StudentInvalidRequestError} from "../models/exceptions/StudentInvalidRequestError";
 import {Student} from "../models/Student";
+import {StudentAlreadyExistsError} from "../models/exceptions/StudentAlreadyExistsError";
 
 export interface AddStudentRequest {
     name: string;
@@ -31,6 +32,13 @@ function validateStudentRequest(request: AddStudentRequest) {
     }
 }
 
+async function validateUserAlreadyExists(username: string, studentRepository: StudentRepository) {
+    const student = await studentRepository.findByUserName(username)
+    if(student) {
+        throw new StudentAlreadyExistsError('El nombre de usuario ya existe');
+    }
+}
+
 export class AddStudentUseCase {
     private studentRepository: StudentRepository;
     private passwordEncoder: PasswordEncoder;
@@ -48,6 +56,7 @@ export class AddStudentUseCase {
 
     async execute(request: AddStudentRequest): Promise<void> {
         validateStudentRequest(request);
+        await validateUserAlreadyExists(request.username, this.studentRepository);
         const hashedPassword = await this.passwordEncoder.encode(request.password);
         const id = this.idGenerator.generate();
         
