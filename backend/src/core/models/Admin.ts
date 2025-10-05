@@ -1,6 +1,6 @@
-import { Usuario } from './Usuario';
+import { User } from './User';
 
-export class Admin extends Usuario {
+export class Admin extends User {
     nivelAcceso: number;
     permisos: string[];
 

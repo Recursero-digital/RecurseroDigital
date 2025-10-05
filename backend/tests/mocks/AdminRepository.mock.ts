@@ -1,6 +1,6 @@
-import { TeacherRepository, User } from '../../src/core/infrastructure/TeacherRepository';
+import { AdminRepository, User } from '../../src/core/infrastructure/AdminRepository';
 
-export class MockUserRepository implements TeacherRepository {
+export class MockAdminRepository implements AdminRepository {
   private users: User[] = [];
 
   constructor(users: User[] = []) {
@@ -12,11 +12,16 @@ export class MockUserRepository implements TeacherRepository {
     return user || null;
   }
 
+  // Métodos auxiliares para testing
   addUser(user: User): void {
     this.users.push(user);
   }
 
   clearUsers(): void {
     this.users = [];
+  }
+
+  getAllUsers(): User[] {
+    return [...this.users];
   }
 }
