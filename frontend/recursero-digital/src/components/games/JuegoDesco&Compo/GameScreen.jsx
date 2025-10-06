@@ -194,7 +194,7 @@ const GameScreen = ({
                                 title="Ver pista"
                             >
                                 ?
-                            </button>
+                            </button> // Boton para consulta --Ver
                             
                             <button
                                 onClick={() => onAnswerChange('')}
@@ -212,7 +212,7 @@ const GameScreen = ({
                                 title="Limpiar respuesta"
                             >
                                 ↺
-                            </button>
+                            </button> // Botón para reiniciar la respuesta--Ver
                         </div>
                     </div>
                 </div>
