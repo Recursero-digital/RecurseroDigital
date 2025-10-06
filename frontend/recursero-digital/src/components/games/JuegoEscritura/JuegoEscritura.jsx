@@ -101,7 +101,7 @@ const JuegoEscritura = () => {
         }
     };
     
-    const handleCheckAnswer = () => {
+    const handleCheckAnswer = async () => {
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
         if (!allAnswersProvided) {
@@ -130,7 +130,7 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            const activityScore = completeActivity(currentLevel);
+            const activityScore = await completeActivity(currentLevel);
             
             if (currentActivity < 2) {
                 setFeedback({ 
@@ -207,7 +207,7 @@ const JuegoEscritura = () => {
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
             
-            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} onNextLevel={() => setGameState('level-select')} />}
+            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} points={points} onNextLevel={() => setGameState('level-select')} />}
             
             {showHelp && (
                 <div className="modal-overlay">
