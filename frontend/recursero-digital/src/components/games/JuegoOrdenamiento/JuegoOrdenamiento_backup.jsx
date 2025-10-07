@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
@@ -15,51 +15,25 @@ const JuegoOrdenamiento = () => {
     points, 
     attempts, 
     incrementAttempts, 
+    resetAttempts, 
     resetScoring, 
     completeActivity 
   } = useGameScoring();
 
-  // Game state
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
   const [numbers, setNumbers] = useState([]);
   const [sortedNumbers, setSortedNumbers] = useState([]);
-  const [targetNumbers, setTargetNumbers] = useState([]);
-  const [levelResults, setLevelResults] = useState([]);
-  
-  // UI state
   const [showGameComplete, setShowGameComplete] = useState(false);
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
+  const [targetNumbers, setTargetNumbers] = useState([]);
+  const [levelResults, setLevelResults] = useState([]);
+
   const [showPermanentHint, setShowPermanentHint] = useState(false);
 
-  // Constants
-  const levelRanges = useMemo(() => [
-    { min: 25, max: 250 },
-    { min: 251, max: 500 },
-    { min: 501, max: 750 },
-    { min: 751, max: 1000 },
-    { min: 1001, max: 1500 },
-  ], []);
-
-  const getNumbersCount = useCallback((level) => 6 + (level * 2), []);
-  const numbersCount = getNumbersCount(currentLevel);
-
-  // Navigation handlers
-  const handleBackToGames = useCallback(() => {
-    navigate('/alumno/juegos', { replace: true });
-  }, [navigate]);
-
-  const handleBackToLevels = useCallback(() => setGameState('level-select'), []);
-  
-  const handleBackToStart = useCallback(() => {
-    resetGame();
-    setGameState('start');
-  }, []);
-
-  // Game logic
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
     setCurrentActivity(0);
@@ -74,6 +48,27 @@ const JuegoOrdenamiento = () => {
     setLevelResults([]);
     setShowPermanentHint(false);
   }, [resetScoring]);
+
+  const handleBackToGames = useCallback(() => {
+    navigate('/alumno/juegos', { replace: true });
+  }, [navigate]);
+
+  const levelRanges = useMemo(() => [
+    { min: 25, max: 250 },
+    { min: 251, max: 500 },
+    { min: 501, max: 750 },
+    { min: 751, max: 1000 },
+    { min: 1001, max: 1500 },
+  ], []);
+
+ 
+  const getNumbersCount = useCallback((level) => {
+    return 6 + (level * 2);
+  }, []);
+
+  const numbersCount = getNumbersCount(currentLevel);
+  const targetAreaRef = useRef(null);
+
 
   const generateNumbers = useCallback((level) => {
     const { min, max } = levelRanges[level];
@@ -93,36 +88,44 @@ const JuegoOrdenamiento = () => {
     setSortedNumbers(sorted);
   }, [levelRanges, getNumbersCount]);
 
+  
   const getOrderInstruction = useCallback((level) => {
     return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
-  }, []);
+ }, []);
 
   const generateHint = useCallback(() => {
     const isEvenLevel = (currentLevel + 1) % 2 === 0;
     const sortedArray = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
     
-    const baseHints = isEvenLevel ? [
-      `💡 Recuerda: Debes ordenar de MENOR a MAYOR`,
-      `🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`,
-      `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-      `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ] : [
-      `💡 Recuerda: Debes ordenar de MAYOR a MENOR`,
-      `🔢 El número más grande es: ${Math.max(...sortedNumbers)}`,
-      `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-      `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ];
+    const hints = [];
     
-    return baseHints[Math.floor(Math.random() * baseHints.length)];
+    if (isEvenLevel) {
+      hints.push(`💡 Recuerda: Debes ordenar de MENOR a MAYOR`);
+      hints.push(`🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`);
+      hints.push(`🔢 El número más grande es: ${Math.max(...sortedNumbers)}`);
+      hints.push(`➡️ Comienza colocando el número ${sortedArray[0]} primero`);
+      hints.push(`🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`);
+    } else {
+      hints.push(`💡 Recuerda: Debes ordenar de MAYOR a MENOR`);
+      hints.push(`🔢 El número más grande es: ${Math.max(...sortedNumbers)}`);
+      hints.push(`🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`);
+      hints.push(`➡️ Comienza colocando el número ${sortedArray[0]} primero`);
+      hints.push(`🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`);
+    }
+    
+    return hints[Math.floor(Math.random() * hints.length)];
   }, [currentLevel, sortedNumbers]);
 
+  
   const checkOrder = useCallback((currentNumbers) => {
     const isEvenLevel = (currentLevel + 1) % 2 === 0;
-    const correctOrder = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
+    const correctOrder = [...sortedNumbers].sort((a, b) =>
+      isEvenLevel ? a - b : b - a
+    );
     return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
   }, [currentLevel, sortedNumbers]);
 
-  // Game flow handlers
+ 
   const handleStartGame = useCallback((level) => {
     setCurrentLevel(level - 1);
     setCurrentActivity(0);
@@ -132,6 +135,8 @@ const JuegoOrdenamiento = () => {
     setGameState('game');
   }, [resetScoring]);
 
+
+ 
   const handleActivityComplete = useCallback(() => {
     const activityScore = completeActivity(currentLevel);
     const newActivity = currentActivity + 1;
@@ -145,6 +150,7 @@ const JuegoOrdenamiento = () => {
     
     setLevelResults(prev => [...prev, result]);
     setTargetNumbers([]);
+    
     setFeedbackSuccess(true);
     setShowFeedback(true);
     
@@ -160,10 +166,12 @@ const JuegoOrdenamiento = () => {
         setShowLevelUp(true);
       }
     }, 1500);
-  }, [currentLevel, currentActivity, completeActivity, attempts, generateNumbers, unlockLevel]);
+  }, [currentLevel, currentActivity, completeActivity, generateNumbers, unlockLevel]);
 
+  
   const handleFailedAttempt = useCallback(() => {
     incrementAttempts();
+    
     setFeedbackSuccess(false);
     setShowFeedback(true);
     
@@ -173,6 +181,7 @@ const JuegoOrdenamiento = () => {
     }, 1500);
   }, [incrementAttempts]);
 
+ 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
     setTargetNumbers(newTargetNumbers);
@@ -186,24 +195,12 @@ const JuegoOrdenamiento = () => {
     }
   }, [targetNumbers, numbersCount, checkOrder, handleActivityComplete, handleFailedAttempt]);
 
+ 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
   }, []);
 
-  const handleNextLevel = useCallback(() => {
-    setShowLevelUp(false);
-    if (currentLevel >= levelRanges.length - 1) {
-      setShowGameComplete(true);
-    } else {
-      setCurrentLevel(prev => prev + 1);
-      setCurrentActivity(0);
-      setLevelResults([]);
-      setShowPermanentHint(false);
-      setTimeout(() => generateNumbers(currentLevel + 1), 100);
-    }
-  }, [currentLevel, levelRanges.length, generateNumbers]);
-
-  // Effects
+ 
   useEffect(() => {
     if (gameState === 'game') {
       generateNumbers(currentLevel);
@@ -212,7 +209,7 @@ const JuegoOrdenamiento = () => {
     }
   }, [gameState, currentLevel, generateNumbers]);
 
-  // Components
+ 
   const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
     const handleDragStart = (e) => {
       e.dataTransfer.setData('text/plain', number.toString());
@@ -240,7 +237,8 @@ const JuegoOrdenamiento = () => {
     );
   });
 
-  const DropTarget = React.memo(() => {
+ 
+  const DropTarget = () => {
     const [isDragOver, setIsDragOver] = useState(false);
 
     const handleDragOver = (e) => {
@@ -255,6 +253,7 @@ const JuegoOrdenamiento = () => {
 
     const handleDragLeave = (e) => {
       e.preventDefault();
+     
       if (!e.currentTarget.contains(e.relatedTarget)) {
         setIsDragOver(false);
       }
@@ -276,9 +275,12 @@ const JuegoOrdenamiento = () => {
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDrop={handleDropEvent}
+        ref={targetAreaRef}
       >
         {targetNumbers.length === 0 ? (
-          <p className="drop-hint">Arrastra los números aquí o haz clic en ellos</p>
+          <p className="drop-hint">
+            Arrastra los números aquí o haz clic en ellos
+          </p>
         ) : (
           targetNumbers.map((number, index) => (
             <NumberBox 
@@ -291,31 +293,51 @@ const JuegoOrdenamiento = () => {
         )}
       </div>
     );
-  });
+  };
 
-  const PermanentHint = React.memo(() => (
-    <div className="permanent-hint">
-      <div className="permanent-hint-header">
-        <span className="hint-icon">💡</span>
-        <h4>¡Pista especial!</h4>
-      </div>
-      <div className="permanent-hint-content">
-        <p className="hint-text">{generateHint()}</p>
-        <div className="hint-numbers">
-          <span className="hint-label">Números:</span>
-          {numbers.map(num => (
-            <span key={num} className="hint-number">{num}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  ));
-
-  // Computed values
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
   const progressPercentage = ((currentLevel + 1) / levelRanges.length) * 100;
 
-  // Render
+     
+  const handleNextLevel = () => {
+    setShowLevelUp(false);
+    if (currentLevel >= levelRanges.length - 1) {
+      setShowGameComplete(true);
+    } else {
+      setCurrentLevel(prev => prev + 1);
+      setCurrentActivity(0);
+      setLevelResults([]);
+      setShowPermanentHint(false);
+      setTimeout(() => {
+        generateNumbers(currentLevel + 1);
+      }, 100);
+    }
+  };
+
+     
+  const handleBackToLevels = useCallback(() => {
+    setGameState('level-select');
+  }, []);
+
+     
+  const handleBackToStart = useCallback(() => {
+    resetGame();
+    setGameState('start');
+  }, [resetGame]);
+
+
+
+     
+  const handleContinueFeedback = () => {
+    setShowFeedback(false);
+  };
+
+   
+  const handleRetryFeedback = () => {
+    setShowFeedback(false);
+    setTargetNumbers([]);
+  };
+
   return (
     <div className="game-container">
       {gameState === 'start' && (
@@ -338,7 +360,7 @@ const JuegoOrdenamiento = () => {
             <div className="header-controls">
               <button 
                 className="btn-back-to-levels"
-                onClick={handleBackToLevels}
+                onClick={() => setGameState('level-select')}
                 title="Volver a niveles"
               >
                 ← Niveles
@@ -351,12 +373,13 @@ const JuegoOrdenamiento = () => {
                 ← Juegos
               </button>
             </div>
-            <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
+            <h1 className="game-title">
+              🎯 Ordenamiento Numérico
+            </h1>
             <p className="game-instruction">
               {getOrderInstruction(currentLevel + 1)}
             </p>
           </header>
-
           <div className="game-status">
             <div className="status-item">
               <div className="status-icon">📊</div>
@@ -383,8 +406,7 @@ const JuegoOrdenamiento = () => {
           <div className="progress-container">
             <div 
               className="progress-bar"
-              data-progress={progressPercentage}
-              style={{'--progress-width': `${progressPercentage}%`}}
+              style={{ width: `${progressPercentage}%` }}
             />
           </div>
 
@@ -407,14 +429,39 @@ const JuegoOrdenamiento = () => {
                 </div>
               </div>
 
-              {showPermanentHint && <PermanentHint />}
+              {showPermanentHint && (
+                <div className="permanent-hint">
+                  <div className="permanent-hint-header">
+                    <span className="hint-icon">💡</span>
+                    <h4>¡Pista especial!</h4>
+                  </div>
+                  <div className="permanent-hint-content">
+                    <p className="hint-text">{generateHint()}</p>
+                    <div className="hint-numbers">
+                      <span className="hint-label">Números:</span>
+                      {numbers.map(num => (
+                        <span key={num} className="hint-number">{num}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <div className="game-complete">
-              <h2 className="complete-title">🎉 ¡Juego Completado!</h2>
-              <p className="complete-message">Has completado todos los niveles</p>
-              <p className="final-score">Puntuación final: {points}</p>
-              <button className="restart-button" onClick={handleBackToStart}>
+              <h2 className="complete-title">
+                🎉 ¡Juego Completado!
+              </h2>
+              <p className="complete-message">
+                Has completado todos los niveles
+              </p>
+              <p className="final-score">
+                Puntuación final: {points}
+              </p>
+              <button 
+                className="restart-button"
+                onClick={handleBackToStart}
+              >
                 🔄 Jugar de nuevo
               </button>
             </div>
@@ -435,13 +482,12 @@ const JuegoOrdenamiento = () => {
       {showFeedback && (
         <ActivityFeedbackModal
           isSuccess={feedbackSuccess}
-          onContinue={() => setShowFeedback(false)}
-          onRetry={() => {
-            setShowFeedback(false);
-            setTargetNumbers([]);
-          }}
+          onContinue={handleContinueFeedback}
+          onRetry={handleRetryFeedback}
         />
       )}
+
+
     </div>
   );
 };
