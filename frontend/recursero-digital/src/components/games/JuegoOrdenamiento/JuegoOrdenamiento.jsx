@@ -31,8 +31,8 @@ const JuegoOrdenamiento = () => {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [levelResults, setLevelResults] = useState([]);
-  const [showHintModal, setShowHintModal] = useState(false);
-  const [consecutiveFailures, setConsecutiveFailures] = useState(0);
+
+  const [showPermanentHint, setShowPermanentHint] = useState(false);
 
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
@@ -46,8 +46,7 @@ const JuegoOrdenamiento = () => {
     setFeedbackSuccess(false);
     setTargetNumbers([]);
     setLevelResults([]);
-    setShowHintModal(false);
-    setConsecutiveFailures(0);
+    setShowPermanentHint(false);
   }, [resetScoring]);
 
   const handleBackToGames = useCallback(() => {
@@ -132,7 +131,7 @@ const JuegoOrdenamiento = () => {
     setCurrentActivity(0);
     resetScoring();
     setLevelResults([]);
-    setConsecutiveFailures(0); 
+    setShowPermanentHint(false);
     setGameState('game');
   }, [resetScoring]);
 
@@ -141,8 +140,6 @@ const JuegoOrdenamiento = () => {
   const handleActivityComplete = useCallback(() => {
     const activityScore = completeActivity(currentLevel);
     const newActivity = currentActivity + 1;
-    
-    setConsecutiveFailures(0);
     
     const result = {
       activity: currentActivity + 1,
@@ -163,7 +160,7 @@ const JuegoOrdenamiento = () => {
         setCurrentActivity(newActivity);
         generateNumbers(currentLevel); 
         setTargetNumbers([]);
-        setConsecutiveFailures(0); 
+        setShowPermanentHint(true);
       } else {  
         unlockLevel('ordenamiento', currentLevel + 2);
         setShowLevelUp(true);
@@ -173,24 +170,16 @@ const JuegoOrdenamiento = () => {
 
   
   const handleFailedAttempt = useCallback(() => {
-    const newConsecutiveFailures = consecutiveFailures + 1;
-    setConsecutiveFailures(newConsecutiveFailures);
     incrementAttempts();
     
-    if (newConsecutiveFailures >= 3) {
-      setShowHintModal(true);
-      setConsecutiveFailures(0); 
-    } else {
-      
-      setFeedbackSuccess(false);
-      setShowFeedback(true);
-      
-      setTimeout(() => {
-        setShowFeedback(false);
-        setTargetNumbers([]); 
-      }, 1500);
-    }
-  }, [consecutiveFailures]);
+    setFeedbackSuccess(false);
+    setShowFeedback(true);
+    
+    setTimeout(() => {
+      setShowFeedback(false);
+      setTargetNumbers([]); 
+    }, 1500);
+  }, [incrementAttempts]);
 
  
   const handleDrop = useCallback((draggedNumber) => {
@@ -216,6 +205,7 @@ const JuegoOrdenamiento = () => {
     if (gameState === 'game') {
       generateNumbers(currentLevel);
       setTargetNumbers([]);
+      setShowPermanentHint(true);
     }
   }, [gameState, currentLevel, generateNumbers]);
 
@@ -317,7 +307,7 @@ const JuegoOrdenamiento = () => {
       setCurrentLevel(prev => prev + 1);
       setCurrentActivity(0);
       setLevelResults([]);
-      setConsecutiveFailures(0);
+      setShowPermanentHint(false);
       setTimeout(() => {
         generateNumbers(currentLevel + 1);
       }, 100);
@@ -335,10 +325,7 @@ const JuegoOrdenamiento = () => {
     setGameState('start');
   }, [resetGame]);
 
-  const handleCloseHint = useCallback(() => {
-    setShowHintModal(false);
-    setTargetNumbers([]);
-  }, []);
+
 
      
   const handleContinueFeedback = () => {
@@ -424,22 +411,42 @@ const JuegoOrdenamiento = () => {
           </div>
 
           {!showGameComplete ? (
-            <div className="game-play-area">
-              <DropTarget />
-              
-              <div className="numbers-section">
-                <h3 className="numbers-title">Números a ordenar:</h3>
-                <div className="numbers-container">
-                  {availableNumbers.map(number => (
-                    <NumberBox 
-                      key={number} 
-                      number={number} 
-                      onDrop={handleDrop}
-                    />
-                  ))}
+            <>
+              <div className="game-play-area">
+                <DropTarget />
+                
+                <div className="numbers-section">
+                  <h3 className="numbers-title">Números a ordenar:</h3>
+                  <div className="numbers-container">
+                    {availableNumbers.map(number => (
+                      <NumberBox 
+                        key={number} 
+                        number={number} 
+                        onDrop={handleDrop}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+
+              {showPermanentHint && (
+                <div className="permanent-hint">
+                  <div className="permanent-hint-header">
+                    <span className="hint-icon">💡</span>
+                    <h4>¡Pista especial!</h4>
+                  </div>
+                  <div className="permanent-hint-content">
+                    <p className="hint-text">{generateHint()}</p>
+                    <div className="hint-numbers">
+                      <span className="hint-label">Números:</span>
+                      {numbers.map(num => (
+                        <span key={num} className="hint-number">{num}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <div className="game-complete">
               <h2 className="complete-title">
@@ -480,40 +487,7 @@ const JuegoOrdenamiento = () => {
         />
       )}
 
-      {showHintModal && (
-        <div className="hint-modal-overlay">
-          <div className="hint-modal">
-            <div className="hint-header">
-              <h2>💡 ¡Pista Especial!</h2>
-              <p>Lo intentaste 3 veces seguidas. ¡Te ayudamos un poco!</p>
-            </div>
-            
-            <div className="hint-content">
-              <div className="hint-message">
-                {generateHint()}
-              </div>
-              
-              <div className="hint-visual">
-                <p><strong>Números actuales:</strong></p>
-                <div className="numbers-preview">
-                  {numbers.map(num => (
-                    <span key={num} className="number-preview">{num}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            <div className="hint-actions">
-              <button 
-                className="hint-btn hint-btn-continue"
-                onClick={handleCloseHint}
-              >
-                💪Intentar de nuevo
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 };
