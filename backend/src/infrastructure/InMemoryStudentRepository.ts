@@ -44,4 +44,8 @@ export class InMemoryStudentRepository implements StudentRepository {
     );
     this.students.push(studentEntity);
   }
+
+  async clearStudents(): Promise<void> {
+    this.students = [];
+  }
 }

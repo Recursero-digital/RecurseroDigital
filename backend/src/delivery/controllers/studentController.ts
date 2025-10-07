@@ -43,6 +43,7 @@ const addStudent = async (req: Request<{}, AddStudentResponse, AddStudentRequest
             return;
         }
         
+        console.error('Error en addStudent:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };

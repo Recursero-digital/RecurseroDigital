@@ -1,17 +1,20 @@
 # Dockerfile para el frontend
-FROM node:18-alpine
+FROM node:20-slim
 
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
+# Copiar archivos de dependencias primero (para aprovechar cache de Docker)
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm ci
+# Instalar dependencias con cache optimizado
+RUN npm ci --silent
 
 # Copiar código fuente
 COPY . .
+
+# Limpiar e instalar dependencias para resolver problemas con dependencias nativas
+RUN rm -rf node_modules package-lock.json && npm install --silent
 
 # Construir la aplicación
 RUN npm run build
