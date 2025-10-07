@@ -2,10 +2,9 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import loginRoutes from '../delivery/routes/loginRoutes';
 import logoutRoutes from '../delivery/routes/logoutRoutes';
+import studentRoutes from '../delivery/routes/studentRoutes';
 
 const app: Application = express();
-const PORT = 4000;
-
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -20,6 +19,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/", loginRoutes);
 app.use("/", logoutRoutes);
+app.use("/", studentRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");

@@ -10,13 +10,11 @@ export class MockTokenService implements TokenService {
 
   verify(token: string): object | null {
     if (token.startsWith('mock_token_')) {
-      // Simular verificación exitosa
       return { id: '1', username: 'testuser', role: 'user' };
     }
     return null;
   }
 
-  // Métodos auxiliares para testing
   getLastGeneratedToken(): string | null {
     return this.tokenCounter > 0 ? `mock_token_${this.tokenCounter}` : null;
   }
