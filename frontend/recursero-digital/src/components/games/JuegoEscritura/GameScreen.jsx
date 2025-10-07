@@ -92,6 +92,25 @@ const GameScreen = ({
                     Enviar respuestas
                 </button>
             </div>
+
+            {/* Sección de pista permanente */}
+            <div className="hint-section">
+                <div className="hint-header">
+                    <span className="hint-icon">💡</span>
+                    <span className="hint-title">Pista de números y palabras</span>
+                </div>
+                <div className="hint-content">
+                    <div className="hint-pairs-list">
+                        {wordPairs.map((pair, index) => (
+                            <div key={index} className="hint-pair-item">
+                                <span className="hint-number">{pair.number}</span>
+                                <span className="hint-arrow">→</span>
+                                <span className="hint-word">{pair.word}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
