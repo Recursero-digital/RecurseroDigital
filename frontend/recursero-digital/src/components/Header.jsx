@@ -1,5 +1,5 @@
 
-import Logo from '../assets/logo.png';
+import Logo from '../assets/logo1.png';
 import '../styles/header.css';
 import '../styles/darkMode.css';
 import { useNavigate } from 'react-router-dom';

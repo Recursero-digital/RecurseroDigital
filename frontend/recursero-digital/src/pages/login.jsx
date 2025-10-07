@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css"
 import { PiStudentFill } from "react-icons/pi";
+import Logo1 from '../assets/logo1.png';
 
 
 export default function RoleSelection() {
@@ -15,9 +16,8 @@ export default function RoleSelection() {
       <div className="role-selection-container">
       <div className="role-selection-content">
         <div className="header-section">
-          <img src="src\assets\logo.png" alt="Recursera Digital" className="logo-image" />
-          <h1 className="main-title">¡Recursero Digital!</h1>
-          <p className="subtitle">Selecciona tu rol para comenzar</p>
+          <img src={Logo1} alt="Recursera Digital" className="logo-image" />
+
         </div>
 
         <div className="cards-container">

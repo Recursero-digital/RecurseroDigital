@@ -17,15 +17,16 @@ export default function HomeAlumno() {
     return "ALUMNO";
   }, []);
   return (
-    <div className="container">
-      <section class="card-header">
+    <div className="main">
+      
+      <section class="welcome-card">
         <h1>¡Bienvenido {userNameOrEmail}!</h1>
         <p>
           ¿Estás preparado para jugar y aprender con estos juegos de matemática?
         </p>
         <p>¡Descubre el mundo mágico de los números mientras te divertís!</p>
       </section>
-      <section class="motivation-section">
+      <section class="info-card">
         <h2>¡Aprender matemáticas nunca fue tan divertido!</h2>
         <p>
           Los juegos son para que ustedes aprendan habilidades matemáticas mientras se divierten. Cada juego

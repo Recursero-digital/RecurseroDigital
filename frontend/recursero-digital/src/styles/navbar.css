@@ -2,19 +2,20 @@
 
 .navbar {
   display: flex;
-  width: 100%;
   background: linear-gradient(
     135deg,
     #0f172a 0%,
     #1e293b 25%,
     #334155 50%,
-    #1e3a8a 75%,
-    #7c3aed 100%
+    #162348 75%,
+    #2e0c4e95 100%
   );
   justify-content: center;
   transition: all 0.3s ease-in-out;
   font-family: "Fredoka", cursive;
   position: relative;
+  padding: 0.3rem 0;
+  
 }
 
 .navbar::before {
@@ -31,24 +32,28 @@
 
 .navbar-tabs {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 15rem;
-  position: relative;
   z-index: 1;
 }
 
 .tab-button {
-  padding: 1rem 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px; /* Ancho fijo para todos los botones */
+  height: 50px; /* Alto fijo para todos los botones */
+  padding: 0 20px; /* Espaciado horizontal */
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(251, 191, 36, 0.3);
-  color: white;
-  border-radius: 2rem;
+  color: rgb(255, 255, 255);
+  border-radius: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: "Fredoka", cursive;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
+  text-align: center; /* Asegura que el texto esté centrado */
 }
 
 .tab-button:hover {
@@ -58,8 +63,7 @@
     rgba(251, 191, 36, 0.1) 100%
   );
   border-color: rgba(251, 191, 36, 0.6);
-  transform: translateY(-2px);
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .tab-button.active {

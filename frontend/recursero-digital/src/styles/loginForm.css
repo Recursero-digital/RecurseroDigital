@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 .login-form-container {
   height: 100vh;
@@ -39,23 +42,23 @@
   margin-bottom: 2rem;
 }
 
-.imagen-logo {
-  width: 20rem;
-  height: 6rem;
-  padding-top: 30px;
+.imagen-logo {  
+  max-width: 50%;
 }
 
 .titulo {
   font-size: 2rem;
   font-weight: 600;
-  font-family: 'Fredoka', cursive;
+  font-family: Newsreader, serif;
   color: #1f2937;
-  margin-bottom: 0.5rem;
 }
 
 .subtitulo {
-  color: #6b7280;
+  color: #333134;
   font-size: 1rem;
+  font-family:Newareader, serif;
+  font-weight: 400;
+
 }
 
 .tabs-container {
@@ -114,9 +117,10 @@
 }
 
 .form-label {
-  font-weight: 600;
+  font-weight: bold;
   color: #374151;
   font-size: 0.875rem;
+  font-family: Roboto, sans-serif;
 }
 
 .form-input {

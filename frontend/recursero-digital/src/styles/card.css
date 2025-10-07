@@ -2,19 +2,26 @@
   display: flex;
   flex-direction: row;
   row-gap: 10px;
-  box-shadow: 0 4px 8px 0 rgba(102, 17, 172, 0.45);
-  margin: 10px;
-  padding: 10px;
-  background-color: #ffffff;
-  padding: 20px;
   border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 50px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 70px rgba(138, 43, 226, 0.4);
+  border-color: rgba(138, 43, 226, 0.5);
 }
 .contenedor-card {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   padding: 20px;
-  background-color: #f3f4f6;
   border-radius: 10px;
 }
 .imagegame {
@@ -28,17 +35,26 @@
   padding: 20px;
   border-radius: 10px;
 }
-.textgame {
+/*.textgame {
   display: flex;
   flex-direction: column;
   row-gap: 25px;
   padding-right: 100px;
   padding-top: 25px;
-}
+}*/
 .textgame button {
   margin: 20px auto;
-  background: linear-gradient(45deg, #966cf8, #9897e7);
-  color: black;
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e3a8a 75%,
+    #7c3aed 100%
+  );
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  color: white;
+  border-radius: 2rem;
   border: none;
   padding: 15px 40px;
   border-radius: 50px;
@@ -74,9 +90,14 @@
   margin-bottom: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
-  text-align: justify;
+  color: white;
+  margin-bottom: 25px;
+  text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+
 }
 .textgame p {
   font-size: x-large;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
 }
