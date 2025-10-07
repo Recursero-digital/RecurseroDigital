@@ -8,6 +8,7 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
+import ErrorPopup from './ErrorPopup';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 
@@ -32,6 +33,7 @@ const JuegoEscritura = () => {
     const [dragAnswers, setDragAnswers] = useState({});
     const [usedNumbers, setUsedNumbers] = useState(new Set());
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
     
     useEffect(() => { 
         AOS.init(); 
@@ -90,8 +92,9 @@ const JuegoEscritura = () => {
                 [wordPairIndex]: draggedNumber
             }));
         } else {
-            // Si no es correcto, incrementamos intentos
+            // Si no es correcto, incrementamos intentos y mostramos popup de error
             incrementAttempts();
+            setShowErrorPopup(true);
         }
     };
     
@@ -174,6 +177,10 @@ const JuegoEscritura = () => {
         setGameState('game');
     };
 
+    const handleCloseErrorPopup = () => {
+        setShowErrorPopup(false);
+    };
+
     return (
         <div className="game-wrapper">
             {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
@@ -201,6 +208,7 @@ const JuegoEscritura = () => {
             
             {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} points={points} onNextLevel={() => setGameState('level-select')} />}
             
+            <ErrorPopup show={showErrorPopup} onClose={handleCloseErrorPopup} />
 
         </div>
     );
