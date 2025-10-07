@@ -52,13 +52,13 @@ export default function MainLayout({ children, userRole = "alumno" }) {
 
   return (
     <div className="main-layout">
-      /*<Header isDarkMode={isDarkMode} toggleDarkMode={() => toggleDarkMode()} />
+      <Header isDarkMode={isDarkMode} toggleDarkMode={() => toggleDarkMode()} />
       <NavBar 
         tabs={tabs} 
         activeTab={activeTab} 
         onTabChange={setActiveTab}
         userRole={userRole}
-      />*/
+      />
       <main className="main-content">
         {children}
       </main>

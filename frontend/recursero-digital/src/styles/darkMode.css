@@ -14,20 +14,80 @@
   --error-color: #ef4444;
 }
 
-/* Aplicar modo oscuro al body */
-.dark-mode body {
-  background-color: var(--primary-bg-color) !important;
+/* Aplicar modo oscuro al html y body */
+body.dark-mode,
+body.dark-mode html {
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e3a8a 75%,
+    #7c3aed 100%
+  ) !important;
+  color: var(--text-color) !important;
+  min-height: 100vh !important;
+  position: relative;
+}
+
+body.dark-mode::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-dark" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.5"/><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-dark)"/></svg>');
+  pointer-events: none;
+  z-index: -1;
+  animation: twinkle 8s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Forzar el fondo oscuro en todos los elementos principales */
+body.dark-mode .main-layout,
+body.dark-mode .main-content,
+body.dark-mode .main {
+  background: inherit !important;
   color: var(--text-color) !important;
 }
 
 /* Header en modo oscuro */
-.dark-mode .header {
-  background-color: var(--secondary-bg-color) !important;
-  border-bottom: 1px solid var(--border-color);
+body.dark-mode .header {
+  background: rgba(43, 74, 175, 0.1) !important;
+  backdrop-filter: blur(100px) !important;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.3) !important;
 }
 
-.dark-mode .app-logo {
+body.dark-mode .app-logo {
   filter: brightness(1.2);
+}
+
+/* Botón cerrar sesión en modo oscuro */
+body.dark-mode .cerrar-sesion {
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6366f1 50%,
+    #3b82f6 100%
+  ) !important;
+  color: white !important;
+  border: 2px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+body.dark-mode .cerrar-sesion:hover {
+  background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #7c3aed 50%,
+    #6366f1 100%
+  ) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4) !important;
 }
 
 /* Search bar en modo oscuro */
@@ -96,84 +156,139 @@
 
 /* Botones en modo oscuro */
 .dark-mode button {
-  background-color: var(--accent-color) !important;
+  background: linear-gradient(
+   135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e3a8a 75%,
+    #7c3aed 100%
+  ) !important;
   color: white !important;
-  border: 1px solid var(--border-color);
+  border: 2px solid rgba(251, 191, 36, 0.3) !important;
 }
 
 .dark-mode button:hover {
-  background-color: var(--accent-hover) !important;
+  background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #7c3aed 25%,
+    #6366f1 50%,
+    #3b82f6 75%,
+    #2563eb 100%
+  ) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4) !important;
 }
 
 /* Cards en modo oscuro */
-.dark-mode .contenedor-card {
-  background-color: var(--primary-bg-color) !important;
-}
-
-.dark-mode .card {
-  background-color: var(--secondary-bg-color) !important;
-  border: 1px solid var(--border-color);
+.dark-mode .welcome-card,
+.dark-mode .info-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: var(--text-color) !important;
 }
 
-.dark-mode .card:hover {
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2) !important;
+.dark-mode .welcome-card h1 {
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #c084fc 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
 }
 
-.dark-mode .titlegame {
+.dark-mode .info-card h2 {
   color: var(--text-color) !important;
+  text-shadow: 0 0 20px rgba(124, 58, 237, 0.6) !important;
 }
 
-.dark-mode .descriptiongame {
-  color: var(--text-secondary) !important;
-}
-
-.dark-mode .buttongame {
-  background-color: var(--accent-color) !important;
-  color: white !important;
-}
-
-.dark-mode .buttongame:hover {
-  background-color: var(--accent-hover) !important;
+.dark-mode .info-card h3 {
+  color: #60a5fa !important;
 }
 
 /* NavBar en modo oscuro */
-.dark-mode .navbar {
-  background-color: var(--secondary-bg-color) !important;
-  border-top: 1px solid var(--border-color);
+body.dark-mode .navbar {
+  background: linear-gradient(
+    135deg,
+    #2d1b69 0%,
+    #1e293b 25%,
+    #1e3a8a 50%,
+    #162348 75%,
+    #4c1d95 100%
+  ) !important;
 }
 
-.dark-mode .nav-item {
-  color: var(--text-secondary) !important;
+body.dark-mode .tab-button {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-color) !important;
+  border: 2px solid rgba(139, 92, 246, 0.3) !important;
 }
 
-.dark-mode .nav-item.active {
-  color: var(--accent-color) !important;
+body.dark-mode .tab-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.2) 0%,
+    rgba(99, 102, 241, 0.1) 100%
+  ) !important;
+  border-color: rgba(139, 92, 246, 0.6) !important;
 }
 
-.dark-mode .nav-item:hover {
+body.dark-mode .tab-button.active {
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6366f1 25%,
+    #3b82f6 50%,
+    #1e40af 75%,
+    #1e3a8a 100%
+  ) !important;
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4) !important;
+}
+
+/* Páginas específicas en modo oscuro */
+body.dark-mode .dashboard-alumno {
+  background: inherit !important;
   color: var(--text-color) !important;
 }
 
+body.dark-mode .perfil-container {
+  background: inherit !important;
+}
+
+body.dark-mode .perfil-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  color: var(--text-color) !important;
+}
+
+body.dark-mode .perfil-header {
+  background: linear-gradient(
+    135deg,
+    #2d1b69 0%,
+    #1e3a8a 100%
+  ) !important;
+}
+
 /* Scrollbar en modo oscuro */
-.dark-mode ::-webkit-scrollbar {
+body.dark-mode ::-webkit-scrollbar {
   width: 8px;
 }
 
-.dark-mode ::-webkit-scrollbar-track {
+body.dark-mode ::-webkit-scrollbar-track {
   background: var(--secondary-bg-color);
 }
 
-.dark-mode ::-webkit-scrollbar-thumb {
+body.dark-mode ::-webkit-scrollbar-thumb {
   background: var(--tertiary-bg-color);
   border-radius: 4px;
 }
 
-.dark-mode ::-webkit-scrollbar-thumb:hover {
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-color);
 }
 
 /* Transiciones suaves */
-.dark-mode * {
+body.dark-mode * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

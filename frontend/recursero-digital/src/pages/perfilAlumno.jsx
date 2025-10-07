@@ -1,65 +1,125 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./../styles/perfilAlumno.css";
-import avatar from "./../assets/logo.png"; // Asegúrate de tener un avatar en esta ruta
+import avatar from "./../assets/logo1.png";
 
 export default function PerfilAlumno() {
-  // Datos de ejemplo
+  const userNameOrEmail = useMemo(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    const storedName = localStorage.getItem("userName");
+    if (storedName) return storedName.toUpperCase();
+    if (storedEmail) {
+      const nameFromEmail = storedEmail.split("@")[0];
+      return nameFromEmail.toUpperCase();
+    }
+    return "ALUMNO";
+  }, []);
+
   const studentData = {
-    name: "Malena Barán",
+    name: userNameOrEmail,
+    level: 15,
+    totalScore: 22300,
     stats: {
       ordenamiento: {
         highScore: 12500,
         gamesPlayed: 42,
         accuracy: "92%",
+        stars: 3
       },
       escritura: {
         highScore: 9800,
         gamesPlayed: 35,
         accuracy: "88%",
+        stars: 3
       },
     },
   };
 
   return (
     <div className="perfil-container">
-      <div className="perfil-card">
-        <div className="perfil-header">
-          <img src={avatar} alt="Avatar" className="perfil-avatar" />
-          <h1 className="perfil-name">{studentData.name}</h1>
-          <p className="perfil-email">{studentData.email}</p>
+      {/* Header del perfil con avatar y info básica */}
+      <div className="perfil-header">
+        <div className="avatar-section">
+          <div className="avatar-frame">
+            <img src={avatar} alt="Avatar" className="perfil-avatar" />
+            <div className="level-badge">Nivel {studentData.level}</div>
+          </div>
         </div>
-        <div className="perfil-stats">
-          <h2 className="stats-title">Estadísticas de Juegos</h2>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3 className="stat-card-title">Juego de Ordenamiento</h3>
-              <p className="stat-item">
-                Puntaje Más Alto:{" "}
-                <span>{studentData.stats.ordenamiento.highScore}</span>
-              </p>
-              <p className="stat-item">
-                Partidas Jugadas:{" "}
-                <span>{studentData.stats.ordenamiento.gamesPlayed}</span>
-              </p>
-              <p className="stat-item">
-                Precisión:{" "}
-                <span>{studentData.stats.ordenamiento.accuracy}</span>
-              </p>
+        <div className="profile-info">
+          <h1 className="profile-name">¡Hola {studentData.name}! 👋</h1>
+          <p className="profile-title">🧮 Matemático Explorador 🧮</p>
+          <div className="achievements">
+            <div className="achievement-item">
+              🏆 <span>{studentData.totalScore}</span> puntos totales
             </div>
-            <div className="stat-card">
-              <h3 className="stat-card-title">Juego de Escritura</h3>
-              <p className="stat-item">
-                Puntaje Más Alto:{" "}
-                <span>{studentData.stats.escritura.highScore}</span>
-              </p>
-              <p className="stat-item">
-                Partidas Jugadas:{" "}
-                <span>{studentData.stats.escritura.gamesPlayed}</span>
-              </p>
-              <p className="stat-item">
-                Precisión: <span>{studentData.stats.escritura.accuracy}</span>
-              </p>
+            <div className="achievement-item">
+              ⭐ <span>{studentData.stats.ordenamiento.stars + studentData.stats.escritura.stars}</span> estrellas ganadas
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Estadísticas de juegos */}
+      <div className="games-stats">
+        <h2 className="stats-title">🎮 Mis Aventuras Matemáticas 🎮</h2>
+        
+        <div className="games-grid">
+          {/* Juego de Ordenamiento */}
+          <div className="game-card ordenamiento">
+            <div className="game-icon">🔢</div>
+            <h3 className="game-title">Ordenamiento de Números</h3>
+            <div className="stars">
+              {[...Array(3)].map((_, i) => (
+                <span key={i} className={`star ${i < studentData.stats.ordenamiento.stars ? 'filled' : ''}`}>⭐</span>
+              ))}
+            </div>
+            <div className="game-stats">
+              <div className="stat-row">
+                <span className="stat-emoji">🎯</span>
+                <span>Mejor puntaje: {studentData.stats.ordenamiento.highScore}</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-emoji">🎲</span>
+                <span>Partidas jugadas: {studentData.stats.ordenamiento.gamesPlayed}</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-emoji">✨</span>
+                <span>Precisión: {studentData.stats.ordenamiento.accuracy}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Juego de Escritura */}
+          <div className="game-card escritura">
+            <div className="game-icon">✍️</div>
+            <h3 className="game-title">Números en Palabras</h3>
+            <div className="stars">
+              {[...Array(3)].map((_, i) => (
+                <span key={i} className={`star ${i < studentData.stats.escritura.stars ? 'filled' : ''}`}>⭐</span>
+              ))}
+            </div>
+            <div className="game-stats">
+              <div className="stat-row">
+                <span className="stat-emoji">🎯</span>
+                <span>Mejor puntaje: {studentData.stats.escritura.highScore}</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-emoji">🎲</span>
+                <span>Partidas jugadas: {studentData.stats.escritura.gamesPlayed}</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-emoji">✨</span>
+                <span>Precisión: {studentData.stats.escritura.accuracy}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sección de motivación */}
+        <div className="motivation-section">
+          <div className="motivation-card">
+            <div className="motivation-emoji">🌟</div>
+            <h3>¡Sigue así, campeón!</h3>
+            <p>Estás aprendiendo matemáticas de manera increíble. ¡Cada juego te hace más inteligente! 🧠✨</p>
           </div>
         </div>
       </div>
