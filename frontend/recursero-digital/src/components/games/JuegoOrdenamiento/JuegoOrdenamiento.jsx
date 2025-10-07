@@ -159,7 +159,7 @@ const JuegoOrdenamiento = () => {
         unlockLevel('ordenamiento', currentLevel + 2);
         setShowLevelUp(true);
       }
-    }, 1500);
+    }, 2500);
   }, [currentLevel, currentActivity, completeActivity, attempts, generateNumbers, unlockLevel]);
 
   const handleFailedAttempt = useCallback(() => {
@@ -170,7 +170,7 @@ const JuegoOrdenamiento = () => {
     setTimeout(() => {
       setShowFeedback(false);
       setTargetNumbers([]); 
-    }, 1500);
+    }, 2500);
   }, [incrementAttempts]);
 
   const handleDrop = useCallback((draggedNumber) => {

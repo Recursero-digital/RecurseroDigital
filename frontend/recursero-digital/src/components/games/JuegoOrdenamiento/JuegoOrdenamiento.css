@@ -633,3 +633,78 @@ body, html {
     grid-template-columns: 1fr;
   }
 }
+
+/* Activity Feedback Modal */
+.activity-feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.activity-feedback-modal {
+  background: var(--main-gradient);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.4s ease-out;
+  text-align: center;
+  border: 3px solid;
+}
+
+.activity-feedback-modal.success {
+  border-color: #4CAF50;
+}
+
+.activity-feedback-modal.error {
+  border-color: #FF6B6B;
+}
+
+.activity-feedback-modal h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.activity-feedback-modal.success h2 {
+  color: #4CAF50;
+}
+
+.activity-feedback-modal.error h2 {
+  color: #FF6B6B;
+}
+
+.activity-feedback-modal p {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #43A047, #5CB860);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
