@@ -10,6 +10,7 @@ import JuegoOrdenamiento from "./components/games/JuegoOrdenamiento/JuegoOrdenam
 import JuegoEscritura from "./components/games/JuegoEscritura/JuegoEscritura.jsx";
 import DashboardAlumno from "./pages/DashboardAlumno.jsx";
 import PerfilAlumno from "./pages/perfilAlumno.jsx";
+import JuegoDescomposicion from './components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             </MainLayout>
           }
         />
+        <Route path="/alumno/juegos/descomposicion" element={<JuegoDescomposicion />} />
         <Route
           path="/alumno/perfil"
           element={

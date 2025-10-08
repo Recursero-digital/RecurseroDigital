@@ -8,21 +8,32 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
+import ErrorPopup from './ErrorPopup';
 import { useUserProgress } from '../../../hooks/useUserProgress';
+import useGameScoring from '../../../hooks/useGameScoring';
 
 const JuegoEscritura = () => {
-    const { unlockLevel } = useUserProgress();
+    const { unlockLevel, getMaxUnlockedLevel } = useUserProgress();
+    const { 
+        points, 
+        attempts, 
+        incrementAttempts, 
+        resetAttempts, 
+        resetScoring, 
+        completeActivity,
+        isSubmitting,
+        submitError 
+    } = useGameScoring();
+    
     const [gameState, setGameState] = useState('start');
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
-    const [points, setPoints] = useState(0);
     const [numbers, setNumbers] = useState([]);
     const [wordPairs, setWordPairs] = useState([]);
     const [dragAnswers, setDragAnswers] = useState({});
     const [usedNumbers, setUsedNumbers] = useState(new Set());
-    const [attempts, setAttempts] = useState(0);
-    const [showHelp, setShowHelp] = useState(false);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
     
     useEffect(() => { 
         AOS.init(); 
@@ -34,7 +45,7 @@ const JuegoEscritura = () => {
         setWordPairs(activityData.wordPairs);
         setDragAnswers({});
         setUsedNumbers(new Set());
-        setAttempts(0);
+        resetAttempts();
     }, [currentLevel]);
     
     useEffect(() => {
@@ -46,7 +57,7 @@ const JuegoEscritura = () => {
     const handleStartGame = (level) => {
         setCurrentLevel(level - 1);
         setCurrentActivity(0);
-        setPoints(0);
+        resetScoring();
         setGameState('game');
     };
     
@@ -81,15 +92,13 @@ const JuegoEscritura = () => {
                 [wordPairIndex]: draggedNumber
             }));
         } else {
-            const newAttempts = attempts + 1;
-            setAttempts(newAttempts);
-            if (newAttempts >= 5) {
-                setShowHelp(true);
-            }
+            // Si no es correcto, incrementamos intentos y mostramos popup de error
+            incrementAttempts();
+            setShowErrorPopup(true);
         }
     };
     
-    const handleCheckAnswer = () => {
+    const handleCheckAnswer = async () => {
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
         if (!allAnswersProvided) {
@@ -118,11 +127,7 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            const baseScore = 50 * (currentLevel + 1);
-            const penaltyForAttempts = attempts * 5;
-            const activityScore = Math.max(0, baseScore - penaltyForAttempts);
-            
-            setPoints(prev => prev + activityScore);
+            const activityScore = await completeActivity(currentLevel);
             
             if (currentActivity < 2) {
                 setFeedback({ 
@@ -163,15 +168,17 @@ const JuegoEscritura = () => {
     };
 
 
-    const handleCloseHelp = () => {
-        setShowHelp(false);
-    };
+
     
     const handleContinue = () => {
         if (feedback.isCorrect) {
             setCurrentActivity(prev => prev + 1);
         }
         setGameState('game');
+    };
+
+    const handleCloseErrorPopup = () => {
+        setShowErrorPopup(false);
     };
 
     return (
@@ -199,38 +206,10 @@ const JuegoEscritura = () => {
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
             
-            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} onNextLevel={() => setGameState('level-select')} />}
+            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} points={points} onNextLevel={() => setGameState('level-select')} />}
             
-            {showHelp && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2 className="help-title">💡 Ayuda - Pista para completar la actividad</h2>
-                        <div className="help-content">
-                            <p>Has tenido 5 intentos fallidos. Aquí tienes una pista:</p>
-                            <div className="help-example">
-                                <p><strong>Ejemplo:</strong> El número <span className="example-number">123</span> se escribe como <span className="example-word">"ciento veintitres"</span></p>
-                                <p><strong>Consejo:</strong> Lee cada palabra cuidadosamente y encuentra el número que le corresponde.</p>
-                            </div>
-                            <div className="help-numbers">
-                                <p><strong>Números en esta actividad:</strong></p>
-                                <div className="help-numbers-list">
-                                    {wordPairs.map((pair, index) => (
-                                        <div key={index} className="help-number-pair">
-                                            <span className="help-number">{pair.number}</span> → <span className="help-word">{pair.word}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <button 
-                            className="btn btn-continue"
-                            onClick={handleCloseHelp}
-                        >
-                            Entendido, continuar
-                        </button>
-                    </div>
-                </div>
-            )}
+            <ErrorPopup show={showErrorPopup} onClose={handleCloseErrorPopup} />
+
         </div>
     );
 };

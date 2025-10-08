@@ -10,9 +10,13 @@ export default function Card() {
     navigate("/alumno/juegos/ordenamiento");
   };
 
-  const handleJugarEscritura = () => {
-    navigate("/alumno/juegos/escritura");
-  };
+    const handleJugarEscritura = () => {
+        navigate('/alumno/juegos/escritura');
+    };
+
+    const handleJugarDescomposicion = () => {
+        navigate('/alumno/juegos/descomposicion');
+    };
 
   return (
     <>
@@ -40,6 +44,16 @@ export default function Card() {
               </p>
               <button onClick={handleJugarEscritura}>Jugar</button>
             </div>
+            </box>
+            
+            <box className="card">
+                <img src={Juego} alt="Descomposicion"  className="imagegame"/>
+                <div className='textgame'>
+                    <h2 className="titlegame">Descomposición y Composición</h2>  
+                    <p className="descriptiongame">¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.</p>
+                    <button className="buttongame" onClick={handleJugarDescomposicion}>Jugar</button>
+                </div>
+  
           </box>
         </div>
       </scroll>
