@@ -115,13 +115,7 @@ export default function PerfilAlumno() {
         </div>
 
         {/* Sección de motivación */}
-        <div className="motivation-section">
-          <div className="motivation-card">
-            <div className="motivation-emoji">🌟</div>
-            <h3>¡Sigue así, campeón!</h3>
-            <p>Estás aprendiendo matemáticas de manera increíble. ¡Cada juego te hace más inteligente! 🧠✨</p>
-          </div>
-        </div>
+ 
       </div>
     </div>
   );

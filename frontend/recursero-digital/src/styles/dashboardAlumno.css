@@ -1,18 +1,26 @@
-.main-layout {
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+
+/* Fondo espacial idéntico al perfil */
+.dashboard {
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-height: 100vh;
+  padding: 2rem;
+  font-family: "Fredoka", sans-serif;
+  gap: 2rem;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 50%,
+    #1e3a8a 75%,
+    #7c3aed 100%
+  );
 }
 
-.main-content {
-  flex: 1;
-  background: #f8fafc;
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-  background: linear-gradient(135deg, #222e4b 0%, #1e293b 25%, #334155 50%, #1e3a8a 75%, #7c3aed 100%);
-}
-.main-content::before {
+.dashboard::before {
   content: '';
   position: fixed;
   top: 0;
@@ -25,10 +33,13 @@
   animation: twinkle 8s ease-in-out infinite;
 }
 
-
-@media (max-width: 768px) {
-  .main-content {
-    padding: 0.5rem;
-  }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 }
 
+/* Asegurar que el contenido esté sobre el fondo */
+.dashboard > * {
+  position: relative;
+  z-index: 1;
+}
