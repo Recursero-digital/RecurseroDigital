@@ -8,20 +8,32 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
+import ErrorPopup from './ErrorPopup';
 import { useUserProgress } from '../../../hooks/useUserProgress';
+import useGameScoring from '../../../hooks/useGameScoring';
 
 const JuegoEscritura = () => {
-    const { unlockLevel } = useUserProgress();
+    const { unlockLevel, getMaxUnlockedLevel } = useUserProgress();
+    const { 
+        points, 
+        attempts, 
+        incrementAttempts, 
+        resetAttempts, 
+        resetScoring, 
+        completeActivity,
+        isSubmitting,
+        submitError 
+    } = useGameScoring();
+    
     const [gameState, setGameState] = useState('start');
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
-    const [points, setPoints] = useState(0);
     const [numbers, setNumbers] = useState([]);
     const [wordPairs, setWordPairs] = useState([]);
     const [dragAnswers, setDragAnswers] = useState({});
     const [usedNumbers, setUsedNumbers] = useState(new Set());
-    const [attempts, setAttempts] = useState(0);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
     
     useEffect(() => { 
         AOS.init(); 
@@ -33,7 +45,7 @@ const JuegoEscritura = () => {
         setWordPairs(activityData.wordPairs);
         setDragAnswers({});
         setUsedNumbers(new Set());
-        setAttempts(0);
+        resetAttempts();
     }, [currentLevel]);
     
     useEffect(() => {
@@ -45,7 +57,7 @@ const JuegoEscritura = () => {
     const handleStartGame = (level) => {
         setCurrentLevel(level - 1);
         setCurrentActivity(0);
-        setPoints(0);
+        resetScoring();
         setGameState('game');
     };
     
@@ -61,12 +73,9 @@ const JuegoEscritura = () => {
         e.preventDefault();
         const draggedNumber = parseInt(e.dataTransfer.getData('text/plain'));
         const targetWordPair = wordPairs[wordPairIndex];
-        
-        // Validar si el número coincide con la palabra
         const isCorrect = validateNumberWordPair(draggedNumber, targetWordPair.word);
         
         if (isCorrect) {
-            // Si es correcto, lo colocamos
             const currentNumber = dragAnswers[wordPairIndex];
             if (currentNumber) {
                 setUsedNumbers(prev => {
@@ -83,13 +92,13 @@ const JuegoEscritura = () => {
                 [wordPairIndex]: draggedNumber
             }));
         } else {
-            // Si no es correcto, incrementamos intentos
-            setAttempts(prev => prev + 1);
+            // Si no es correcto, incrementamos intentos y mostramos popup de error
+            incrementAttempts();
+            setShowErrorPopup(true);
         }
     };
     
-    const handleCheckAnswer = () => {
-        // Verificar si todos los campos están llenos
+    const handleCheckAnswer = async () => {
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
         if (!allAnswersProvided) {
@@ -101,8 +110,6 @@ const JuegoEscritura = () => {
             setGameState('feedback');
             return;
         }
-
-        // Verificar cada respuesta
         let correctCount = 0;
         let incorrectAnswers = [];
 
@@ -120,15 +127,16 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            if (currentActivity < 4) {
+            const activityScore = await completeActivity(currentLevel);
+            
+            if (currentActivity < 2) {
                 setFeedback({ 
                     title: '✅ ¡Perfecto!', 
-                    text: '¡Excelente! Todas las respuestas son correctas. Avanza a la siguiente actividad.', 
+                    text: `¡Excelente! Todas las respuestas son correctas. Ganaste ${activityScore} puntos. Avanza a la siguiente actividad.`, 
                     isCorrect: true 
                 });
                 setGameState('feedback');
             } else {
-                setPoints(prev => prev + (currentLevel + 1) * 50);
                 unlockLevel('escritura', currentLevel + 2);
                 setGameState('congrats');
             }
@@ -159,17 +167,18 @@ const JuegoEscritura = () => {
         }
     };
 
-    const handleClear = () => {
-        setDragAnswers({});
-        setUsedNumbers(new Set());
-        setAttempts(0);
-    };
+
+
     
     const handleContinue = () => {
         if (feedback.isCorrect) {
             setCurrentActivity(prev => prev + 1);
         }
         setGameState('game');
+    };
+
+    const handleCloseErrorPopup = () => {
+        setShowErrorPopup(false);
     };
 
     return (
@@ -192,12 +201,15 @@ const JuegoEscritura = () => {
                 onDrop={handleDrop}
                 onRemoveNumber={handleRemoveNumber}
                 onCheck={handleCheckAnswer}
-                onClear={handleClear}
+                onBackToLevels={() => setGameState('level-select')}
             />}
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
             
-            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} onNextLevel={() => setGameState('level-select')} />}
+            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} points={points} onNextLevel={() => setGameState('level-select')} />}
+            
+            <ErrorPopup show={showErrorPopup} onClose={handleCloseErrorPopup} />
+
         </div>
     );
 };
