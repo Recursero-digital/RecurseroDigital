@@ -4,9 +4,8 @@ const PROGRESS_KEY = 'userGameProgress';
 
 export const useUserProgress = () => {
   const [unlockedLevels, setUnlockedLevels] = useState(() => {
-    // Inicializar con nivel 1 desbloqueado por defecto
     const saved = localStorage.getItem(PROGRESS_KEY);
-    return saved ? JSON.parse(saved) : { ordenamiento: 1, escritura: 1, descomposicion: 1 };
+    return saved ? JSON.parse(saved) : { ordenamiento: 1, escritura: 1, descomposicion: 1, escala: 1 };
   });
 
   const unlockLevel = (game, level) => {
@@ -29,7 +28,7 @@ export const useUserProgress = () => {
   };
 
   const resetProgress = () => {
-    const defaultProgress = { ordenamiento: 1, escritura: 1, descomposicion: 1 };
+    const defaultProgress = { ordenamiento: 1, escritura: 1, descomposicion: 1, escala: 1 };
     setUnlockedLevels(defaultProgress);
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(defaultProgress));
   };

@@ -18,11 +18,15 @@ export function Card() {
         navigate('/alumno/juegos/descomposicion');
     };
 
+    const handleJugarEscala = () => {
+        navigate('/alumno/juegos/escala');
+    };
+
     return(
         <>
-        <scroll>
+        <div className="scroll-container">
         <div className='contenedor-card'>
-            <box className="card">
+            <div className="card">
                 <img src={Juego} alt="Ordenamiento"  className="imagegame"/>
                 <div className='textgame'>
                     <h2 className="titlegame">Ordenamiento de Números</h2>  
@@ -30,8 +34,8 @@ export function Card() {
                     <button className="buttongame" onClick={handleJugarOrdenamiento}>Jugar</button>
                 </div>
   
-            </box>
-            <box className="card">
+            </div>
+            <div className="card">
                 <img src={Juego2} alt="Numeros y palabras"  className="imagegame"/>
                 <div className='textgame'>
                     <h2 className="titlegame">Escribir Números en Palabras</h2>  
@@ -39,20 +43,28 @@ export function Card() {
                     <button className="buttongame" onClick={handleJugarEscritura}>Jugar</button>
                 </div>
   
-            </box>
+            </div>
             
-            <box className="card">
+            <div className="card">
                 <img src={Juego} alt="Descomposicion"  className="imagegame"/>
                 <div className='textgame'>
                     <h2 className="titlegame">Descomposición y Composición</h2>  
                     <p className="descriptiongame">¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.</p>
                     <button className="buttongame" onClick={handleJugarDescomposicion}>Jugar</button>
                 </div>
-  
-            </box>
+            </div>
+
+            <div className="card">
+                <img src={Juego2} alt="Escala"  className="imagegame"/>
+                <div className='textgame'>
+                    <h2 className="titlegame">Escala Numérica</h2>  
+                    <p className="descriptiongame">¡Explora los números anteriores y posteriores! Completa secuencias y descubre patrones numéricos.</p>
+                    <button className="buttongame" onClick={handleJugarEscala}>Jugar</button>
+                </div>
+            </div>
    
         </div>
-        </scroll>
+        </div>
         
 
         </>
