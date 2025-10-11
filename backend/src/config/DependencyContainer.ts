@@ -12,6 +12,8 @@ import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
 import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
 import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
+import {PostgreSQLCourseRepository} from "../infrastructure/PostgreSQLCoursesRepository";
+import {InMemoryCourseRepository} from "../infrastructure/InMemoryCourseRepository";
 
 
 
@@ -25,6 +27,7 @@ export class DependencyContainer {
     private _teacherRepository: PostgreSQLTeacherRepository | InMemoryTeacherRepository | null = null;
     private _studentRepository: PostgreSQLStudentRepository | InMemoryStudentRepository | null = null;
     private _adminRepository: PostgreSQLAdminRepository | InMemoryAdminRepository | null = null;
+    private _courseRepository: PostgreSQLCourseRepository | InMemoryCourseRepository | null = null;
     private _databaseConnection: DatabaseConnection | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
@@ -92,6 +95,17 @@ export class DependencyContainer {
             }
         }
         return this._adminRepository;
+    }
+
+    public get courseRepository(): PostgreSQLCourseRepository | InMemoryCourseRepository {
+        if (!this._courseRepository) {
+            if (process.env.NODE_ENV === 'test') {
+                this._courseRepository = new InMemoryCourseRepository();
+            } else {
+                this._courseRepository = new PostgreSQLCourseRepository();
+            }
+        }
+        return this._courseRepository;
     }
 
     public get databaseConnection(): DatabaseConnection {
@@ -172,7 +186,10 @@ export class DependencyContainer {
             await (this.teacherRepository as InMemoryTeacherRepository).clearUsers();
             await (this.studentRepository as InMemoryStudentRepository).clearStudents();
             await (this.adminRepository as InMemoryAdminRepository).clearUsers();
-            
+            await (this.courseRepository as InMemoryCourseRepository).clearCourses();
+
+
+
             await this.initializeTestData();
         }
     }
@@ -203,6 +220,13 @@ export class DependencyContainer {
             dni: '12345678',
             role: 'student'
         });
+
+        // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({
+        //     id: '1',
+        //     name: 'A',
+        //     teacher_id: '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni', // abcd1234
+        //     students: 'docente'
+        // });
     }
 
 }

@@ -70,6 +70,7 @@ export class DatabaseConnection {
           name VARCHAR(255) NOT NULL,
           lastname VARCHAR(255) NOT NULL,
           dni VARCHAR(20) NOT NULL,
+          course_id VARCHAR(255),
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -97,11 +98,39 @@ export class DatabaseConnection {
         )
       `);
 
+        await this.query(`
+        CREATE TABLE IF NOT EXISTS courses (
+         id VARCHAR(255) PRIMARY KEY,
+         name VARCHAR(255) UNIQUE NOT NULL,
+         teacher_id VARCHAR(255),
+         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
       await this.query('CREATE INDEX IF NOT EXISTS idx_students_username ON students(username)');
       await this.query('CREATE INDEX IF NOT EXISTS idx_admins_username ON admins(username)');
       await this.query('CREATE INDEX IF NOT EXISTS idx_teachers_username ON teachers(username)');
+        await this.query('CREATE INDEX IF NOT EXISTS idx_courses_name ON courses(name)');
+
+        await this.query(`
+          ALTER TABLE students
+          ADD CONSTRAINT fk_students_course
+          FOREIGN KEY (course_id)
+          REFERENCES courses(id)
+          ON DELETE SET NULL
+    `);
+
+        await this.query(`
+          ALTER TABLE courses
+          ADD CONSTRAINT fk_courses_teacher
+          FOREIGN KEY (teacher_id)
+          REFERENCES teachers(id)
+          ON DELETE SET NULL
+    `);
 
       await this.createDefaultUsers();
+      await this.createDefaultCourses();
 
       console.log('Tablas inicializadas correctamente en PostgreSQL');
     } catch (error) {
@@ -141,4 +170,32 @@ export class DatabaseConnection {
       throw error;
     }
   }
+
+    private async createDefaultCourses(): Promise<void> {
+        try {
+            console.log('Creando cursos por defecto...');
+
+            await this.query(`
+                INSERT INTO courses (id, name, teacher_id) 
+                VALUES ($1, $2, $3)
+                ON CONFLICT (name) DO NOTHING
+            `, ['default-course-1', 'Curso A', 'default-teacher-1']);
+
+            //Asignar alumno al curso
+            await this.query(`
+                UPDATE students
+                SET course_id = $1
+                WHERE id = $2
+        `, ['default-course-1', 'default-student-1']);
+
+            console.log('Cursos por defecto creados:');
+        } catch (error) {
+            console.error('Error al crear cursos por defecto:', error);
+            throw error;
+        }
+    }
+
+
+
+
 }
