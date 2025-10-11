@@ -11,7 +11,6 @@ const GameScreen = ({
     userAnswer,
     onAnswerChange,
     onCheckAnswer,
-    onShowHint,
     onBackToLevels,
     formatNumber
 }) => {
@@ -48,19 +47,23 @@ const GameScreen = ({
                 <div>Puntos: <span>{points}</span> | Intentos: <span>{attempts}</span></div>
             </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                 <div className="progress-indicator">
                     Pregunta {activity} de {totalActivities}
                 </div>
             </div>
 
-            <div className="paper-note slide-in" style={{ position: 'relative' }}>
+            <div className="paper-note slide-in" style={{ 
+                position: 'relative',
+                maxWidth: '700px',
+                margin: '0 auto'
+            }}>
                 <div style={{
                     background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
-                    margin: '-2rem -2rem 2rem -2rem',
-                    padding: '1.5rem 2rem',
-                    borderRadius: '1rem 1rem 0 0',
-                    borderBottom: '2px solid #81d4fa'
+                    margin: '-1.5rem -1.5rem 1rem -1.5rem',
+                    padding: '1rem 1.5rem',
+                    borderRadius: '1rem',
+                    textAlign: 'center'
                 }}>
                     <h3 className="question-title" style={{
                         margin: 0,
@@ -68,62 +71,54 @@ const GameScreen = ({
                         fontSize: '1.5rem',
                         fontWeight: '600'
                     }}>
-                        {question.type === 'decomposition' 
-                            ? '¿Qué número se forma?' 
-                            : '¿Qué número se forma?'
-                        }
+                        ¿Qué número se forma?
                     </h3>
                 </div>
 
+                {/* Contenido principal centralizado */}
                 <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: '1fr 1fr', 
-                    gap: '2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
-                    minHeight: '200px'
+                    gap: '1.5rem',
+                    padding: '0.5rem'
                 }}>
+                    {/* Pregunta principal */}
                     <div style={{
                         background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
-                        padding: '2rem',
+                        padding: '1.5rem',
                         borderRadius: '1rem',
                         border: '2px solid #ce93d8',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        minWidth: '280px',
+                        maxWidth: '450px'
                     }}>
-                        <p style={{
-                            fontSize: '0.9rem',
-                            color: '#4a148c',
-                            marginBottom: '1rem',
-                            fontStyle: 'italic'
-                        }}>
-                            {question.type === 'decomposition' 
-                                ? 'Escribe el número que se forma:'
-                                : 'Escribe el número que se forma:'
-                            }
-                        </p>
-
                         {question.type === 'decomposition' ? (
-                            <div className="question-number">
+                            <div className="question-number" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#4a148c' }}>
                                 {formatNumber(question.number)}
                             </div>
                         ) : (
-                            <div className="question-decomposition">
+                            <div className="question-decomposition" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4a148c' }}>
                                 {question.decomposition.join(' + ')}
                             </div>
                         )}
                     </div>
 
+                    {/* Sección de respuesta */}
                     <div style={{
                         background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
-                        padding: '2rem',
+                        padding: '1.5rem',
                         borderRadius: '1rem',
                         border: '2px solid #ffcc02',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        minWidth: '280px',
+                        maxWidth: '450px'
                     }}>
                         <p style={{
-                            fontSize: '0.9rem',
+                            fontSize: '1rem',
                             color: '#e65100',
                             marginBottom: '1rem',
-                            fontStyle: 'italic'
+                            fontWeight: '600'
                         }}>
                             {question.type === 'decomposition' 
                                 ? 'Escribe la descomposición:'
@@ -131,7 +126,7 @@ const GameScreen = ({
                             }
                         </p>
 
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
                             <input
                                 type="text"
                                 className="answer-input"
@@ -148,16 +143,18 @@ const GameScreen = ({
                                     textAlign: 'center',
                                     background: 'rgba(255, 255, 255, 0.9)',
                                     border: '2px solid #ffb74d',
-                                    borderRadius: '0.5rem'
+                                    borderRadius: '0.5rem',
+                                    padding: '0.75rem',
+                                    width: '100%',
+                                    maxWidth: '350px'
                                 }}
                             />
                         </form>
 
                         <div style={{
                             display: 'flex',
-                            gap: '0.5rem',
-                            justifyContent: 'center',
-                            marginTop: '1rem'
+                            gap: '1rem',
+                            justifyContent: 'center'
                         }}>
                             <button
                                 onClick={onCheckAnswer}
@@ -166,35 +163,17 @@ const GameScreen = ({
                                     background: userAnswer.trim() ? '#4caf50' : '#e0e0e0',
                                     color: userAnswer.trim() ? 'white' : '#9e9e9e',
                                     border: 'none',
-                                    borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.6rem 1.2rem',
                                     cursor: userAnswer.trim() ? 'pointer' : 'not-allowed',
-                                    fontSize: '1.2rem',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '600',
                                     transition: 'all 0.3s ease'
                                 }}
                                 title="Verificar respuesta"
                             >
-                                ✓
+                                ✓ Verificar
                             </button>
-                            
-                            <button
-                                onClick={onShowHint}
-                                style={{
-                                    background: '#ff9800',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
-                                    cursor: 'pointer',
-                                    fontSize: '1.2rem',
-                                    transition: 'all 0.3s ease'
-                                }}
-                                title="Ver pista"
-                            >
-                                ?
-                            </button> // Boton para consulta --Ver
                             
                             <button
                                 onClick={() => onAnswerChange('')}
@@ -202,23 +181,24 @@ const GameScreen = ({
                                     background: '#f44336',
                                     color: 'white',
                                     border: 'none',
-                                    borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.6rem 1.2rem',
                                     cursor: 'pointer',
-                                    fontSize: '1.2rem',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '600',
                                     transition: 'all 0.3s ease'
                                 }}
                                 title="Limpiar respuesta"
                             >
-                                ↺
-                            </button> // Botón para reiniciar la respuesta--Ver
+                                ↺ Limpiar
+                            </button>
                         </div>
                     </div>
                 </div>
 
+                {/* Pista en la parte inferior */}
                 <div style={{
-                    marginTop: '2rem',
+                    marginTop: '1rem',
                     padding: '1rem',
                     background: 'rgba(33, 150, 243, 0.1)',
                     borderRadius: '0.5rem',

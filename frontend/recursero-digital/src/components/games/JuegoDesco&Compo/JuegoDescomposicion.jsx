@@ -101,16 +101,16 @@ const JuegoDescomposicion = () => {
         setCurrentActivity(0);
         setQuestions(generateQuestions(level));
         resetScoring();
+        resetAttempts(); // Resetear intentos al empezar un nuevo nivel
         setGameState('playing');
-    }, [generateQuestions, resetScoring]);
+    }, [generateQuestions, resetScoring, resetAttempts]);
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {
             setCurrentQuestion(questions[currentActivity]);
             setUserAnswer('');
-            resetAttempts();
         }
-    }, [gameState, currentActivity, questions, resetAttempts]);
+    }, [gameState, currentActivity, questions]);
 
     const handleCheckAnswer = useCallback(() => {
         if (!currentQuestion || !userAnswer.trim()) return;
@@ -161,8 +161,10 @@ const JuegoDescomposicion = () => {
             setShowCongrats(true);
         } else {
             setCurrentActivity(prev => prev + 1);
+            // Resetear intentos al pasar a la siguiente pregunta
+            resetAttempts();
         }
-    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel]);
+    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel, resetAttempts]);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);

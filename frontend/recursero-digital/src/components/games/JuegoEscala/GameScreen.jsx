@@ -199,9 +199,15 @@ const GameScreen = ({
                                     ← Anterior
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     value={userAnswers.anterior || ''}
-                                    onChange={(e) => handleInputChange('anterior', e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Solo permitir números positivos y vacío
+                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                            handleInputChange('anterior', value);
+                                        }
+                                    }}
                                     className="answer-input"
                                     style={{
                                         fontSize: '1.5rem',
@@ -209,8 +215,11 @@ const GameScreen = ({
                                         borderRadius: '1rem',
                                         border: '3px solid #dc2626',
                                         textAlign: 'center',
-                                        width: '120px'
+                                        width: '120px',
+                                        WebkitAppearance: 'none',
+                                        MozAppearance: 'textfield'
                                     }}
+                                    placeholder="0"
                                 />
                             </div>
 
@@ -225,9 +234,15 @@ const GameScreen = ({
                                     Posterior →
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     value={userAnswers.posterior || ''}
-                                    onChange={(e) => handleInputChange('posterior', e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Solo permitir números positivos y vacío
+                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                            handleInputChange('posterior', value);
+                                        }
+                                    }}
                                     className="answer-input"
                                     style={{
                                         fontSize: '1.5rem',
@@ -235,8 +250,11 @@ const GameScreen = ({
                                         borderRadius: '1rem',
                                         border: '3px solid #16a34a',
                                         textAlign: 'center',
-                                        width: '120px'
+                                        width: '120px',
+                                        WebkitAppearance: 'none',
+                                        MozAppearance: 'textfield'
                                     }}
+                                    placeholder="0"
                                 />
                             </div>
                         </div>

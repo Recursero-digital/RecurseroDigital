@@ -29,7 +29,7 @@ const StartScreen = ({ onStart }) => {
                 zIndex: 10
             }}>
                 <h1 style={{
-                    fontSize: '4rem',
+                    fontSize: '3.5rem',
                     fontWeight: '900',
                     color: '#1e40af',
                     marginBottom: '1rem',
@@ -38,20 +38,15 @@ const StartScreen = ({ onStart }) => {
                     background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
+                    backgroundClip: 'text',
+                    textAlign: 'center',
+                    lineHeight: '1.2',
+                    maxWidth: '100%',
+                    wordWrap: 'break-word'
                 }}>
-                    🔢 NumeroExplorers ⚡
+                    🔢 ¿Cuál es el numero anterior y posterior? 🔢
                 </h1>
-                
-                <p style={{
-                    fontSize: '1.5rem',
-                    color: '#0c4a6e',
-                    marginBottom: '2rem',
-                    fontWeight: '600',
-                    textShadow: '1px 1px 2px rgba(255, 255, 255, 0.8)'
-                }}>
-                    ¡Aventura Matemática de Secuencias!
-                </p>
+
 
                 <div style={{
                     background: 'rgba(255, 255, 255, 0.95)',
@@ -139,10 +134,10 @@ const StartScreen = ({ onStart }) => {
                             fontWeight: '500',
                             paddingLeft: '1rem'
                         }}>
-                            <li>• Identificar y completar secuencias numéricas</li>
-                            <li>• Reconocer el valor posicional de las cifras</li>
-                            <li>• Anticipar números anteriores y posteriores</li>
-                            <li>• Trabajar con regularidades matemáticas</li>
+                            <li>Identificar y completar secuencias numéricas</li>
+                            <li>Reconocer el valor posicional de las cifras</li>
+                            <li>Anticipar números anteriores y posteriores</li>
+                            <li>Trabajar con regularidades matemáticas</li>
                         </ul>
                     </div>
                 </div>
