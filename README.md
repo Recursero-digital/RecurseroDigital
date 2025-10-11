@@ -78,29 +78,6 @@ docker-compose up --build backend
 Para más detalles sobre la configuración de Docker, consulta el archivo [DOCKER.md](./DOCKER.md).
 
 ---
-## 🚀 Despliegue en Railway (Ambiente de Desarrollo)
-
-Para tener un ambiente de desarrollo accesible online, el proyecto está configurado para desplegarse en Railway:
-
-### Configuración automática:
-- ✅ **railway.json** - Configuración principal de Railway
-- ✅ **nixpacks.toml** - Configuración de build específica
-- ✅ **package.json** - Configuración del monorepo
-- ✅ **start.sh** - Script de inicio para Railway
-
-### Pasos para deploy:
-1. **Conectar repositorio** en Railway
-2. **Railway detectará automáticamente** la configuración
-3. **El despliegue se realizará** automáticamente
-
-### Servicios incluidos:
-- **Backend**: API REST en puerto 3000
-- **Frontend**: Aplicación React en puerto 5173
-- **Ambos servicios** ejecutándose simultáneamente
-
-**Nota**: Railway se usa únicamente para el ambiente de desarrollo. El ambiente de producción se desplegará en otra plataforma.
-
----
 ## 🛠️ Instalación manual (Desarrollo)
 
 Si prefieres ejecutar el proyecto sin Docker:
