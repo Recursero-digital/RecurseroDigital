@@ -1,6 +1,7 @@
 
 export class StudentEntity {
     id: string;
+    userId: string;
     username: string;
     passwordHash: string;
     name: string;
@@ -8,7 +9,8 @@ export class StudentEntity {
     dni: String;
 
     constructor(
-        id: string, 
+        id: string,
+        userId: string,
         username: string,
         passwordHash: string,
         name: string,
@@ -16,6 +18,7 @@ export class StudentEntity {
         dni: String
     ) {
         this.id = id;
+        this.userId = userId;
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;

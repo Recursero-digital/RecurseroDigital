@@ -211,15 +211,6 @@ export class DependencyContainer {
             role: 'docente'
         });
 
-        await (testContainer.studentRepository as InMemoryStudentRepository).addStudent({
-            id: '1',
-            username: 'nico@gmail.com',
-            passwordHash: '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // Recursero2025!
-            name: 'Nicolás',
-            lastname: 'García',
-            dni: '12345678',
-            role: 'student'
-        });
 
         // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({
         //     id: '1',

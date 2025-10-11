@@ -1,5 +1,6 @@
 import { StudentRepository } from '../core/infrastructure/StudentRepository';
 import { Student } from '../core/models/Student';
+import { User } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLStudentRepository implements StudentRepository {
@@ -12,7 +13,10 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async findByUserName(userName: string): Promise<Student | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM students WHERE username = $1',
+        `SELECT s.*, u.username, u.password_hash, u.role 
+         FROM students s 
+         JOIN users u ON s.user_id = u.id 
+         WHERE u.username = $1`,
         [userName]
       );
 
@@ -21,13 +25,13 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
+      const user = new User(row.username, row.username, row.password_hash, row.role);
       return new Student(
         row.id,
-        row.username,
-        row.password_hash,
         row.name,
         row.lastname,
-        row.dni
+        row.dni,
+        user
       );
     } catch (error) {
       console.error('Error al buscar estudiante por nombre de usuario:', error);
@@ -37,13 +41,25 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
   async addStudent(studentData: Student): Promise<void> {
     try {
+      // Primero insertar el usuario
       await this.db.query(
-        `INSERT INTO students (id, username, password_hash, name, lastname, dni)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+        `INSERT INTO users (id, username, password_hash, role)
+         VALUES ($1, $2, $3, $4)`,
+        [
+          studentData.user.id,
+          studentData.user.username,
+          studentData.user.passwordHash,
+          studentData.user.role
+        ]
+      );
+
+      // Luego insertar el estudiante
+      await this.db.query(
+        `INSERT INTO students (id, user_id, name, lastname, dni)
+         VALUES ($1, $2, $3, $4, $5)`,
         [
           studentData.id,
-          studentData.username,
-          studentData.passwordHash,
+          studentData.user.id,
           studentData.name,
           studentData.lastname,
           studentData.dni
@@ -58,15 +74,22 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   // Métodos adicionales útiles para administración
   async getAllStudents(): Promise<Student[]> {
     try {
-      const result = await this.db.query('SELECT * FROM students ORDER BY created_at DESC');
-      return result.rows.map((row: any) => new Student(
-        row.id,
-        row.username,
-        row.password_hash,
-        row.name,
-        row.lastname,
-        row.dni
-      ));
+      const result = await this.db.query(
+        `SELECT s.*, u.username, u.password_hash, u.role 
+         FROM students s 
+         JOIN users u ON s.user_id = u.id 
+         ORDER BY s.created_at DESC`
+      );
+      return result.rows.map((row: any) => {
+        const user = new User(row.username, row.username, row.password_hash, row.role);
+        return new Student(
+          row.id,
+          row.name,
+          row.lastname,
+          row.dni,
+          user
+        );
+      });
     } catch (error) {
       console.error('Error al obtener todos los estudiantes:', error);
       throw error;
@@ -76,7 +99,10 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async findById(id: string): Promise<Student | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM students WHERE id = $1',
+        `SELECT s.*, u.username, u.password_hash, u.role 
+         FROM students s 
+         JOIN users u ON s.user_id = u.id 
+         WHERE s.id = $1`,
         [id]
       );
 
@@ -85,13 +111,13 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
+      const user = new User(row.username, row.username, row.password_hash, row.role);
       return new Student(
         row.id,
-        row.username,
-        row.password_hash,
         row.name,
         row.lastname,
-        row.dni
+        row.dni,
+        user
       );
     } catch (error) {
       console.error('Error al buscar estudiante por ID:', error);
@@ -102,13 +128,23 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async updateStudent(studentData: Student): Promise<void> {
     try {
       await this.db.query(
+        `UPDATE users 
+         SET username = $2, password_hash = $3, role = $4, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [
+          studentData.user.id,
+          studentData.user.username,
+          studentData.user.passwordHash,
+          studentData.user.role
+        ]
+      );
+
+      await this.db.query(
         `UPDATE students 
-         SET username = $2, password_hash = $3, name = $4, lastname = $5, dni = $6, updated_at = CURRENT_TIMESTAMP
+         SET name = $2, lastname = $3, dni = $4, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
         [
           studentData.id,
-          studentData.username,
-          studentData.passwordHash,
           studentData.name,
           studentData.lastname,
           studentData.dni
@@ -122,6 +158,11 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
   async deleteStudent(id: string): Promise<void> {
     try {
+      const student = await this.findById(id);
+      if (!student) {
+        throw new Error('Estudiante no encontrado');
+      }
+
       await this.db.query('DELETE FROM students WHERE id = $1', [id]);
     } catch (error) {
       console.error('Error al eliminar estudiante:', error);

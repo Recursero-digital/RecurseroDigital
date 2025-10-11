@@ -21,13 +21,13 @@ export class LoginStudentUseCase {
 
     async execute(userName: string, password: string): Promise<string> {
         const student = await this.studentRepository.findByUserName(userName);
-        if (!student || !(await this.passwordEncoder.compare(password, student.passwordHash))) {
+        if (!student || !(await this.passwordEncoder.compare(password, student.getPasswordHash()))) {
             throw new InvalidCredentials();
         }
         return this.tokenService.generate({
             id: student.id,
-            username: student.username,
-            role: student.role
+            username: student.getUsername(),
+            role: student.getRole()
         });
     }
 }

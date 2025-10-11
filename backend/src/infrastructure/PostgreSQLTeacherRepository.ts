@@ -1,4 +1,6 @@
-import { TeacherRepository, User } from '../core/infrastructure/TeacherRepository';
+import { TeacherRepository } from '../core/infrastructure/TeacherRepository';
+import { Teacher } from '../core/models/Teacher';
+import { User } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLTeacherRepository implements TeacherRepository {
@@ -8,10 +10,13 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
     this.db = DatabaseConnection.getInstance();
   }
 
-  async findByUserName(userName: string): Promise<User | null> {
+  async findByUserName(userName: string): Promise<Teacher | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM teachers WHERE username = $1',
+        `SELECT t.*, u.username, u.password_hash, u.role 
+         FROM teachers t 
+         JOIN users u ON t.user_id = u.id 
+         WHERE u.username = $1`,
         [userName]
       );
 
@@ -20,24 +25,43 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      return {
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      };
+      const user = new User(row.username, row.username, row.password_hash, row.role);
+      return new Teacher(
+        row.id,
+        row.name,
+        row.surname,
+        row.email,
+        user
+      );
     } catch (error) {
       console.error('Error al buscar profesor por nombre de usuario:', error);
       throw error;
     }
   }
 
-  async addUser(user: User): Promise<void> {
+  async addTeacher(teacherData: Teacher): Promise<void> {
     try {
       await this.db.query(
-        `INSERT INTO teachers (id, username, password, role)
+        `INSERT INTO users (id, username, password_hash, role)
          VALUES ($1, $2, $3, $4)`,
-        [user.id, user.username, user.password, user.role]
+        [
+          teacherData.user.id,
+          teacherData.user.username,
+          teacherData.user.passwordHash,
+          teacherData.user.role
+        ]
+      );
+
+      await this.db.query(
+        `INSERT INTO teachers (id, user_id, name, surname, email)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          teacherData.id,
+          teacherData.user.id,
+          teacherData.name,
+          teacherData.surname,
+          teacherData.email
+        ]
       );
     } catch (error) {
       console.error('Error al agregar profesor:', error);
@@ -45,25 +69,37 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
     }
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllTeachers(): Promise<Teacher[]> {
     try {
-      const result = await this.db.query('SELECT * FROM teachers ORDER BY created_at DESC');
-      return result.rows.map((row: any) => ({
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      }));
+      const result = await this.db.query(
+        `SELECT t.*, u.username, u.password_hash, u.role 
+         FROM teachers t 
+         JOIN users u ON t.user_id = u.id 
+         ORDER BY t.created_at DESC`
+      );
+      return result.rows.map((row: any) => {
+        const user = new User(row.username, row.username, row.password_hash, row.role);
+        return new Teacher(
+          row.id,
+          row.name,
+          row.surname,
+          row.email,
+          user
+        );
+      });
     } catch (error) {
       console.error('Error al obtener todos los profesores:', error);
       throw error;
     }
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<Teacher | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM teachers WHERE id = $1',
+        `SELECT t.*, u.username, u.password_hash, u.role 
+         FROM teachers t 
+         JOIN users u ON t.user_id = u.id 
+         WHERE t.id = $1`,
         [id]
       );
 
@@ -72,25 +108,44 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      return {
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      };
+      const user = new User(row.username, row.username, row.password_hash, row.role);
+      return new Teacher(
+        row.id,
+        row.name,
+        row.surname,
+        row.email,
+        user
+      );
     } catch (error) {
       console.error('Error al buscar profesor por ID:', error);
       throw error;
     }
   }
 
-  async updateUser(user: User): Promise<void> {
+  async updateTeacher(teacherData: Teacher): Promise<void> {
     try {
       await this.db.query(
-        `UPDATE teachers 
-         SET username = $2, password = $3, role = $4, updated_at = CURRENT_TIMESTAMP
+        `UPDATE users 
+         SET username = $2, password_hash = $3, role = $4, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
-        [user.id, user.username, user.password, user.role]
+        [
+          teacherData.user.id,
+          teacherData.user.username,
+          teacherData.user.passwordHash,
+          teacherData.user.role
+        ]
+      );
+
+      await this.db.query(
+        `UPDATE teachers 
+         SET name = $2, surname = $3, email = $4, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [
+          teacherData.id,
+          teacherData.name,
+          teacherData.surname,
+          teacherData.email
+        ]
       );
     } catch (error) {
       console.error('Error al actualizar profesor:', error);
@@ -98,8 +153,13 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteTeacher(id: string): Promise<void> {
     try {
+      const teacher = await this.findById(id);
+      if (!teacher) {
+        throw new Error('Profesor no encontrado');
+      }
+
       await this.db.query('DELETE FROM teachers WHERE id = $1', [id]);
     } catch (error) {
       console.error('Error al eliminar profesor:', error);

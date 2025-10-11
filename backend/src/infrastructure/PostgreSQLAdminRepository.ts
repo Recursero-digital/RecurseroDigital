@@ -1,4 +1,6 @@
-import { AdminRepository, User } from '../core/infrastructure/AdminRepository';
+import { AdminRepository } from '../core/infrastructure/AdminRepository';
+import { Admin } from '../core/models/Admin';
+import { User } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLAdminRepository implements AdminRepository {
@@ -8,10 +10,13 @@ export class PostgreSQLAdminRepository implements AdminRepository {
     this.db = DatabaseConnection.getInstance();
   }
 
-  async findByUserName(userName: string): Promise<User | null> {
+  async findByUserName(userName: string): Promise<Admin | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM admins WHERE username = $1',
+        `SELECT a.*, u.username, u.password_hash, u.role 
+         FROM admins a 
+         JOIN users u ON a.user_id = u.id 
+         WHERE u.username = $1`,
         [userName]
       );
 
@@ -20,24 +25,42 @@ export class PostgreSQLAdminRepository implements AdminRepository {
       }
 
       const row = result.rows[0];
-      return {
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      };
+      const user = new User(row.username, row.username, row.password_hash, row.role);
+      return new Admin(
+        row.id,
+        row.user_id,
+        row.nivel_acceso,
+        row.permisos || [],
+        user
+      );
     } catch (error) {
       console.error('Error al buscar administrador por nombre de usuario:', error);
       throw error;
     }
   }
 
-  async addUser(user: User): Promise<void> {
+  async addAdmin(adminData: Admin): Promise<void> {
     try {
       await this.db.query(
-        `INSERT INTO admins (id, username, password, role)
+        `INSERT INTO users (id, username, password_hash, role)
          VALUES ($1, $2, $3, $4)`,
-        [user.id, user.username, user.password, user.role]
+        [
+          adminData.user.id,
+          adminData.user.username,
+          adminData.user.passwordHash,
+          adminData.user.role
+        ]
+      );
+
+      await this.db.query(
+        `INSERT INTO admins (id, user_id, nivel_acceso, permisos)
+         VALUES ($1, $2, $3, $4)`,
+        [
+          adminData.id,
+          adminData.user.id,
+          adminData.nivelAcceso,
+          adminData.permisos
+        ]
       );
     } catch (error) {
       console.error('Error al agregar administrador:', error);
@@ -45,25 +68,37 @@ export class PostgreSQLAdminRepository implements AdminRepository {
     }
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllAdmins(): Promise<Admin[]> {
     try {
-      const result = await this.db.query('SELECT * FROM admins ORDER BY created_at DESC');
-      return result.rows.map((row: any) => ({
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      }));
+      const result = await this.db.query(
+        `SELECT a.*, u.username, u.password_hash, u.role 
+         FROM admins a 
+         JOIN users u ON a.user_id = u.id 
+         ORDER BY a.created_at DESC`
+      );
+      return result.rows.map((row: any) => {
+        const user = new User(row.username, row.username, row.password_hash, row.role);
+        return new Admin(
+          row.id,
+          row.user_id,
+          row.nivel_acceso,
+          row.permisos || [],
+          user
+        );
+      });
     } catch (error) {
       console.error('Error al obtener todos los administradores:', error);
       throw error;
     }
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<Admin | null> {
     try {
       const result = await this.db.query(
-        'SELECT * FROM admins WHERE id = $1',
+        `SELECT a.*, u.username, u.password_hash, u.role 
+         FROM admins a 
+         JOIN users u ON a.user_id = u.id 
+         WHERE a.id = $1`,
         [id]
       );
 
@@ -72,25 +107,43 @@ export class PostgreSQLAdminRepository implements AdminRepository {
       }
 
       const row = result.rows[0];
-      return {
-        id: row.id,
-        username: row.username,
-        password: row.password,
-        role: row.role
-      };
+      const user = new User(row.username, row.username, row.password_hash, row.role);
+      return new Admin(
+        row.id,
+        row.user_id,
+        row.nivel_acceso,
+        row.permisos || [],
+        user
+      );
     } catch (error) {
       console.error('Error al buscar administrador por ID:', error);
       throw error;
     }
   }
 
-  async updateUser(user: User): Promise<void> {
+  async updateAdmin(adminData: Admin): Promise<void> {
     try {
       await this.db.query(
-        `UPDATE admins 
-         SET username = $2, password = $3, role = $4, updated_at = CURRENT_TIMESTAMP
+        `UPDATE users 
+         SET username = $2, password_hash = $3, role = $4, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
-        [user.id, user.username, user.password, user.role]
+        [
+          adminData.user.id,
+          adminData.user.username,
+          adminData.user.passwordHash,
+          adminData.user.role
+        ]
+      );
+
+      await this.db.query(
+        `UPDATE admins 
+         SET nivel_acceso = $2, permisos = $3, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1`,
+        [
+          adminData.id,
+          adminData.nivelAcceso,
+          adminData.permisos
+        ]
       );
     } catch (error) {
       console.error('Error al actualizar administrador:', error);
@@ -98,8 +151,13 @@ export class PostgreSQLAdminRepository implements AdminRepository {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteAdmin(id: string): Promise<void> {
     try {
+      const admin = await this.findById(id);
+      if (!admin) {
+        throw new Error('Administrador no encontrado');
+      }
+
       await this.db.query('DELETE FROM admins WHERE id = $1', [id]);
     } catch (error) {
       console.error('Error al eliminar administrador:', error);

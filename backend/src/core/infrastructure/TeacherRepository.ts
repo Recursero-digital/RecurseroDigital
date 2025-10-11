@@ -1,10 +1,10 @@
-export interface User {
-    id: string;
-    username: string;
-    password: string;
-    role: string;
-}
+import {Teacher} from "../models/Teacher";
 
 export interface TeacherRepository {
-    findByUserName(userName: string): Promise<User | null>;
+    findByUserName(userName: string): Promise<Teacher | null>;
+    addTeacher(teacherData: Teacher): Promise<void>;
+    getAllTeachers(): Promise<Teacher[]>;
+    findById(id: string): Promise<Teacher | null>;
+    updateTeacher(teacherData: Teacher): Promise<void>;
+    deleteTeacher(id: string): Promise<void>;
 }
