@@ -36,7 +36,6 @@ export default function PerfilAlumno() {
 
   return (
     <div className="perfil-container">
-      {/* Header del perfil con avatar y info básica */}
       <div className="perfil-header">
         <div className="avatar-section">
           <div className="avatar-frame">
@@ -57,13 +56,10 @@ export default function PerfilAlumno() {
           </div>
         </div>
       </div>
-
-      {/* Estadísticas de juegos */}
       <div className="games-stats">
         <h2 className="stats-title">🎮 Mis Aventuras Matemáticas 🎮</h2>
-        
+      
         <div className="games-grid">
-          {/* Juego de Ordenamiento */}
           <div className="game-card ordenamiento">
             <div className="game-icon">🔢</div>
             <h3 className="game-title">Ordenamiento de Números</h3>
@@ -87,8 +83,6 @@ export default function PerfilAlumno() {
               </div>
             </div>
           </div>
-
-          {/* Juego de Escritura */}
           <div className="game-card escritura">
             <div className="game-icon">✍️</div>
             <h3 className="game-title">Números en Palabras</h3>
@@ -113,9 +107,6 @@ export default function PerfilAlumno() {
             </div>
           </div>
         </div>
-
-        {/* Sección de motivación */}
- 
       </div>
     </div>
   );

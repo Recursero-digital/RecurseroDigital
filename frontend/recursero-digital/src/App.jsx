@@ -4,6 +4,8 @@ import Login from "./pages/login";
 import LoginForm from "./pages/LoginForm";
 import HomeAlumno from "./pages/homeAlumno";
 import HomeDocente from "./pages/homeDocente";
+import TeacherStudents from "./pages/TeacherStudents";
+import TeacherGames from "./pages/TeacherGames";
 import MainLayout from "./layouts/MainLayout";
 //import DocenteConCurso from "./pages/docenteConCurso";
 import JuegoOrdenamiento from "./components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx";
@@ -64,7 +66,7 @@ function App() {
           path="/docente/estudiantes"
           element={
             <MainLayout userRole="docente">
-              <HomeDocente />
+              <TeacherStudents />
             </MainLayout>
           }
         />
@@ -72,7 +74,7 @@ function App() {
           path="/docente/juegos"
           element={
             <MainLayout userRole="docente">
-              <HomeDocente />
+              <TeacherGames />
             </MainLayout>
           }
         />
