@@ -1,5 +1,7 @@
 import { Pool, PoolClient } from 'pg';
 import { databaseConfig } from '../config/database';
+import { spawn } from 'child_process';
+import path from 'path';
 
 export class DatabaseConnection {
   private static instance: DatabaseConnection;
@@ -56,164 +58,52 @@ export class DatabaseConnection {
     await this.pool.end();
   }
 
+  private async runMigrations(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const databaseUrl = `postgresql://${databaseConfig.user}:${databaseConfig.password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`;
+      
+      const migrateProcess = spawn('npx', [
+        'node-pg-migrate',
+        'up',
+        '-m',
+        path.join(__dirname, '../../migrations'),
+        '--database-url-var',
+        'DATABASE_URL'
+      ], {
+        env: { ...process.env, DATABASE_URL: databaseUrl },
+        shell: true
+      });
+
+      let output = '';
+      migrateProcess.stdout?.on('data', (data) => {
+        output += data.toString();
+        console.log(data.toString());
+      });
+
+      migrateProcess.stderr?.on('data', (data) => {
+        output += data.toString();
+        console.error(data.toString());
+      });
+
+      migrateProcess.on('close', (code) => {
+        if (code === 0) {
+          console.log('Migraciones ejecutadas correctamente');
+          resolve();
+        } else {
+          reject(new Error(`Error al ejecutar migraciones. Código: ${code}\n${output}`));
+        }
+      });
+    });
+  }
+
   public async initializeTables(): Promise<void> {
     try {
       await this.waitForDatabase();
 
-      console.log('Creando tablas en PostgreSQL...');
+      console.log('Ejecutando migraciones...');
+      await this.runMigrations();
 
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS users (
-          id VARCHAR(255) PRIMARY KEY,
-          username VARCHAR(255) UNIQUE NOT NULL,
-          password_hash VARCHAR(255) NOT NULL,
-          role VARCHAR(50) NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)');
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS students (
-          id VARCHAR(255) PRIMARY KEY,
-          user_id VARCHAR(255) NOT NULL,
-          name VARCHAR(255) NOT NULL,
-          lastname VARCHAR(255) NOT NULL,
-          dni VARCHAR(20) UNIQUE NOT NULL,
-          course_id VARCHAR(255),
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_students_user_id ON students(user_id)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_students_dni ON students(dni)');
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS teachers (
-          id VARCHAR(255) PRIMARY KEY,
-          user_id VARCHAR(255) NOT NULL,
-          name VARCHAR(255) NOT NULL,
-          surname VARCHAR(255) NOT NULL,
-          email VARCHAR(255) UNIQUE NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_teachers_user_id ON teachers(user_id)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_teachers_email ON teachers(email)');
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS admins (
-          id VARCHAR(255) PRIMARY KEY,
-          user_id VARCHAR(255) NOT NULL,
-          nivel_acceso INTEGER NOT NULL DEFAULT 1,
-          permisos TEXT[] DEFAULT '{}',
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_admins_user_id ON admins(user_id)');
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS courses (
-          id VARCHAR(255) PRIMARY KEY,
-          name VARCHAR(255) UNIQUE NOT NULL,
-          teacher_id VARCHAR(255),
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_courses_name ON courses(name)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_courses_teacher_id ON courses(teacher_id)');
-
-
-      await this.query(`
-        DO $$
-        BEGIN
-          IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE constraint_name = 'fk_students_user'
-          ) THEN
-            ALTER TABLE students
-            ADD CONSTRAINT fk_students_user
-            FOREIGN KEY (user_id)
-            REFERENCES users(id)
-            ON DELETE CASCADE;
-          END IF;
-        END $$;
-      `);
-
-      await this.query(`
-        DO $$
-        BEGIN
-          IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE constraint_name = 'fk_teachers_user'
-          ) THEN
-            ALTER TABLE teachers
-            ADD CONSTRAINT fk_teachers_user
-            FOREIGN KEY (user_id)
-            REFERENCES users(id)
-            ON DELETE CASCADE;
-          END IF;
-        END $$;
-      `);
-
-      await this.query(`
-        DO $$
-        BEGIN
-          IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE constraint_name = 'fk_admins_user'
-          ) THEN
-            ALTER TABLE admins
-            ADD CONSTRAINT fk_admins_user
-            FOREIGN KEY (user_id)
-            REFERENCES users(id)
-            ON DELETE CASCADE;
-          END IF;
-        END $$;
-      `);
-
-      await this.query(`
-        DO $$
-        BEGIN
-          IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE constraint_name = 'fk_courses_teacher'
-          ) THEN
-            ALTER TABLE courses
-            ADD CONSTRAINT fk_courses_teacher
-            FOREIGN KEY (teacher_id)
-            REFERENCES teachers(id)
-            ON DELETE SET NULL;
-          END IF;
-        END $$;
-      `);
-
-      await this.query(`
-        DO $$
-        BEGIN
-          IF NOT EXISTS (
-            SELECT 1 FROM information_schema.table_constraints 
-            WHERE constraint_name = 'fk_students_course'
-          ) THEN
-            ALTER TABLE students
-            ADD CONSTRAINT fk_students_course
-            FOREIGN KEY (course_id)
-            REFERENCES courses(id)
-            ON DELETE SET NULL;
-          END IF;
-        END $$;
-      `);
-
+      console.log('Creando datos por defecto...');
       await this.createDefaultUsers();
       await this.createDefaultCourses();
 
