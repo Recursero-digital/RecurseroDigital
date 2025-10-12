@@ -13,7 +13,23 @@ const StartScreen = ({ onStart, onBackToGames }) => {
                 </button>
             </div>
             <h1>🎯 Ordenamiento Numérico</h1>
-            <p>¡Vamos a ordenar números de forma divertida!</p>
+            <p>¡Aprende a ordenar números de menor a mayor!</p>
+            
+            <div className="start-features">
+                <div className="feature-item">
+                    <span className="feature-icon">🔢</span>
+                    <span className="feature-text">Ordena números</span>
+                </div>
+                <div className="feature-item">
+                    <span className="feature-icon">🎯</span>
+                    <span className="feature-text">Arrastra y suelta</span>
+                </div>
+                <div className="feature-item">
+                    <span className="feature-icon">⭐</span>
+                    <span className="feature-text">Gana puntos</span>
+                </div>
+            </div>
+            
             <div className="button-group">
                 <button onClick={onStart} className="btn btn-start">COMENZAR</button>
             </div>

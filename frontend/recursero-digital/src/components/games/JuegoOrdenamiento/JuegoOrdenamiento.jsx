@@ -147,19 +147,6 @@ const JuegoOrdenamiento = () => {
     setTargetNumbers([]);
     setFeedbackSuccess(true);
     setShowFeedback(true);
-    
-    setTimeout(() => {
-      setShowFeedback(false);
-      if (newActivity < totalActivities) {
-        setCurrentActivity(newActivity);
-        generateNumbers(currentLevel); 
-        setTargetNumbers([]);
-        setShowPermanentHint(true);
-      } else {  
-        unlockLevel('ordenamiento', currentLevel + 2);
-        setShowLevelUp(true);
-      }
-    }, 2500);
   }, [currentLevel, currentActivity, completeActivity, attempts, generateNumbers, unlockLevel]);
 
   const handleFailedAttempt = useCallback(() => {
@@ -172,6 +159,19 @@ const JuegoOrdenamiento = () => {
       setTargetNumbers([]); 
     }, 2500);
   }, [incrementAttempts]);
+
+  const handleContinueAfterSuccess = useCallback(() => {
+    setShowFeedback(false);
+    if (currentActivity + 1 < totalActivities) {
+      setCurrentActivity(currentActivity + 1);
+      generateNumbers(currentLevel); 
+      setTargetNumbers([]);
+      setShowPermanentHint(true);
+    } else {  
+      unlockLevel('ordenamiento', currentLevel + 2);
+      setShowLevelUp(true);
+    }
+  }, [currentActivity, totalActivities, currentLevel, generateNumbers, unlockLevel]);
 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
@@ -435,7 +435,7 @@ const JuegoOrdenamiento = () => {
       {showFeedback && (
         <ActivityFeedbackModal
           isSuccess={feedbackSuccess}
-          onContinue={() => setShowFeedback(false)}
+          onContinue={feedbackSuccess ? handleContinueAfterSuccess : () => setShowFeedback(false)}
           onRetry={() => {
             setShowFeedback(false);
             setTargetNumbers([]);
