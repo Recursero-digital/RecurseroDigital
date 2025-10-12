@@ -4,6 +4,7 @@ import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockIdGenerator } from '../../mocks/IdGenerator.mock';
 import {StudentInvalidRequestError} from "../../../src/core/models/exceptions/StudentInvalidRequestError";
 import {StudentAlreadyExistsError} from "../../../src/core/models/exceptions/StudentAlreadyExistsError";
+import { UserRole } from "../../../src/core/models/User";
 
 describe('AddStudentUseCase', () => {
     let addStudentUseCase: AddStudentUseCase;
@@ -50,7 +51,7 @@ describe('AddStudentUseCase', () => {
             expect(createdStudent.name).toBe(request.name);
             expect(createdStudent.lastname).toBe(request.lastName);
             expect(createdStudent.dni).toBe(request.dni);
-            expect(createdStudent.user.role).toBe('STUDENT');
+            expect(createdStudent.user.role).toBe(UserRole.STUDENT);
         });
 
         it('should throw error when username is no received', async () => {

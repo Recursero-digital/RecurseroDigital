@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User, UserRole } from './User';
 
 export class Teacher {
     id: string;
@@ -29,7 +29,7 @@ export class Teacher {
         return this.user.passwordHash;
     }
 
-    getRole(): string {
+    getRole(): UserRole {
         return this.user.role;
     }
 }

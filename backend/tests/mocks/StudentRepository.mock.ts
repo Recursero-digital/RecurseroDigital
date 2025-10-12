@@ -1,7 +1,7 @@
 import { StudentRepository } from '../../src/core/infrastructure/StudentRepository';
 import {Student} from "../../src/core/models/Student";
 import {StudentEntity} from "../../src/infrastructure/entities/StudentEntity";
-import { User } from '../../src/core/models/User';
+import { User, UserRole } from '../../src/core/models/User';
 
 export class MockStudentRepository implements StudentRepository {
   private students: StudentEntity[];
@@ -17,7 +17,7 @@ export class MockStudentRepository implements StudentRepository {
               student.userId,
               student.username,
               student.passwordHash,
-              'STUDENT'
+              UserRole.STUDENT
           );
           return new Student(
               student.id,
@@ -49,7 +49,7 @@ export class MockStudentRepository implements StudentRepository {
         student.userId,
         student.username,
         student.passwordHash,
-        'STUDENT'
+        UserRole.STUDENT
       );
       return new Student(
         student.id,
@@ -68,7 +68,7 @@ export class MockStudentRepository implements StudentRepository {
         student.userId,
         student.username,
         student.passwordHash,
-        'STUDENT'
+        UserRole.STUDENT
       );
       return new Student(
         student.id,

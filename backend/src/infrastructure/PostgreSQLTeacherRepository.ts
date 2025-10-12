@@ -1,6 +1,6 @@
 import { TeacherRepository } from '../core/infrastructure/TeacherRepository';
 import { Teacher } from '../core/models/Teacher';
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLTeacherRepository implements TeacherRepository {
@@ -25,7 +25,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Teacher(
         row.id,
         row.name,
@@ -108,7 +108,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Teacher(
         row.id,
         row.name,

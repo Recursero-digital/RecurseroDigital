@@ -1,6 +1,6 @@
 import { TeacherRepository } from '../core/infrastructure/TeacherRepository';
 import { Teacher } from '../core/models/Teacher';
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 
 export class InMemoryTeacherRepository implements TeacherRepository {
   private teachers: Teacher[] = [];
@@ -11,7 +11,7 @@ export class InMemoryTeacherRepository implements TeacherRepository {
       '1',
       'Mariana@gmail.com',
       '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni',
-      'TEACHER'
+      UserRole.TEACHER
     );
     const teacher = new Teacher('1', 'Mariana', 'García', 'Mariana@gmail.com', teacherUser);
     this.teachers = [teacher];

@@ -3,7 +3,7 @@ import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidC
 import { MockUserRepository } from '../../mocks/UserRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/models/User';
+import { User, UserRole } from '../../../src/core/models/User';
 
 describe('LoginTeacherUseCase', () => {
   let loginUseCase: LoginTeacherUseCase;
@@ -45,7 +45,7 @@ describe('LoginTeacherUseCase', () => {
         '1',
         'testuser',
         'hashed_correct_password',
-        'TEACHER'
+        UserRole.TEACHER
       );
       
       mockUserRepository.addUser(user);
@@ -64,7 +64,7 @@ describe('LoginTeacherUseCase', () => {
         '1',
         'testuser',
         'hashed_correct_password',
-        'TEACHER'
+        UserRole.TEACHER
       );
       
       mockUserRepository.addUser(user);
