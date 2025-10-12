@@ -129,7 +129,7 @@ const JuegoEscritura = () => {
         if (allCorrect) {
             const activityScore = await completeActivity(currentLevel);
             
-            if (currentActivity < 2) {
+            if (currentActivity < 4) {
                 setFeedback({ 
                     title: '✅ ¡Perfecto!', 
                     text: `¡Excelente! Todas las respuestas son correctas. Ganaste ${activityScore} puntos. Avanza a la siguiente actividad.`, 

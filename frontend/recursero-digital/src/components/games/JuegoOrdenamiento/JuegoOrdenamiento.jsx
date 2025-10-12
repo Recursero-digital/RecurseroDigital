@@ -37,12 +37,12 @@ const JuegoOrdenamiento = () => {
 
   // Constants
   const levelRanges = useMemo(() => [
-    { min: 25, max: 250 },
-    { min: 251, max: 500 },
-    { min: 501, max: 750 },
-    { min: 751, max: 1000 },
-    { min: 1001, max: 1500 },
+    { min: 25, max: 250, name: "Números Pequeños", description: "Del 25 al 250" },
+    { min: 251, max: 500, name: "Números Medianos", description: "Del 251 al 500" },
+    { min: 501, max: 1000, name: "Números Grandes", description: "Del 501 al 1000" },
   ], []);
+
+  const totalActivities = 5;
 
   const getNumbersCount = useCallback((level) => 6 + (level * 2), []);
   const numbersCount = getNumbersCount(currentLevel);
@@ -150,7 +150,7 @@ const JuegoOrdenamiento = () => {
     
     setTimeout(() => {
       setShowFeedback(false);
-      if (newActivity < 3) {
+      if (newActivity < totalActivities) {
         setCurrentActivity(newActivity);
         generateNumbers(currentLevel); 
         setTargetNumbers([]);
@@ -366,7 +366,7 @@ const JuegoOrdenamiento = () => {
             <div className="status-item">
               <div className="status-icon">🎯</div>
               <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/3</div>
+              <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
             </div>
             <div className="status-item">
               <div className="status-icon">🎯</div>
