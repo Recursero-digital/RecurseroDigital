@@ -34,7 +34,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
       ];
 
   return (
-    <div className="main-layout">
+    <div className={`main-layout ${isDarkMode ? 'dark-mode' : ''}`}>
       <Header isDarkMode={isDarkMode} toggleDarkMode={() => toggleDarkMode()} />
       <NavBar 
         tabs={tabs} 

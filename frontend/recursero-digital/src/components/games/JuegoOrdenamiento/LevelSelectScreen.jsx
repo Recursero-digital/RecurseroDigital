@@ -7,9 +7,7 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
     const levels = [
         { number: 1, range: "25 - 250", difficulty: "Fácil", color: "level-1" },
         { number: 2, range: "251 - 500", difficulty: "Intermedio", color: "level-2" },
-        { number: 3, range: "501 - 750", difficulty: "Avanzado", color: "level-3" },
-        { number: 4, range: "751 - 1000", difficulty: "Experto", color: "level-4" },
-        { number: 5, range: "1001 - 1500", difficulty: "Maestro", color: "level-5" }
+        { number: 3, range: "501 - 1000", difficulty: "Avanzado", color: "level-3" }
     ];
 
     const maxUnlocked = getMaxUnlockedLevel('ordenamiento');
