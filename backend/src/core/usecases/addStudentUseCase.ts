@@ -5,7 +5,7 @@ import { IdGenerator } from '../infrastructure/IdGenerator';
 import {StudentInvalidRequestError} from "../models/exceptions/StudentInvalidRequestError";
 import {Student} from "../models/Student";
 import {StudentAlreadyExistsError} from "../models/exceptions/StudentAlreadyExistsError";
-import {User} from "../models/User";
+import {User, UserRole} from "../models/User";
 
 export interface AddStudentRequest {
     name: string;
@@ -66,7 +66,7 @@ export class AddStudentUseCase {
             userId,
             request.username,
             hashedPassword,
-            'STUDENT'
+            UserRole.STUDENT
         );
         
         const student = new Student(

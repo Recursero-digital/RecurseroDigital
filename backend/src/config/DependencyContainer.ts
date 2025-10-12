@@ -14,7 +14,7 @@ import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
 import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
 import {PostgreSQLCourseRepository} from "../infrastructure/PostgreSQLCoursesRepository";
 import {InMemoryCourseRepository} from "../infrastructure/InMemoryCourseRepository";
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 import { Admin } from '../core/models/Admin';
 import { Teacher } from '../core/models/Teacher';
 import { Student } from '../core/models/Student';
@@ -205,7 +205,7 @@ export class DependencyContainer {
             '2',
             'julian',
             '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
-            'ADMIN'
+            UserRole.ADMIN
         );
         const admin = new Admin('1', '2', 1, ['all'], adminUser);
         await (testContainer.adminRepository as InMemoryAdminRepository).addAdmin(admin);
@@ -214,7 +214,7 @@ export class DependencyContainer {
             '1',
             'Mariana@gmail.com',
             '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni',
-            'TEACHER'
+            UserRole.TEACHER
         );
         const teacher = new Teacher('1', 'Mariana', 'García', 'Mariana@gmail.com', teacherUser);
         await (testContainer.teacherRepository as InMemoryTeacherRepository).addTeacher(teacher);
@@ -223,7 +223,7 @@ export class DependencyContainer {
             '1',
             'nico@gmail.com',
             '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
-            'STUDENT'
+            UserRole.STUDENT
         );
         const student = new Student('1', 'Nicolás', 'García', '12345678', studentUser);
         await (testContainer.studentRepository as InMemoryStudentRepository).addStudent(student);

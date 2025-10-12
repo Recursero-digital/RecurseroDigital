@@ -1,6 +1,6 @@
 import { StudentRepository } from '../core/infrastructure/StudentRepository';
 import { Student } from '../core/models/Student';
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLStudentRepository implements StudentRepository {
@@ -25,7 +25,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Student(
         row.id,
         row.name,
@@ -111,7 +111,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Student(
         row.id,
         row.name,

@@ -3,7 +3,7 @@ import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidC
 import { MockAdminRepository } from '../../mocks/AdminRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/models/User';
+import { User, UserRole } from '../../../src/core/models/User';
 
 describe('LoginAdminUseCase', () => {
   let loginUseCase: LoginAdminUseCase;
@@ -44,7 +44,7 @@ describe('LoginAdminUseCase', () => {
         '1',
         'adminuser',
         'hashed_correct_password',
-        'ADMIN'
+        UserRole.ADMIN
       );
       
       mockUserRepository.addUser(user);
@@ -63,7 +63,7 @@ describe('LoginAdminUseCase', () => {
         '1',
         'adminuser',
         'hashed_correct_password',
-        'ADMIN'
+        UserRole.ADMIN
       );
       
       mockUserRepository.addUser(user);

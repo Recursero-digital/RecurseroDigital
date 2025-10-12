@@ -1,6 +1,6 @@
 import { AdminRepository } from '../core/infrastructure/AdminRepository';
 import { Admin } from '../core/models/Admin';
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 
 export class InMemoryAdminRepository implements AdminRepository {
   private admins: Admin[] = [];
@@ -11,7 +11,7 @@ export class InMemoryAdminRepository implements AdminRepository {
       '2',
       'julian',
       '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
-      'ADMIN'
+      UserRole.ADMIN
     );
     const admin = new Admin('1', '2', 1, ['all'], adminUser);
     this.admins = [admin];

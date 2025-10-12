@@ -1,6 +1,6 @@
 import { AdminRepository } from '../core/infrastructure/AdminRepository';
 import { Admin } from '../core/models/Admin';
-import { User } from '../core/models/User';
+import { User, UserRole } from '../core/models/User';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLAdminRepository implements AdminRepository {
@@ -25,7 +25,7 @@ export class PostgreSQLAdminRepository implements AdminRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Admin(
         row.id,
         row.user_id,
@@ -107,7 +107,7 @@ export class PostgreSQLAdminRepository implements AdminRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role);
+      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
       return new Admin(
         row.id,
         row.user_id,

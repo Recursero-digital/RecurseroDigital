@@ -1,7 +1,7 @@
 import { StudentRepository } from '../core/infrastructure/StudentRepository';
 import { StudentEntity } from './entities/StudentEntity';
 import {Student} from "../core/models/Student";
-import {User} from "../core/models/User";
+import {User, UserRole} from "../core/models/User";
 
 export class InMemoryStudentRepository implements StudentRepository {
   private students: StudentEntity[] = [];
@@ -27,7 +27,7 @@ export class InMemoryStudentRepository implements StudentRepository {
             student.userId,
             student.username,
             student.passwordHash,
-            'STUDENT'
+            UserRole.STUDENT
         );
         return new Student(
             student.id,
@@ -59,7 +59,7 @@ export class InMemoryStudentRepository implements StudentRepository {
         student.userId,
         student.username,
         student.passwordHash,
-        'STUDENT'
+        UserRole.STUDENT
       );
       return new Student(
         student.id,
@@ -78,7 +78,7 @@ export class InMemoryStudentRepository implements StudentRepository {
         student.userId,
         student.username,
         student.passwordHash,
-        'STUDENT'
+        UserRole.STUDENT
       );
       return new Student(
         student.id,
