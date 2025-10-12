@@ -1,0 +1,73 @@
+import React from 'react';
+
+const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidationError }) => {
+    const { isCorrect, title, text } = feedback;
+
+    return (
+        <div className="modal-overlay">
+            <div className={`feedback-modal ${isCorrect ? 'correct' : 'incorrect'}`}>
+                <div className="modal-content">
+                    <div className="feedback-icon">
+                        {isValidationError ? '⚠️' : (isCorrect ? '🌟' : '❌')}
+                    </div>
+                    
+                    <h3 className="feedback-title">
+                        {title}
+                    </h3>
+                    
+                    <p className="feedback-explanation">
+                        {text}
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        {/* Botón para cerrar (validaciones y respuestas incorrectas) */}
+                        {(isValidationError || !isCorrect) && (
+                            <button 
+                                className="btn btn-close"
+                                onClick={onClose}
+                                style={{
+                                    background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+                                    border: '3px solid #374151',
+                                    fontSize: '1.1rem',
+                                    fontWeight: '700',
+                                    padding: '0.8rem 1.5rem',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer',
+                                    color: 'white',
+                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                ✖️ Cerrar
+                            </button>
+                        )}
+                        
+                        {/* Botón siguiente pregunta (solo respuestas correctas) */}
+                        {isCorrect && !isValidationError && (
+                            <button 
+                                className="btn btn-success"
+                                onClick={onNext}
+                                style={{
+                                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                    border: '3px solid #047857',
+                                    fontSize: '1.2rem',
+                                    fontWeight: '700',
+                                    padding: '1rem 2rem',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer',
+                                    color: 'white',
+                                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                {isLastQuestion ? '🏁 Ver resultados' : '➡️ Siguiente pregunta'}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default FeedbackModal;

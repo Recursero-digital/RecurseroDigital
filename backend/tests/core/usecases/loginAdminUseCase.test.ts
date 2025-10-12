@@ -3,7 +3,7 @@ import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidC
 import { MockAdminRepository } from '../../mocks/AdminRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/infrastructure/AdminRepository';
+import { User, UserRole } from '../../../src/core/models/User';
 
 describe('LoginAdminUseCase', () => {
   let loginUseCase: LoginAdminUseCase;
@@ -24,7 +24,7 @@ describe('LoginAdminUseCase', () => {
   });
 
   afterEach(() => {
-    mockUserRepository.clearUsers();
+    mockUserRepository.clearAdmins();
     mockPasswordEncoder.clearPasswords();
     mockTokenService.reset();
   });
@@ -40,12 +40,12 @@ describe('LoginAdminUseCase', () => {
     });
 
     it('debe lanzar InvalidCredentials cuando encuentra usuario pero la contraseña no coincide', async () => {
-      const user: User = {
-        id: '1',
-        username: 'adminuser',
-        password: 'hashed_correct_password',
-        role: 'admin'
-      };
+      const user = new User(
+        '1',
+        'adminuser',
+        'hashed_correct_password',
+        UserRole.ADMIN
+      );
       
       mockUserRepository.addUser(user);
       mockPasswordEncoder.setPasswordMatch('correct_password', 'hashed_correct_password');
@@ -59,12 +59,12 @@ describe('LoginAdminUseCase', () => {
     });
 
     it('debe retornar un token cuando encuentra usuario y la contraseña coincide', async () => {
-      const user: User = {
-        id: '1',
-        username: 'adminuser',
-        password: 'hashed_correct_password',
-        role: 'admin'
-      };
+      const user = new User(
+        '1',
+        'adminuser',
+        'hashed_correct_password',
+        UserRole.ADMIN
+      );
       
       mockUserRepository.addUser(user);
       mockPasswordEncoder.setPasswordMatch('correct_password', 'hashed_correct_password');

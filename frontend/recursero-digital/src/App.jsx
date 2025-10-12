@@ -13,6 +13,7 @@ import JuegoEscritura from "./components/games/JuegoEscritura/JuegoEscritura.jsx
 import DashboardAlumno from "./pages/DashboardAlumno.jsx";
 import PerfilAlumno from "./pages/perfilAlumno.jsx";
 import JuegoDescomposicion from './components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
+import JuegoEscala from './components/games/JuegoEscala/JuegoEscala.jsx';
 
 function App() {
   return (
@@ -36,7 +37,14 @@ function App() {
             </MainLayout>
           }
         />
-
+        <Route
+          path="/alumno/juegos"
+          element={
+            <MainLayout userRole="alumno">
+              <DashboardAlumno/>
+            </MainLayout>
+          }
+        />
         <Route
           path="/alumno/juegos/ordenamiento"
           element={
@@ -54,6 +62,7 @@ function App() {
           }
         />
         <Route path="/alumno/juegos/descomposicion" element={<JuegoDescomposicion />} />
+        <Route path="/alumno/juegos/escala" element={<JuegoEscala />} />
         <Route
           path="/alumno/perfil"
           element={
@@ -83,16 +92,6 @@ function App() {
           element={
             <MainLayout userRole="docente">
               <HomeDocente />
-            </MainLayout>
-          }
-        />
-
-        {/* Nueva ruta para DashboardAlumno */}
-        <Route
-          path="/alumno/juegos"
-          element={
-            <MainLayout userRole="alumno">
-              <DashboardAlumno/>
             </MainLayout>
           }
         />

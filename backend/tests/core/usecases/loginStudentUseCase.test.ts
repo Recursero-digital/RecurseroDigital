@@ -3,7 +3,7 @@ import { InvalidCredentials } from '../../../src/core/models/exceptions/InvalidC
 import { MockStudentRepository } from '../../mocks/StudentRepository.mock';
 import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockTokenService } from '../../mocks/TokenService.mock';
-import { User } from '../../../src/core/models/User';
+import { User, UserRole } from '../../../src/core/models/User';
 
 describe('LoginStudentUseCase', () => {
   let loginUseCase: LoginStudentUseCase;
@@ -40,12 +40,12 @@ describe('LoginStudentUseCase', () => {
     });
 
     it('debe lanzar InvalidCredentials cuando encuentra usuario pero la contraseña no coincide', async () => {
-      const user: User = {
-        id: '1',
-        username: 'studentuser',
-        passwordHash: 'hashed_correct_password',
-        role: 'student'
-      };
+      const user = new User(
+        '1',
+        'studentuser',
+        'hashed_correct_password',
+        UserRole.STUDENT
+      );
       
       mockUserRepository.addUser(user);
       mockPasswordEncoder.setPasswordMatch('correct_password', 'hashed_correct_password');
@@ -59,12 +59,12 @@ describe('LoginStudentUseCase', () => {
     });
 
     it('debe retornar un token cuando encuentra usuario y la contraseña coincide', async () => {
-      const user: User = {
-        id: '1',
-        username: 'studentuser',
-        passwordHash: 'hashed_correct_password',
-        role: 'student'
-      };
+      const user = new User(
+        '1',
+        'studentuser',
+        'hashed_correct_password',
+        UserRole.STUDENT
+      );
       
       mockUserRepository.addUser(user);
       mockPasswordEncoder.setPasswordMatch('correct_password', 'hashed_correct_password');

@@ -4,6 +4,7 @@ import { MockPasswordEncoder } from '../../mocks/PasswordEncoder.mock';
 import { MockIdGenerator } from '../../mocks/IdGenerator.mock';
 import {StudentInvalidRequestError} from "../../../src/core/models/exceptions/StudentInvalidRequestError";
 import {StudentAlreadyExistsError} from "../../../src/core/models/exceptions/StudentAlreadyExistsError";
+import { UserRole } from "../../../src/core/models/User";
 
 describe('AddStudentUseCase', () => {
     let addStudentUseCase: AddStudentUseCase;
@@ -41,19 +42,16 @@ describe('AddStudentUseCase', () => {
 
             await addStudentUseCase.execute(request);
 
-            const allStudents = mockStudentRepository.getAllStudents();
+            const allStudents = await mockStudentRepository.getAllStudents();
             expect(allStudents).toHaveLength(1);
             
             const createdStudent = allStudents[0];
-            expect(createdStudent).toEqual({
-                id: '00000000-0000-4000-8000-0000000100000000',
-                username: request.username,
-                passwordHash: expect.any(String),
-                name: request.name,
-                lastname: request.lastName,
-                dni: request.dni,
-                role: 'STUDENT'
-            });
+            expect(createdStudent).toBeDefined();
+            expect(createdStudent.user.username).toBe(request.username);
+            expect(createdStudent.name).toBe(request.name);
+            expect(createdStudent.lastname).toBe(request.lastName);
+            expect(createdStudent.dni).toBe(request.dni);
+            expect(createdStudent.user.role).toBe(UserRole.STUDENT);
         });
 
         it('should throw error when username is no received', async () => {

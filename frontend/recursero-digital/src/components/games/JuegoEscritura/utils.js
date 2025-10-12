@@ -52,9 +52,7 @@ const numberWords = {
 export const levelRanges = [
     { min: 1, max: 50 },
     { min: 51, max: 200 },
-    { min: 201, max: 500 },
-    { min: 501, max: 800 },
-    { min: 801, max: 1000 }
+    { min: 201, max: 500 }
 ];
 
 

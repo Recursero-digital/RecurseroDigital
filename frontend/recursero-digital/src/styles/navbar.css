@@ -1,105 +1,66 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
-
 .navbar {
   display: flex;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
   justify-content: center;
-  transition: all 0.3s ease-in-out;
-  font-family: "Fredoka", cursive;
-  position: relative;
-  padding: 0.3rem 0;
-}
-
-.navbar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-navbar" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.5"/><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-navbar)"/></svg>');
-  pointer-events: none;
-  z-index: 0;
-  animation: twinkle 8s ease-in-out infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+  width: 100%;
+  background: linear-gradient(0deg, #d7d4de, #c5b2e7);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
 }
 
 .navbar-tabs {
   display: flex;
-  align-items: center;
-  gap: 15rem;
-  z-index: 1;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .tab-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px; /* Ancho fijo para todos los botones */
-  height: 50px; /* Alto fijo para todos los botones */
-  padding: 0 20px; /* Espaciado horizontal */
+  padding: 10px 20px;
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(251, 191, 36, 0.3);
-  color: rgb(255, 255, 255);
-  border-radius: 1.5rem;
+  border: none;
+  color: rgb(15, 15, 15);
+  border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: "Fredoka", cursive;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: center; /* Asegura que el texto esté centrado */
-  position: relative;
-  z-index: 2;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .tab-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.2) 0%,
-    rgba(251, 191, 36, 0.1) 100%
-  );
-  border-color: rgba(251, 191, 36, 0.6);
-  color: rgb(255, 255, 255);
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tab-button.active {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.3) 0%,
-    rgba(251, 191, 36, 0.2) 100%
-  );
-  border-color: #fbbf24;
-  color: white;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+  background: white;
+  color: #000000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
 }
 
+/* Responsive design */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
   }
-
+  
   .navbar-brand {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
   }
-
+  
   .navbar-tabs {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15rem;
   }
-
+  
   .tab-button {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
 }
+
