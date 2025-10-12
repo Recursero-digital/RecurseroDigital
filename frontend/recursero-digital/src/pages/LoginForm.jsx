@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiRequest, AUTH_ENDPOINTS } from "../config/api";
 import "../styles/loginForm.css";
+import Logo1 from '../assets/logo1.png';
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -11,9 +12,6 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Establecer el rol inicial basado en el 
-  // estado pasado desde la página anterior
   useEffect(() => {
     if (location.state?.role) {
       setActiveTab(location.state.role);
@@ -26,10 +24,7 @@ export default function LoginForm() {
     setError("");
     
     try {
-      // Determinar el endpoint según el tipo de usuario
       const endpoint = activeTab === "alumno" ? AUTH_ENDPOINTS.LOGIN_STUDENT : AUTH_ENDPOINTS.LOGIN_TEACHER;
-      
-      // Petición al backend
       const response = await apiRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -42,8 +37,6 @@ export default function LoginForm() {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userType', activeTab);
         localStorage.setItem('userEmail', email);
-        
-        //Navegar según el tipo de usuario
         if (activeTab === "alumno") {
           navigate("/alumno");
         } else {
@@ -64,8 +57,8 @@ export default function LoginForm() {
     <div className="login-form-container">
       <div className="login-form-content">
         <div className="header-section">
-          <img src="src/assets/logo.png" alt="Recursera Digital" className="imagen-logo" />
-          <h1 className="titulo">¡Recursera Digital!</h1>
+          <img src={Logo1} alt="Recursera Digital" className="imagen-logo" />
+          <h1 className="titulo">¡Recursero Digital!</h1>
           <p className="subtitulo">Inicia sesión para continuar</p>
         </div>
 
@@ -78,14 +71,14 @@ export default function LoginForm() {
           )}
           
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="text" className="form-label">Username</label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-input"
-              placeholder="tu@email.com"
+              placeholder="Tu username"
               required
             />
           </div>

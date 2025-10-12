@@ -1,5 +1,5 @@
 
-import Logo from '../assets/logo.png';
+import Logo from '../assets/logo1.png';
 import '../styles/header.css';
 import '../styles/darkMode.css';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +15,6 @@ export function Header({ isDarkMode, toggleDarkMode }) {
        <div className="logo">
         <img src={Logo} alt="Recursera Digital" className='app-logo' /></div>
         <div className="search-and-mode">
-        <div className="search-bar">
-          <input type="text" placeholder="Buscar..." />
-          <button className="search-icon">🔍</button> {/* Puedes reemplazar con un icono de FontAwesome o similar */}
-        </div>
-
         <div className="dark-mode-toggle">
           <span className="mode-text">Modo Oscuro</span>
           <label className="switch">

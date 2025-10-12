@@ -16,13 +16,13 @@ export default function HomeDocente() {
   ];
 
   const handleCursoClick = () => {
-    setMostrarMenu(!mostrarMenu); // abre o cierra menú
+    setMostrarMenu(!mostrarMenu); 
   };
 
   const handleSeleccion = (e) => {
     const idCurso = e.target.value;
     setCursoSeleccionado(idCurso);
-    navigate(`/docente/cursos/${idCurso}`); // redirige con id del curso
+    navigate(`/docente/cursos/${idCurso}`);
   };
 
   return (

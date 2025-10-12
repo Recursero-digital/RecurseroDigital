@@ -1,34 +1,13 @@
 import { useNavigate } from "react-router-dom";
-
-
-/*export default function Login() {
-  const [role, setRole] = useState("alumno");
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    if (role === "alumno") navigate("/alumno");
-    else navigate("/docente");
-  };
-
-  return (
-    <div>
-      <h1>Recursera Digital - Login</h1>
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="alumno">Alumno</option>
-        <option value="docente">Docente</option>
-      </select>
-      <button onClick={handleLogin}>Ingresar</button>
-    </div>
-  );
-}*/
-
 import "../styles/login.css"
+import { PiStudentFill } from "react-icons/pi";
+import Logo1 from '../assets/logo1.png';
+
 
 export default function RoleSelection() {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    // Redirect to login form page
     navigate("/login-form", { state: { role } });
   }
 
@@ -36,15 +15,14 @@ export default function RoleSelection() {
       <div className="role-selection-container">
       <div className="role-selection-content">
         <div className="header-section">
-          <img src="src\assets\logo.png" alt="Recursera Digital" className="logo-image" />
-          <h1 className="main-title">¡Recursera Digital!</h1>
-          <p className="subtitle">Selecciona tu rol para comenzar</p>
+          <img src={Logo1} alt="Recursera Digital" className="logo-image" />
+
         </div>
 
         <div className="cards-container">
           <div className="role-card">
             <div className="card-header">
-              <div className="card-emoji">🎓</div>
+              <div className="card-emoji"> <PiStudentFill/></div>
               <h2 className="card-title student">Estudiante</h2>
               <p className="card-description student">¡Aprende matemáticas jugando!</p>
             </div>

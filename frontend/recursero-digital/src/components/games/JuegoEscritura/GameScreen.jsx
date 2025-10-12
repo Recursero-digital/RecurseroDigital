@@ -31,7 +31,7 @@ const GameScreen = ({
                     </button>
                     <button 
                         className="btn-back-to-dashboard"
-                        onClick={() => navigate('/alumno')}
+                        onClick={() => navigate('/alumno/juegos')}
                         title="Volver al dashboard"
                     >
                         🏠
