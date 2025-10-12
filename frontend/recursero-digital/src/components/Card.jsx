@@ -22,6 +22,9 @@ export function Card() {
 
                 // MOCK TEMPORAL: Simulando respuesta del backend
                 // Esto simula que el alumno tiene acceso a todos los juegos
+
+                // encargarse del apiRequest. mockgames es una respuesta ficticia dle back. Crear la API api/student/games y q el array de games este habilitado para el estudiante.
+                //Debo obtener los juegos del curso del alumno
                 const mockGames = [
                     {
                         id: 'game-ordenamiento',
