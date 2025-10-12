@@ -144,7 +144,9 @@ migrations/
 ├── 1760231340955_create-teachers-table.js
 ├── 1760231341955_create-admins-table.js
 ├── 1760231342955_create-courses-table.js
-└── 1760231343955_add-foreign-keys.js
+├── 1760231343955_add-foreign-keys.js
+├── 1760231344955_create-games-tables.js
+└── 1760231345955_seed-games.js
 ```
 
 #### Cómo Funciona
@@ -223,6 +225,23 @@ exports.down = (pgm) => {
 - `id` VARCHAR(255) PK
 - `name` VARCHAR(255) UNIQUE
 - `teacher_id` → FK a `teachers(id)`
+
+**Tabla `games`**
+- `id` VARCHAR(255) PK
+- `name` VARCHAR(255) UNIQUE
+- `description` TEXT
+- `image_url` VARCHAR(500)
+- `route` VARCHAR(255)
+- `difficulty_level` INTEGER
+- `is_active` BOOLEAN
+
+**Tabla `courses_games`**
+- `id` VARCHAR(255) PK
+- `course_id` → FK a `courses(id)`
+- `game_id` → FK a `games(id)`
+- `is_enabled` BOOLEAN
+- `order_index` INTEGER
+- UNIQUE(`course_id`, `game_id`)
 
 #### Datos por Defecto (Seeds)
 
