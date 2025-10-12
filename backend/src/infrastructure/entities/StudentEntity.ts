@@ -6,7 +6,7 @@ export class StudentEntity {
     passwordHash: string;
     name: string;
     lastname: string;
-    dni: String;
+    dni: string;
 
     constructor(
         id: string,
@@ -15,7 +15,7 @@ export class StudentEntity {
         passwordHash: string,
         name: string,
         lastname: string,
-        dni: String
+        dni: string
     ) {
         this.id = id;
         this.userId = userId;

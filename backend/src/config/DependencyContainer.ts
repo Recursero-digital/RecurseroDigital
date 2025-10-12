@@ -14,6 +14,10 @@ import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
 import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
 import {PostgreSQLCourseRepository} from "../infrastructure/PostgreSQLCoursesRepository";
 import {InMemoryCourseRepository} from "../infrastructure/InMemoryCourseRepository";
+import { User } from '../core/models/User';
+import { Admin } from '../core/models/Admin';
+import { Teacher } from '../core/models/Teacher';
+import { Student } from '../core/models/Student';
 
 
 
@@ -183,9 +187,9 @@ export class DependencyContainer {
 
     public async clearAllData(): Promise<void> {
         if (process.env.NODE_ENV === 'test') {
-            await (this.teacherRepository as InMemoryTeacherRepository).clearUsers();
+            await (this.teacherRepository as InMemoryTeacherRepository).clearTeachers();
             await (this.studentRepository as InMemoryStudentRepository).clearStudents();
-            await (this.adminRepository as InMemoryAdminRepository).clearUsers();
+            await (this.adminRepository as InMemoryAdminRepository).clearAdmins();
             await (this.courseRepository as InMemoryCourseRepository).clearCourses();
 
 
@@ -197,20 +201,32 @@ export class DependencyContainer {
     private async initializeTestData(): Promise<void> {
         const testContainer = DependencyContainer.getInstance();
         
-        await (testContainer.adminRepository as InMemoryAdminRepository).addUser({
-            id: '2',
-            username: 'julian',
-            password: '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // Recursero2025!
-            role: 'admin'
-        });
+        const adminUser = new User(
+            '2',
+            'julian',
+            '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
+            'ADMIN'
+        );
+        const admin = new Admin('1', '2', 1, ['all'], adminUser);
+        await (testContainer.adminRepository as InMemoryAdminRepository).addAdmin(admin);
 
-        await (testContainer.teacherRepository as InMemoryTeacherRepository).addUser({
-            id: '1',
-            username: 'Mariana@gmail.com',
-            password: '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni', // abcd1234
-            role: 'docente'
-        });
+        const teacherUser = new User(
+            '1',
+            'Mariana@gmail.com',
+            '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni',
+            'TEACHER'
+        );
+        const teacher = new Teacher('1', 'Mariana', 'García', 'Mariana@gmail.com', teacherUser);
+        await (testContainer.teacherRepository as InMemoryTeacherRepository).addTeacher(teacher);
 
+        const studentUser = new User(
+            '1',
+            'nico@gmail.com',
+            '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
+            'STUDENT'
+        );
+        const student = new Student('1', 'Nicolás', 'García', '12345678', studentUser);
+        await (testContainer.studentRepository as InMemoryStudentRepository).addStudent(student);
 
         // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({
         //     id: '1',

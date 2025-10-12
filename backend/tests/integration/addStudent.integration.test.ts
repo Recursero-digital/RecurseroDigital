@@ -1,7 +1,11 @@
 import request from 'supertest';
 import app from '../../src/config/app';
+import { DependencyContainer } from '../../src/config/DependencyContainer';
 
 describe('Student Integration Tests', () => {
+  beforeEach(async () => {
+    await DependencyContainer.getInstance().clearAllData();
+  });
   
   describe('POST /student', () => {
       it('should return created 201 when add student successfully', async () => {

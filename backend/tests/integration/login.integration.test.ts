@@ -1,7 +1,11 @@
 import request from 'supertest';
 import app from '../../src/config/app';
+import { DependencyContainer } from '../../src/config/DependencyContainer';
 
 describe('Login Integration Tests', () => {
+  beforeEach(async () => {
+    await DependencyContainer.getInstance().clearAllData();
+  });
   
   describe('POST /login/admin', () => {
     describe('Validaciones de parámetros', () => {
