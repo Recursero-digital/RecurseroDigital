@@ -118,34 +118,36 @@ export class DatabaseConnection {
     try {
       console.log('Creando usuarios por defecto...');
 
+      const existingUsers = await this.query('SELECT COUNT(*) as count FROM users');
+      
+      if (existingUsers.rows[0].count > 0) {
+        console.log('Usuarios por defecto ya existen, omitiendo creación...');
+        return;
+      }
+
       await this.query(`
         INSERT INTO users (id, username, password_hash, role) 
         VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING
       `, ['default-user-teacher-1', 'docente@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'TEACHER']);
 
       await this.query(`
         INSERT INTO teachers (id, user_id, name, surname, email) 
         VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (email) DO NOTHING
       `, ['default-teacher-1', 'default-user-teacher-1', 'Docente', 'Por Defecto', 'docente@email.com']);
 
       await this.query(`
         INSERT INTO users (id, username, password_hash, role) 
         VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING
       `, ['default-user-student-1', 'alumno@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'STUDENT']);
 
       await this.query(`
         INSERT INTO students (id, user_id, name, lastname, dni) 
         VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (dni) DO NOTHING
       `, ['default-student-1', 'default-user-student-1', 'Alumno', 'Por Defecto', '12345678']);
 
       await this.query(`
         INSERT INTO users (id, username, password_hash, role) 
         VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING
       `, ['default-user-admin-1', 'admin@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'ADMIN']);
 
       await this.query(`
@@ -167,18 +169,23 @@ export class DatabaseConnection {
         try {
             console.log('Creando cursos por defecto...');
 
+            const existingCourses = await this.query('SELECT COUNT(*) as count FROM courses');
+            
+            if (existingCourses.rows[0].count > 0) {
+                console.log('Cursos por defecto ya existen, omitiendo creación...');
+                return;
+            }
+
             await this.query(`
                 INSERT INTO courses (id, name, teacher_id) 
                 VALUES ($1, $2, $3)
-                ON CONFLICT (name) DO NOTHING
             `, ['default-course-1', 'Curso A', 'default-teacher-1']);
 
-            //Asignar alumno al curso
             await this.query(`
                 UPDATE students
                 SET course_id = $1
                 WHERE id = $2
-        `, ['default-course-1', 'default-student-1']);
+            `, ['default-course-1', 'default-student-1']);
 
             console.log('Cursos por defecto creados:');
         } catch (error) {
