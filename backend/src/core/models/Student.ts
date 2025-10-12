@@ -1,21 +1,35 @@
 import { User } from './User';
 
-export class Student extends User {
+export class Student {
+    id: string;
     name: string;
     lastname: string;
-    dni: String;
+    dni: string;
+    user: User;
 
     constructor(
-        id: string, 
-        username: string,
-        passwordHash: string,
+        id: string,
         name: string,
         lastname: string,
-        dni: String
+        dni: string,
+        user: User
     ) {
-        super(id, username, passwordHash, 'STUDENT');
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;
+        this.user = user;
+    }
+
+    getUsername(): string {
+        return this.user.username;
+    }
+
+    getPasswordHash(): string {
+        return this.user.passwordHash;
+    }
+
+    getRole(): string {
+        return this.user.role;
     }
 }

@@ -1,5 +1,5 @@
 import { InvalidCredentials } from '../models/exceptions/InvalidCredentials';
-import { AdminRepository, User } from '../infrastructure/AdminRepository';
+import { AdminRepository } from '../infrastructure/AdminRepository';
 import { PasswordEncoder } from '../infrastructure/PasswordEncoder';
 import { TokenService } from '../infrastructure/TokenService';
 
@@ -19,14 +19,14 @@ export class LoginAdminUseCase {
     }
 
     async execute(userName: string, password: string): Promise<string> {
-        const user = await this.adminRepository.findByUserName(userName);
-        if (!user || !(await this.passwordEncoder.compare(password, user.password))) {
+        const admin = await this.adminRepository.findByUserName(userName);
+        if (!admin || !(await this.passwordEncoder.compare(password, admin.getPasswordHash()))) {
             throw new InvalidCredentials();
         }
         return this.tokenService.generate({
-            id: user.id,
-            username: user.username,
-            role: user.role
+            id: admin.id,
+            username: admin.getUsername(),
+            role: admin.getRole()
         });
     }
 }

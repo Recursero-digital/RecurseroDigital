@@ -13,13 +13,18 @@ export class MockStudentRepository implements StudentRepository {
   async findByUserName(userName: string): Promise<Student | null> {
       const student = this.students.find(u => u.username === userName);
       if(student) {
-          return new Student(
-              student.id,
+          const user = new User(
+              student.userId,
               student.username,
               student.passwordHash,
+              'STUDENT'
+          );
+          return new Student(
+              student.id,
               student.name,
               student.lastname,
-              student.dni
+              student.dni,
+              user
           );
       }
       return null;
@@ -28,13 +33,74 @@ export class MockStudentRepository implements StudentRepository {
   async addStudent(studentData: Student): Promise<void> {
       const studentEntity = new StudentEntity(
           studentData.id,
-          studentData.username,
-          studentData.passwordHash,
+          studentData.user.id,
+          studentData.user.username,
+          studentData.user.passwordHash,
           studentData.name,
           studentData.lastname,
           studentData.dni
       );
       this.students.push(studentEntity);
+  }
+
+  async getAllStudents(): Promise<Student[]> {
+    return this.students.map(student => {
+      const user = new User(
+        student.userId,
+        student.username,
+        student.passwordHash,
+        'STUDENT'
+      );
+      return new Student(
+        student.id,
+        student.name,
+        student.lastname,
+        student.dni,
+        user
+      );
+    });
+  }
+
+  async findById(id: string): Promise<Student | null> {
+    const student = this.students.find(s => s.id === id);
+    if (student) {
+      const user = new User(
+        student.userId,
+        student.username,
+        student.passwordHash,
+        'STUDENT'
+      );
+      return new Student(
+        student.id,
+        student.name,
+        student.lastname,
+        student.dni,
+        user
+      );
+    }
+    return null;
+  }
+
+  async updateStudent(studentData: Student): Promise<void> {
+    const index = this.students.findIndex(s => s.id === studentData.id);
+    if (index !== -1) {
+      this.students[index] = new StudentEntity(
+        studentData.id,
+        studentData.user.id,
+        studentData.user.username,
+        studentData.user.passwordHash,
+        studentData.name,
+        studentData.lastname,
+        studentData.dni
+      );
+    }
+  }
+
+  async deleteStudent(id: string): Promise<void> {
+    const index = this.students.findIndex(s => s.id === id);
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
   }
 
   clearStudents(): void {
@@ -43,6 +109,7 @@ export class MockStudentRepository implements StudentRepository {
 
   addUser(user: User): void {
     const studentEntity = new StudentEntity(
+      '1',
       user.id,
       user.username,
       user.passwordHash,
@@ -51,16 +118,5 @@ export class MockStudentRepository implements StudentRepository {
       '12345678'
     );
     this.students.push(studentEntity);
-  }
-
-  getAllStudents(): Student[] {
-    return this.students.map(student => new Student(
-        student.id,
-        student.username,
-        student.passwordHash,
-        student.name,
-        student.lastname,
-        student.dni
-    ));
   }
 }

@@ -1,5 +1,7 @@
 import { Pool, PoolClient } from 'pg';
 import { databaseConfig } from '../config/database';
+import { spawn } from 'child_process';
+import path from 'path';
 
 export class DatabaseConnection {
   private static instance: DatabaseConnection;
@@ -56,79 +58,52 @@ export class DatabaseConnection {
     await this.pool.end();
   }
 
+  private async runMigrations(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const databaseUrl = `postgresql://${databaseConfig.user}:${databaseConfig.password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`;
+      
+      const migrateProcess = spawn('npx', [
+        'node-pg-migrate',
+        'up',
+        '-m',
+        path.join(__dirname, '../../migrations'),
+        '--database-url-var',
+        'DATABASE_URL'
+      ], {
+        env: { ...process.env, DATABASE_URL: databaseUrl },
+        shell: true
+      });
+
+      let output = '';
+      migrateProcess.stdout?.on('data', (data) => {
+        output += data.toString();
+        console.log(data.toString());
+      });
+
+      migrateProcess.stderr?.on('data', (data) => {
+        output += data.toString();
+        console.error(data.toString());
+      });
+
+      migrateProcess.on('close', (code) => {
+        if (code === 0) {
+          console.log('Migraciones ejecutadas correctamente');
+          resolve();
+        } else {
+          reject(new Error(`Error al ejecutar migraciones. Código: ${code}\n${output}`));
+        }
+      });
+    });
+  }
+
   public async initializeTables(): Promise<void> {
     try {
       await this.waitForDatabase();
 
-      console.log('Creando tablas en PostgreSQL...');
+      console.log('Ejecutando migraciones...');
+      await this.runMigrations();
 
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS students (
-          id VARCHAR(255) PRIMARY KEY,
-          username VARCHAR(255) UNIQUE NOT NULL,
-          password_hash VARCHAR(255) NOT NULL,
-          name VARCHAR(255) NOT NULL,
-          lastname VARCHAR(255) NOT NULL,
-          dni VARCHAR(20) NOT NULL,
-          course_id VARCHAR(255),
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS admins (
-          id VARCHAR(255) PRIMARY KEY,
-          username VARCHAR(255) UNIQUE NOT NULL,
-          password VARCHAR(255) NOT NULL,
-          role VARCHAR(50) NOT NULL DEFAULT 'admin',
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query(`
-        CREATE TABLE IF NOT EXISTS teachers (
-          id VARCHAR(255) PRIMARY KEY,
-          username VARCHAR(255) UNIQUE NOT NULL,
-          password VARCHAR(255) NOT NULL,
-          role VARCHAR(50) NOT NULL DEFAULT 'teacher',
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-        await this.query(`
-        CREATE TABLE IF NOT EXISTS courses (
-         id VARCHAR(255) PRIMARY KEY,
-         name VARCHAR(255) UNIQUE NOT NULL,
-         teacher_id VARCHAR(255),
-         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      await this.query('CREATE INDEX IF NOT EXISTS idx_students_username ON students(username)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_admins_username ON admins(username)');
-      await this.query('CREATE INDEX IF NOT EXISTS idx_teachers_username ON teachers(username)');
-        await this.query('CREATE INDEX IF NOT EXISTS idx_courses_name ON courses(name)');
-
-        await this.query(`
-          ALTER TABLE students
-          ADD CONSTRAINT fk_students_course
-          FOREIGN KEY (course_id)
-          REFERENCES courses(id)
-          ON DELETE SET NULL
-    `);
-
-        await this.query(`
-          ALTER TABLE courses
-          ADD CONSTRAINT fk_courses_teacher
-          FOREIGN KEY (teacher_id)
-          REFERENCES teachers(id)
-          ON DELETE SET NULL
-    `);
-
+      console.log('Creando datos por defecto...');
       await this.createDefaultUsers();
       await this.createDefaultCourses();
 
@@ -143,28 +118,47 @@ export class DatabaseConnection {
     try {
       console.log('Creando usuarios por defecto...');
 
-      await this.query(`
-        INSERT INTO teachers (id, username, password, role) 
-        VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING
-      `, ['default-teacher-1', 'docente@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'teacher']);
+      const existingUsers = await this.query('SELECT COUNT(*) as count FROM users');
+      
+      if (existingUsers.rows[0].count > 0) {
+        console.log('Usuarios por defecto ya existen, omitiendo creación...');
+        return;
+      }
 
       await this.query(`
-        INSERT INTO students (id, username, password_hash, name, lastname, dni) 
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (username) DO NOTHING
-      `, ['default-student-1', 'alumno@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'Alumno', 'Por Defecto', '12345678']);
+        INSERT INTO users (id, username, password_hash, role) 
+        VALUES ($1, $2, $3, $4)
+      `, ['default-user-teacher-1', 'docente@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'TEACHER']);
 
       await this.query(`
-        INSERT INTO admins (id, username, password, role) 
+        INSERT INTO teachers (id, user_id, name, surname, email) 
+        VALUES ($1, $2, $3, $4, $5)
+      `, ['default-teacher-1', 'default-user-teacher-1', 'Docente', 'Por Defecto', 'docente@email.com']);
+
+      await this.query(`
+        INSERT INTO users (id, username, password_hash, role) 
         VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING
-      `, ['default-admin-1', 'admin@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'admin']);
+      `, ['default-user-student-1', 'alumno@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'STUDENT']);
+
+      await this.query(`
+        INSERT INTO students (id, user_id, name, lastname, dni) 
+        VALUES ($1, $2, $3, $4, $5)
+      `, ['default-student-1', 'default-user-student-1', 'Alumno', 'Por Defecto', '12345678']);
+
+      await this.query(`
+        INSERT INTO users (id, username, password_hash, role) 
+        VALUES ($1, $2, $3, $4)
+      `, ['default-user-admin-1', 'admin@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'ADMIN']);
+
+      await this.query(`
+        INSERT INTO admins (id, user_id, nivel_acceso, permisos) 
+        VALUES ($1, $2, $3, $4)
+      `, ['default-admin-1', 'default-user-admin-1', 1, '{all}']);
 
       console.log('Usuarios por defecto creados:');
-      console.log('   docente / 123456');
-      console.log('   alumno / 123456');
-      console.log('   admin / 123456');
+      console.log('   docente@email.com / 123456');
+      console.log('   alumno@email.com / 123456');
+      console.log('   admin@email.com / 123456');
     } catch (error) {
       console.error('Error al crear usuarios por defecto:', error);
       throw error;
@@ -175,18 +169,23 @@ export class DatabaseConnection {
         try {
             console.log('Creando cursos por defecto...');
 
+            const existingCourses = await this.query('SELECT COUNT(*) as count FROM courses');
+            
+            if (existingCourses.rows[0].count > 0) {
+                console.log('Cursos por defecto ya existen, omitiendo creación...');
+                return;
+            }
+
             await this.query(`
                 INSERT INTO courses (id, name, teacher_id) 
                 VALUES ($1, $2, $3)
-                ON CONFLICT (name) DO NOTHING
             `, ['default-course-1', 'Curso A', 'default-teacher-1']);
 
-            //Asignar alumno al curso
             await this.query(`
                 UPDATE students
                 SET course_id = $1
                 WHERE id = $2
-        `, ['default-course-1', 'default-student-1']);
+            `, ['default-course-1', 'default-student-1']);
 
             console.log('Cursos por defecto creados:');
         } catch (error) {
