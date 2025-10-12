@@ -18,13 +18,12 @@ import { User } from '../core/models/User';
 import { Admin } from '../core/models/Admin';
 import { Teacher } from '../core/models/Teacher';
 import { Student } from '../core/models/Student';
+import { PostgreSQLStudentStatisticsRepository } from '../infrastructure/PostgreSQLStudentStatisticsRepository';
+import { SaveGameStatisticsUseCase } from '../core/usecases/SaveGameStatisticsUseCase';
+import { GetStudentProgressUseCase } from '../core/usecases/GetStudentProgressUseCase';
+import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseCase';
 
 
-
-/**
- * Contenedor simple de dependencias
- * Centraliza la creación de instancias para mantener la separación de responsabilidades
- */
 export class DependencyContainer {
     private static instance: DependencyContainer;
     
@@ -32,6 +31,7 @@ export class DependencyContainer {
     private _studentRepository: PostgreSQLStudentRepository | InMemoryStudentRepository | null = null;
     private _adminRepository: PostgreSQLAdminRepository | InMemoryAdminRepository | null = null;
     private _courseRepository: PostgreSQLCourseRepository | InMemoryCourseRepository | null = null;
+    private _statisticsRepository: PostgreSQLStudentStatisticsRepository | null = null;
     private _databaseConnection: DatabaseConnection | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
@@ -40,10 +40,12 @@ export class DependencyContainer {
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
     private _addStudentUseCase: AddStudentUseCase | null = null;
+    private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
+    private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
+    private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
 
 
     private constructor() {
-        // Solo inicializar base de datos si no estamos en modo test
         if (process.env.NODE_ENV !== 'test') {
             this.initializeDatabase();
         }
@@ -110,6 +112,13 @@ export class DependencyContainer {
             }
         }
         return this._courseRepository;
+    }
+
+    public get statisticsRepository(): PostgreSQLStudentStatisticsRepository {
+        if (!this._statisticsRepository) {
+            this._statisticsRepository = new PostgreSQLStudentStatisticsRepository();
+        }
+        return this._statisticsRepository;
     }
 
     public get databaseConnection(): DatabaseConnection {
@@ -182,6 +191,34 @@ export class DependencyContainer {
             );
         }
         return this._addStudentUseCase;
+    }
+
+    public get saveGameStatisticsUseCase(): SaveGameStatisticsUseCase {
+        if (!this._saveGameStatisticsUseCase) {
+            this._saveGameStatisticsUseCase = new SaveGameStatisticsUseCase(
+                this.statisticsRepository,
+                this.uuidGenerator
+            );
+        }
+        return this._saveGameStatisticsUseCase;
+    }
+
+    public get getStudentProgressUseCase(): GetStudentProgressUseCase {
+        if (!this._getStudentProgressUseCase) {
+            this._getStudentProgressUseCase = new GetStudentProgressUseCase(
+                this.statisticsRepository
+            );
+        }
+        return this._getStudentProgressUseCase;
+    }
+
+    public get getGameStatisticsUseCase(): GetGameStatisticsUseCase {
+        if (!this._getGameStatisticsUseCase) {
+            this._getGameStatisticsUseCase = new GetGameStatisticsUseCase(
+                this.statisticsRepository
+            );
+        }
+        return this._getGameStatisticsUseCase;
     }
 
 
