@@ -1,86 +1,85 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
-
 .app-logo {
-  width: 120px;
+  width: 300px; /* Ajusta el tamaño de tu logo */
   height: auto;
-  margin-left: 1rem;
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
-}
 
-.app-logo:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 6px 12px rgba(124, 58, 237, 0.4));
 }
 .header {
-  position: relative;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.1rem 1rem;
-  height: 100px;
+  padding: 1rem 2rem;
+  background-color: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-header" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.5"/><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-header)"/></svg>');
-  pointer-events: none;
-  z-index: 0;
-  animation: twinkle 8s ease-in-out infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+.logo {
+  flex-shrink: 0;
 }
 
 .search-and-mode {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  position: relative;
-  margin-left: 20px;
-  z-index: 2;
+  gap: 2rem;
+  flex: 1;
+  justify-content: center;
 }
 
-/* Dark Mode Toggle */
+.search-bar {
+  display: flex;
+  border: 2px solid #d1a7d3;
+  border-radius: 25px;
+  background-color: #f7f0f8;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar input {
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  outline: none;
+  background-color: transparent;
+  width: 400px;
+  color: #2d3748;
+}
+
+.search-bar input::placeholder {
+  color: #718096;
+}
+
+.search-bar button {
+  background-color: #6255bc;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #4c51bf;
+}
+
+/* --- Dark Mode Toggle --- */
 .dark-mode-toggle {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  position: relative;
-  z-index: 2;
+  gap: 12px;
 }
 
 .mode-text {
-  font-size: 0.9rem;
-  color: white;
-  font-family: "Fredoka", cursive;
+  font-size: 14px;
   font-weight: 500;
+  color: #2d3748;
 }
 
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 20px;
+  width: 50px;
+  height: 24px;
 }
 
 /* Hide default HTML checkbox */
@@ -98,73 +97,55 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.3);
-  transition: 0.4s;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: #e4c7e7;
+  transition: 0.4s ease;
+  border-radius: 24px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
   left: 2px;
   bottom: 2px;
-  background: white;
-  transition: 0.4s;
+  background-color: white;
+  transition: 0.4s ease;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 input:checked + .slider {
-  background: #fbbf24;
-  border-color: #fbbf24;
+  background-color: #6366f1;
 }
 
 input:checked + .slider:before {
-  transform: translateX(20px);
+  transform: translateX(26px);
 }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 20px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
+.slider:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .boton-cerrar {
-  display: flex;
-  padding-left: 20px;
-}
-.cerrar-sesion {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(251, 191, 36, 0.3);
-  color: white;
-  border-radius: 2rem;
-  font-size: 16px;
-  transition: all 0.2s ease-in-out;
-}
-.cerrar-sesion:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.2) 0%,
-    rgba(251, 191, 36, 0.1) 100%
-  );
-  border-color: rgba(251, 191, 36, 0.6);
-  color: rgb(255, 255, 255);
+  flex-shrink: 0;
 }
 
-.cerrar-sesion.active {
-  background: rgb(186, 118, 218);
-  color: #000000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.cerrar-sesion {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cerrar-sesion:hover {
+  background-color: #c53030;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
 }
