@@ -4,6 +4,7 @@ import Login from "./pages/login";
 import LoginForm from "./pages/LoginForm";
 import HomeAlumno from "./pages/homeAlumno";
 import HomeDocente from "./pages/homeDocente";
+import DocenteDashboard from "./pages/DocenteDashboard";
 import TeacherStudents from "./pages/TeacherStudents";
 import TeacherGames from "./pages/TeacherGames";
 import MainLayout from "./layouts/MainLayout";
@@ -31,9 +32,13 @@ function App() {
         />
         <Route
           path="/docente"
+          element={<HomeDocente />}
+        />
+        <Route
+          path="/docente/dashboard"
           element={
             <MainLayout userRole="docente">
-              <HomeDocente />
+              <DocenteDashboard />
             </MainLayout>
           }
         />

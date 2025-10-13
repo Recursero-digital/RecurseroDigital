@@ -11,7 +11,6 @@
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 25px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transition: all 0.3s;
   text-align: center;
@@ -28,9 +27,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 250px;
-  height: 200px;
+  width: 550px;
+  height: 300px;
   border-radius: 10px;
   margin-bottom: 1rem;
   object-fit: cover;
@@ -90,7 +88,7 @@
   text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
 }
 .textgame p {
-  font-size: x-large;
+  font-size: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.9);

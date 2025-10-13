@@ -74,8 +74,8 @@ export default function PerfilAlumno() {
           </div>
         </div>
         <div className="profile-info">
-          <h1 className="profile-name">¡Hola {studentData.name}! 👋</h1>
-          <p className="profile-title">🧮 Matemático Explorador 🧮</p>
+          <h1 className="profile-name">🌟 ¡Hola {studentData.name}! 🌟</h1>
+          <p className="profile-title">🚀 Explorador Galáctico de Matemáticas 🚀</p>
           <div className="achievements">
             <div className="achievement-item">
               🏆 <span>{studentData.totalScore}</span> puntos totales
@@ -96,7 +96,7 @@ export default function PerfilAlumno() {
 
       
         <div className="games-grid">
-          <div className="game-card ordenamiento">
+          <div className="card-game">
             <div className="game-icon">🔢</div>
             <h3 className="game-title">Ordenamiento de Números</h3>
             <div className="stars">
@@ -132,7 +132,7 @@ export default function PerfilAlumno() {
               </div>
             </div>
           </div>
-          <div className="game-card escritura">
+          <div className="card-game">
             <div className="game-icon">✍️</div>
             <h3 className="game-title">Números en Palabras</h3>
             <div className="stars">

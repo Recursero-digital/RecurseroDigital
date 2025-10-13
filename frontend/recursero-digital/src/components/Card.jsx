@@ -26,6 +26,7 @@ export default function Card() {
 
   return (
     <>
+   
       <box className="card">
         <img src={JuegoOrdenamiento} alt="Ordenamiento" className="imagegame" />
         <div className="textgame">
@@ -75,6 +76,7 @@ export default function Card() {
           </button>
         </div>
       </box>
+    
     </>
   );
 }
