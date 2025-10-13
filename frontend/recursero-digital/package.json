@@ -9,7 +9,6 @@
     "lint": "eslint .",
     "start": "serve -s dist"
   },
-  
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@react-icons/all-files": "^4.1.0",
@@ -40,6 +39,8 @@
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "vite-plugin-pwa": "^1.0.3",
+    "workbox-window": "^7.3.0"
   }
 }
