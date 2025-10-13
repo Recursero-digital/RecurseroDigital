@@ -10,53 +10,54 @@ export default function Card() {
     navigate("/alumno/juegos/ordenamiento");
   };
 
-    const handleJugarEscritura = () => {
-        navigate('/alumno/juegos/escritura');
-    };
+  const handleJugarEscritura = () => {
+    navigate("/alumno/juegos/escritura");
+  };
 
-    const handleJugarDescomposicion = () => {
-        navigate('/alumno/juegos/descomposicion');
-    };
+  const handleJugarDescomposicion = () => {
+    navigate("/alumno/juegos/descomposicion");
+  };
 
   return (
     <>
-      <scroll>
-        <div className="contenedor-card">
-          <box className="card">
-            <img src={Juego} alt="Ordenamiento" className="imagegame" />
-            <div className="textgame">
-              <h2>Ordenamiento de Números</h2>
-              <p>
-                ¡Aprende a ordenar números de forma divertida! Juega y mejora
-                tus habilidades matemáticas de menor a mayor.
-              </p>
-              <button onClick={handleJugarOrdenamiento}>Jugar</button>
-            </div>
-          </box>
-          <box className="card">
-            <img src={Juego2} alt="Escrbir sus palabras" className="imagegame" />
+        <box className="card">
+          <img src={Juego} alt="Ordenamiento" className="imagegame" />
+          <div className="textgame">
+            <h2>Ordenamiento de Números</h2>
+            <p>
+              ¡Aprende a ordenar números de forma divertida! Juega y mejora tus
+              habilidades matemáticas de menor a mayor.
+            </p>
+            <button onClick={handleJugarOrdenamiento}>Jugar</button>
+          </div> 
+        </box>
+        <box className="card">
+          <img src={Juego2} alt="Escrbir sus palabras" className="imagegame" />
 
-            <div className="textgame">
-              <h2>Escribir Números en Palabras</h2>
-              <p>
-                ¡Aprende a escribir los números en palabras! Arrastra las
-                palabras para formar la respuesta correcta.
-              </p>
-              <button onClick={handleJugarEscritura}>Jugar</button>
-            </div>
-            </box>
-            
-            <box className="card">
-                <img src={Juego} alt="Descomposicion"  className="imagegame"/>
-                <div className='textgame'>
-                    <h2 className="titlegame">Descomposición y Composición</h2>  
-                    <p className="descriptiongame">¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.</p>
-                    <button className="buttongame" onClick={handleJugarDescomposicion}>Jugar</button>
-                </div>
+          <div className="textgame">
+            <h2>Escribir Números en Palabras</h2>
+            <p>
+              ¡Aprende a escribir los números en palabras! Arrastra las palabras
+              para formar la respuesta correcta.
+            </p>
+            <button onClick={handleJugarEscritura}>Jugar</button>
+          </div>
+        </box>
+        <box className="card">
+          <img src={Juego} alt="Descomposicion" className="imagegame" />
+          <div className="textgame">
+            <h2 className="titlegame">Descomposición y Composición</h2>
+            <p className="descriptiongame">
+              ¡Aprende a descomponer y componer números! Descubre el misterio de
+              los valores posicionales.
+            </p>
+            <button className="buttongame" onClick={handleJugarDescomposicion}>
+              Jugar
+            </button>
+          </div>
+        </box>
   
-          </box>
-        </div>
-      </scroll>
+    
     </>
   );
 }
