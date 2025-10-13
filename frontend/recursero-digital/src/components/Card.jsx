@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import Juego from "../assets/juegoOr.png";
-import Juego2 from "../assets/juegoEsc.png";
-import "../styles/card.css";
+import { useNavigate } from 'react-router-dom';
+import JuegoEscala from '../assets/JuegoEscritura-fontpage.png';
+import JuegoDescoCompo from '../assets/JuegoCompoyDesco-fontpage.png';
+import JuegoEscritura from '../assets/NumeroPalabras-fontpage.png';
+import JuegoOrdenamiento from '../assets/JuegoOrdenamiento-fontpage.png';
+import '../styles/card.css';
 
 export default function Card() {
   const navigate = useNavigate();
@@ -14,8 +16,16 @@ export default function Card() {
     navigate("/alumno/juegos/escritura");
   };
 
-  const handleJugarDescomposicion = () => {
-    navigate("/alumno/juegos/descomposicion");
+    const handleJugarDescomposicion = () => {
+        navigate('/alumno/juegos/descomposicion');
+    };
+
+  const handleJugarEscala = () => {
+    navigate('/alumno/juegos/escala');
+  };
+
+  const handleJugarEscala = () => {
+    navigate('/alumno/juegos/escala');
   };
 
   return (
@@ -59,5 +69,5 @@ export default function Card() {
   
     
     </>
-  );
+  )
 }

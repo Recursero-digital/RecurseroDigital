@@ -25,7 +25,7 @@ body, html {
 
 .chalkboard {
     min-height: 100vh;
-    padding: 2rem;
+    padding: 1rem;
     background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
     color: white;
     position: relative;
@@ -42,21 +42,13 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 24px,
-            rgba(255, 255, 255, 0.03) 25px,
-            rgba(255, 255, 255, 0.03) 26px
-        );
     pointer-events: none;
 }
 
 .header-controls {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: 1rem;
+    left: 1rem;
     display: flex;
     gap: 1rem;
     z-index: 10;
@@ -84,16 +76,17 @@ body, html {
 
 .game-hud {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
+    top: 1rem;
+    right: 1rem;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1rem;
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     font-weight: 500;
     z-index: 10;
+    font-size: 0.9rem;
 }
 
 .game-hud span {
@@ -113,26 +106,6 @@ body, html {
     max-width: 600px;
     margin: 2rem auto;
     border: 1px solid #e2d5c7;
-}
-
-.paper-note::before {
-    content: '';
-    position: absolute;
-    left: 2rem;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, #e2d5c7, transparent);
-}
-
-.paper-note::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 2.5rem;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #e2d5c7, transparent);
 }
 
 .question-title {

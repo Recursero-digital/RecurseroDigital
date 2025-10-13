@@ -12,11 +12,18 @@
     "install:backend": "cd backend && npm install",
     "install:frontend": "cd frontend/recursero-digital && npm install"
   },
-  "keywords": ["matematica", "primaria", "educacion", "react", "node"],
+  "keywords": [
+    "matematica",
+    "primaria",
+    "educacion",
+    "react",
+    "node"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "next-themes": "^0.4.6"
   },
   "engines": {
     "node": ">=18.0.0",

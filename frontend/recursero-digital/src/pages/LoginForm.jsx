@@ -12,9 +12,6 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Establecer el rol inicial basado en el 
-  // estado pasado desde la página anterior
   useEffect(() => {
     if (location.state?.role) {
       setActiveTab(location.state.role);
@@ -27,10 +24,7 @@ export default function LoginForm() {
     setError("");
     
     try {
-      // Determinar el endpoint según el tipo de usuario
       const endpoint = activeTab === "alumno" ? AUTH_ENDPOINTS.LOGIN_STUDENT : AUTH_ENDPOINTS.LOGIN_TEACHER;
-      
-      // Petición al backend
       const response = await apiRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -43,8 +37,6 @@ export default function LoginForm() {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userType', activeTab);
         localStorage.setItem('userEmail', email);
-        
-        //Navegar según el tipo de usuario
         if (activeTab === "alumno") {
           navigate("/alumno");
         } else {

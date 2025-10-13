@@ -5,6 +5,7 @@ import { IdGenerator } from '../infrastructure/IdGenerator';
 import {StudentInvalidRequestError} from "../models/exceptions/StudentInvalidRequestError";
 import {Student} from "../models/Student";
 import {StudentAlreadyExistsError} from "../models/exceptions/StudentAlreadyExistsError";
+import {User, UserRole} from "../models/User";
 
 export interface AddStudentRequest {
     name: string;
@@ -58,15 +59,22 @@ export class AddStudentUseCase {
         validateStudentRequest(request);
         await validateUserAlreadyExists(request.username, this.studentRepository);
         const hashedPassword = await this.passwordEncoder.encode(request.password);
-        const id = this.idGenerator.generate();
+        const studentId = this.idGenerator.generate();
+        const userId = this.idGenerator.generate();
         
-        const student = new Student(
-            id,
+        const user = new User(
+            userId,
             request.username,
             hashedPassword,
+            UserRole.STUDENT
+        );
+        
+        const student = new Student(
+            studentId,
             request.name,
             request.lastName,
-            request.dni
+            request.dni,
+            user
         )
 
         await this.studentRepository.addStudent(student);

@@ -37,12 +37,12 @@ const JuegoOrdenamiento = () => {
 
   // Constants
   const levelRanges = useMemo(() => [
-    { min: 25, max: 250 },
-    { min: 251, max: 500 },
-    { min: 501, max: 750 },
-    { min: 751, max: 1000 },
-    { min: 1001, max: 1500 },
+    { min: 25, max: 250, name: "Números Pequeños", description: "Del 25 al 250" },
+    { min: 251, max: 500, name: "Números Medianos", description: "Del 251 al 500" },
+    { min: 501, max: 1000, name: "Números Grandes", description: "Del 501 al 1000" },
   ], []);
+
+  const totalActivities = 5;
 
   const getNumbersCount = useCallback((level) => 6 + (level * 2), []);
   const numbersCount = getNumbersCount(currentLevel);
@@ -147,19 +147,6 @@ const JuegoOrdenamiento = () => {
     setTargetNumbers([]);
     setFeedbackSuccess(true);
     setShowFeedback(true);
-    
-    setTimeout(() => {
-      setShowFeedback(false);
-      if (newActivity < 3) {
-        setCurrentActivity(newActivity);
-        generateNumbers(currentLevel); 
-        setTargetNumbers([]);
-        setShowPermanentHint(true);
-      } else {  
-        unlockLevel('ordenamiento', currentLevel + 2);
-        setShowLevelUp(true);
-      }
-    }, 2500);
   }, [currentLevel, currentActivity, completeActivity, attempts, generateNumbers, unlockLevel]);
 
   const handleFailedAttempt = useCallback(() => {
@@ -172,6 +159,19 @@ const JuegoOrdenamiento = () => {
       setTargetNumbers([]); 
     }, 2500);
   }, [incrementAttempts]);
+
+  const handleContinueAfterSuccess = useCallback(() => {
+    setShowFeedback(false);
+    if (currentActivity + 1 < totalActivities) {
+      setCurrentActivity(currentActivity + 1);
+      generateNumbers(currentLevel); 
+      setTargetNumbers([]);
+      setShowPermanentHint(true);
+    } else {  
+      unlockLevel('ordenamiento', currentLevel + 2);
+      setShowLevelUp(true);
+    }
+  }, [currentActivity, totalActivities, currentLevel, generateNumbers, unlockLevel]);
 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
@@ -366,7 +366,7 @@ const JuegoOrdenamiento = () => {
             <div className="status-item">
               <div className="status-icon">🎯</div>
               <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/3</div>
+              <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
             </div>
             <div className="status-item">
               <div className="status-icon">🎯</div>
@@ -435,7 +435,7 @@ const JuegoOrdenamiento = () => {
       {showFeedback && (
         <ActivityFeedbackModal
           isSuccess={feedbackSuccess}
-          onContinue={() => setShowFeedback(false)}
+          onContinue={feedbackSuccess ? handleContinueAfterSuccess : () => setShowFeedback(false)}
           onRetry={() => {
             setShowFeedback(false);
             setTargetNumbers([]);

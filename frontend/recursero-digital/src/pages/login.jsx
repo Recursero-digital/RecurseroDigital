@@ -8,7 +8,6 @@ export default function RoleSelection() {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    // Redirect to login form page
     navigate("/login-form", { state: { role } });
   }
 

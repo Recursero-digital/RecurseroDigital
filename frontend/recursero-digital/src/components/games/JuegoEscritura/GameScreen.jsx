@@ -51,7 +51,7 @@ const GameScreen = ({
                 <div className="status-item">
                     <span className="status-icon">📝</span>
                     <span className="status-label">Actividad</span>
-                    <span className="status-value">{activity}/3</span>
+                    <span className="status-value">{activity}/5</span>
                 </div>
                 <div className="status-item">
                     <span className="status-icon">⭐</span>
