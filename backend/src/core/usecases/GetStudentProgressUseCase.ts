@@ -48,35 +48,37 @@ export class GetStudentProgressUseCase {
             gameGroups.get(stat.gameId)!.push(stat);
         });
 
-        const gameProgress = Array.from(gameGroups.entries()).map(([gameId, gameStats]) => {
-            const latestStat = gameStats.reduce((latest, current) => 
-                current.maxUnlockedLevel > latest.maxUnlockedLevel ? current : latest
-            );
+        const gameProgress = await Promise.all(
+            Array.from(gameGroups.entries()).map(async ([gameId, gameStats]) => {
+                const latestStat = gameStats.reduce((latest, current) => 
+                    current.maxUnlockedLevel > latest.maxUnlockedLevel ? current : latest
+                );
 
-            const totalPoints = gameStats.reduce((sum, stat) => sum + stat.points, 0);
-            const completionRate = await this.statisticsRepository.getStudentCompletionRate(
-                request.studentId, 
-                gameId
-            );
-            const averageAccuracy = await this.statisticsRepository.getStudentAverageAccuracy(
-                request.studentId, 
-                gameId
-            );
+                const totalPoints = gameStats.reduce((sum, stat) => sum + stat.points, 0);
+                const completionRate = await this.statisticsRepository.getStudentCompletionRate(
+                    request.studentId, 
+                    gameId
+                );
+                const averageAccuracy = await this.statisticsRepository.getStudentAverageAccuracy(
+                    request.studentId, 
+                    gameId
+                );
 
-            const lastActivity = gameStats.reduce((latest, current) => 
-                current.createdAt > latest.createdAt ? current : latest
-            ).createdAt;
+                const lastActivity = gameStats.reduce((latest, current) => 
+                    current.createdAt > latest.createdAt ? current : latest
+                ).createdAt;
 
-            return {
-                gameId,
-                maxUnlockedLevel: latestStat.maxUnlockedLevel,
-                totalPoints,
-                completionRate,
-                averageAccuracy,
-                lastActivity,
-                statistics: gameStats
-            };
-        });
+                return {
+                    gameId,
+                    maxUnlockedLevel: latestStat.maxUnlockedLevel,
+                    totalPoints,
+                    completionRate,
+                    averageAccuracy,
+                    lastActivity,
+                    statistics: gameStats
+                };
+            })
+        );
 
         const totalPoints = await this.statisticsRepository.getStudentTotalPoints(request.studentId);
         const totalGamesPlayed = gameGroups.size;

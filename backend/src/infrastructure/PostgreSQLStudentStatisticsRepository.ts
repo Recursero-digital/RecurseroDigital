@@ -112,7 +112,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         [studentId, gameId]
       );
 
-      return result.rows.map(row => this.mapRowToStatistics(row));
+      return result.rows.map((row: any) => this.mapRowToStatistics(row));
     } catch (error) {
       console.error('Error al buscar estadísticas por estudiante y juego:', error);
       throw error;
@@ -128,7 +128,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         [studentId]
       );
 
-      return result.rows.map(row => this.mapRowToStatistics(row));
+      return result.rows.map((row: any) => this.mapRowToStatistics(row));
     } catch (error) {
       console.error('Error al buscar estadísticas por estudiante:', error);
       throw error;
@@ -144,7 +144,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         [gameId]
       );
 
-      return result.rows.map(row => this.mapRowToStatistics(row));
+      return result.rows.map((row: any) => this.mapRowToStatistics(row));
     } catch (error) {
       console.error('Error al buscar estadísticas por juego:', error);
       throw error;
@@ -202,7 +202,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         [studentId, gameId, level]
       );
 
-      return result.rows.map(row => this.mapRowToStatistics(row));
+      return result.rows.map((row: any) => this.mapRowToStatistics(row));
     } catch (error) {
       console.error('Error al buscar estadísticas por nivel:', error);
       throw error;
@@ -287,7 +287,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         [gameId]
       );
 
-      return result.rows.map(row => this.mapRowToStatistics(row));
+      return result.rows.map((row: any) => this.mapRowToStatistics(row));
     } catch (error) {
       console.error('Error al obtener progreso de todos los estudiantes:', error);
       throw error;
