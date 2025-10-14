@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import useGameScoringAPI from './useGameScoring.api';
+import useGameStatistics from './useGameStatistics';
 
 /**
  * Hook personalizado para manejar la lógica de puntuación de los juegos
@@ -8,7 +9,9 @@ import useGameScoringAPI from './useGameScoring.api';
 const useGameScoring = () => {
   const [points, setPoints] = useState(0);
   const [attempts, setAttempts] = useState(0);
+  const [sessionStartTime, setSessionStartTime] = useState(null);
   const { submitGameScore, isSubmitting, submitError } = useGameScoringAPI();
+  const { saveGameStatistics, calculateSessionStats } = useGameStatistics();
 
   /**
    * Calcula el puntaje de una actividad basado en el nivel y número de intentos
@@ -51,6 +54,21 @@ const useGameScoring = () => {
   const resetScoring = useCallback(() => {
     setPoints(0);
     setAttempts(0);
+    setSessionStartTime(null);
+  }, []);
+
+  /**
+   * Inicia una nueva sesión de juego
+   */
+  const startGameSession = useCallback(() => {
+    setSessionStartTime(new Date());
+  }, []);
+
+  /**
+   * Finaliza la sesión de juego actual
+   */
+  const endGameSession = useCallback(() => {
+    setSessionStartTime(null);
   }, []);
 
   /**
@@ -60,25 +78,55 @@ const useGameScoring = () => {
    * @param {number} activity - Actividad actual dentro del nivel
    * @param {number} maxUnlockedLevel - Máximo nivel desbloqueado
    * @param {object} additionalData - Datos adicionales (correctAnswers, totalQuestions, etc.)
+   * @param {string} studentId - ID del estudiante (requerido para estadísticas)
    * @returns {number} Puntaje obtenido en la actividad
    */
-  const completeActivity = useCallback(async (level, gameType = null, activity = null, maxUnlockedLevel = null, additionalData = {}) => {
+  const completeActivity = useCallback(async (level, gameType = null, activity = null, maxUnlockedLevel = null, additionalData = {}, studentId = null) => {
     const activityScore = calculateActivityScore(level);
     addPoints(activityScore);
     
     // Si se proporcionan datos del juego, enviar a la base de datos
     if (gameType) {
       try {
+        // Enviar al sistema anterior (mantener compatibilidad)
         await submitGameScore({
           gameType,
           level,
           activity,
-          points: points + activityScore, // Puntos totales después de sumar esta actividad
+          points: points + activityScore,
           activityScore,
           attempts,
           maxUnlockedLevel,
           ...additionalData
         });
+
+        // Enviar al nuevo sistema de estadísticas
+        if (studentId) {
+          const sessionEndTime = new Date();
+          const sessionStats = calculateSessionStats({
+            startTime: sessionStartTime,
+            endTime: sessionEndTime,
+            correctAnswers: additionalData.correctAnswers,
+            totalQuestions: additionalData.totalQuestions,
+            attempts
+          });
+
+          await saveGameStatistics({
+            studentId,
+            gameId: gameType,
+            level: level + 1, // Convertir de 0-indexed a 1-indexed
+            activity: activity || 1,
+            points: activityScore,
+            attempts,
+            correctAnswers: additionalData.correctAnswers,
+            totalQuestions: additionalData.totalQuestions,
+            completionTime: sessionStats.completionTime,
+            isCompleted: true,
+            maxUnlockedLevel: maxUnlockedLevel || (level + 1),
+            sessionStartTime,
+            sessionEndTime
+          });
+        }
       } catch (error) {
         console.warn('Error al guardar puntaje en BD, continuando con el juego:', error);
       }
@@ -86,7 +134,7 @@ const useGameScoring = () => {
     
     resetAttempts();
     return activityScore;
-  }, [calculateActivityScore, addPoints, resetAttempts, submitGameScore, points, attempts]);
+  }, [calculateActivityScore, addPoints, resetAttempts, submitGameScore, points, attempts, studentId, sessionStartTime, saveGameStatistics, calculateSessionStats]);
 
   /**
    * Obtiene información detallada del puntaje actual
@@ -107,6 +155,7 @@ const useGameScoring = () => {
     // Estado
     points,
     attempts,
+    sessionStartTime,
     
     // Funciones de cálculo
     calculateActivityScore,
@@ -118,6 +167,10 @@ const useGameScoring = () => {
     resetAttempts,
     resetScoring,
     completeActivity,
+    
+    // Funciones de sesión
+    startGameSession,
+    endGameSession,
     
     // Estado de API
     isSubmitting,
