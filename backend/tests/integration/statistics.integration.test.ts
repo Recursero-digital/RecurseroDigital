@@ -1,56 +1,10 @@
 import request from 'supertest';
 import app from '../../src/config/app';
-
-// Mock del DependencyContainer para usar mocks en lugar de PostgreSQL
-jest.mock('../../src/config/DependencyContainer', () => {
-  const originalModule = jest.requireActual('../../src/config/DependencyContainer');
-  const { MockStudentStatisticsRepository } = require('../mocks/StudentStatisticsRepository.mock');
-  const { MockIdGenerator } = require('../mocks/IdGenerator.mock');
-  
-  return {
-    ...originalModule,
-    DependencyContainer: class MockDependencyContainer extends originalModule.DependencyContainer {
-      private mockStatisticsRepository = new MockStudentStatisticsRepository();
-      private mockIdGenerator = new MockIdGenerator();
-
-      get statisticsRepository() {
-        return this.mockStatisticsRepository;
-      }
-
-      get uuidGenerator() {
-        return this.mockIdGenerator;
-      }
-
-      get saveGameStatisticsUseCase() {
-        const { SaveGameStatisticsUseCase } = require('../../src/core/usecases/SaveGameStatisticsUseCase');
-        return new SaveGameStatisticsUseCase(
-          this.mockStatisticsRepository,
-          this.mockIdGenerator
-        );
-      }
-
-      get getStudentProgressUseCase() {
-        const { GetStudentProgressUseCase } = require('../../src/core/usecases/GetStudentProgressUseCase');
-        return new GetStudentProgressUseCase(this.mockStatisticsRepository);
-      }
-
-      get getGameStatisticsUseCase() {
-        const { GetGameStatisticsUseCase } = require('../../src/core/usecases/GetGameStatisticsUseCase');
-        return new GetGameStatisticsUseCase(this.mockStatisticsRepository);
-      }
-
-      async clearAllData() {
-        this.mockStatisticsRepository.clearStatistics();
-        this.mockIdGenerator.reset();
-      }
-    }
-  };
-});
+import { DependencyContainer } from '../../src/config/DependencyContainer';
 
 describe('Statistics Integration Tests', () => {
   beforeEach(async () => {
     // Limpiar datos antes de cada test
-    const { DependencyContainer } = await import('../../src/config/DependencyContainer');
     const container = DependencyContainer.getInstance();
     await container.clearAllData();
   });

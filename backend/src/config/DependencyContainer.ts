@@ -19,6 +19,7 @@ import { Admin } from '../core/models/Admin';
 import { Teacher } from '../core/models/Teacher';
 import { Student } from '../core/models/Student';
 import { PostgreSQLStudentStatisticsRepository } from '../infrastructure/PostgreSQLStudentStatisticsRepository';
+import { InMemoryStudentStatisticsRepository } from '../infrastructure/InMemoryStudentStatisticsRepository';
 import { SaveGameStatisticsUseCase } from '../core/usecases/SaveGameStatisticsUseCase';
 import { GetStudentProgressUseCase } from '../core/usecases/GetStudentProgressUseCase';
 import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseCase';
@@ -31,7 +32,7 @@ export class DependencyContainer {
     private _studentRepository: PostgreSQLStudentRepository | InMemoryStudentRepository | null = null;
     private _adminRepository: PostgreSQLAdminRepository | InMemoryAdminRepository | null = null;
     private _courseRepository: PostgreSQLCourseRepository | InMemoryCourseRepository | null = null;
-    private _statisticsRepository: PostgreSQLStudentStatisticsRepository | null = null;
+    private _statisticsRepository: PostgreSQLStudentStatisticsRepository | InMemoryStudentStatisticsRepository | null = null;
     private _databaseConnection: DatabaseConnection | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
@@ -114,9 +115,13 @@ export class DependencyContainer {
         return this._courseRepository;
     }
 
-    public get statisticsRepository(): PostgreSQLStudentStatisticsRepository {
+    public get statisticsRepository(): PostgreSQLStudentStatisticsRepository | InMemoryStudentStatisticsRepository {
         if (!this._statisticsRepository) {
-            this._statisticsRepository = new PostgreSQLStudentStatisticsRepository();
+            if (process.env.NODE_ENV === 'test') {
+                this._statisticsRepository = new InMemoryStudentStatisticsRepository();
+            } else {
+                this._statisticsRepository = new PostgreSQLStudentStatisticsRepository();
+            }
         }
         return this._statisticsRepository;
     }
@@ -228,8 +233,7 @@ export class DependencyContainer {
             await (this.studentRepository as InMemoryStudentRepository).clearStudents();
             await (this.adminRepository as InMemoryAdminRepository).clearAdmins();
             await (this.courseRepository as InMemoryCourseRepository).clearCourses();
-
-
+            await (this.statisticsRepository as InMemoryStudentStatisticsRepository).clearStatistics();
 
             await this.initializeTestData();
         }

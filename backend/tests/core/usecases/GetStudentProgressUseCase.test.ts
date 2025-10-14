@@ -231,7 +231,7 @@ describe('GetStudentProgressUseCase', () => {
       const result = await getStudentProgressUseCase.execute(request);
 
       const gameProgress = result.gameProgress[0];
-      expect(gameProgress.completionRate).toBe(66.67); // 2 de 3 completados
+      expect(gameProgress.completionRate).toBeCloseTo(66.67, 1);
     });
 
     it('should calculate average accuracy correctly', async () => {

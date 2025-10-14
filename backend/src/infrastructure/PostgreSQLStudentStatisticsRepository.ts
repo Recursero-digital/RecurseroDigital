@@ -302,13 +302,20 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
   }> {
     try {
       const result = await this.db.query(
-        `SELECT 
-           COUNT(DISTINCT student_id) as total_students,
-           AVG(total_points) as avg_points,
-           AVG(correct_answers::float / NULLIF(total_questions, 0)) * 100 as avg_accuracy,
-           (COUNT(CASE WHEN is_completed = true THEN 1 END)::float / COUNT(*)) * 100 as completion_rate
-         FROM student_statistics 
-         WHERE game_id = $1`,
+        `WITH student_max_points AS (
+           SELECT student_id, MAX(total_points) as max_total_points
+           FROM student_statistics 
+           WHERE game_id = $1
+           GROUP BY student_id
+         )
+         SELECT 
+           COUNT(DISTINCT ss.student_id) as total_students,
+           AVG(smp.max_total_points) as avg_points,
+           AVG(ss.correct_answers::float / NULLIF(ss.total_questions, 0)) * 100 as avg_accuracy,
+           (COUNT(CASE WHEN ss.is_completed = true THEN 1 END)::float / COUNT(*)) * 100 as completion_rate
+         FROM student_statistics ss
+         LEFT JOIN student_max_points smp ON ss.student_id = smp.student_id
+         WHERE ss.game_id = $1`,
         [gameId]
       );
 

@@ -80,7 +80,12 @@ export class GetStudentProgressUseCase {
             })
         );
 
-        const totalPoints = await this.statisticsRepository.getStudentTotalPoints(request.studentId);
+        let totalPoints: number;
+        if (request.gameId) {
+            totalPoints = gameProgress.length > 0 ? gameProgress[0].totalPoints : 0;
+        } else {
+            totalPoints = await this.statisticsRepository.getStudentTotalPoints(request.studentId);
+        }
         const totalGamesPlayed = gameGroups.size;
 
         return {
