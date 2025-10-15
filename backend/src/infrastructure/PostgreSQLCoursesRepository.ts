@@ -167,4 +167,26 @@ export class PostgreSQLCourseRepository implements CourseRepository {
       throw error;
     }
   }
+
+
+  async addGameToCourse(courseId: string, gameId: string): Promise<void> {
+    try {
+      await this.db.query(
+        `INSERT INTO courses_games (id, course_id, game_id, is_enabled, order_index)
+         VALUES (
+           gen_random_uuid(),
+           $1,
+           $2,
+           true,
+           COALESCE((SELECT MAX(order_index) + 1 FROM courses_games WHERE course_id = $1), 0)
+         )
+         ON CONFLICT (course_id, game_id)
+         DO UPDATE SET is_enabled = EXCLUDED.is_enabled, updated_at = CURRENT_TIMESTAMP`,
+        [courseId, gameId]
+      );
+    } catch (error) {
+      console.error('Error al agregar juego al curso:', error);
+      throw error;
+    }
+  }
 }
