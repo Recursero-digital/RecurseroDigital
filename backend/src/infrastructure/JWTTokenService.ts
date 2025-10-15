@@ -21,4 +21,20 @@ export class JWTTokenService implements TokenService {
       return null;
     }
   }
+
+  getUserFromToken(token: string): { id: string; username: string; role: string } | null {
+    try {
+      const decoded = jwt.verify(token, this.secretKey) as any;
+      if (decoded && decoded.id && decoded.username && decoded.role) {
+        return {
+          id: decoded.id,
+          username: decoded.username,
+          role: decoded.role
+        };
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
 }

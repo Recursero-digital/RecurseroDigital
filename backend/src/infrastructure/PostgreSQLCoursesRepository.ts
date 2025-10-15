@@ -1,5 +1,7 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
 import{Course} from "@/core/models/Course";
+import { CourseGame } from '../core/models/CourseGame';
+import { Game } from '../core/models/Game';
 import { DatabaseConnection } from './DatabaseConnection';
 
 export class PostgreSQLCourseRepository implements CourseRepository {
@@ -104,6 +106,64 @@ export class PostgreSQLCourseRepository implements CourseRepository {
       await this.db.query('DELETE FROM courses WHERE id = $1', [id]);
     } catch (error) {
       console.error('Error al eliminar curso:', error);
+      throw error;
+    }
+  }
+
+  async getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT 
+           cg.id,
+           cg.course_id,
+           cg.game_id,
+           cg.is_enabled,
+           cg.order_index,
+           cg.created_at,
+           cg.updated_at,
+           g.name as game_name,
+           g.description as game_description,
+           g.image_url as game_image_url,
+           g.route as game_route,
+           g.difficulty_level as game_difficulty_level,
+           g.is_active as game_is_active,
+           g.created_at as game_created_at,
+           g.updated_at as game_updated_at
+         FROM courses_games cg
+         JOIN games g ON cg.game_id = g.id
+         WHERE cg.course_id = $1 
+           AND cg.is_enabled = true 
+           AND g.is_active = true
+         ORDER BY cg.order_index ASC`,
+        [courseId]
+      );
+
+      return result.rows.map((row: any) => {
+        const game = new Game(
+          row.game_id,
+          row.game_name,
+          row.game_description,
+          row.game_image_url,
+          row.game_route,
+          row.game_difficulty_level,
+          row.game_is_active,
+          row.game_created_at,
+          row.game_updated_at
+        );
+
+        return new CourseGame(
+          row.id,
+          row.course_id,
+          row.game_id,
+          row.is_enabled,
+          row.order_index,
+          game,
+          row.created_at,
+          row.updated_at
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener juegos habilitados del curso:', error);
       throw error;
     }
   }

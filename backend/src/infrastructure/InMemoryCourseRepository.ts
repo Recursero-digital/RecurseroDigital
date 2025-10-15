@@ -1,5 +1,6 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
 import {Course} from "@/core/models/Course";
+import { CourseGame } from '../core/models/CourseGame';
 
 export class InMemoryCourseRepository implements CourseRepository {
   private courses: Course[] = [];
@@ -31,5 +32,17 @@ export class InMemoryCourseRepository implements CourseRepository {
 
   async clearCourses(): Promise<void> {
     this.courses = [];
+  }
+
+  async findById(id: string): Promise<Course | null> {
+    const course = this.courses.find(c => c.id === id);
+    return course || null;
+  }
+
+  //TO-DO: VER CON TIN
+  async getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]> {
+    // Para el repositorio en memoria, retornamos un array vacío por ahora
+    // En un entorno real, aquí tendríamos datos mock o una estructura diferente
+    return [];
   }
 }
