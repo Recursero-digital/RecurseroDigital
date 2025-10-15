@@ -54,4 +54,13 @@ export class InMemoryCourseRepository implements CourseRepository {
     this.courseGames[courseId].add(gameId);
   }
 
+
+  async createCourse(name: string, teacherId?: string): Promise<Course> {
+    const courseId = `course_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    const course = new Course(courseId, name, teacherId || '', []);
+    this.courses.push(course);
+
+    return course;
+  }
 }

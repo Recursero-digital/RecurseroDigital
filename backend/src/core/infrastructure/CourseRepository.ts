@@ -9,4 +9,5 @@ export interface CourseRepository {
     findById(id: string): Promise<Course | null>;
     getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]>;
     addGameToCourse(courseId: string, gameId: string): Promise<void>;
+    createCourse(name: string, teacherId?: string): Promise<Course>;
 }
