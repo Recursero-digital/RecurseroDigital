@@ -15,6 +15,13 @@ export class MockTokenService implements TokenService {
     return null;
   }
 
+  getUserFromToken(token: string): { id: string; username: string; role: string } | null {
+    if (token.startsWith('mock_token_')) {
+      return { id: '1', username: 'testuser', role: 'student' };
+    }
+    return null;
+  }
+
   getLastGeneratedToken(): string | null {
     return this.tokenCounter > 0 ? `mock_token_${this.tokenCounter}` : null;
   }

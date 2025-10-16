@@ -266,7 +266,7 @@ export class DependencyContainer {
             '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
             UserRole.STUDENT
         );
-        const student = new Student('1', 'Nicolás', 'García', '12345678', studentUser);
+        const student = new Student('1', 'Nicolás', 'García', '12345678', null, studentUser);
         await (testContainer.studentRepository as InMemoryStudentRepository).addStudent(student);
 
         // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({

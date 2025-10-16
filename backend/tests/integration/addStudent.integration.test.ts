@@ -32,7 +32,7 @@ describe('Student Integration Tests', () => {
         });
     });
 
-    describe('POST /student', () => {
+    describe('POST /api/student', () => {
         describe('Authentication and Authorization', () => {
             it('should return 401 when no token is provided', async () => {
                 const studentData = {
@@ -44,7 +44,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .send(studentData);
 
                 expect(res.statusCode).toBe(401);
@@ -61,7 +61,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${teacherToken}`)
                     .send(studentData);
 
@@ -79,7 +79,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${studentToken}`)
                     .send(studentData);
 
@@ -99,7 +99,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${adminToken}`)
                     .send(studentData);
 
@@ -118,7 +118,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${adminToken}`)
                     .send(studentData);
 
@@ -136,7 +136,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${adminToken}`)
                     .send(studentData);
 
@@ -154,7 +154,7 @@ describe('Student Integration Tests', () => {
                 };
 
                 const res = await request(app)
-                    .post('/student')
+                    .post('/api/student')
                     .set('Authorization', `Bearer ${adminToken}`)
                     .send(studentData);
 

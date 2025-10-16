@@ -31,6 +31,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         row.name,
         row.lastname,
         row.dni,
+        row.course_id,
         user
       );
     } catch (error) {
@@ -55,14 +56,15 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
       // Luego insertar el estudiante
       await this.db.query(
-        `INSERT INTO students (id, user_id, name, lastname, dni)
-         VALUES ($1, $2, $3, $4, $5)`,
+        `INSERT INTO students (id, user_id, name, lastname, dni, course_id)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
         [
           studentData.id,
           studentData.user.id,
           studentData.name,
           studentData.lastname,
-          studentData.dni
+          studentData.dni,
+          studentData.courseId
         ]
       );
     } catch (error) {
@@ -87,6 +89,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
           row.name,
           row.lastname,
           row.dni,
+          row.course_id,
           user
         );
       });
@@ -117,6 +120,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         row.name,
         row.lastname,
         row.dni,
+        row.course_id,
         user
       );
     } catch (error) {
@@ -141,13 +145,14 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
       await this.db.query(
         `UPDATE students 
-         SET name = $2, lastname = $3, dni = $4, updated_at = CURRENT_TIMESTAMP
+         SET name = $2, lastname = $3, dni = $4, course_id = $5, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
         [
           studentData.id,
           studentData.name,
           studentData.lastname,
-          studentData.dni
+          studentData.dni,
+          studentData.courseId
         ]
       );
     } catch (error) {
