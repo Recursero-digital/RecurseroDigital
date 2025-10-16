@@ -1,5 +1,5 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
-import{Course} from "@/core/models/Course";
+import { Course } from '../core/models/Course';
 import { CourseGame } from '../core/models/CourseGame';
 import { Game } from '../core/models/Game';
 import { DatabaseConnection } from './DatabaseConnection';
@@ -186,6 +186,24 @@ export class PostgreSQLCourseRepository implements CourseRepository {
       );
     } catch (error) {
       console.error('Error al agregar juego al curso:', error);
+      throw error;
+    }
+  }
+
+  async createCourse(name: string, teacherId?: string): Promise<Course> {
+    try {
+      //ID para el curso
+      const courseId = `course_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      await this.db.query(
+        `INSERT INTO courses (id, name, teacher_id, created_at, updated_at)
+         VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+        [courseId, name, teacherId || null]
+      );
+
+      return new Course(courseId, name, teacherId || '', []);
+    } catch (error) {
+      console.error('Error al crear curso:', error);
       throw error;
     }
   }

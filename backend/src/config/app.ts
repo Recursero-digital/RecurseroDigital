@@ -19,12 +19,12 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use("/api", loginRoutes);
-app.use("/api", logoutRoutes);
-app.use("/api", studentRoutes);
+app.use("/api/login", loginRoutes);
+app.use("/api/logout", logoutRoutes);
+app.use("/api/student", studentRoutes);
 
 app.use("/api/statistics", statisticsRoutes);
-app.use("/api", courseRoutes);
+app.use("/api/course", courseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");

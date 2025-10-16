@@ -1,4 +1,4 @@
-import {Student} from "@/core/models/Student";
+import { Student } from './Student';
 
 export class Course {
     id: string;
