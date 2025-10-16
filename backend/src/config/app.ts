@@ -5,7 +5,7 @@ import logoutRoutes from '../delivery/routes/logoutRoutes';
 import studentRoutes from '../delivery/routes/studentRoutes';
 import statisticsRoutes from '../delivery/routes/statisticsRoutes';
 import courseRoutes from '../delivery/routes/courseRoutes';
-import teacherRoutes from "@/delivery/routes/teacherRoutes";
+import teacherRoutes from "../delivery/routes/teacherRoutes";
 
 const app: Application = express();
 

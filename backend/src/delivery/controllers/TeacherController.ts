@@ -14,7 +14,8 @@ const assignTeacherToCourses = async (
     req: Request<{}, AssignTeacherResponse, AssignTeacherToCoursesRequest>,
     res: Response<AssignTeacherResponse>
 ): Promise<void> => {
-    const { teacherId, courseIds } = req.body;
+    const { courseIds } = req.body;
+    const { teacherId } = req.params as { teacherId: string };
 
     try {
         if (!teacherId) {
