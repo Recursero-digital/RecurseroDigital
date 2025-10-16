@@ -34,7 +34,7 @@ export class GetStudentGamesUseCase {
             throw new Error('Token inválido');
         }
 
-        if (userFromToken.role !== 'student') {
+        if (userFromToken.role !== 'STUDENT') {
             throw new Error('Usuario no autorizado para esta operación');
         }
 

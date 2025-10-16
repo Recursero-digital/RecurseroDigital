@@ -38,9 +38,9 @@ export class PostgreSQLCourseRepository implements CourseRepository {
   async addCourse(course: Course): Promise<void> {
     try {
       await this.db.query(
-        `INSERT INTO courses (id, name, teacher_id, students)
-         VALUES ($1, $2, $3, $4)`,
-        [course.id, course.name, course.teacher_id, course.students]
+        `INSERT INTO courses (id, name, teacher_id)
+         VALUES ($1, $2, $3)`,
+        [course.id, course.name, null]
       );
     } catch (error) {
       console.error('Error al agregar curso:', error);
@@ -91,9 +91,9 @@ export class PostgreSQLCourseRepository implements CourseRepository {
     try {
       await this.db.query(
         `UPDATE courses 
-         SET name = $2, teacher_id = $3, students = $4, updated_at = CURRENT_TIMESTAMP
+         SET name = $2, teacher_id = $3, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
-        [course.id, course.name, course.teacher_id, course.students]
+        [course.id, course.name, course.teacher_id]
       );
     } catch (error) {
       console.error('Error al actualizar el curso:', error);
