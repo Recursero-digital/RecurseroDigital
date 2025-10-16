@@ -5,9 +5,9 @@ import { UserRole } from '../../core/models/User';
 
 const router: Router = express.Router();
 
-router.post('/student', protectAdminRoute(), studentController.addStudent);
+router.post('/', protectAdminRoute(), studentController.addStudent);
 
 // /api/student/me/games
-router.get('/student/me/games', protectRoute(UserRole.STUDENT), studentController.getMyGames);
+router.get('/me/games', protectRoute(UserRole.STUDENT), studentController.getMyGames);
 
 export default router;

@@ -40,10 +40,7 @@ export class InMemoryCourseRepository implements CourseRepository {
     return course || null;
   }
 
-  //TO-DO: VER CON TIN
   async getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]> {
-    // Para el repositorio en memoria, retornamos un array vacío por ahora
-    // En un entorno real, aquí tendríamos datos mock o una estructura diferente
     return [];
   }
 
