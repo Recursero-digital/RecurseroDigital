@@ -4,6 +4,6 @@ import { protectAdminRoute } from '../middleware/authMiddleWare';
 
 const router: Router = express.Router();
 
-router.post('/assign-courses', protectAdminRoute(), teacherController.assignTeacherToCourses);
+router.post('/:teacherId/courses', protectAdminRoute(), teacherController.assignTeacherToCourses);
 
 export default router;
