@@ -18,7 +18,10 @@ export const courseController = {
                 return;
             }
 
-            const useCase = new AssignGameToCourseUseCase(container.courseRepository);
+            const useCase = new AssignGameToCourseUseCase(
+                container.courseRepository,
+                container.uuidGenerator
+            );
             await useCase.execute({ courseId, gameId });
 
             res.status(201).json({ message: 'Juego asignado al curso correctamente' });

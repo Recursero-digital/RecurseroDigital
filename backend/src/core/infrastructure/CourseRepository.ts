@@ -1,5 +1,5 @@
-import {Course} from "@/core/models/Course";
-import {CourseGame} from "@/core/models/CourseGame";
+import { Course } from '../models/Course';
+import { CourseGame } from '../models/CourseGame';
 
 
 export interface CourseRepository {
@@ -8,6 +8,6 @@ export interface CourseRepository {
     getAllCourses(): Promise<Course[]>;
     findById(id: string): Promise<Course | null>;
     getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]>;
-    addGameToCourse(courseId: string, gameId: string): Promise<void>;
+    addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void>;
     createCourse(name: string, teacherId?: string): Promise<Course>;
 }
