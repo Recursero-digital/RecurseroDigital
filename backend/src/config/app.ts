@@ -4,6 +4,7 @@ import loginRoutes from '../delivery/routes/loginRoutes';
 import logoutRoutes from '../delivery/routes/logoutRoutes';
 import studentRoutes from '../delivery/routes/studentRoutes';
 import statisticsRoutes from '../delivery/routes/statisticsRoutes';
+import courseRoutes from '../delivery/routes/courseRoutes';
 
 const app: Application = express();
 
@@ -23,6 +24,7 @@ app.use("/api", logoutRoutes);
 app.use("/api", studentRoutes);
 
 app.use("/api/statistics", statisticsRoutes);
+app.use("/api", courseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");

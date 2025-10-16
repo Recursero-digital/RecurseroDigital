@@ -4,6 +4,7 @@ import { CourseGame } from '../core/models/CourseGame';
 
 export class InMemoryCourseRepository implements CourseRepository {
   private courses: Course[] = [];
+  private courseGames: { [courseId: string]: Set<string> } = {};
 
   constructor() {
     // Curso de prueba:
@@ -45,4 +46,12 @@ export class InMemoryCourseRepository implements CourseRepository {
     // En un entorno real, aquí tendríamos datos mock o una estructura diferente
     return [];
   }
+
+  async addGameToCourse(courseId: string, gameId: string): Promise<void> {
+    if (!this.courseGames[courseId]) {
+      this.courseGames[courseId] = new Set<string>();
+    }
+    this.courseGames[courseId].add(gameId);
+  }
+
 }
