@@ -44,7 +44,7 @@ export class InMemoryCourseRepository implements CourseRepository {
     return [];
   }
 
-  async addGameToCourse(courseId: string, gameId: string): Promise<void> {
+  async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     if (!this.courseGames[courseId]) {
       this.courseGames[courseId] = new Set<string>();
     }

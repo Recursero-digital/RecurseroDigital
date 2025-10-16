@@ -38,9 +38,9 @@ export class PostgreSQLCourseRepository implements CourseRepository {
   async addCourse(course: Course): Promise<void> {
     try {
       await this.db.query(
-        `INSERT INTO courses (id, name, teacher_id, students)
-         VALUES ($1, $2, $3, $4)`,
-        [course.id, course.name, course.teacher_id, course.students]
+        `INSERT INTO courses (id, name, teacher_id)
+         VALUES ($1, $2, $3)`,
+        [course.id, course.name, null]
       );
     } catch (error) {
       console.error('Error al agregar curso:', error);
@@ -91,9 +91,9 @@ export class PostgreSQLCourseRepository implements CourseRepository {
     try {
       await this.db.query(
         `UPDATE courses 
-         SET name = $2, teacher_id = $3, students = $4, updated_at = CURRENT_TIMESTAMP
+         SET name = $2, teacher_id = $3, updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
-        [course.id, course.name, course.teacher_id, course.students]
+        [course.id, course.name, course.teacher_id]
       );
     } catch (error) {
       console.error('Error al actualizar el curso:', error);
@@ -169,20 +169,22 @@ export class PostgreSQLCourseRepository implements CourseRepository {
   }
 
 
-  async addGameToCourse(courseId: string, gameId: string): Promise<void> {
+  async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     try {
+      // Primero obtenemos el próximo order_index
+      const orderResult = await this.db.query(
+        'SELECT COALESCE(MAX(order_index) + 1, 0) as next_order FROM courses_games WHERE course_id = $1',
+        [courseId]
+      );
+      const nextOrder = orderResult.rows[0]?.next_order || 0;
+
+      // Luego insertamos el juego al curso
       await this.db.query(
         `INSERT INTO courses_games (id, course_id, game_id, is_enabled, order_index)
-         VALUES (
-           gen_random_uuid(),
-           $1,
-           $2,
-           true,
-           COALESCE((SELECT MAX(order_index) + 1 FROM courses_games WHERE course_id = $1), 0)
-         )
+         VALUES ($1, $2, $3, true, $4)
          ON CONFLICT (course_id, game_id)
          DO UPDATE SET is_enabled = EXCLUDED.is_enabled, updated_at = CURRENT_TIMESTAMP`,
-        [courseId, gameId]
+        [courseGameId, courseId, gameId, nextOrder]
       );
     } catch (error) {
       console.error('Error al agregar juego al curso:', error);
