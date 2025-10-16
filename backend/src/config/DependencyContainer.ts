@@ -23,6 +23,7 @@ import { InMemoryStudentStatisticsRepository } from '../infrastructure/InMemoryS
 import { SaveGameStatisticsUseCase } from '../core/usecases/SaveGameStatisticsUseCase';
 import { GetStudentProgressUseCase } from '../core/usecases/GetStudentProgressUseCase';
 import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseCase';
+import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 
 
 export class DependencyContainer {
@@ -44,6 +45,7 @@ export class DependencyContainer {
     private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
     private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
     private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
+    private _assignTeacherToCoursesUseCase: AssignTeacherToCoursesUseCase | null = null;
 
 
     private constructor() {
@@ -226,6 +228,15 @@ export class DependencyContainer {
         return this._getGameStatisticsUseCase;
     }
 
+    public get assignTeacherToCoursesUseCase(): AssignTeacherToCoursesUseCase {
+        if (!this._assignTeacherToCoursesUseCase) {
+            this._assignTeacherToCoursesUseCase = new AssignTeacherToCoursesUseCase(
+                this.courseRepository,
+                this.teacherRepository
+            );
+        }
+        return this._assignTeacherToCoursesUseCase;
+    }
 
     public async clearAllData(): Promise<void> {
         if (process.env.NODE_ENV === 'test') {

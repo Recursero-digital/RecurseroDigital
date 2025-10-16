@@ -60,4 +60,14 @@ export class InMemoryCourseRepository implements CourseRepository {
 
     return course;
   }
+
+  async assignTeacherToCourse(teacherId: string, courseId: string): Promise<void> {
+    const courseIndex = this.courses.findIndex(c => c.id === courseId);
+    if (courseIndex === -1) {
+      throw new Error('Curso no encontrado');
+    }
+    
+    this.courses[courseIndex].teacher_id = teacherId;
+  }
+  
 }
