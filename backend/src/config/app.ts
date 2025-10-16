@@ -5,6 +5,7 @@ import logoutRoutes from '../delivery/routes/logoutRoutes';
 import studentRoutes from '../delivery/routes/studentRoutes';
 import statisticsRoutes from '../delivery/routes/statisticsRoutes';
 import courseRoutes from '../delivery/routes/courseRoutes';
+import teacherRoutes from "@/delivery/routes/teacherRoutes";
 
 const app: Application = express();
 
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/student", studentRoutes);
-
+app.use("/api/teacher", teacherRoutes);
 app.use("/api/statistics", statisticsRoutes);
 app.use("/api/course", courseRoutes);
 
