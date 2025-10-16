@@ -23,9 +23,6 @@ import { InMemoryStudentStatisticsRepository } from '../infrastructure/InMemoryS
 import { SaveGameStatisticsUseCase } from '../core/usecases/SaveGameStatisticsUseCase';
 import { GetStudentProgressUseCase } from '../core/usecases/GetStudentProgressUseCase';
 import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseCase';
-import { GetStudentGamesUseCase } from '../core/usecases/GetStudentGamesUseCase';
-import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStudentUseCase';
-import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 
 
 export class DependencyContainer {
@@ -47,9 +44,6 @@ export class DependencyContainer {
     private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
     private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
     private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
-    private _assignTeacherToCoursesUseCase: AssignTeacherToCoursesUseCase | null = null;
-    private _getStudentGamesUseCase: GetStudentGamesUseCase | null = null;
-    private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
 
 
     private constructor() {
@@ -232,36 +226,6 @@ export class DependencyContainer {
         return this._getGameStatisticsUseCase;
     }
 
-    public get getStudentGamesUseCase(): GetStudentGamesUseCase {
-        if (!this._getStudentGamesUseCase) {
-            this._getStudentGamesUseCase = new GetStudentGamesUseCase(
-                this.tokenService,
-                this.studentRepository,
-                this.courseRepository
-            );
-        }
-        return this._getStudentGamesUseCase;
-    }
-
-    public get assignCourseToStudentUseCase(): AssignCourseToStudentUseCase {
-        if (!this._assignCourseToStudentUseCase) {
-            this._assignCourseToStudentUseCase = new AssignCourseToStudentUseCase(
-                this.studentRepository,
-                this.courseRepository
-            );
-        }
-        return this._assignCourseToStudentUseCase;
-    }
-
-    public get assignTeacherToCoursesUseCase(): AssignTeacherToCoursesUseCase {
-        if (!this._assignTeacherToCoursesUseCase) {
-            this._assignTeacherToCoursesUseCase = new AssignTeacherToCoursesUseCase(
-                this.courseRepository,
-                this.teacherRepository
-            );
-        }
-        return this._assignTeacherToCoursesUseCase;
-    }
 
     public async clearAllData(): Promise<void> {
         if (process.env.NODE_ENV === 'test') {
