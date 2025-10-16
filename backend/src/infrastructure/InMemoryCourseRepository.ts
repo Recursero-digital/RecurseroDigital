@@ -1,5 +1,5 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
-import {Course} from "@/core/models/Course";
+import { Course } from '../core/models/Course';
 import { CourseGame } from '../core/models/CourseGame';
 
 export class InMemoryCourseRepository implements CourseRepository {
