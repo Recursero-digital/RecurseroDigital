@@ -3,6 +3,7 @@ import { DependencyContainer } from '../../config/DependencyContainer';
 import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 import { StudentAlreadyExistsError } from '../../core/models/exceptions/StudentAlreadyExistsError';
 import { GetStudentGamesUseCase } from '../../core/usecases/GetStudentGamesUseCase';
+import { AssignCourseToStudentUseCase } from '../../core/usecases/AssignCourseToStudentUseCase';
 
 interface AddStudentRequest {
     name: string;
@@ -89,3 +90,36 @@ const getMyGames = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const studentController = { addStudent, getMyGames };
+
+export const assignCourseToStudent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { studentId } = req.params as { studentId: string };
+        const { courseId } = req.body as { courseId: string };
+
+        if (!courseId) {
+            res.status(400).json({ error: 'courseId es requerido' });
+            return;
+        }
+
+        const useCase = new AssignCourseToStudentUseCase(
+            dependencyContainer.studentRepository,
+            dependencyContainer.courseRepository
+        );
+
+        await useCase.execute({ studentId, courseId });
+
+        res.status(200).json({ message: 'Curso asignado al estudiante correctamente' });
+    } catch (error: any) {
+        if (error.message === 'Estudiante no encontrado') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error.message === 'Curso no encontrado') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+export const studentExtendedController = { addStudent, getMyGames, assignCourseToStudent };
