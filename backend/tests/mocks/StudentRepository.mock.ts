@@ -24,6 +24,7 @@ export class MockStudentRepository implements StudentRepository {
               student.name,
               student.lastname,
               student.dni,
+              student.courseId,
               user
           );
       }
@@ -38,7 +39,8 @@ export class MockStudentRepository implements StudentRepository {
           studentData.user.passwordHash,
           studentData.name,
           studentData.lastname,
-          studentData.dni
+          studentData.dni,
+          studentData.courseId
       );
       this.students.push(studentEntity);
   }
@@ -56,6 +58,7 @@ export class MockStudentRepository implements StudentRepository {
         student.name,
         student.lastname,
         student.dni,
+        student.courseId,
         user
       );
     });
@@ -75,6 +78,7 @@ export class MockStudentRepository implements StudentRepository {
         student.name,
         student.lastname,
         student.dni,
+        student.courseId,
         user
       );
     }
@@ -91,7 +95,8 @@ export class MockStudentRepository implements StudentRepository {
         studentData.user.passwordHash,
         studentData.name,
         studentData.lastname,
-        studentData.dni
+        studentData.dni,
+        studentData.courseId
       );
     }
   }
