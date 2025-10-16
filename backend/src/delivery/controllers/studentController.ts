@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
 import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 import { StudentAlreadyExistsError } from '../../core/models/exceptions/StudentAlreadyExistsError';
-import { GetStudentGamesUseCase } from '../../core/usecases/GetStudentGamesUseCase';
-import { AssignCourseToStudentUseCase } from '../../core/usecases/AssignCourseToStudentUseCase';
 
 interface AddStudentRequest {
     name: string;
@@ -61,13 +59,7 @@ const getMyGames = async (req: Request, res: Response): Promise<void> => {
 
         const token = authHeader.split(' ')[1];
         
-        const useCase = new GetStudentGamesUseCase(
-            dependencyContainer.tokenService,
-            dependencyContainer.studentRepository,
-            dependencyContainer.courseRepository
-        );
-
-        const result = await useCase.execute({ token });
+        const result = await dependencyContainer.getStudentGamesUseCase.execute({ token });
 
         res.status(200).json(result);
     } catch (error: any) {
@@ -101,12 +93,7 @@ export const assignCourseToStudent = async (req: Request, res: Response): Promis
             return;
         }
 
-        const useCase = new AssignCourseToStudentUseCase(
-            dependencyContainer.studentRepository,
-            dependencyContainer.courseRepository
-        );
-
-        await useCase.execute({ studentId, courseId });
+        await dependencyContainer.assignCourseToStudentUseCase.execute({ studentId, courseId });
 
         res.status(200).json({ message: 'Curso asignado al estudiante correctamente' });
     } catch (error: any) {
