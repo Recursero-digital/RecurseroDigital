@@ -171,18 +171,20 @@ export class PostgreSQLCourseRepository implements CourseRepository {
 
   async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     try {
+      // Primero obtenemos el próximo order_index
+      const orderResult = await this.db.query(
+        'SELECT COALESCE(MAX(order_index) + 1, 0) as next_order FROM courses_games WHERE course_id = $1',
+        [courseId]
+      );
+      const nextOrder = orderResult.rows[0]?.next_order || 0;
+
+      // Luego insertamos el juego al curso
       await this.db.query(
         `INSERT INTO courses_games (id, course_id, game_id, is_enabled, order_index)
-         VALUES (
-           $1,
-           $2,
-           $3,
-           true,
-           COALESCE((SELECT MAX(order_index) + 1 FROM courses_games WHERE course_id = $2), 0)
-         )
+         VALUES ($1, $2, $3, true, $4)
          ON CONFLICT (course_id, game_id)
          DO UPDATE SET is_enabled = EXCLUDED.is_enabled, updated_at = CURRENT_TIMESTAMP`,
-        [courseGameId, courseId, gameId]
+        [courseGameId, courseId, gameId, nextOrder]
       );
     } catch (error) {
       console.error('Error al agregar juego al curso:', error);
