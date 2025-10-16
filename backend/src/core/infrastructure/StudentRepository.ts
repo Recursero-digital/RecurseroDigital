@@ -7,4 +7,5 @@ export interface StudentRepository {
     findById(id: string): Promise<Student | null>;
     updateStudent(studentData: Student): Promise<void>;
     deleteStudent(id: string): Promise<void>;
+    assignCourseToStudent(studentId: string, courseId: string): Promise<void>;
 }

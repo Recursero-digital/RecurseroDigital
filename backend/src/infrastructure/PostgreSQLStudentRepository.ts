@@ -174,4 +174,16 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       throw error;
     }
   }
+
+  async assignCourseToStudent(studentId: string, courseId: string): Promise<void> {
+    try {
+      await this.db.query(
+        `UPDATE students SET course_id = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+        [studentId, courseId]
+      );
+    } catch (error) {
+      console.error('Error al asignar curso a estudiante:', error);
+      throw error;
+    }
+  }
 }

@@ -108,6 +108,13 @@ export class MockStudentRepository implements StudentRepository {
     }
   }
 
+  async assignCourseToStudent(studentId: string, courseId: string): Promise<void> {
+    const student = this.students.find(s => s.id === studentId);
+    if (student) {
+      student.courseId = courseId;
+    }
+  }
+
   clearStudents(): void {
     this.students = [];
   }

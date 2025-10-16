@@ -121,4 +121,22 @@ export class InMemoryStudentRepository implements StudentRepository {
   async clearStudents(): Promise<void> {
     this.students = [];
   }
+
+  async assignCourseToStudent(studentId: string, courseId: string): Promise<void> {
+    const index = this.students.findIndex(s => s.id === studentId);
+    if (index === -1) {
+      throw new Error('Estudiante no encontrado');
+    }
+    const current = this.students[index];
+    this.students[index] = new StudentEntity(
+      current.id,
+      current.userId,
+      current.username,
+      current.passwordHash,
+      current.name,
+      current.lastname,
+      current.dni,
+      courseId
+    );
+  }
 }
