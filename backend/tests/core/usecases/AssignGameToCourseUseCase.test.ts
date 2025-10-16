@@ -43,6 +43,10 @@ class MockCourseRepository implements CourseRepository {
     clearCourseGames(): void {
         this.courseGames = {};
     }
+
+    async assignTeacherToCourse(teacherId: string, courseId: string): Promise<void> {
+        // Mock implementation - no hace nada en el mock
+    }
 }
 
 class MockIdGenerator implements IdGenerator {
