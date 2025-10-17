@@ -1,70 +1,117 @@
 import { useNavigate } from 'react-router-dom';
-import JuegoEscala from '../assets/JuegoEscritura-fontpage.png';
-import JuegoDescoCompo from '../assets/JuegoCompoyDesco-fontpage.png';
-import JuegoEscritura from '../assets/NumeroPalabras-fontpage.png';
-import JuegoOrdenamiento from '../assets/JuegoOrdenamiento-fontpage.png';
+import { useState, useEffect } from 'react';
+import { apiRequest } from '../config/api';
 import '../styles/card.css';
 
-export default function Card() {
-  const navigate = useNavigate();
+export function Card() {
+    const navigate = useNavigate();
+    const [games, setGames] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  const handleJugarOrdenamiento = () => {
-    navigate("/alumno/juegos/ordenamiento");
-  };
+    useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const response = await apiRequest('/api/student/me/games');
+                if (response.ok && response.data && response.data.games) {
+                    const gamesResponse = response.data.games
+                        .map(courseGame => ({
+                            id: courseGame.game.id,
+                            name: courseGame.game.name,
+                            description: courseGame.game.description,
+                            imageUrl: courseGame.game.imageUrl,
+                            route: courseGame.game.route,
+                            difficultyLevel: courseGame.game.difficultyLevel,
+                            orderIndex: courseGame.orderIndex
+                        }));
+                    setGames(gamesResponse);
+                } else {
+                    setGames([]);
+                }
 
-  const handleJugarEscritura = () => {
-    navigate('/alumno/juegos/escritura');
-  };
+                // MOCK TEMPORAL: Simulando respuesta del backend
+                // Esto simula que el alumno tiene acceso a todos los juegos
 
-  const handleJugarDescomposicion = () => {
-    navigate('/alumno/juegos/descomposicion');
-  };
+                // encargarse del apiRequest. mockgames es una respuesta ficticia dle back. Crear la API api/student/games y q el array de games este habilitado para el estudiante.
+                //Debo obtener los juegos del curso del alumno
 
-  const handleJugarEscala = () => {
-    navigate('/alumno/juegos/escala');
-  };
+                //La respuesta del backj es la siguiente:
 
-  return (
-    <>
-      <div className="scroll-container">
-        <div className='contenedor-card'>
-          <div className="card">
-            <img src={JuegoOrdenamiento} alt="Ordenamiento" className="imagegame"/>
-            <div className='textgame'>
-              <h2 className="titlegame">Ordenamiento de Números</h2>  
-              <p className="descriptiongame">¡Aprende a ordenar números de forma divertida! Juega y mejora tus habilidades matemáticas de menor a mayor.</p>
-              <button className="buttongame" onClick={handleJugarOrdenamiento}>Jugar</button>
+                // const mockGames = [
+                //     {
+                //         id: 'game-ordenamiento',
+                //         name: 'Ordenamiento de Números',
+                //         description: '¡Aprende a ordenar números de forma divertida! Juega y mejora tus habilidades matemáticas de menor a mayor.',
+                //         imageUrl: Juego,
+                //         route: '/alumno/juegos/ordenamiento',
+                //         difficultyLevel: 1,
+                //         orderIndex: 1
+                //     },
+                //     {
+                //         id: 'game-escritura',
+                //         name: 'Escribir Números en Palabras',
+                //         description: '¡Aprende a escribir los números en palabras! Arrastra las palabras para formar la respuesta correcta.',
+                //         imageUrl: Juego2,
+                //         route: '/alumno/juegos/escritura',
+                //         difficultyLevel: 1,
+                //         orderIndex: 2
+                //     },
+                //     {
+                //         id: 'game-descomposicion',
+                //         name: 'Descomposición y Composición',
+                //         description: '¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.',
+                //         imageUrl: Juego,
+                //         route: '/alumno/juegos/descomposicion',
+                //         difficultyLevel: 2,
+                //         orderIndex: 3
+                //     },
+                //     {
+                //         id: 'game-escala',
+                //         name: 'Escala Numérica',
+                //         description: '¡Explora los números anteriores y posteriores! Completa secuencias y descubre patrones numéricos.',
+                //         imageUrl: JuegoEscala,
+                //         route: '/alumno/juegos/escala',
+                //         difficultyLevel: 2,
+                //         orderIndex: 4
+                //     }
+                // ];
+                // setGames(mockGames);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al cargar juegos:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchGames();
+    }, []);
+
+    const handleJugar = (route) => {
+        navigate(route);
+    };
+
+    if (loading) {
+        return <div className="container">Cargando juegos...</div>;
+    }
+
+    return (
+        <>
+            <div className="scroll-container">
+                <div className='contenedor-card'>
+                    {games
+                        .sort((a, b) => a.orderIndex - b.orderIndex)
+                        .map((game) => (
+                            <box className="card" key={game.id}>
+                                <img src={game.imageUrl} alt={game.name} className="imagegame"/>
+                                <div className='textgame'>
+                                    <h2 className="titlegame">{game.name}</h2>
+                                    <p className="descriptiongame">{game.description}</p>
+                                    <button className="buttongame" onClick={() => handleJugar(game.route)}>Jugar</button>
+                                </div>
+                            </box>
+                        ))
+                    }
+                </div>
             </div>
-          </div>
-          
-          <div className="card">
-            <img src={JuegoEscritura} alt="Numeros y palabras" className="imagegame"/>
-            <div className='textgame'>
-              <h2 className="titlegame">Escribir Números en Palabras</h2>  
-              <p className="descriptiongame">¡Aprende a escribir los números en palabras! Arrastra las palabras para formar la respuesta correcta.</p>
-              <button className="buttongame" onClick={handleJugarEscritura}>Jugar</button>
-            </div>
-          </div>
-          
-          <div className="card">
-            <img src={JuegoDescoCompo} alt="Descomposicion" className="imagegame"/>
-            <div className='textgame'>
-              <h2 className="titlegame">Descomposición y Composición</h2>  
-              <p className="descriptiongame">¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.</p>
-              <button className="buttongame" onClick={handleJugarDescomposicion}>Jugar</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <img src={JuegoEscala} alt="Escala" className="imagegame"/>
-            <div className='textgame'>
-              <h2 className="titlegame">Escala Numérica</h2>  
-              <p className="descriptiongame">¡Explora los números anteriores y posteriores! Completa secuencias y descubre patrones numéricos.</p>
-              <button className="buttongame" onClick={handleJugarEscala}>Jugar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
+        </>
+    )
 }
