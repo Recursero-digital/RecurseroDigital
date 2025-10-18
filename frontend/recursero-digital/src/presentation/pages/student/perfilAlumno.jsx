@@ -2,7 +2,6 @@ import React, { useMemo, useState, useEffect } from "react";
 import "../../styles/pages/perfilAlumno.css";
 
 export default function PerfilAlumno() {
-  // Lista de avatares disponibles
   const avatarOptions = [
     { id: 1, emoji: "🚀", name: "Explorador Espacial", color: "#7c3aed" },
     { id: 2, emoji: "🦖", name: "Dino Matemático", color: "#10b981" },
@@ -10,7 +9,6 @@ export default function PerfilAlumno() {
     { id: 4, emoji: "🦸‍♀️", name: "Súper Estudiante", color: "#ef4444" }
   ];
 
-  // Estado para el avatar seleccionado
   const [selectedAvatar, setSelectedAvatar] = useState(() => {
     const saved = localStorage.getItem("selectedAvatar");
     return saved ? JSON.parse(saved) : avatarOptions[0];
@@ -18,7 +16,6 @@ export default function PerfilAlumno() {
 
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
-  // Guardar avatar seleccionado en localStorage
   useEffect(() => {
     localStorage.setItem("selectedAvatar", JSON.stringify(selectedAvatar));
   }, [selectedAvatar]);
@@ -169,7 +166,6 @@ export default function PerfilAlumno() {
         </div>
       </div>
 
-      {/* Selector de Avatares */}
       {showAvatarSelector && (
         <div className="avatar-selector-overlay" onClick={() => setShowAvatarSelector(false)}>
           <div className="avatar-selector-modal" onClick={(e) => e.stopPropagation()}>

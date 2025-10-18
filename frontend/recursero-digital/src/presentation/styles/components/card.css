@@ -1,20 +1,31 @@
-/* Reset y prevención de scrolls */
+
 * {
   box-sizing: border-box;
 }
 
-.card {
+.contenedor-card {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  border-radius: 30px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transition: all 0.3s;
-  text-align: center;
-
+  padding: 1.5rem;
+  gap: 2rem;
+  min-height: 200px;
 }
 
 .card:hover {
@@ -27,34 +38,47 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 550px;
-  height: 300px;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  object-fit: cover;
+  width: 220px;
+  height: 170px;
+  border-radius: 15px;
+  flex-shrink: 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-/*.textgame {
+
+.imagegame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.imagegame img:hover {
+  transform: scale(1.05);
+}
+
+.textgame {
   display: flex;
   flex-direction: column;
-  row-gap: 25px;
-  padding-right: 100px;
-  padding-top: 25px;
-}*/
+  gap: 1rem;
+  flex: 1;
+  text-align: left;
+}
 .textgame button {
-  margin: 20px auto;
+  margin: 1rem 0 0 0;
   background: rgba(167, 100, 199, 0.322);
   border: 2px solid rgba(251, 191, 36, 0.3);
   color: rgb(255, 255, 255);
-  border-radius: 2rem;
-  border: none;
-  padding: 15px 40px;
   border-radius: 50px;
-  font-size: 20px;
+  padding: 12px 30px;
+  font-size: 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  text-align: justify;
+  align-self: flex-start;
 }
 .textgame button:hover {
    background: linear-gradient(
@@ -78,71 +102,105 @@
 }
 
 .textgame h2 {
-  font-size: 35px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  font-size: 28px;
+  margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
   color: white;
-  margin-bottom: 25px;
   text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
 }
+
 .textgame p {
-  font-size: 20px;
+  font-size: 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.8;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
+  margin: 0;
 }
 
-/* Responsive design para pantallas pequeñas */
 @media (max-width: 1024px) {
   .contenedor-card {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 0;
+    gap: 1.25rem;
+  }
+  
+  .card {
+    padding: 1.25rem;
     gap: 1.5rem;
-    padding: 1rem;
+  }
+  
+  .imagegame {
+    width: 180px;
+    height: 135px;
   }
 }
 
 @media (max-width: 768px) {
   .contenedor-card {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 15px;
+    padding: 0;
+    gap: 1rem;
   }
 
   .card {
-    max-width: 100%;
-    min-height: 300px;
-    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    gap: 1rem;
+    min-height: auto;
   }
 
   .imagegame {
-    max-width: 200px;
+    width: 200px;
     height: 150px;
-    margin-bottom: 1rem;
+    padding: 8px;
+  }
+
+  .imagegame img {
+    border-radius: 8px;
+  }
+
+  .textgame {
+    text-align: center;
+  }
+
+  .textgame button {
+    align-self: center;
   }
 
   .textgame h2 {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .textgame p {
-    font-size: large;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .contenedor-card {
-    padding: 10px;
-    gap: 1rem;
+    padding: 0;
+    gap: 0.75rem;
   }
 
   .card {
-    padding: 15px;
-    min-height: 280px;
+    padding: 1rem;
+  }
+
+  .imagegame {
+    width: 160px;
+    height: 120px;
+    padding: 6px;
+  }
+
+  .imagegame img {
+    border-radius: 6px;
   }
 
   .textgame h2 {
-    font-size: 24px;
+    font-size: 20px;
+  }
+
+  .textgame p {
+    font-size: 13px;
   }
 }

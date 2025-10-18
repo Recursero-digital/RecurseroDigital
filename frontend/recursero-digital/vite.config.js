@@ -11,8 +11,8 @@ export default defineConfig({
             registerType: 'autoUpdate',
             includeAssets: ['vite.svg', 'robots.txt'],
             manifest: {
-                name: 'Numerix',
-                short_name: 'Numerix',
+                name: 'TecnoMente',
+                short_name: 'TecnoMente',
                 description: 'Plataforma educativa digital de matemáticas',
                 theme_color: '#ffffff',
                 background_color: '#ffffff',

@@ -1,21 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
 
-/* Fondo espacial idéntico al perfil */
-.dashboard {
-  
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
-  flex-direction: row;
 
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  padding: 1rem;
+  min-height: 100vh; 
+  padding: 2rem;
   font-family: "Fredoka", sans-serif;
+  gap: 2rem;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-  box-sizing: border-box;
   background: linear-gradient(
     135deg,
     #0f172a 0%,
@@ -44,18 +39,16 @@
   50% { opacity: 1; }
 }
 
-/* Asegurar que el contenido esté sobre el fondo */
 .dashboard > * {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
 }
 
-/* Específico para las cards en el dashboard */
-.dashboard .contenedor-card {
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
 }

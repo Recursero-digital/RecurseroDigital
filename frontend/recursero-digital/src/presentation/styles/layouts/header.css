@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 
 .app-logo {
-  width: 300px;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .header {
@@ -14,6 +18,8 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   position: relative;
   font-family: "Fredoka", sans-serif;
+  height: 80px;
+  padding: 0 20px;
 }
 
 .header::before {
@@ -36,92 +42,41 @@
 
 .logo {
   display: flex;
-  width: 200px;
-  height: 120px;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 60px;
+  padding: 10px;
+}
+
+.header-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.header-title h1 {
+  font-family: "Fredoka One", cursive;
+  font-size: 32px;
+  color: white;
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(138, 43, 226, 0.8);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
 }
 
 .search-and-mode {
   display: flex;
-  margin-right: 120px;
+  margin-right: 20px;
   align-items: center;
-  gap: 5rem;
   z-index: 1;
   position: relative;
 }
 
-
-
-
-
-/* --- Dark Mode Toggle --- */
-.dark-mode-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.mode-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: white;
-  font-family: "Fredoka", sans-serif;
-  text-shadow: 0 2px 10px rgba(124, 58, 237, 0.5);
-}
-
-/* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(30, 58, 138, 0.3));
-  transition: 0.4s ease;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: 0.4s ease;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-input:checked + .slider {
-  background: linear-gradient(135deg, #7c3aed, #1e3a8a);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.slider:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
 
 .boton-cerrar {
   flex-shrink: 0;
@@ -148,4 +103,65 @@ input:checked + .slider:before {
   background: linear-gradient(135deg, #f87171, #ef4444);
   transform: translateY(-2px);
   box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header {
+    height: 70px;
+    padding: 0 15px;
+  }
+  
+  .logo {
+    width: 60px;
+    height: 50px;
+    padding: 5px;
+  }
+  
+  .app-logo {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .search-and-mode {
+    margin-right: 10px;
+  }
+  
+  .header-title h1 {
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+  
+  .cerrar-sesion {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 60px;
+    padding: 0 10px;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 40px;
+    padding: 5px;
+  }
+  
+  .app-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header-title h1 {
+    font-size: 20px;
+    letter-spacing: 0.5px;
+  }
+  
+  .cerrar-sesion {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
 }

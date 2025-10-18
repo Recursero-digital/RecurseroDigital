@@ -4,11 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  height: 100%; 
   padding: 2rem;
   font-family: "Fredoka", sans-serif;
   gap: 2rem;
   position: relative;
+  overflow-y: auto; 
+  overflow-x: hidden;
   background: linear-gradient(
     135deg,
     #0f172a 0%,
@@ -37,7 +39,7 @@
   50% { opacity: 1; }
 }
 
-/* Header del perfil */
+
 .perfil-header {
   display: flex;
   align-items: center;
@@ -136,12 +138,6 @@
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
 }
 
-
-
-
-
-
-/* Estadísticas de juegos */
 .games-stats {
   width: 100%;
   max-width: 1000px;
@@ -163,6 +159,25 @@
   margin-bottom: 2rem;
 }
 
+.perfil-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.perfil-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.perfil-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+}
+
+.perfil-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
 .card-game {
   transition: all 0.4s ease;
   position: relative;
@@ -177,8 +192,6 @@
   text-align: center;
   
 }
-
-
 
 .card-game::after {
   content: '';
@@ -202,8 +215,6 @@
   text-align: center;
   margin-bottom: 1.5rem;
 }
-
-
 
 .game-title {
   font-size: 1.6rem;
@@ -256,10 +267,12 @@
   font-size: 1.3rem;
 }
 
-
-
-/* Responsive */
 @media (max-width: 768px) {
+  .perfil-container {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
   .perfil-header {
     flex-direction: column;
     text-align: center;
@@ -279,7 +292,6 @@
   }
 }
 
-/* Avatar System Styles */
 .avatar-container {
   position: relative;
   cursor: pointer;
@@ -329,7 +341,6 @@
   box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
 }
 
-/* Avatar Selector Modal */
 .avatar-selector-overlay {
   position: fixed;
   top: 0;
@@ -539,7 +550,7 @@
   box-shadow: 0 8px 25px rgba(107, 114, 128, 0.5);
 }
 
-/* Responsive Design for Avatar System */
+
 @media (max-width: 768px) {
   .emoji-avatar {
     font-size: 4rem;
