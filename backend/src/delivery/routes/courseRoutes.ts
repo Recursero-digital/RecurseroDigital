@@ -5,7 +5,7 @@ import { protectAdminRoute, protectTeacherOrAdminRoute } from '../middleware/aut
 const router: Router = express.Router();
 
 router.post('/:courseId/game', protectAdminRoute(), courseController.addGameToCourse);
-router.get('/:courseId/students', protectTeacherOrAdminRoute(), courseController.getCourseStudents);
+router.get('/:courseId/students', courseController.getCourseStudents);
 // POST /api/courses { name }
 router.post('/', protectAdminRoute(), courseController.createCourse);
 
