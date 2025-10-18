@@ -20,11 +20,12 @@
   min-height: 100vh; /* Ocupa toda la altura */
   background: linear-gradient(
     135deg,
-    #0f172a 0%,
-    #1e293b 25%,
-    #334155 50%,
-    #1e3a8a 75%,
-    #7c3aed 100%
+    #1e3a8a 0%,
+    #3b82f6 20%,
+    #6366f1 40%,
+    #8b5cf6 60%,
+    #7c3aed 80%,
+    #5b21b6 100%
   );
   position: relative;
   max-width: 100%;
@@ -82,13 +83,12 @@
   display: flex;
   flex-direction: row;
   gap: 3rem;
-  margin-right: 40px;
-  justify-content: space-between;
-  
+  justify-content: center;
+  align-items: center;
 }
 
 .role-card {
-  background: white;
+  background: #fffefa;
   border-radius: 1rem;
   padding:25px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
