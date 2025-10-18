@@ -1,0 +1,148 @@
+/* Reset y prevención de scrolls */
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+  text-align: center;
+
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 70px rgba(138, 43, 226, 0.4);
+  border-color: rgba(138, 43, 226, 0.5);
+}
+
+.imagegame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 550px;
+  height: 300px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  object-fit: cover;
+}
+/*.textgame {
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  padding-right: 100px;
+  padding-top: 25px;
+}*/
+.textgame button {
+  margin: 20px auto;
+  background: rgba(167, 100, 199, 0.322);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  color: rgb(255, 255, 255);
+  border-radius: 2rem;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  text-align: justify;
+}
+.textgame button:hover {
+   background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.2) 0%,
+    rgba(251, 191, 36, 0.1) 100%
+  );
+  border-color: rgba(251, 191, 36, 0.6);
+  color: rgb(255, 255, 255);
+}
+.buttongame:after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 20px;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(30deg);
+  transition: all 0.5s;
+}
+
+.textgame h2 {
+  font-size: 35px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 25px;
+  text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+}
+.textgame p {
+  font-size: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive design para pantallas pequeñas */
+@media (max-width: 1024px) {
+  .contenedor-card {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contenedor-card {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 15px;
+  }
+
+  .card {
+    max-width: 100%;
+    min-height: 300px;
+    padding: 20px;
+  }
+
+  .imagegame {
+    max-width: 200px;
+    height: 150px;
+    margin-bottom: 1rem;
+  }
+
+  .textgame h2 {
+    font-size: 28px;
+  }
+
+  .textgame p {
+    font-size: large;
+  }
+}
+
+@media (max-width: 480px) {
+  .contenedor-card {
+    padding: 10px;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 15px;
+    min-height: 280px;
+  }
+
+  .textgame h2 {
+    font-size: 24px;
+  }
+}

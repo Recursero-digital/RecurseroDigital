@@ -1,19 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/login";
-import LoginForm from "./pages/LoginForm";
-import HomeAlumno from "./pages/homeAlumno";
-import HomeDocente from "./pages/homeDocente";
-import TeacherStudents from "./pages/TeacherStudents";
-import TeacherGames from "./pages/TeacherGames";
-import MainLayout from "./layouts/MainLayout";
+import Login from "./presentation/pages/auth/login";
+import LoginForm from "./presentation/pages/auth/LoginForm";
+import HomeAlumno from "./presentation/pages/student/homeAlumno";
+import HomeDocente from "./presentation/pages/teacher/homeDocente";
+import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
+import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
+import TeacherGames from "./presentation/pages/teacher/TeacherGames";
+import MainLayout from "./presentation/layouts/MainLayout";
 //import DocenteConCurso from "./pages/docenteConCurso";
-import JuegoOrdenamiento from "./components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx";
-import JuegoEscritura from "./components/games/JuegoEscritura/JuegoEscritura.jsx";
-import DashboardAlumno from "./pages/DashboardAlumno.jsx";
-import PerfilAlumno from "./pages/perfilAlumno.jsx";
-import JuegoDescomposicion from './components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
-import JuegoEscala from './components/games/JuegoEscala/JuegoEscala.jsx';
+import JuegoOrdenamiento from "./presentation/components/games/JuegoOrdenamiento/JuegoOrdenamiento.jsx";
+import JuegoEscritura from "./presentation/components/games/JuegoEscritura/JuegoEscritura.jsx";
+import DashboardAlumno from "./presentation/pages/student/DashboardAlumno.jsx";
+import PerfilAlumno from "./presentation/pages/student/perfilAlumno.jsx";
+import JuegoDescomposicion from './presentation/components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
+import JuegoEscala from './presentation/components/games/JuegoEscala/JuegoEscala.jsx';
 
 function App() {
   return (
@@ -31,9 +32,13 @@ function App() {
         />
         <Route
           path="/docente"
+          element={<HomeDocente />}
+        />
+        <Route
+          path="/docente/dashboard"
           element={
             <MainLayout userRole="docente">
-              <HomeDocente />
+              <DocenteDashboard />
             </MainLayout>
           }
         />

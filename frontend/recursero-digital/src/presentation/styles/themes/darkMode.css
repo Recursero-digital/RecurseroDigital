@@ -1,0 +1,310 @@
+/* Variables CSS para modo oscuro azul */
+.dark-mode {
+  --primary-bg-color: #0f172a;
+  --secondary-bg-color: #1e293b;
+  --tertiary-bg-color: #334155;
+  --text-color: #ffffff;
+  --text-secondary: #cbd5e1;
+  --placeholder-color: #94a3b8;
+  --border-color: #475569;
+  --accent-color: #7c3aed;
+  --accent-hover: #8b5cf6;
+}
+
+/* Aplicar modo oscuro al body */
+.dark-mode body {
+  background: linear-gradient(135deg, var(--primary-bg-color), var(--secondary-bg-color));
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+/* Header en modo oscuro */
+.dark-mode .header {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.dark-mode .app-logo {
+  filter: brightness(1.2);
+}
+
+/* Search bar en modo oscuro */
+.dark-mode .search-bar {
+  background: rgba(51, 65, 85, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(124, 58, 237, 0.4);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
+}
+
+.dark-mode .search-bar:hover {
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 12px 35px rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .search-bar input {
+  color: var(--text-color);
+}
+
+.dark-mode .search-bar input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.dark-mode .search-bar button {
+  background: linear-gradient(135deg, var(--accent-color), #1e3a8a);
+  color: white;
+}
+
+.dark-mode .search-bar button:hover {
+  background: linear-gradient(135deg, var(--accent-hover), #3b82f6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+/* Dark mode toggle en modo oscuro */
+.dark-mode .mode-text {
+  color: var(--text-color);
+}
+
+.dark-mode .slider {
+  background-color: var(--tertiary-bg-color);
+}
+
+.dark-mode .slider:before {
+  background-color: var(--accent-color);
+}
+
+.dark-mode input:checked + .slider {
+  background-color: var(--accent-color);
+}
+
+/* Botón cerrar sesión en modo oscuro */
+.dark-mode .cerrar-sesion {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.dark-mode .cerrar-sesion:hover {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+}
+
+/* Layout en modo oscuro */
+.dark-mode .main-layout {
+  background: linear-gradient(135deg, var(--primary-bg-color), var(--secondary-bg-color));
+}
+
+.dark-mode .main-content {
+  background: transparent;
+  color: var(--text-color);
+}
+
+/* Cards en modo oscuro */
+.dark-mode .contenedor-card {
+  background: transparent;
+}
+
+.dark-mode .card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(124, 58, 237, 0.3);
+  color: var(--text-color);
+  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.2);
+}
+
+.dark-mode .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), #3b82f6, #10b981);
+  border-radius: 15px 15px 0 0;
+}
+
+.dark-mode .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(124, 58, 237, 0.4);
+  border-color: rgba(124, 58, 237, 0.6);
+}
+
+.dark-mode .titlegame {
+  color: var(--text-color);
+}
+
+.dark-mode .descriptiongame {
+  color: var(--text-secondary);
+}
+
+.dark-mode .buttongame {
+  background: linear-gradient(135deg, var(--accent-color), #1e3a8a);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .buttongame:hover {
+  background: linear-gradient(135deg, var(--accent-hover), #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+}
+
+/* NavBar en modo oscuro - Alumno */
+.dark-mode .navbar.alumno {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.dark-mode .navbar.alumno .tab-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border: 2px solid rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .navbar.alumno .tab-button:hover {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--text-color);
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .navbar.alumno .tab-button.active {
+  background: linear-gradient(135deg, var(--accent-color), #1e3a8a);
+  color: white;
+  border-color: var(--accent-color);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+}
+
+/* NavBar en modo oscuro - Docente */
+.dark-mode .navbar.docente {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(25px);
+  border-top: 2px solid rgba(37, 99, 235, 0.5);
+  box-shadow: 0 -8px 32px rgba(37, 99, 235, 0.4);
+}
+
+.dark-mode .navbar.docente .tab-button {
+  background: rgba(37, 99, 235, 0.2);
+  color: #e0f2fe;
+  border: 2px solid rgba(37, 99, 235, 0.5);
+  text-shadow: 0 2px 8px rgba(37, 99, 235, 0.7);
+}
+
+.dark-mode .navbar.docente .tab-button:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), rgba(59, 130, 246, 0.3));
+  color: white;
+  border-color: rgba(37, 99, 235, 0.8);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+}
+
+.dark-mode .navbar.docente .tab-button.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border-color: #1e40af;
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.6);
+}
+
+/* Scrollbar específica para contenedores en modo oscuro */
+.dark-mode .scroll-container {
+  scrollbar-color: var(--tertiary-bg-color) var(--secondary-bg-color);
+}
+
+.dark-mode .scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dark-mode .scroll-container::-webkit-scrollbar-track {
+  background: var(--secondary-bg-color);
+  border-radius: 3px;
+}
+
+.dark-mode .scroll-container::-webkit-scrollbar-thumb {
+  background: var(--tertiary-bg-color);
+  border-radius: 3px;
+}
+
+.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Scrollbar específica para juegos en modo oscuro */
+.dark-mode .game-container::-webkit-scrollbar,
+.dark-mode .chalkboard::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-mode .game-container::-webkit-scrollbar-track,
+.dark-mode .chalkboard::-webkit-scrollbar-track {
+  background: var(--secondary-bg-color);
+}
+
+.dark-mode .game-container::-webkit-scrollbar-thumb,
+.dark-mode .chalkboard::-webkit-scrollbar-thumb {
+  background: var(--tertiary-bg-color);
+  border-radius: 4px;
+}
+
+.dark-mode .game-container::-webkit-scrollbar-thumb:hover,
+.dark-mode .chalkboard::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Perfil de Alumno en modo oscuro */
+.dark-mode .perfil-container {
+  background: linear-gradient(135deg, var(--primary-bg-color), var(--secondary-bg-color));
+}
+
+.dark-mode .perfil-header {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .game-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(124, 58, 237, 0.3);
+  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.2);
+}
+
+.dark-mode .game-card:hover {
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 25px 50px rgba(124, 58, 237, 0.4);
+}
+
+.dark-mode .avatar-selector-overlay {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(15px);
+}
+
+.dark-mode .avatar-selector-modal {
+  background: rgba(30, 41, 59, 0.9);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(124, 58, 237, 0.4);
+}
+
+.dark-mode .avatar-option {
+  background: rgba(51, 65, 85, 0.6);
+  border: 2px solid rgba(124, 58, 237, 0.3);
+}
+
+.dark-mode .avatar-option:hover {
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 15px 30px rgba(124, 58, 237, 0.4);
+}
+
+.dark-mode .avatar-option.selected {
+  background: rgba(124, 58, 237, 0.4);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
+}
+
+/* Transiciones suaves */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
