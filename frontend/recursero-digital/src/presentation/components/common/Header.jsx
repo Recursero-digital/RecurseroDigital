@@ -1,9 +1,9 @@
 
-import Logo from '../../../assets/logo1.png';
+import Logo from '../../../assets/Logo.png';
 import '../../styles/layouts/header.css';
-import '../../styles/themes/darkMode.css';
 import { useNavigate } from 'react-router-dom';
-export function Header({ isDarkMode, toggleDarkMode }) {
+
+export function Header() {
   const navigate = useNavigate();
 
   const handleCerrarSesion = () => {
@@ -13,15 +13,11 @@ export function Header({ isDarkMode, toggleDarkMode }) {
     return (
       <header className="header">
        <div className="logo">
-        <img src={Logo} alt="Recursera Digital" className='app-logo' /></div>
-        <div className="search-and-mode">
-        <div className="dark-mode-toggle">
-          <span className="mode-text">Modo Oscuro</span>
-          <label className="switch">
-            <input type="checkbox" checked={isDarkMode} onChange={toggleDarkMode} />
-            <span className="slider round"></span>
-          </label>
+        <img src={Logo} alt="TecnoMente" className='app-logo' /></div>
+        <div className="header-title">
+          <h1>TecnoMente</h1>
         </div>
+        <div className="search-and-mode">
         <div className='boton-cerrar'>
           <button className='cerrar-sesion' onClick={handleCerrarSesion}>Cerrar Sesion</button>
         </div>

@@ -3,15 +3,12 @@ import { NavBar } from "../components/common/NavBar";
 import { Header } from "../components/common/Header";
 import { useLocation } from "react-router-dom";
 import "../styles/layouts/layout.css";
-import "../styles/themes/darkMode.css";
 
 
 export default function MainLayout({ children, userRole = "alumno" }) {
   const [activeTab, setActiveTab] = useState("home");
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
 
-  // Detectar automáticamente qué tab debe estar activo basado en la URL
   useEffect(() => {
     const path = location.pathname;
     
@@ -25,17 +22,6 @@ export default function MainLayout({ children, userRole = "alumno" }) {
       setActiveTab("home");
     }
   }, [location.pathname]);
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [isDarkMode]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   const tabs = userRole === "alumno" 
     ? [
@@ -51,8 +37,8 @@ export default function MainLayout({ children, userRole = "alumno" }) {
       ];
 
   return (
-    <div className={`main-layout ${isDarkMode ? 'dark-mode' : ''}`}>
-      <Header isDarkMode={isDarkMode} toggleDarkMode={() => toggleDarkMode()} />
+    <div className="main-layout">
+      <Header />
       <NavBar 
         tabs={tabs} 
         activeTab={activeTab} 

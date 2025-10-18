@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/login.css"
 import { PiStudentFill } from "react-icons/pi";
-import Logo1 from '../../../assets/logo1.png';
+import Logo from '../../../assets/Logo.png';
 
 
 export default function RoleSelection() {
@@ -15,7 +15,7 @@ export default function RoleSelection() {
       <div className="role-selection-container">
       <div className="role-selection-content">
         <div className="header-section">
-          <img src={Logo1} alt="Recursera Digital" className="logo-image" />
+          <img src={Logo} alt="TecnoMente" className="logo-image" />
 
         </div>
 

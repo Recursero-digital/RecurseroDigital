@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { apiRequest } from '../../../infrastructure/config/api';
+//import { apiRequest } from '../../../infrastructure/config/api';
 import '../../styles/components/card.css';
-import Juego from '../../../assets/JuegoOrdenamiento-fontpage.png';
-import Juego2 from '../../../assets/JuegoEscritura-fontpage.png';
-import JuegoEscala from '../../../assets/juegoEsc.png';
+import JuegoOrdenamiento from '../../../assets/JuegoOrdenamiento-fontpage.png';
+import JuegoEscritura from '../../../assets/JuegoEscritura-fontpage.png';
+import JuegoCompoyDesco from '../../../assets/JuegoCompoyDesco-fontpage.png';
+import NumeroPalabras from '../../../assets/NumeroPalabras-fontpage.png';
 
 export function Card() {
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ export function Card() {
                         id: 'game-ordenamiento',
                         name: 'Ordenamiento de Números',
                         description: '¡Aprende a ordenar números de forma divertida! Juega y mejora tus habilidades matemáticas de menor a mayor.',
-                        imageUrl: Juego,
+                        imageUrl: JuegoOrdenamiento,
                         route: '/alumno/juegos/ordenamiento',
                         difficultyLevel: 1,
                         orderIndex: 1
@@ -53,25 +54,25 @@ export function Card() {
                         id: 'game-escritura',
                         name: 'Escribir Números en Palabras',
                         description: '¡Aprende a escribir los números en palabras! Arrastra las palabras para formar la respuesta correcta.',
-                        imageUrl: Juego2,
+                        imageUrl: NumeroPalabras,
                         route: '/alumno/juegos/escritura',
                         difficultyLevel: 1,
                         orderIndex: 2
                     },
                     {
                         id: 'game-descomposicion',
-                        name: 'Descomposición y Composición',
+                        name: 'Arma la Descomposición y Composición de los numeros',
                         description: '¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.',
-                        imageUrl: Juego,
+                        imageUrl: JuegoCompoyDesco,
                         route: '/alumno/juegos/descomposicion',
                         difficultyLevel: 2,
                         orderIndex: 3
                     },
                     {
                         id: 'game-escala',
-                        name: 'Escala Numérica',
+                        name: 'Escribí el número anterior y el posterior',
                         description: '¡Explora los números anteriores y posteriores! Completa secuencias y descubre patrones numéricos.',
-                        imageUrl: JuegoEscala,
+                        imageUrl: JuegoEscritura,
                         route: '/alumno/juegos/escala',
                         difficultyLevel: 2,
                         orderIndex: 4
@@ -98,22 +99,20 @@ export function Card() {
 
     return (
         <>
-            <div className="scroll-container">
-                <div className='contenedor-card'>
-                    {games
-                        .sort((a, b) => a.orderIndex - b.orderIndex)
-                        .map((game) => (
-                            <box className="card" key={game.id}>
-                                <img src={game.imageUrl} alt={game.name} className="imagegame"/>
-                                <div className='textgame'>
-                                    <h2 className="titlegame">{game.name}</h2>
-                                    <p className="descriptiongame">{game.description}</p>
-                                    <button className="buttongame" onClick={() => handleJugar(game.route)}>Jugar</button>
-                                </div>
-                            </box>
-                        ))
-                    }
-                </div>
+            <div className='contenedor-card'>
+                {games
+                    .sort((a, b) => a.orderIndex - b.orderIndex)
+                    .map((game) => (
+                        <box className="card" key={game.id}>
+                            <img src={game.imageUrl} alt={game.name} className="imagegame"/>
+                            <div className='textgame'>
+                                <h2 className="titlegame">{game.name}</h2>
+                                <p className="descriptiongame">{game.description}</p>
+                                <button className="buttongame" onClick={() => handleJugar(game.route)}>Jugar</button>
+                            </div>
+                        </box>
+                    ))
+                }
             </div>
         </>
     )

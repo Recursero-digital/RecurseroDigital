@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiRequest, AUTH_ENDPOINTS } from "../../../infrastructure/config/api";
 import "../../styles/pages/loginForm.css";
-import Logo1 from '../../../assets/logo1.png';
+import Logo from '../../../assets/Logo.png';
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -57,8 +57,8 @@ export default function LoginForm() {
     <div className="login-form-container">
       <div className="login-form-content">
         <div className="header-section">
-          <img src={Logo1} alt="Recursera Digital" className="imagen-logo" />
-          <h1 className="titulo">¡Recursero Digital!</h1>
+          <img src={Logo} alt="TecnoMente" className="imagen-logo" />
+          <h1 className="titulo">¡TecnoMente!</h1>
           <p className="subtitulo">Inicia sesión para continuar</p>
         </div>
 
