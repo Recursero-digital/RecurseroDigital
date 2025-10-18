@@ -3,8 +3,8 @@ import { loginController } from '../controllers/loginController';
 
 const router: Router = express.Router();
 
-router.post('/login/teacher', loginController.loginTeacher);
-router.post('/login/student', loginController.loginStudent);
-router.post('/login/admin', loginController.loginAdmin);
+router.post('/teacher', loginController.loginTeacher);
+router.post('/student', loginController.loginStudent);
+router.post('/admin', loginController.loginAdmin);
 
 export default router;

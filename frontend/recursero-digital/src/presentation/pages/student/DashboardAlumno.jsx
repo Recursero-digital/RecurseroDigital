@@ -1,4 +1,4 @@
-import Card from "../../components/common/Card";
+import { Card } from "../../components/common/Card";
 import "../../styles/pages/dashboardAlumno.css";
 
 function DashboardAlumno() {

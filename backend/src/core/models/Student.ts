@@ -5,6 +5,7 @@ export class Student {
     name: string;
     lastname: string;
     dni: string;
+    courseId: string | null;
     user: User;
 
     constructor(
@@ -12,12 +13,14 @@ export class Student {
         name: string,
         lastname: string,
         dni: string,
+        courseId: string | null,
         user: User
     ) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.dni = dni;
+        this.courseId = courseId;
         this.user = user;
     }
 
@@ -31,5 +34,9 @@ export class Student {
 
     getRole(): UserRole {
         return this.user.role;
+    }
+
+    getCourseId(): string | null {
+        return this.courseId;
     }
 }

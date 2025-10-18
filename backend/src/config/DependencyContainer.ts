@@ -18,13 +18,16 @@ import { User, UserRole } from '../core/models/User';
 import { Admin } from '../core/models/Admin';
 import { Teacher } from '../core/models/Teacher';
 import { Student } from '../core/models/Student';
+import { PostgreSQLStudentStatisticsRepository } from '../infrastructure/PostgreSQLStudentStatisticsRepository';
+import { InMemoryStudentStatisticsRepository } from '../infrastructure/InMemoryStudentStatisticsRepository';
+import { SaveGameStatisticsUseCase } from '../core/usecases/SaveGameStatisticsUseCase';
+import { GetStudentProgressUseCase } from '../core/usecases/GetStudentProgressUseCase';
+import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseCase';
+import { GetStudentGamesUseCase } from '../core/usecases/GetStudentGamesUseCase';
+import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStudentUseCase';
+import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 
 
-
-/**
- * Contenedor simple de dependencias
- * Centraliza la creación de instancias para mantener la separación de responsabilidades
- */
 export class DependencyContainer {
     private static instance: DependencyContainer;
     
@@ -32,6 +35,7 @@ export class DependencyContainer {
     private _studentRepository: PostgreSQLStudentRepository | InMemoryStudentRepository | null = null;
     private _adminRepository: PostgreSQLAdminRepository | InMemoryAdminRepository | null = null;
     private _courseRepository: PostgreSQLCourseRepository | InMemoryCourseRepository | null = null;
+    private _statisticsRepository: PostgreSQLStudentStatisticsRepository | InMemoryStudentStatisticsRepository | null = null;
     private _databaseConnection: DatabaseConnection | null = null;
     private _passwordEncoder: BcryptPasswordEncoder | null = null;
     private _tokenService: JWTTokenService | null = null;
@@ -40,10 +44,15 @@ export class DependencyContainer {
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
     private _addStudentUseCase: AddStudentUseCase | null = null;
+    private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
+    private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
+    private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
+    private _assignTeacherToCoursesUseCase: AssignTeacherToCoursesUseCase | null = null;
+    private _getStudentGamesUseCase: GetStudentGamesUseCase | null = null;
+    private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
 
 
     private constructor() {
-        // Solo inicializar base de datos si no estamos en modo test
         if (process.env.NODE_ENV !== 'test') {
             this.initializeDatabase();
         }
@@ -110,6 +119,17 @@ export class DependencyContainer {
             }
         }
         return this._courseRepository;
+    }
+
+    public get statisticsRepository(): PostgreSQLStudentStatisticsRepository | InMemoryStudentStatisticsRepository {
+        if (!this._statisticsRepository) {
+            if (process.env.NODE_ENV === 'test') {
+                this._statisticsRepository = new InMemoryStudentStatisticsRepository();
+            } else {
+                this._statisticsRepository = new PostgreSQLStudentStatisticsRepository();
+            }
+        }
+        return this._statisticsRepository;
     }
 
     public get databaseConnection(): DatabaseConnection {
@@ -184,6 +204,64 @@ export class DependencyContainer {
         return this._addStudentUseCase;
     }
 
+    public get saveGameStatisticsUseCase(): SaveGameStatisticsUseCase {
+        if (!this._saveGameStatisticsUseCase) {
+            this._saveGameStatisticsUseCase = new SaveGameStatisticsUseCase(
+                this.statisticsRepository,
+                this.uuidGenerator
+            );
+        }
+        return this._saveGameStatisticsUseCase;
+    }
+
+    public get getStudentProgressUseCase(): GetStudentProgressUseCase {
+        if (!this._getStudentProgressUseCase) {
+            this._getStudentProgressUseCase = new GetStudentProgressUseCase(
+                this.statisticsRepository
+            );
+        }
+        return this._getStudentProgressUseCase;
+    }
+
+    public get getGameStatisticsUseCase(): GetGameStatisticsUseCase {
+        if (!this._getGameStatisticsUseCase) {
+            this._getGameStatisticsUseCase = new GetGameStatisticsUseCase(
+                this.statisticsRepository
+            );
+        }
+        return this._getGameStatisticsUseCase;
+    }
+
+    public get getStudentGamesUseCase(): GetStudentGamesUseCase {
+        if (!this._getStudentGamesUseCase) {
+            this._getStudentGamesUseCase = new GetStudentGamesUseCase(
+                this.tokenService,
+                this.studentRepository,
+                this.courseRepository
+            );
+        }
+        return this._getStudentGamesUseCase;
+    }
+
+    public get assignCourseToStudentUseCase(): AssignCourseToStudentUseCase {
+        if (!this._assignCourseToStudentUseCase) {
+            this._assignCourseToStudentUseCase = new AssignCourseToStudentUseCase(
+                this.studentRepository,
+                this.courseRepository
+            );
+        }
+        return this._assignCourseToStudentUseCase;
+    }
+
+    public get assignTeacherToCoursesUseCase(): AssignTeacherToCoursesUseCase {
+        if (!this._assignTeacherToCoursesUseCase) {
+            this._assignTeacherToCoursesUseCase = new AssignTeacherToCoursesUseCase(
+                this.courseRepository,
+                this.teacherRepository
+            );
+        }
+        return this._assignTeacherToCoursesUseCase;
+    }
 
     public async clearAllData(): Promise<void> {
         if (process.env.NODE_ENV === 'test') {
@@ -191,8 +269,7 @@ export class DependencyContainer {
             await (this.studentRepository as InMemoryStudentRepository).clearStudents();
             await (this.adminRepository as InMemoryAdminRepository).clearAdmins();
             await (this.courseRepository as InMemoryCourseRepository).clearCourses();
-
-
+            await (this.statisticsRepository as InMemoryStudentStatisticsRepository).clearStatistics();
 
             await this.initializeTestData();
         }
@@ -225,7 +302,7 @@ export class DependencyContainer {
             '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6',
             UserRole.STUDENT
         );
-        const student = new Student('1', 'Nicolás', 'García', '12345678', studentUser);
+        const student = new Student('1', 'Nicolás', 'García', '12345678', null, studentUser);
         await (testContainer.studentRepository as InMemoryStudentRepository).addStudent(student);
 
         // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({

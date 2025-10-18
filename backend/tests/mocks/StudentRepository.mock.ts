@@ -24,6 +24,7 @@ export class MockStudentRepository implements StudentRepository {
               student.name,
               student.lastname,
               student.dni,
+              student.courseId,
               user
           );
       }
@@ -38,7 +39,8 @@ export class MockStudentRepository implements StudentRepository {
           studentData.user.passwordHash,
           studentData.name,
           studentData.lastname,
-          studentData.dni
+          studentData.dni,
+          studentData.courseId
       );
       this.students.push(studentEntity);
   }
@@ -56,6 +58,7 @@ export class MockStudentRepository implements StudentRepository {
         student.name,
         student.lastname,
         student.dni,
+        student.courseId,
         user
       );
     });
@@ -75,6 +78,7 @@ export class MockStudentRepository implements StudentRepository {
         student.name,
         student.lastname,
         student.dni,
+        student.courseId,
         user
       );
     }
@@ -91,7 +95,8 @@ export class MockStudentRepository implements StudentRepository {
         studentData.user.passwordHash,
         studentData.name,
         studentData.lastname,
-        studentData.dni
+        studentData.dni,
+        studentData.courseId
       );
     }
   }
@@ -100,6 +105,13 @@ export class MockStudentRepository implements StudentRepository {
     const index = this.students.findIndex(s => s.id === id);
     if (index !== -1) {
       this.students.splice(index, 1);
+    }
+  }
+
+  async assignCourseToStudent(studentId: string, courseId: string): Promise<void> {
+    const student = this.students.find(s => s.id === studentId);
+    if (student) {
+      student.courseId = courseId;
     }
   }
 

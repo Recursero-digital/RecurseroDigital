@@ -3,6 +3,9 @@ import cors from "cors";
 import loginRoutes from '../delivery/routes/loginRoutes';
 import logoutRoutes from '../delivery/routes/logoutRoutes';
 import studentRoutes from '../delivery/routes/studentRoutes';
+import statisticsRoutes from '../delivery/routes/statisticsRoutes';
+import courseRoutes from '../delivery/routes/courseRoutes';
+import teacherRoutes from "../delivery/routes/teacherRoutes";
 
 const app: Application = express();
 
@@ -17,9 +20,12 @@ app.use(cors({
 
 
 app.use(express.json());
-app.use("/", loginRoutes);
-app.use("/", logoutRoutes);
-app.use("/", studentRoutes);
+app.use("/api/login", loginRoutes);
+app.use("/api/logout", logoutRoutes);
+app.use("/api/student", studentRoutes);
+app.use("/api/teacher", teacherRoutes);
+app.use("/api/statistics", statisticsRoutes);
+app.use("/api/course", courseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");

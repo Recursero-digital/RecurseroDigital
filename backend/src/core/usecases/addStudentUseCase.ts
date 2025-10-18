@@ -74,6 +74,7 @@ export class AddStudentUseCase {
             request.name,
             request.lastName,
             request.dni,
+            null,
             user
         )
 
