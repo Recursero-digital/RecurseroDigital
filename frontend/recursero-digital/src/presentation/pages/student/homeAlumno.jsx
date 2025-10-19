@@ -1,10 +1,7 @@
 import { useMemo } from "react";
 import "../../styles/pages/homeAlumno.css";
-import { useNavigate } from "react-router-dom";
-import { IoLogoGameControllerA } from "react-icons/io";
 
 export default function HomeAlumno() {
-  const navigate = useNavigate();
 
   const userNameOrEmail = useMemo(() => {
     const storedEmail = localStorage.getItem("userEmail");
@@ -36,10 +33,6 @@ export default function HomeAlumno() {
           ¡Comienza tu aventura en las matemáticas ¡Hoy mismo!
         </h3>
       </section>
-      <button className="botonJugar" onClick={() => navigate("/alumno/juegos")}>
-        <IoLogoGameControllerA />
-        Ir a Jugar
-      </button>
     </div>
   );
 }
