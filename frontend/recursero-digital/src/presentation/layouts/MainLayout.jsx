@@ -45,7 +45,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
         onTabChange={setActiveTab}
         userRole={userRole}
       />
-      <main className="main-content">
+      <main className="main-content bg-space bg-space-gradient bg-stars scrollbar-space">
         {children}
       </main>
     </div>

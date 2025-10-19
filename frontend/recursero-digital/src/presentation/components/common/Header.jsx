@@ -11,7 +11,7 @@ export function Header() {
   };
 
     return (
-      <header className="header">
+      <header className="header bg-space-ui bg-stars-ui">
        <div className="logo">
         <img src={Logo} alt="TecnoMente" className='app-logo' /></div>
         <div className="header-title">

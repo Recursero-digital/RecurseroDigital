@@ -54,7 +54,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="login-form-container">
+    <div className="login-form-container bg-space bg-space-gradient bg-stars">
       <div className="login-form-content">
         <div className="header-section">
           <img src={Logo} alt="TecnoMente" className="imagen-logo" />
