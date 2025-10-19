@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMyCourseDetails } from "../../../infrastructure/adapters/api/teacherApi";
 import "../../styles/pages/docenteDashboard.css";
 
 export default function DocenteDashboard() {
@@ -10,22 +11,43 @@ export default function DocenteDashboard() {
     juegosActivos: 0,
     progresoPromedio: 0
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Cargar curso seleccionado desde localStorage
-    const cursoGuardado = localStorage.getItem('cursoSeleccionado');
-    if (cursoGuardado) {
-      setCursoActual(JSON.parse(cursoGuardado));
-      // Simular carga de estadísticas
-      setEstadisticas({
-        totalEstudiantes: 25,
-        juegosActivos: 6,
-        progresoPromedio: 78
-      });
-    } else {
-      // Si no hay curso seleccionado, redirigir a selección
-      navigate('/docente');
-    }
+    const loadCourseDetails = async () => {
+      const cursoGuardado = localStorage.getItem('cursoSeleccionado');
+      if (cursoGuardado) {
+        const curso = JSON.parse(cursoGuardado);
+        setCursoActual(curso);
+        
+        try {
+          setLoading(true);
+          setError(null);
+
+          const courseDetails = await getMyCourseDetails(curso.id);
+          
+          if (courseDetails && courseDetails.statistics) {
+            setEstadisticas(courseDetails.statistics);
+          }
+          
+        } catch (error) {
+          console.error('Error al cargar detalles del curso:', error);
+          setError('Error al cargar los detalles del curso');
+          setEstadisticas({
+            totalEstudiantes: 0,
+            juegosActivos: 0,
+            progresoPromedio: 0
+          });
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        navigate('/docente');
+      }
+    };
+
+    loadCourseDetails();
   }, [navigate]);
 
   const cambiarCurso = () => {
@@ -34,7 +56,7 @@ export default function DocenteDashboard() {
   };
 
   if (!cursoActual) {
-    return <div className="loading">Cargando...</div>;
+    return <div className="loading">Cargando curso...</div>;
   }
 
   return (
@@ -46,6 +68,8 @@ export default function DocenteDashboard() {
           </div>
           <div className="curso-details">
             <h1>{cursoActual.nombre}</h1>
+            {loading && <span className="loading-indicator">🔄 Cargando estadísticas...</span>}
+            {error && <span className="error-indicator">⚠️ {error}</span>}
           </div>
         </div>
         <button className="cambiar-curso-btn" onClick={cambiarCurso}>

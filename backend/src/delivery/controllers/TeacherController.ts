@@ -91,7 +91,35 @@ const getTeacherCourses = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+const getMyCourseDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { courseId } = req.params as { courseId: string };
+        
+        if (!courseId) {
+            res.status(400).json({ error: 'courseId es requerido' });
+            return;
+        }
+
+        const courseDetails = {
+            id: courseId,
+            name: "3º A",
+            statistics: {
+                totalEstudiantes: 25,
+                juegosActivos: 6,
+                progresoPromedio: 78
+            }
+        };
+        
+        res.status(200).json(courseDetails);
+        
+    } catch (error: any) {
+        console.error('Error en getMyCourseDetails:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const teacherController = {
     assignTeacherToCourses,
-    getTeacherCourses
+    getTeacherCourses,
+    getMyCourseDetails
 };

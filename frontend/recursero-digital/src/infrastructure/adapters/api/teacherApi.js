@@ -3,7 +3,7 @@ const API_BASE_URL = 'http://localhost:3000/api'; // URL base del backend
 
 export const getTeacherProfile = async () => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_BASE_URL}/teacher/profile`, {
+  const response = await fetch(`${API_BASE_URL}/teacher/me/profile`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ export const getTeacherProfile = async () => {
 
 export const getTeacherCourses = async () => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_BASE_URL}/teacher/courses`, {
+  const response = await fetch(`${API_BASE_URL}/teacher/me/courses`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -23,9 +23,9 @@ export const getTeacherCourses = async () => {
   return await response.json();
 };
 
-export const getCourseDetails = async (courseId) => {
+export const getMyCourseDetails = async (courseId) => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+  const response = await fetch(`${API_BASE_URL}/teacher/me/course/${courseId}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
