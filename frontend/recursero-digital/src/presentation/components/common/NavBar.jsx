@@ -9,18 +9,31 @@ export function NavBar({ tabs, activeTab, onTabChange, userRole}) {
     navigate(tab.path);
   };
 
+  // Determinar qué clases usar según el rol
+  const navbarClasses = userRole === "docente" 
+    ? `navbar ${userRole} bg-space-docente bg-stars-docente`
+    : `navbar ${userRole} bg-space-ui bg-stars-ui`;
+
   return (
-    <nav className={`navbar ${userRole}`}>
+    <nav className={navbarClasses}>
       <div className="navbar-tabs">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
-            onClick={() => handleTabClick(tab)} 
-          >
-            {tab.label}
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const buttonClasses = activeTab === tab.id 
+            ? "tab-button active bg-accent-active"
+            : "tab-button";
+          
+          return (
+            <button
+              key={tab.id}
+              className={buttonClasses}
+              onClick={() => handleTabClick(tab)} 
+              onMouseEnter={(e) => !e.target.classList.contains('active') && e.target.classList.add('bg-accent-hover')}
+              onMouseLeave={(e) => e.target.classList.remove('bg-accent-hover')}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

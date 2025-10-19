@@ -1,33 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+@import '../globals/backgrounds.css';
 
 .navbar {
   display: flex;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
   justify-content: center;
   transition: all 0.3s ease-in-out;
   font-family: "Fredoka", cursive;
   position: relative;
   padding: 0.3rem 0;
-}
-
-.navbar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-navbar" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.5"/><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-navbar)"/></svg>');
-  pointer-events: none;
-  z-index: 0;
-  animation: twinkle 8s ease-in-out infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
 }
 
 .navbar-tabs {
@@ -45,7 +25,7 @@
   height: 50px; /* Alto fijo para todos los botones */
   padding: 0 20px; /* Espaciado horizontal */
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(251, 191, 36, 0.3);
+  border: 2px solid rgba(139, 92, 246, 0.3);
   color: rgb(255, 255, 255);
   border-radius: 1.5rem;
   cursor: pointer;
@@ -59,49 +39,20 @@
 }
 
 .tab-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.2) 0%,
-    rgba(251, 191, 36, 0.1) 100%
-  );
-  border-color: rgba(251, 191, 36, 0.6);
+  border-color: rgba(139, 92, 246, 0.6);
   color: rgb(255, 255, 255);
 }
 
 .tab-button.active {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.3) 0%,
-    rgba(251, 191, 36, 0.2) 100%
-  );
-  border-color: #fbbf24;
+  border-color: #8b5cf6;
   color: white;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
 
 /* Estilos específicos para navbar de docente */
-.navbar.docente {
-  background: rgba(30, 41, 59, 0.9);
-  backdrop-filter: blur(25px);
-  border-top: 2px solid rgba(59, 130, 246, 0.4);
-  box-shadow: 0 -8px 32px rgba(59, 130, 246, 0.3);
-}
-
-.navbar.docente::before {
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-docente" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.5" fill="%2359a5fa" opacity="0.4"/><circle cx="6" cy="6" r="0.8" fill="%233b82f6" opacity="0.6"/><circle cx="18" cy="18" r="1.2" fill="%2393c5fd" opacity="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-docente)"/></svg>');
-  animation: twinkleDocente 10s ease-in-out infinite;
-}
-
-@keyframes twinkleDocente {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-
 .navbar.docente .navbar-tabs {
   gap: 8rem;
 }
-
-
 
 .navbar.docente .tab-button.active::before {
   content: '';
@@ -110,7 +61,6 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0.2) 100%);
   border-radius: 2rem;
   z-index: -1;
   opacity: 0.8;
@@ -125,7 +75,7 @@
   left: 50%;
   width: 0;
   height: 0;
-  background: radial-gradient(circle,rgba(251, 191, 36, 0.3) 0%, transparent);
+  background: radial-gradient(circle,rgba(139, 92, 246, 0.3) 0%, transparent);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease;
@@ -151,18 +101,7 @@
   }
 }
 
-/* Estilos específicos para navbar de alumno (mantener estilo actual espacial) */
-.navbar.alumno {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.navbar.alumno::before {
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-alumno" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="5" cy="5" r="0.5" fill="white" opacity="0.5"/><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-alumno)"/></svg>');
-  animation: twinkle 8s ease-in-out infinite;
-}
-
+/* Estilos específicos para navbar de alumno */
 .navbar.alumno .navbar-tabs {
   gap: 15rem;
 }
@@ -170,7 +109,7 @@
 .navbar.alumno .tab-button, 
 .navbar.docente .tab-button {
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(251, 191, 36, 0.3);
+  border: 2px solid rgba(139, 92, 246, 0.3);
   color: rgb(255, 255, 255);
   width: 200px;
   height: 50px;
@@ -178,17 +117,15 @@
 
 .navbar.alumno .tab-button:hover,
 .navbar.docente .tab-button:hover {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0.1) 100%);
-  border-color: rgba(251, 191, 36, 0.6);
+  border-color: rgba(139, 92, 246, 0.6);
   color: rgb(255, 255, 255);
 }
 
 .navbar.alumno .tab-button.active, 
 .navbar.navbar.docente .tab-button.active {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0.2) 100%);
-  border-color: #fbbf24;
+  border-color: #8b5cf6;
   color: white;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
 
 @media (max-width: 768px) {

@@ -12,7 +12,7 @@ export default function RoleSelection() {
   }
 
   return (
-      <div className="role-selection-container">
+      <div className="role-selection-container bg-space bg-space-gradient bg-stars">
       <div className="role-selection-content">
         <div className="header-section">
           <img src={Logo} alt="TecnoMente" className="logo-image" />
