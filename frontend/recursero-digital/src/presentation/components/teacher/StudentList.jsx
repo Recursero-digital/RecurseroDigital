@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { /* getCourseStudents */ } from '../../../infrastructure/adapters/api/teacherApi';
+import { getCourseStudents } from '../../../infrastructure/adapters/api/teacherApi';
 import '../../styles/components/StudentList.css';
 
 const StudentList = ({ courseId, onSelectStudent }) => {
@@ -14,86 +14,15 @@ const StudentList = ({ courseId, onSelectStudent }) => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        setTimeout(() => {
-          setStudents([
-            {
-              id: "student_1",
-              name: "Ana García",
-              email: "ana.garcia@student.edu",
-              enrollmentDate: "2024-01-15",
-              totalGamesPlayed: 45,
-              averageScore: 88,
-              lastActivity: "2024-10-12T10:30:00Z",
-              progressByGame: {
-                ordenamiento: { completed: 15, totalTime: 450, averageScore: 92 },
-                escritura: { completed: 12, totalTime: 360, averageScore: 85 },
-                descomposicion: { completed: 10, totalTime: 300, averageScore: 90 },
-                escala: { completed: 8, totalTime: 240, averageScore: 86 }
-              }
-            },
-            {
-              id: "student_2", 
-              name: "Carlos López",
-              email: "carlos.lopez@student.edu",
-              enrollmentDate: "2024-01-15",
-              totalGamesPlayed: 32,
-              averageScore: 76,
-              lastActivity: "2024-10-11T14:20:00Z",
-              progressByGame: {
-                ordenamiento: { completed: 10, totalTime: 350, averageScore: 78 },
-                escritura: { completed: 8, totalTime: 280, averageScore: 74 },
-                descomposicion: { completed: 8, totalTime: 240, averageScore: 80 },
-                escala: { completed: 6, totalTime: 180, averageScore: 72 }
-              }
-            },
-            {
-              id: "student_3",
-              name: "María Rodríguez", 
-              email: "maria.rodriguez@student.edu",
-              enrollmentDate: "2024-01-20",
-              totalGamesPlayed: 28,
-              averageScore: 94,
-              lastActivity: "2024-10-12T16:45:00Z",
-              progressByGame: {
-                ordenamiento: { completed: 8, totalTime: 200, averageScore: 96 },
-                escritura: { completed: 7, totalTime: 175, averageScore: 93 },
-                descomposicion: { completed: 7, totalTime: 210, averageScore: 95 },
-                escala: { completed: 6, totalTime: 150, averageScore: 92 }
-              }
-            },
-            {
-              id: "student_4",
-              name: "Diego Martínez",
-              email: "diego.martinez@student.edu", 
-              enrollmentDate: "2024-02-01",
-              totalGamesPlayed: 18,
-              averageScore: 82,
-              lastActivity: "2024-10-10T11:15:00Z",
-              progressByGame: {
-                ordenamiento: { completed: 6, totalTime: 180, averageScore: 84 },
-                escritura: { completed: 4, totalTime: 120, averageScore: 79 },
-                descomposicion: { completed: 5, totalTime: 150, averageScore: 85 },
-                escala: { completed: 3, totalTime: 90, averageScore: 80 }
-              }
-            },
-            {
-              id: "student_5",
-              name: "Sofia Hernández",
-              email: "sofia.hernandez@student.edu",
-              enrollmentDate: "2024-01-18", 
-              totalGamesPlayed: 52,
-              averageScore: 79,
-              lastActivity: "2024-10-12T09:30:00Z",
-              progressByGame: {
-                ordenamiento: { completed: 18, totalTime: 540, averageScore: 81 },
-                escritura: { completed: 14, totalTime: 420, averageScore: 77 },
-                descomposicion: { completed: 12, totalTime: 360, averageScore: 82 },
-                escala: { completed: 8, totalTime: 240, averageScore: 76 }
-              }
-            }
-          ]);
-          setLoading(false);
-        }, 800);
+        const response = await getCourseStudents(courseId);
+        
+        if (response.students) {
+          setStudents(response.students);
+        } else {
+          setStudents([]);
+        }
+        
+        setLoading(false);
       } catch (error) {
         console.error('Error loading students:', error);
         setError('Error al cargar la lista de estudiantes');
@@ -137,8 +66,9 @@ const StudentList = ({ courseId, onSelectStudent }) => {
   };
 
   const filteredStudents = students.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         student.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const fullName = `${student.name} ${student.lastname}`.toLowerCase();
+    const matchesSearch = fullName.includes(searchTerm.toLowerCase()) ||
+                         student.userName.toLowerCase().includes(searchTerm.toLowerCase());
     
     if (!matchesSearch) return false;
 
@@ -163,7 +93,9 @@ const StudentList = ({ courseId, onSelectStudent }) => {
       case 'games':
         return b.totalGamesPlayed - a.totalGamesPlayed;
       default:
-        return a.name.localeCompare(b.name);
+        const fullNameA = `${a.name} ${a.lastname}`;
+        const fullNameB = `${b.name} ${b.lastname}`;
+        return fullNameA.localeCompare(fullNameB);
     }
   });
 
@@ -201,7 +133,7 @@ const StudentList = ({ courseId, onSelectStudent }) => {
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Buscar estudiante por nombre o email..."
+            placeholder="Buscar estudiante por nombre o username..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -271,11 +203,11 @@ const StudentList = ({ courseId, onSelectStudent }) => {
               >
                 <div className="student-header">
                   <div className="student-avatar">
-                    {student.name.split(' ').map(n => n[0]).join('')}
+                    {`${student.name[0]}${student.lastname[0]}`}
                   </div>
                   <div className="student-info">
-                    <h3 className="student-name">{student.name}</h3>
-                    <p className="student-email">{student.email}</p>
+                    <h3 className="student-name">{student.name} {student.lastname}</h3>
+                    <p className="student-username">@{student.userName}</p>
                     <p className="enrollment-date">
                       Inscrito: {formatDate(student.enrollmentDate)}
                     </p>

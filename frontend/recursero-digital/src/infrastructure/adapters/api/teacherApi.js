@@ -2,8 +2,8 @@
 const API_BASE_URL = 'http://localhost:3000/api'; // URL base del backend
 
 export const getTeacherProfile = async () => {
-  const token = localStorage.getItem('teacherToken');
-  const response = await fetch(`${API_BASE_URL}/teacher/profile`, {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_BASE_URL}/teacher/me/profile`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -13,8 +13,8 @@ export const getTeacherProfile = async () => {
 };
 
 export const getTeacherCourses = async () => {
-  const token = localStorage.getItem('teacherToken');
-  const response = await fetch(`${API_BASE_URL}/teacher/courses`, {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_BASE_URL}/teacher/me/courses`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -23,9 +23,9 @@ export const getTeacherCourses = async () => {
   return await response.json();
 };
 
-export const getCourseDetails = async (courseId) => {
-  const token = localStorage.getItem('teacherToken');
-  const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+export const getMyCourseDetails = async (courseId) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_BASE_URL}/teacher/me/course/${courseId}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export const getCourseDetails = async (courseId) => {
 };
 
 export const getCourseStudents = async (courseId) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/students`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -46,7 +46,7 @@ export const getCourseStudents = async (courseId) => {
 };
 
 export const getStudentDetails = async (studentId) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/students/${studentId}/details`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -57,7 +57,7 @@ export const getStudentDetails = async (studentId) => {
 };
 
 export const getCourseStatistics = async (courseId) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/statistics`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -68,7 +68,7 @@ export const getCourseStatistics = async (courseId) => {
 };
 
 export const getGameReports = async (courseId, gameType) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/games/${gameType}/reports`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -79,7 +79,7 @@ export const getGameReports = async (courseId, gameType) => {
 };
 
 export const getGameCommonErrors = async (courseId, gameType) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/games/${gameType}/common-errors`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -90,7 +90,7 @@ export const getGameCommonErrors = async (courseId, gameType) => {
 };
 
 export const getActivityConfig = async (courseId) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/activity-config`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -101,7 +101,7 @@ export const getActivityConfig = async (courseId) => {
 };
 
 export const updateActivityConfig = async (courseId, config) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/activity-config`, {
     method: 'PUT',
     headers: {
@@ -114,7 +114,7 @@ export const updateActivityConfig = async (courseId, config) => {
 };
 
 export const getCourseGrades = async (courseId) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/grades`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -125,7 +125,7 @@ export const getCourseGrades = async (courseId) => {
 };
 
 export const updateStudentGrade = async (studentId, gradeData) => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/students/${studentId}/grade`, {
     method: 'PUT',
     headers: {
@@ -139,7 +139,7 @@ export const updateStudentGrade = async (studentId, gradeData) => {
 
 
 export const exportCourseData = async (courseId, format = 'csv') => {
-  const token = localStorage.getItem('teacherToken');
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/export?format=${format}`, {
     headers: {
       'Authorization': `Bearer ${token}`,

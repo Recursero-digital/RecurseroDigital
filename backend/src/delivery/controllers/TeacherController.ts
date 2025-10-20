@@ -56,6 +56,70 @@ const assignTeacherToCourses = async (
     }
 };
 
+const getTeacherCourses = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const courses = [
+            {
+                id: "1",
+                name: "3º A"
+            },
+            {
+                id: "2", 
+                name: "3º B"
+            },
+            {
+                id: "3",
+                name: "3º C"
+            },
+            {
+                id: "4",
+                name: "4º A"
+            },
+            {
+                id: "5",
+                name: "4º B"
+            }
+        ];
+
+        res.status(200).json({
+            courses: courses
+        });
+
+    } catch (error: any) {
+        console.error('Error en getTeacherCourses:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+const getMyCourseDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { courseId } = req.params as { courseId: string };
+        
+        if (!courseId) {
+            res.status(400).json({ error: 'courseId es requerido' });
+            return;
+        }
+
+        const courseDetails = {
+            id: courseId,
+            name: "3º A",
+            statistics: {
+                totalEstudiantes: 25,
+                juegosActivos: 6,
+                progresoPromedio: 78
+            }
+        };
+        
+        res.status(200).json(courseDetails);
+        
+    } catch (error: any) {
+        console.error('Error en getMyCourseDetails:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const teacherController = {
-    assignTeacherToCourses
+    assignTeacherToCourses,
+    getTeacherCourses,
+    getMyCourseDetails
 };
