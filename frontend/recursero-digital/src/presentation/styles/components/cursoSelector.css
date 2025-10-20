@@ -1,36 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+@import '../globals/backgrounds.css';
 
 .curso-selector-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(
-    135deg,
-    #0f172a 0%,
-    #1e293b 25%,
-    #334155 50%,
-    #1e3a8a 75%,
-    #3b82f6 100%
-  );
   font-family: "Fredoka", sans-serif;
   position: relative;
-  overflow: hidden;
-}
-
-.curso-selector-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-curso" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.5" fill="white" opacity="0.3"/><circle cx="6" cy="6" r="0.8" fill="white" opacity="0.5"/><circle cx="18" cy="18" r="1.2" fill="white" opacity="0.4"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-curso)"/></svg>');
-  pointer-events: none;
-  z-index: -1;
-  animation: twinkle 8s ease-in-out infinite;
 }
 
 @keyframes twinkle {
@@ -74,9 +52,16 @@
 }
 
 .curso-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(
+    135deg,
+    #1e3a8a 0%,
+    #3b82f6 20%,
+    #6366f1 40%,
+    #8b5cf6 60%,
+    #7c3aed 80%,
+    #5b21b6 100%
+  );
+  border: 2px solid #ffffff;
   border-radius: 25px;
   padding: 2.5rem;
   text-align: center;
@@ -100,15 +85,7 @@
   border-radius: 25px 25px 0 0;
 }
 
-.curso-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-}
+
 
 
 
@@ -116,11 +93,20 @@
   transform: translateY(-10px) scale(1.02);
   border-color: var(--curso-color);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #7c3aed 100%
+  );
 }
 
 .curso-card.selected {
   border-color: var(--curso-color);
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6d28d9 100%
+  );
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }

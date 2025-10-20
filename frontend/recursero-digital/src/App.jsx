@@ -32,7 +32,11 @@ function App() {
         />
         <Route
           path="/docente"
-          element={<HomeDocente />}
+          element={
+            <MainLayout userRole="docente">
+              <HomeDocente />
+            </MainLayout>
+          }
         />
         <Route
           path="/docente/dashboard"
