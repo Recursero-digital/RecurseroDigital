@@ -1,4 +1,7 @@
 
+/* Importar estilos globales de juegos */
+@import './presentation/styles/globals/games.css';
+
 * {
   box-sizing: border-box;
   margin: 0;

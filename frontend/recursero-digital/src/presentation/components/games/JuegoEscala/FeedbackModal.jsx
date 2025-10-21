@@ -26,8 +26,8 @@ const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidation
                                 className="btn btn-close"
                                 onClick={onClose}
                                 style={{
-                                    background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
-                                    border: '3px solid #374151',
+                                    background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                    border: '3px solid #1e3a8a',
                                     fontSize: '1.1rem',
                                     fontWeight: '700',
                                     padding: '0.8rem 1.5rem',
@@ -48,8 +48,8 @@ const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidation
                                 className="btn btn-success"
                                 onClick={onNext}
                                 style={{
-                                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                    border: '3px solid #047857',
+                                    background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                    border: '3px solid #1e3a8a',
                                     fontSize: '1.2rem',
                                     fontWeight: '700',
                                     padding: '1rem 2rem',

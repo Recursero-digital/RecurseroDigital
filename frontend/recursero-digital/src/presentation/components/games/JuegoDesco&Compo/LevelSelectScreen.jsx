@@ -95,9 +95,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                                 style={{
                                     background: isLocked 
                                         ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
-                                        : level.color === 'chocolate'
-                                            ? 'linear-gradient(135deg, #8b5e34 0%, #6f4518 100%)'
-                                            : 'linear-gradient(135deg, #e86a1e 0%, #d95114 100%)',
+                                        : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
                                     cursor: isLocked ? 'not-allowed' : 'pointer'
                                 }}
                             >

@@ -1,0 +1,356 @@
+/* =================================================================== */
+/* ESTILOS GLOBALES PARA JUEGOS - RECURSERO DIGITAL                   */
+/* =================================================================== */
+
+/* ------------------------------------------------------------------- */
+/* BOTONES DE NAVEGACIÓN                                              */
+/* ------------------------------------------------------------------- */
+
+.btn-back-to-levels,
+.btn-back-to-dashboard {
+  background: var(--button-gradient);
+  color: white;
+  border: 2px solid var(--space-yellow);
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn-back-to-levels:hover,
+.btn-back-to-dashboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+/* ------------------------------------------------------------------- */
+/* TÍTULOS Y TEXTOS DE JUEGOS                                         */
+/* ------------------------------------------------------------------- */
+
+.game-title {
+  color: var(--space-yellow);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  margin: clamp(10px, 2vh, 20px) 0 clamp(5px, 1vh, 10px) 0;
+  text-shadow: 3px 3px 0px var(--space-blue);
+  font-weight: 700;
+}
+
+.game-instruction {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  margin: 0 0 clamp(5px, 1vh, 10px) 0;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------- */
+/* PANTALLA DE SELECCIÓN DE NIVELES                                   */
+/* ------------------------------------------------------------------- */
+
+.level-select-screen {
+  text-align: center;
+  padding: clamp(1rem, 3vh, 2rem);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.level-select-screen h1 {
+  color: var(--space-yellow);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(0.5rem, 2vh, 1rem);
+  text-shadow: 3px 3px 0px var(--space-blue);
+  font-weight: 700;
+}
+
+.level-select-screen p {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  margin-bottom: clamp(1rem, 3vh, 2rem);
+  font-weight: 500;
+}
+
+.level-select-title {
+  color: var(--space-yellow);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(0.5rem, 2vh, 1rem);
+  text-shadow: 3px 3px 0px var(--space-blue);
+  font-weight: 700;
+}
+
+.level-select-subtitle {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  margin-bottom: clamp(1rem, 3vh, 2rem);
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.level-select-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+/* ------------------------------------------------------------------- */
+/* GRID Y BOTONES DE NIVELES                                          */
+/* ------------------------------------------------------------------- */
+
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin: clamp(1rem, 3vh, 2rem) 0;
+  max-width: 800px;
+  width: 100%;
+}
+
+.level-btn {
+  background: var(--button-gradient);
+  color: white;
+  border: 3px solid var(--space-yellow);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-radius: 20px;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: clamp(80px, 15vh, 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.level-btn:hover:not(.locked):not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
+}
+
+.level-btn.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  border-color: #64748b;
+}
+
+.level-btn.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------- */
+/* ELEMENTOS DE TEXTO EN BOTONES DE NIVEL                             */
+/* ------------------------------------------------------------------- */
+
+.level-number {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  margin-bottom: clamp(4px, 1vh, 8px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.level-range {
+  color: var(--space-yellow);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-weight: 600;
+  margin-bottom: clamp(2px, 0.5vh, 4px);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.level-difficulty {
+  color: white;
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+  font-weight: 500;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.level-info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.8vh, 6px);
+  width: 100%;
+}
+
+.level-header {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2px, 0.5vh, 4px);
+  width: 100%;
+}
+
+.locked-message {
+  color: #fbbf24;
+  font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+  font-weight: 500;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin-top: clamp(4px, 1vh, 8px);
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* Estilos específicos para botones bloqueados */
+.level-btn.locked .level-number,
+.level-btn.locked .level-range,
+.level-btn.locked .level-difficulty {
+  opacity: 0.7;
+}
+
+/* ------------------------------------------------------------------- */
+/* MODALES                                                             */
+/* ------------------------------------------------------------------- */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+  padding: 1rem;
+}
+
+.modal,
+.modal-content {
+  background: var(--main-gradient);
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.4s ease-out;
+  border: 3px solid var(--space-yellow);
+  text-align: center;
+  position: relative;
+}
+
+.modal-content.congrats {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f59e0b;
+}
+
+.modal h2,
+.modal-content h2 {
+  color: var(--space-yellow);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+.modal p,
+.modal-content p {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.modal-content.congrats h2 {
+  color: #92400e;
+}
+
+.modal-content.congrats p {
+  color: #92400e;
+}
+
+/* ------------------------------------------------------------------- */
+/* CONTROLES DE ENCABEZADO                                             */
+/* ------------------------------------------------------------------- */
+
+.header-controls {
+  position: absolute;
+  top: clamp(1rem, 3vh, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  z-index: 100;
+}
+
+/* ------------------------------------------------------------------- */
+/* ANIMACIONES                                                         */
+/* ------------------------------------------------------------------- */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------- */
+/* RESPONSIVE DESIGN                                                   */
+/* ------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .level-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .level-btn {
+    min-height: 100px;
+    padding: 1rem;
+  }
+  
+  .header-controls {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-bottom: 1rem;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .level-select-screen {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .level-grid {
+    gap: 0.75rem;
+  }
+  
+  .modal,
+  .modal-content {
+    width: 95%;
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .btn-back-to-levels,
+  .btn-back-to-dashboard {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}

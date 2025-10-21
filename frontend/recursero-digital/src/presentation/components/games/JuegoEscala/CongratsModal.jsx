@@ -63,14 +63,14 @@ const CongratsModal = ({
                             
                             {levelPassed && (
                                 <div style={{
-                                    background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
-                                    border: '2px solid #10b981',
+                                    background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)',
+                                    border: '2px solid #1e3a8a',
                                     borderRadius: '1rem',
                                     padding: '1rem',
                                     marginBottom: '1rem'
                                 }}>
                                     <p style={{
-                                        color: '#065f46',
+                                        color: '#1e3a8a',
                                         fontWeight: '700',
                                         margin: 0
                                     }}>
@@ -78,7 +78,7 @@ const CongratsModal = ({
                                     </p>
                                     {nextLevelUnlocked && (
                                         <p style={{
-                                            color: '#065f46',
+                                            color: '#1e3a8a',
                                             fontWeight: '600',
                                             margin: '0.5rem 0 0 0',
                                             fontSize: '0.9rem'
@@ -91,8 +91,8 @@ const CongratsModal = ({
                             
                             {!levelPassed && (
                                 <div style={{
-                                    background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                                    border: '2px solid #f59e0b',
+                                    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%)',
+                                    border: '2px solid #8b5cf6',
                                     borderRadius: '1rem',
                                     padding: '1rem',
                                     marginBottom: '1rem'
@@ -122,8 +122,8 @@ const CongratsModal = ({
                             className="btn btn-play-again"
                             onClick={onPlayAgain}
                             style={{
-                                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-                                border: '3px solid #1e40af',
+                                background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                border: '3px solid #1e3a8a',
                                 color: 'white',
                                 fontSize: '1.1rem',
                                 fontWeight: '700',
@@ -131,7 +131,7 @@ const CongratsModal = ({
                                 borderRadius: '1rem',
                                 cursor: 'pointer',
                                 marginRight: '1rem',
-                                boxShadow: '0 6px 20px rgba(59, 130, 246, 0.4)'
+                                boxShadow: '0 6px 20px rgba(124, 58, 237, 0.4)'
                             }}
                         >
                             🔄 Jugar otra vez
@@ -141,8 +141,8 @@ const CongratsModal = ({
                             className="btn btn-back-to-levels"
                             onClick={onBackToLevels}
                             style={{
-                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                border: '3px solid #047857',
+                                background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                border: '3px solid #1e3a8a',
                                 color: 'white',
                                 fontSize: '1.1rem',
                                 fontWeight: '700',
@@ -160,15 +160,15 @@ const CongratsModal = ({
                             className="btn btn-back-to-games"
                             onClick={() => navigate('/alumno')}
                             style={{
-                                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                                border: '3px solid #6d28d9',
+                                background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                border: '3px solid #1e3a8a',
                                 color: 'white',
                                 fontSize: '1.1rem',
                                 fontWeight: '700',
                                 padding: '1rem 2rem',
                                 borderRadius: '1rem',
                                 cursor: 'pointer',
-                                boxShadow: '0 6px 20px rgba(139, 92, 246, 0.4)'
+                                boxShadow: '0 6px 20px rgba(124, 58, 237, 0.4)'
                             }}
                         >
                             🎮 Otros juegos
