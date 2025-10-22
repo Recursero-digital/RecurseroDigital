@@ -522,6 +522,14 @@ body, html {
   font-weight: 500;
 }
 
+.complete-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
 .restart-button {
   background: var(--button-gradient);
   color: white;
@@ -532,7 +540,7 @@ body, html {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  margin: 0;
 }
 
 .restart-button:hover {

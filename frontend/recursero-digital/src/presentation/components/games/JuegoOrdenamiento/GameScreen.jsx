@@ -140,7 +140,8 @@ const GameScreen = ({
 
   // Computed values
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
-  const progressPercentage = ((currentLevel + 1) / levelRanges.length) * 100;
+  // La barra de progreso: 0% nivel 1, 33% nivel 2, 66% nivel 3
+  const progressPercentage = currentLevel === 0 ? 0 : currentLevel === 1 ? 33 : 66;
 
   return (
     <div className="game-content">
