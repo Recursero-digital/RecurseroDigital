@@ -45,14 +45,7 @@ body, html {
     pointer-events: none;
 }
 
-.header-controls {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    display: flex;
-    gap: 1rem;
-    z-index: 10;
-}
+/* .header-controls removido - ahora está en globals/games.css */
 
 .btn-back-to-levels,
 .btn-back-to-dashboard {

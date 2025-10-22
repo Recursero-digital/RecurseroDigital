@@ -133,14 +133,7 @@ body, html {
     border-bottom: 30px solid #dc2626;
 }
 
-.header-controls {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    display: flex;
-    gap: 1rem;
-    z-index: 10;
-}
+/* .header-controls removido - ahora está en globals/games.css */
 
 /* Estilos específicos para JuegoEscala */
 /* Los estilos comunes están en globals/games.css */

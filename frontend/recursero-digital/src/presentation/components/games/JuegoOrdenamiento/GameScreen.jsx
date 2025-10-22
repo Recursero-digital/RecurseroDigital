@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 
 const GameScreen = ({ 
   currentLevel, 
@@ -18,6 +18,22 @@ const GameScreen = ({
   showPermanentHint,
   levelRanges
 }) => {
+
+  const [shouldAnimateHint, setShouldAnimateHint] = useState(false);
+  const previousShowHint = useRef(showPermanentHint);
+
+  // Detectar cuando la pista aparece por primera vez
+  useEffect(() => {
+    if (showPermanentHint && !previousShowHint.current) {
+      setShouldAnimateHint(true);
+      // Remover la clase después de la animación
+      const timer = setTimeout(() => {
+        setShouldAnimateHint(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+    previousShowHint.current = showPermanentHint;
+  }, [showPermanentHint]);
 
   const getOrderInstruction = useCallback((level) => {
     return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
@@ -105,7 +121,7 @@ const GameScreen = ({
   });
 
   const PermanentHint = React.memo(() => (
-    <div className="permanent-hint">
+    <div className={`permanent-hint ${shouldAnimateHint ? 'hint-animate' : ''}`}>
       <div className="permanent-hint-header">
         <span className="hint-icon">💡</span>
         <h4>¡Pista especial!</h4>
@@ -130,49 +146,51 @@ const GameScreen = ({
     <div className="game-content">
       <header className="game-header">
         <div className="header-controls">
-          <button 
-            className="btn-back-to-levels"
-            onClick={onBackToLevels}
-            title="Volver a niveles"
-          >
-            ← Niveles
-          </button>
-          <button 
-            className="btn-back-to-dashboard"
-            onClick={onBackToGames}
-            title="Volver a juegos"
-          >
-            ← Juegos
-          </button>
+          <div className="buttons-group">
+            <button 
+              className="btn-back-to-levels"
+              onClick={onBackToLevels}
+              title="Volver a niveles"
+            >
+              ← Niveles
+            </button>
+            <button 
+              className="btn-back-to-dashboard"
+              onClick={onBackToGames}
+              title="Volver a juegos"
+            >
+              ← Juegos
+            </button>
+          </div>
+          
+          <div className="game-status">
+            <div className="status-item">
+              <div className="status-icon">📊</div>
+              <div className="status-label">Nivel</div>
+              <div className="status-value">{currentLevel + 1}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">🎯</div>
+              <div className="status-label">Actividad</div>
+              <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">🎯</div>
+              <div className="status-label">Intentos</div>
+              <div className="status-value">{attempts}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">⭐</div>
+              <div className="status-label">Puntuación</div>
+              <div className="status-value">{points}</div>
+            </div>
+          </div>
         </div>
         <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
         <p className="game-instruction">
           {getOrderInstruction(currentLevel + 1)}
         </p>
       </header>
-
-      <div className="game-status">
-        <div className="status-item">
-          <div className="status-icon">📊</div>
-          <div className="status-label">Nivel</div>
-          <div className="status-value">{currentLevel + 1}</div>
-        </div>
-        <div className="status-item">
-          <div className="status-icon">🎯</div>
-          <div className="status-label">Actividad</div>
-          <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
-        </div>
-        <div className="status-item">
-          <div className="status-icon">🎯</div>
-          <div className="status-label">Intentos</div>
-          <div className="status-value">{attempts}</div>
-        </div>
-        <div className="status-item">
-          <div className="status-icon">⭐</div>
-          <div className="status-label">Puntuación</div>
-          <div className="status-value">{points}</div>
-        </div>
-      </div>
 
       <div className="progress-container">
         <div 

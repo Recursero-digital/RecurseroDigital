@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
-
-/* CSS Variables */
+/* CSS Variables específicas para JuegoOrdenamiento */
 :root {
   --space-blue: #1e3a8a;
   --space-purple: #7c3aed;
@@ -9,8 +7,8 @@
   --space-orange: #f97316;
   --space-green: #10b981;
   --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-  --button-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-  --number-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+  --button-gradient: var(--main-gradient);
+  --number-gradient: var(--main-gradient);
 }
 
 /* Base Styles */
@@ -47,77 +45,110 @@ body, html {
   position: relative;
   z-index: 10;
   justify-content: flex-start;
+  overflow-y: auto; /* Permitir scroll si es necesario */
 }
 
 /* Header */
 .game-header {
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 30px;
   position: relative;
-}
-
-.header-controls {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  padding-top: 60px; /* Reducido para aprovechar mejor el espacio */
   display: flex;
-  gap: 12px;
-  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  min-height: 200px; /* Altura mínima para centrar las instrucciones */
+  justify-content: center;
 }
 
-/* Estilos específicos para JuegoOrdenamiento */
-/* Los estilos comunes están en globals/games.css */
+/* Header controls layout */
+.game-content .header-controls {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-content .header-controls .buttons-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Game Status en línea con los botones del header */
+.header-controls .game-status {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.5vw, 18px);
+  background: var(--button-gradient);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+  border: 2px solid var(--space-yellow);
+  flex-shrink: 0;
+  flex-grow: 1;
+  max-width: 600px;
+  margin-left: 20px;
+}
+
+.header-controls .game-status .status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 100px;
+  flex: 1;
+}
+
+.header-controls .game-status .status-icon {
+  font-size: 1rem;
+}
+
+.header-controls .game-status .status-label {
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.header-controls .game-status .status-value {
+  color: var(--space-yellow);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Estilos específicos para JuegoOrdenamiento - Desktop only */
+/* Sobrescriben los estilos globales responsivos de games.css */
 
 .game-title {
   color: var(--space-yellow);
-  font-size: 2.5rem;
-  margin: 20px 0 10px 0;
+  font-size: 2.2rem;
+  margin: 0 0 10px 0;
   text-shadow: 3px 3px 0px var(--space-blue);
   font-weight: 700;
 }
 
 .game-instruction {
   color: white;
-  font-size: 1.4rem;
-  margin: 0 0 10px 0;
-  font-weight: 600;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Game Status */
-.game-status {
-  display: flex;
-  justify-content: space-around;
-  margin: 8px 0;
-  padding: 10px;
-  background: var(--button-gradient);
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-  border: 2px solid var(--space-yellow);
-}
-
-.status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.status-icon {
-  font-size: 1.5rem;
-}
-
-.status-label {
-  color: var(--space-yellow);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.status-value {
-  color: white;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
+  margin: 20px 0;
   font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px 30px;
+  border-radius: 20px;
+  border: 2px solid var(--space-yellow);
+  max-width: 600px;
+}
+
+/* Game Status original (ahora oculto, se usa el del header) */
+.game-content > .game-status {
+  display: none;
 }
 
 /* Progress Bar */
@@ -256,8 +287,11 @@ body, html {
   margin-top: 0.5rem;
   box-shadow: 0 3px 10px rgba(251, 191, 36, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  animation: slideInUp 0.5s ease-out;
   flex-shrink: 0;
+}
+
+.permanent-hint.hint-animate {
+  animation: slideInUp 0.5s ease-out;
 }
 
 .permanent-hint-header {
@@ -436,82 +470,10 @@ body, html {
 /* Removidos: level-select-screen, level-grid, level-btn, etc. */
 
 .levels-grid,
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin: 2rem 0;
-}
+/* .level-grid removido - ahora está en globals/games.css */
 
-.level-btn {
-  background: var(--button-gradient);
-  color: white;
-  border: 3px solid var(--space-yellow);
-  padding: 20px;
-  border-radius: 20px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.level-btn:hover:not(.locked) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
-}
-
-.level-btn.locked {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-}
-
-.level-number {
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* .level-range removido - ahora está en globals/games.css */
-
-.level-difficulty {
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 500;
-  opacity: 0.9;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.locked-message {
-  color: #cbd5e1;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-top: 8px;
-  text-align: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-/* Modals */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  animation: fadeIn 0.3s ease-out;
-}
+/* Estilos removidos que ahora están en globals/games.css: */
+/* .level-btn, .level-number, .level-difficulty, .locked-message, .modal-overlay */
 
 .modal {
   background: var(--main-gradient);
@@ -607,114 +569,6 @@ body, html {
   }
   to {
     opacity: 1;
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .game-content {
-    padding: 8px;
-  }
-  
-  .game-title {
-    font-size: 2rem;
-  }
-  
-  .game-instruction {
-    font-size: 1.1rem;
-  }
-  
-  .game-play-area {
-    gap: 20px;
-    min-height: calc(100vh - 140px);
-    justify-content: center;
-  }
-  
-  .drop-target {
-    height: 80px;
-    padding: 10px;
-    min-width: 300px;
-  }
-  
-  .numbers-container {
-    gap: 15px;
-    min-height: 60px;
-    padding: 8px;
-  }
-  
-  .number-box {
-    padding: 8px 15px;
-    font-size: 1.2rem;
-    min-height: 40px;
-  }
-  
-  .permanent-hint {
-    padding: 0.4rem;
-    margin-top: 0.4rem;
-  }
-  
-  .permanent-hint-header h4 {
-    font-size: 0.8rem;
-  }
-  
-  .hint-text {
-    font-size: 0.75rem;
-  }
-  
-  .hint-number {
-    padding: 0.1rem 0.25rem;
-    font-size: 0.65rem;
-  }
-  
-  .start-title {
-    font-size: 2.5rem;
-  }
-  
-  .level-select-title {
-    font-size: 2rem;
-  }
-  
-  .levels-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-content {
-    padding: 6px;
-  }
-  
-  .game-play-area {
-    gap: 15px;
-    min-height: calc(100vh - 160px);
-    justify-content: center;
-  }
-
-  .drop-target {
-    height: 70px;
-    min-width: 250px;
-  }
-
-  .number-box {
-    padding: 6px 12px;
-    font-size: 1rem;
-  }
-
-  .numbers-container {
-    gap: 10px;
-    min-height: 50px;
-    padding: 5px;
-  }
-
-  .header-controls {
-    position: static;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-  
-  .levels-grid {
-    grid-template-columns: 1fr;
   }
 }
 

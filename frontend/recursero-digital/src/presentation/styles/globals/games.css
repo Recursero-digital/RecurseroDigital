@@ -3,6 +3,50 @@
 /* =================================================================== */
 
 /* ------------------------------------------------------------------- */
+/* BOTONES COMUNES DE JUEGOS                                          */
+/* ------------------------------------------------------------------- */
+
+.btn-start,
+.btn-check,
+.btn-hint,
+.btn-verify,
+.btn-clear,
+.btn-secondary {
+  background: var(--button-gradient);
+  color: white;
+  border: 2px solid var(--space-yellow);
+  padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-start:hover,
+.btn-check:hover,
+.btn-hint:hover,
+.btn-verify:hover:not(:disabled),
+.btn-clear:hover:not(:disabled),
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+.btn-start:disabled,
+.btn-check:disabled,
+.btn-hint:disabled,
+.btn-verify:disabled,
+.btn-clear:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ------------------------------------------------------------------- */
 /* BOTONES DE NAVEGACIÓN                                              */
 /* ------------------------------------------------------------------- */
 
