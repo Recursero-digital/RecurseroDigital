@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ActivityFeedbackModal = ({ isSuccess, onContinue, onRetry }) => {
+const FeedbackModal = ({ isSuccess, onContinue, onRetry }) => {
     const getRandomErrorMessage = () => {
         const messages = [
             "¡Intenta de nuevo!",
@@ -22,6 +22,7 @@ const ActivityFeedbackModal = ({ isSuccess, onContinue, onRetry }) => {
         ];
         return descriptions[Math.floor(Math.random() * descriptions.length)];
     };
+    
     if (isSuccess) {
         return (
             <div className="activity-feedback-overlay">
@@ -46,4 +47,4 @@ const ActivityFeedbackModal = ({ isSuccess, onContinue, onRetry }) => {
     );
 };
 
-export default ActivityFeedbackModal;
+export default FeedbackModal;

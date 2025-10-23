@@ -38,11 +38,11 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                 <h2 style={{
                     fontSize: '3.5rem',
                     fontWeight: '900',
-                    color: '#1e40af',
+                    color: '#1e3a8a',
                     marginBottom: '1rem',
                     fontFamily: 'Fredoka, sans-serif',
                     textShadow: '3px 3px 6px rgba(0, 0, 0, 0.2)',
-                    background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                    background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text'
@@ -118,14 +118,14 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                             </p>
                             
                             <div style={{
-                                background: color === 'blue' ? 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)' :
-                                           color === 'green' ? 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)' :
-                                           'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)',
+                                background: color === 'blue' ? 'linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%)' :
+                                           color === 'green' ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)' :
+                                           'linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(91, 33, 182, 0.1) 100%)',
                                 padding: '1rem',
                                 borderRadius: '1rem',
                                 marginBottom: '1.5rem',
-                                border: `2px solid ${color === 'blue' ? '#3b82f6' : 
-                                                    color === 'green' ? '#10b981' : '#8b5cf6'}`
+                                border: `2px solid ${color === 'blue' ? '#1e3a8a' : 
+                                                    color === 'green' ? '#6366f1' : '#7c3aed'}`
                             }}>
                                 <div style={{
                                     fontSize: '1.5rem',
@@ -152,13 +152,11 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                                     background: isLocked 
                                         ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
                                         : color === 'blue'
-                                            ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                                            ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)'
                                             : color === 'green'
-                                                ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
-                                                : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                                    border: `3px solid ${isLocked ? '#6b7280' : 
-                                                        color === 'blue' ? '#1e40af' : 
-                                                        color === 'green' ? '#047857' : '#6d28d9'}`,
+                                                ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)'
+                                                : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
+                                    border: `3px solid ${isLocked ? '#6b7280' : '#1e3a8a'}`,
                                     cursor: isLocked ? 'not-allowed' : 'pointer',
                                     fontSize: '1.1rem',
                                     fontWeight: '700'

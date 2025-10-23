@@ -8,9 +8,9 @@
   --space-yellow: #fbbf24;
   --space-orange: #f97316;
   --space-green: #10b981;
-  --main-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --button-gradient: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
-  --number-gradient: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%);
+  --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+  --button-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+  --number-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
 }
 
 /* Base Styles */
@@ -24,7 +24,7 @@ body, html {
 .game-wrapper {
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e3a8a 75%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
   padding: 8px;
   font-family: 'Fredoka', cursive;
   box-sizing: border-box;
@@ -61,34 +61,10 @@ body, html {
   flex-shrink: 0;
 }
 
-.header-controls {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 12px;
-  z-index: 100;
-}
+/* .header-controls removido - ahora está en globals/games.css */
 
-.btn-back-to-levels,
-.btn-back-to-dashboard {
-  background: var(--button-gradient);
-  color: white;
-  border: 2px solid var(--space-yellow);
-  padding: 8px 16px;
-  border-radius: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.btn-back-to-levels:hover,
-.btn-back-to-dashboard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
-}
+/* Estilos específicos para JuegoEscritura */
+/* Los estilos comunes están en globals/games.css */
 
 .game-title {
   color: var(--space-yellow);
@@ -110,7 +86,7 @@ body, html {
 .game-status {
   display: flex;
   justify-content: space-around;
-  margin: clamp(4px, 0.8vh, 6px) 0;
+  margin: clamp(4px, 0.8vh, 5px) 6px;
   padding: clamp(6px, 1.2vh, 10px);
   background: var(--button-gradient);
   border-radius: 15px;
@@ -156,13 +132,13 @@ body, html {
 }
 
 .paper-note {
-    background: linear-gradient(135deg, #fffacd 0%, #fef3c7 100%);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     transform: rotate(-0.5deg);
     padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 12px);
     margin: clamp(2px, 0.5vh, 4px) 0;
-    border: 1px solid #fbbf24;
+    border: 1px solid #8b5cf6;
     transition: all 0.3s ease;
     color: #1f2937;
     display: inline-block;
@@ -191,21 +167,21 @@ body, html {
 }
 
 .btn-start {
-    background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-    color: black;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+    color: white;
     border-radius: 9999px;
-    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .btn-start:hover {
-    background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
-    box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(124, 58, 237, 0.9) 50%, rgba(91, 33, 182, 0.9) 100%);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
     transform: translateY(-2px);
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.6) 0%, rgba(124, 58, 237, 0.6) 100%);
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
@@ -218,27 +194,10 @@ body, html {
     transform: translateY(-2px);
 }
 
-.level-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
+/* Estilos removidos: level-grid, level-btn, locked-message */
+/* Ahora están en globals/games.css */
 
-.level-btn {
-    border-radius: 8px;
-    padding: 16px 8px;
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    color: white;
-    min-height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
+/* Estilos específicos de niveles para JuegoEscritura */
 .level-1 { background-color: #22c55e; }
 .level-1:hover { background-color: #16a34a; }
 .level-2 { background-color: #3b82f6; }
@@ -249,35 +208,6 @@ body, html {
 .level-4:hover { background-color: #dc2626; }
 .level-5 { background-color: #eab308; }
 .level-5:hover { background-color: #d97706; }
-
-.level-btn.locked {
-  background-color: #6b7280 !important;
-  opacity: 0.6;
-  cursor: not-allowed;
-  position: relative;
-}
-
-.level-btn.locked:hover {
-  background-color: #6b7280 !important;
-  transform: none !important;
-}
-
-.level-btn.locked .level-number {
-  opacity: 0.7;
-}
-
-.level-btn.locked .level-range,
-.level-btn.locked .level-difficulty {
-  opacity: 0.5;
-}
-
-.locked-message {
-  font-size: 0.8rem;
-  margin-top: 8px;
-  opacity: 0.8;
-  font-style: italic;
-  color: #fef08a;
-}
 
 .game-hud {
     display: flex;
@@ -734,16 +664,7 @@ body, html {
     margin: 0 clamp(4px, 0.8vw, 8px);
 }
 
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1000;
-    padding: 20px;
-}
+/* Modal overlay removido - ahora está en globals/games.css */
 
 /* Start Screen Styles */
 .start-screen {
@@ -925,12 +846,7 @@ body, html {
     gap: clamp(4px, 0.8vh, 6px);
 }
 
-.level-range {
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    color: white;
-    font-weight: 500;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
+/* .level-range removido - ahora está en globals/games.css */
 
 .locked-message {
     font-size: clamp(0.65rem, 1.3vw, 0.75rem);

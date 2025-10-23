@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LevelResultsModal = ({ level, results, totalScore, onNextLevel, onBackToLevels }) => {
+const CongratsModal = ({ level, results, totalScore, onNextLevel, onBackToLevels }) => {
     const totalAttempts = results.reduce((sum, result) => sum + result.attempts, 0);
     const averageScore = results.length > 0 ? Math.round(totalScore / results.length) : 0;
 
@@ -50,4 +50,4 @@ const LevelResultsModal = ({ level, results, totalScore, onNextLevel, onBackToLe
     );
 };
 
-export default LevelResultsModal;
+export default CongratsModal;

@@ -1,12 +1,21 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
-import LevelResultsModal from './LevelResultsModal';
-import ActivityFeedbackModal from './ActivityFeedbackModal';
+import GameScreen from './GameScreen';
+import CongratsModal from './CongratsModal';
+import FeedbackModal from './FeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { 
+  generateNumbers, 
+  checkOrder, 
+  generateHint, 
+  levelRanges, 
+  totalActivities, 
+  getNumbersCount 
+} from './utils';
 
 const JuegoOrdenamiento = () => {
   const navigate = useNavigate();
@@ -34,18 +43,6 @@ const JuegoOrdenamiento = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [showPermanentHint, setShowPermanentHint] = useState(false);
-
-  // Constants
-  const levelRanges = useMemo(() => [
-    { min: 25, max: 250, name: "Números Pequeños", description: "Del 25 al 250" },
-    { min: 251, max: 500, name: "Números Medianos", description: "Del 251 al 500" },
-    { min: 501, max: 1000, name: "Números Grandes", description: "Del 501 al 1000" },
-  ], []);
-
-  const totalActivities = 5;
-
-  const getNumbersCount = useCallback((level) => 6 + (level * 2), []);
-  const numbersCount = getNumbersCount(currentLevel);
 
   // Navigation handlers
   const handleBackToGames = useCallback(() => {
@@ -75,52 +72,11 @@ const JuegoOrdenamiento = () => {
     setShowPermanentHint(false);
   }, [resetScoring]);
 
-  const generateNumbers = useCallback((level) => {
-    const { min, max } = levelRanges[level];
-    const currentNumbersCount = getNumbersCount(level);
-    const generatedNumbers = new Set();
-
-    while (generatedNumbers.size < currentNumbersCount) {
-      const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
-      generatedNumbers.add(newNum);
-    }
-
-    const numbersArray = Array.from(generatedNumbers);
-    const shuffledNumbers = [...numbersArray].sort(() => Math.random() - 0.5);
-    const sorted = [...numbersArray].sort((a, b) => b - a);
-
-    setNumbers(shuffledNumbers);
-    setSortedNumbers(sorted);
-  }, [levelRanges, getNumbersCount]);
-
-  const getOrderInstruction = useCallback((level) => {
-    return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
+  const setupLevel = useCallback((level) => {
+    const numbersData = generateNumbers(level, levelRanges, getNumbersCount);
+    setNumbers(numbersData.shuffled);
+    setSortedNumbers(numbersData.sorted);
   }, []);
-
-  const generateHint = useCallback(() => {
-    const isEvenLevel = (currentLevel + 1) % 2 === 0;
-    const sortedArray = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
-    
-    const baseHints = isEvenLevel ? [
-      `💡 Recuerda: Debes ordenar de MENOR a MAYOR`,
-      `🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`,
-      `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-      `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ] : [
-      `💡 Recuerda: Debes ordenar de MAYOR a MENOR`,
-      `🔢 El número más grande es: ${Math.max(...sortedNumbers)}`,
-      `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-      `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ];
-    
-    return baseHints[Math.floor(Math.random() * baseHints.length)];
-  }, [currentLevel, sortedNumbers]);
-
-  const checkOrder = useCallback((currentNumbers) => {
-    const isEvenLevel = (currentLevel + 1) % 2 === 0;
-    const correctOrder = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
-    return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
-  }, [currentLevel, sortedNumbers]);
 
   // Game flow handlers
   const handleStartGame = useCallback((level) => {
@@ -147,7 +103,7 @@ const JuegoOrdenamiento = () => {
     setTargetNumbers([]);
     setFeedbackSuccess(true);
     setShowFeedback(true);
-  }, [currentLevel, currentActivity, completeActivity, attempts, generateNumbers, unlockLevel]);
+  }, [currentLevel, currentActivity, completeActivity, attempts]);
 
   const handleFailedAttempt = useCallback(() => {
     incrementAttempts();
@@ -164,27 +120,42 @@ const JuegoOrdenamiento = () => {
     setShowFeedback(false);
     if (currentActivity + 1 < totalActivities) {
       setCurrentActivity(currentActivity + 1);
-      generateNumbers(currentLevel); 
+      setupLevel(currentLevel); 
       setTargetNumbers([]);
       setShowPermanentHint(true);
     } else {  
       unlockLevel('ordenamiento', currentLevel + 2);
-      setShowLevelUp(true);
+      
+      // Si se completó el nivel 1 (currentLevel = 0), ir automáticamente al nivel 2
+      if (currentLevel === 0) {
+        // Proceder automáticamente al siguiente nivel sin mostrar el modal
+        setCurrentLevel(1);
+        setCurrentActivity(0);
+        setLevelResults([]);
+        setShowPermanentHint(false);
+        setTimeout(() => setupLevel(1), 100);
+      } else if (currentLevel === 2) {
+        // Si se completó el nivel 3, mostrar completado del juego
+        setShowGameComplete(true);
+      } else {
+        setShowLevelUp(true);
+      }
     }
-  }, [currentActivity, totalActivities, currentLevel, generateNumbers, unlockLevel]);
+  }, [currentActivity, currentLevel, setupLevel, unlockLevel]);
 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
     setTargetNumbers(newTargetNumbers);
 
+    const numbersCount = getNumbersCount(currentLevel);
     if (newTargetNumbers.length === numbersCount) {
-      if (checkOrder(newTargetNumbers)) {
+      if (checkOrder(newTargetNumbers, currentLevel, sortedNumbers)) {
         handleActivityComplete();
       } else {
         handleFailedAttempt();
       }
     }
-  }, [targetNumbers, numbersCount, checkOrder, handleActivityComplete, handleFailedAttempt]);
+  }, [targetNumbers, currentLevel, sortedNumbers, handleActivityComplete, handleFailedAttempt]);
 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
@@ -199,121 +170,24 @@ const JuegoOrdenamiento = () => {
       setCurrentActivity(0);
       setLevelResults([]);
       setShowPermanentHint(false);
-      setTimeout(() => generateNumbers(currentLevel + 1), 100);
+      setTimeout(() => setupLevel(currentLevel + 1), 100);
     }
-  }, [currentLevel, levelRanges.length, generateNumbers]);
+  }, [currentLevel, setupLevel]);
+
+  const getHint = useCallback(() => {
+    return generateHint(currentLevel, sortedNumbers);
+  }, [currentLevel, sortedNumbers]);
 
   // Effects
   useEffect(() => {
     if (gameState === 'game') {
-      generateNumbers(currentLevel);
+      setupLevel(currentLevel);
       setTargetNumbers([]);
       setShowPermanentHint(true);
     }
-  }, [gameState, currentLevel, generateNumbers]);
+  }, [gameState, currentLevel, setupLevel]);
 
-  // Components
-  const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
-    const handleDragStart = (e) => {
-      e.dataTransfer.setData('text/plain', number.toString());
-      e.dataTransfer.effectAllowed = 'move';
-    };
 
-    const handleClick = () => {
-      if (isInTarget) {
-        onRemove(number);
-      } else if (targetNumbers.length < numbersCount) {
-        onDrop(number);
-      }
-    };
-
-    return (
-      <div
-        className={`number-box ${isInTarget ? 'in-target' : ''}`}
-        draggable={!isInTarget}
-        onDragStart={handleDragStart}
-        onClick={handleClick}
-        data-value={number}
-      >
-        {number}
-      </div>
-    );
-  });
-
-  const DropTarget = React.memo(() => {
-    const [isDragOver, setIsDragOver] = useState(false);
-
-    const handleDragOver = (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-    };
-
-    const handleDragEnter = (e) => {
-      e.preventDefault();
-      setIsDragOver(true);
-    };
-
-    const handleDragLeave = (e) => {
-      e.preventDefault();
-      if (!e.currentTarget.contains(e.relatedTarget)) {
-        setIsDragOver(false);
-      }
-    };
-
-    const handleDropEvent = (e) => {
-      e.preventDefault();
-      setIsDragOver(false);
-      const draggedNumber = parseInt(e.dataTransfer.getData('text/plain'));
-      if (!targetNumbers.includes(draggedNumber) && targetNumbers.length < numbersCount) {
-        handleDrop(draggedNumber);
-      }
-    };
-
-    return (
-      <div
-        className={`drop-target ${isDragOver ? 'drag-over' : ''}`}
-        onDragOver={handleDragOver}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDropEvent}
-      >
-        {targetNumbers.length === 0 ? (
-          <p className="drop-hint">Arrastra los números aquí o haz clic en ellos</p>
-        ) : (
-          targetNumbers.map((number, index) => (
-            <NumberBox 
-              key={`${number}-${index}`} 
-              number={number} 
-              isInTarget 
-              onRemove={handleRemove}
-            />
-          ))
-        )}
-      </div>
-    );
-  });
-
-  const PermanentHint = React.memo(() => (
-    <div className="permanent-hint">
-      <div className="permanent-hint-header">
-        <span className="hint-icon">💡</span>
-        <h4>¡Pista especial!</h4>
-      </div>
-      <div className="permanent-hint-content">
-        <p className="hint-text">{generateHint()}</p>
-        <div className="hint-numbers">
-          <span className="hint-label">Números:</span>
-          {numbers.map(num => (
-            <span key={num} className="hint-number">{num}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  ));
-
-  // Computed values
-  const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
-  const progressPercentage = ((currentLevel + 1) / levelRanges.length) * 100;
 
   // Render
   return (
@@ -332,98 +206,90 @@ const JuegoOrdenamiento = () => {
         />
       )}
       
-      {gameState === 'game' && (
+      {gameState === 'game' && !showGameComplete && (
+        <GameScreen
+          currentLevel={currentLevel}
+          currentActivity={currentActivity}
+          totalActivities={totalActivities}
+          attempts={attempts}
+          points={points}
+          numbers={numbers}
+          sortedNumbers={sortedNumbers}
+          targetNumbers={targetNumbers}
+          numbersCount={getNumbersCount(currentLevel)}
+          onDrop={handleDrop}
+          onRemove={handleRemove}
+          onBackToLevels={handleBackToLevels}
+          onBackToGames={handleBackToGames}
+          generateHint={getHint}
+          showPermanentHint={showPermanentHint}
+          levelRanges={levelRanges}
+        />
+      )}
+
+      {gameState === 'game' && showGameComplete && (
         <div className="game-content">
           <header className="game-header">
             <div className="header-controls">
-              <button 
-                className="btn-back-to-levels"
-                onClick={handleBackToLevels}
-                title="Volver a niveles"
-              >
-                ← Niveles
-              </button>
-              <button 
-                className="btn-back-to-dashboard"
-                onClick={handleBackToGames}
-                title="Volver a juegos"
-              >
-                ← Juegos
-              </button>
+              <div className="buttons-group">
+                <button 
+                  className="btn-back-to-levels"
+                  onClick={handleBackToLevels}
+                  title="Volver a niveles"
+                >
+                  ← Niveles
+                </button>
+                <button 
+                  className="btn-back-to-dashboard"
+                  onClick={handleBackToGames}
+                  title="Volver a juegos"
+                >
+                  ← Juegos
+                </button>
+              </div>
+              
+              <div className="game-status">
+                <div className="status-item">
+                  <div className="status-icon">📊</div>
+                  <div className="status-label">Nivel</div>
+                  <div className="status-value">3</div>
+                </div>
+                <div className="status-item">
+                  <div className="status-icon">⭐</div>
+                  <div className="status-label">Puntuación</div>
+                  <div className="status-value">{points}</div>
+                </div>
+              </div>
             </div>
-            <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
-            <p className="game-instruction">
-              {getOrderInstruction(currentLevel + 1)}
-            </p>
+            <h1 className="game-title">� Ordenamiento Numérico</h1>
           </header>
-
-          <div className="game-status">
-            <div className="status-item">
-              <div className="status-icon">📊</div>
-              <div className="status-label">Nivel</div>
-              <div className="status-value">{currentLevel + 1}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">🎯</div>
-              <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">🎯</div>
-              <div className="status-label">Intentos</div>
-              <div className="status-value">{attempts}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">⭐</div>
-              <div className="status-label">Puntuación</div>
-              <div className="status-value">{points}</div>
-            </div>
-          </div>
 
           <div className="progress-container">
             <div 
               className="progress-bar"
-              data-progress={progressPercentage}
-              style={{'--progress-width': `${progressPercentage}%`}}
+              data-progress="100"
+              style={{'--progress-width': '100%'}}
             />
           </div>
 
-          {!showGameComplete ? (
-            <>
-              <div className="game-play-area">
-                <DropTarget />
-                
-                <div className="numbers-section">
-                  <h3 className="numbers-title">Números a ordenar:</h3>
-                  <div className="numbers-container">
-                    {availableNumbers.map(number => (
-                      <NumberBox 
-                        key={number} 
-                        number={number} 
-                        onDrop={handleDrop}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {showPermanentHint && <PermanentHint />}
-            </>
-          ) : (
-            <div className="game-complete">
-              <h2 className="complete-title">🎉 ¡Juego Completado!</h2>
-              <p className="complete-message">Has completado todos los niveles</p>
-              <p className="final-score">Puntuación final: {points}</p>
+          <div className="game-complete">
+            <h2 className="complete-title">🎉 ¡Felicitaciones!</h2>
+            <p className="complete-message">¡Has completado todos los niveles del juego de ordenamiento!</p>
+            <p className="final-score">Puntuación final: {points}</p>
+            <div className="complete-buttons">
+              <button className="restart-button" onClick={handleBackToLevels}>
+                📊 Ver Niveles
+              </button>
               <button className="restart-button" onClick={handleBackToStart}>
                 🔄 Jugar de nuevo
               </button>
             </div>
-          )}
+          </div>
         </div>
       )}
 
       {showLevelUp && !showGameComplete && (
-        <LevelResultsModal
+        <CongratsModal
           level={currentLevel + 1}
           results={levelResults}
           totalScore={points}
@@ -433,7 +299,7 @@ const JuegoOrdenamiento = () => {
       )}
 
       {showFeedback && (
-        <ActivityFeedbackModal
+        <FeedbackModal
           isSuccess={feedbackSuccess}
           onContinue={feedbackSuccess ? handleContinueAfterSuccess : () => setShowFeedback(false)}
           onRetry={() => {

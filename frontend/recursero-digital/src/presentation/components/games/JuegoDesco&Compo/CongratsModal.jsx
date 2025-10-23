@@ -73,7 +73,7 @@ const CongratsModal = ({ level, points, hasNextLevel, onNextLevel, onBackToLevel
                         onClick={onNextLevel} 
                         className="btn btn-start"
                         style={{
-                            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                            background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%)',
                             padding: '0.75rem 1.5rem'
                         }}
                     >

@@ -18,14 +18,30 @@ body, html {
     font-family: 'Comic Neue', cursive;
     min-height: 100vh;
     width: 100vw;
-    background: linear-gradient(135deg, #87ceeb 0%, #98e4ff 50%, #b6f3ff 100%);
+    background: linear-gradient(
+        135deg,
+        #1e3a8a 0%,
+        #3b82f6 20%,
+        #6366f1 40%,
+        #8b5cf6 60%,
+        #7c3aed 80%,
+        #5b21b6 100%
+    );
     position: relative;
     overflow-x: hidden;
 }
 
 .ocean-scene {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #87ceeb 0%, #98e4ff 40%, #7dd3fc 70%, #0ea5e9 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(30, 58, 138, 0.8) 0%,
+        rgba(59, 130, 246, 0.8) 20%,
+        rgba(99, 102, 241, 0.8) 40%,
+        rgba(139, 92, 246, 0.8) 60%,
+        rgba(124, 58, 237, 0.8) 80%,
+        rgba(91, 33, 182, 0.8) 100%
+    );
     position: relative;
     overflow: hidden;
 }
@@ -37,7 +53,7 @@ body, html {
     left: 0;
     right: 0;
     height: 60%;
-    background: radial-gradient(ellipse at center bottom, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
 }
 
 .landscape {
@@ -46,7 +62,15 @@ body, html {
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(to right, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(30, 58, 138, 0.6) 0%,
+        rgba(59, 130, 246, 0.6) 20%,
+        rgba(99, 102, 241, 0.6) 40%,
+        rgba(139, 92, 246, 0.6) 60%,
+        rgba(124, 58, 237, 0.6) 80%,
+        rgba(91, 33, 182, 0.6) 100%
+    );
     border-radius: 50% 50% 0 0 / 100% 100% 0 0;
     z-index: 1;
 }
@@ -109,15 +133,12 @@ body, html {
     border-bottom: 30px solid #dc2626;
 }
 
-.header-controls {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    display: flex;
-    gap: 1rem;
-    z-index: 10;
-}
+/* .header-controls removido - ahora está en globals/games.css */
 
+/* Estilos específicos para JuegoEscala */
+/* Los estilos comunes están en globals/games.css */
+
+/* Sobrescribir botones back para este juego específico */
 .btn-back-to-levels,
 .btn-back-to-dashboard {
     background: rgba(255, 255, 255, 0.95);
@@ -135,8 +156,16 @@ body, html {
 .btn-back-to-levels:hover,
 .btn-back-to-dashboard:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-    background: #3b82f6;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    background: linear-gradient(
+        135deg,
+        #1e3a8a 0%,
+        #3b82f6 20%,
+        #6366f1 40%,
+        #8b5cf6 60%,
+        #7c3aed 80%,
+        #5b21b6 100%
+    );
     color: white;
 }
 
@@ -216,35 +245,53 @@ body, html {
 }
 
 .number-box.filled {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: linear-gradient(
+        135deg,
+        #1e3a8a 0%,
+        #3b82f6 20%,
+        #6366f1 40%,
+        #8b5cf6 60%,
+        #7c3aed 80%,
+        #5b21b6 100%
+    );
     color: white;
-    border: 3px solid #1e40af;
+    border: 3px solid #1e3a8a;
 }
 
 .number-box.empty {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border: 3px dashed #f59e0b;
-    color: #92400e;
+    background: linear-gradient(
+        135deg,
+        rgba(139, 92, 246, 0.1) 0%,
+        rgba(124, 58, 237, 0.1) 50%,
+        rgba(91, 33, 182, 0.1) 100%
+    );
+    border: 3px dashed #8b5cf6;
+    color: #7c3aed;
 }
 
 .number-input {
     width: 80px;
     height: 80px;
-    border: 3px solid #f59e0b;
+    border: 3px solid #8b5cf6;
     border-radius: 1rem;
     text-align: center;
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    color: #92400e;
+    background: linear-gradient(
+        135deg,
+        rgba(139, 92, 246, 0.1) 0%,
+        rgba(124, 58, 237, 0.1) 50%,
+        rgba(91, 33, 182, 0.1) 100%
+    );
+    color: #7c3aed;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .number-input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
     background: rgba(255, 255, 255, 0.95);
     color: #1e40af;
 }
@@ -453,12 +500,7 @@ body, html {
     line-height: 1.4;
 }
 
-.level-range {
-    color: #64748b;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
+/* .level-range removido - ahora está en globals/games.css */
 
 .modal-overlay {
     position: fixed;
