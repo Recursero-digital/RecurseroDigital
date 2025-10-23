@@ -1,4 +1,5 @@
 import React from 'react';
+import { isValidNumber } from './util';
 
 const GameScreen = ({ 
     activity,
@@ -9,14 +10,49 @@ const GameScreen = ({
     onAnswersChange,
     onCheckAnswer,
     onBackToLevels,
-    levelConfig
+    levelConfig,
+    inputErrors,
+    setInputErrors,
+    isProcessing
 }) => {
 
     const handleInputChange = (field, value) => {
-        onAnswersChange(prev => ({
+        // No permitir cambios mientras se procesa
+        if (isProcessing) return;
+
+        // Validación en tiempo real
+        const isValid = isValidNumber(value);
+        setInputErrors(prev => ({
             ...prev,
-            [field]: value
+            [field]: !isValid
         }));
+
+        if (isValid) {
+            onAnswersChange(prev => ({
+                ...prev,
+                [field]: value
+            }));
+        }
+    };
+
+    const handleKeyDown = (e, field) => {
+        // No permitir navegación mientras se procesa
+        if (isProcessing) return;
+
+        // Navegación por teclado
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (field === 'anterior') {
+                // Mover al input posterior
+                const posteriorInput = document.querySelector('input[aria-label="Número posterior en la secuencia"]');
+                if (posteriorInput) posteriorInput.focus();
+            } else if (field === 'posterior') {
+                // Verificar respuesta si ambos campos están llenos y no hay errores
+                if (userAnswers.anterior && userAnswers.posterior && !inputErrors?.anterior && !inputErrors?.posterior) {
+                    onCheckAnswer();
+                }
+            }
+        }
     };
 
     return (
@@ -203,24 +239,42 @@ const GameScreen = ({
                                     value={userAnswers.anterior || ''}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        // Solo permitir números positivos y vacío
-                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                        // Permitir números enteros (positivos y negativos) y vacío
+                                        if (value === '' || /^-?\d+$/.test(value)) {
                                             handleInputChange('anterior', value);
                                         }
                                     }}
+                                    onKeyDown={(e) => handleKeyDown(e, 'anterior')}
+                                    disabled={isProcessing}
                                     className="answer-input"
                                     style={{
                                         fontSize: '1.5rem',
                                         padding: '1rem',
                                         borderRadius: '1rem',
-                                        border: '3px solid #dc2626',
+                                        border: `3px solid ${inputErrors?.anterior ? '#ef4444' : '#dc2626'}`,
                                         textAlign: 'center',
                                         width: '120px',
                                         WebkitAppearance: 'none',
-                                        MozAppearance: 'textfield'
+                                        MozAppearance: 'textfield',
+                                        backgroundColor: isProcessing ? '#f3f4f6' : (inputErrors?.anterior ? '#fef2f2' : 'white'),
+                                        cursor: isProcessing ? 'not-allowed' : 'text',
+                                        opacity: isProcessing ? 0.7 : 1
                                     }}
                                     placeholder="0"
+                                    aria-label="Número anterior en la secuencia"
+                                    aria-describedby="anterior-help"
+                                    aria-invalid={inputErrors?.anterior}
+                                    role="spinbutton"
                                 />
+                                {inputErrors?.anterior && (
+                                    <div style={{
+                                        color: '#dc2626',
+                                        fontSize: '0.875rem',
+                                        marginTop: '0.25rem'
+                                    }}>
+                                        Ingresa un número válido
+                                    </div>
+                                )}
                             </div>
 
                             <div style={{ textAlign: 'center' }}>
@@ -238,39 +292,62 @@ const GameScreen = ({
                                     value={userAnswers.posterior || ''}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        // Solo permitir números positivos y vacío
-                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                        // Permitir números enteros (positivos y negativos) y vacío
+                                        if (value === '' || /^-?\d+$/.test(value)) {
                                             handleInputChange('posterior', value);
                                         }
                                     }}
+                                    onKeyDown={(e) => handleKeyDown(e, 'posterior')}
+                                    disabled={isProcessing}
                                     className="answer-input"
                                     style={{
                                         fontSize: '1.5rem',
                                         padding: '1rem',
                                         borderRadius: '1rem',
-                                        border: '3px solid #16a34a',
+                                        border: `3px solid ${inputErrors?.posterior ? '#ef4444' : '#16a34a'}`,
                                         textAlign: 'center',
                                         width: '120px',
                                         WebkitAppearance: 'none',
-                                        MozAppearance: 'textfield'
+                                        MozAppearance: 'textfield',
+                                        backgroundColor: isProcessing ? '#f3f4f6' : (inputErrors?.posterior ? '#fef2f2' : 'white'),
+                                        cursor: isProcessing ? 'not-allowed' : 'text',
+                                        opacity: isProcessing ? 0.7 : 1
                                     }}
                                     placeholder="0"
+                                    aria-label="Número posterior en la secuencia"
+                                    aria-describedby="posterior-help"
+                                    aria-invalid={inputErrors?.posterior}
+                                    role="spinbutton"
                                 />
+                                {inputErrors?.posterior && (
+                                    <div style={{
+                                        color: '#dc2626',
+                                        fontSize: '0.875rem',
+                                        marginTop: '0.25rem'
+                                    }}>
+                                        Ingresa un número válido
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Cuadro informativo estático */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
-                        border: '3px solid #0288d1',
-                        borderRadius: '1rem',
-                        padding: '1.5rem',
-                        margin: '2rem auto',
-                        maxWidth: '600px',
-                        textAlign: 'center',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}>
+                    {/* Cuadro informativo estático con ARIA */}
+                    <div 
+                        id="game-instructions"
+                        role="region"
+                        aria-label="Instrucciones del juego"
+                        style={{
+                            background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
+                            border: '3px solid #0288d1',
+                            borderRadius: '1rem',
+                            padding: '1.5rem',
+                            margin: '2rem auto',
+                            maxWidth: '600px',
+                            textAlign: 'center',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                        }}
+                    >
                         <div style={{
                             fontSize: '1.2rem',
                             fontWeight: '700',
@@ -279,12 +356,25 @@ const GameScreen = ({
                         }}>
                             📚 {levelConfig.name}
                         </div>
-                        <div style={{
-                            fontSize: '1rem',
-                            color: '#01579b',
-                            fontWeight: '600'
-                        }}>
+                        <div 
+                            id="anterior-help"
+                            style={{
+                                fontSize: '1rem',
+                                color: '#01579b',
+                                fontWeight: '600'
+                            }}
+                        >
                             {levelConfig.description}
+                        </div>
+                        <div 
+                            id="posterior-help"
+                            style={{
+                                fontSize: '0.875rem',
+                                color: '#01579b',
+                                marginTop: '0.5rem'
+                            }}
+                        >
+                            Usa Enter para navegar entre campos y verificar tu respuesta
                         </div>
                     </div>
 
@@ -297,20 +387,29 @@ const GameScreen = ({
                         <button 
                             className="btn-submit"
                             onClick={onCheckAnswer}
+                            disabled={!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing}
+                            aria-describedby="game-instructions"
                             style={{
-                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                background: (!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing) 
+                                    ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
+                                    : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                                 border: '3px solid #047857',
                                 color: 'white',
                                 padding: '0.75rem 2rem',
                                 borderRadius: '1rem',
                                 fontSize: '1.2rem',
                                 fontWeight: '700',
-                                cursor: 'pointer',
+                                cursor: (!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing) 
+                                    ? 'not-allowed' 
+                                    : 'pointer',
                                 position: 'relative',
-                                zIndex: 1000
+                                zIndex: 1000,
+                                opacity: (!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing) 
+                                    ? 0.6 
+                                    : 1
                             }}
                         >
-                            🚀 Verificar Respuesta
+                            {isProcessing ? '⏳ Procesando...' : '🚀 Verificar Respuesta'}
                         </button>
                     </div>
                 </div>
