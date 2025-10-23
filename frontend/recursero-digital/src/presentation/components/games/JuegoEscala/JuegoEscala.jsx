@@ -256,32 +256,13 @@ const JuegoEscala = () => {
         <div className="game-wrapper">
             {/* Notificación de error si existe */}
             {errorNotification && (
-                <div style={{
-                    position: 'fixed',
-                    top: '20px',
-                    right: '20px',
-                    background: '#fef3c7',
-                    border: '2px solid #f59e0b',
-                    borderRadius: '0.5rem',
-                    padding: '1rem',
-                    zIndex: 9999,
-                    maxWidth: '300px'
-                }}>
-                    <div style={{ color: '#92400e', fontWeight: '600' }}>
+                <div className="error-notification">
+                    <div className="error-notification-text">
                         ⚠️ {errorNotification}
                     </div>
                     <button 
                         onClick={() => setErrorNotification('')}
-                        style={{
-                            marginTop: '0.5rem',
-                            background: '#f59e0b',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '0.25rem',
-                            padding: '0.25rem 0.5rem',
-                            fontSize: '0.875rem',
-                            cursor: 'pointer'
-                        }}
+                        className="error-notification-close"
                     >
                         Cerrar
                     </button>
