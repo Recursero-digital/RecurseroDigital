@@ -59,6 +59,12 @@ body, html {
   align-items: center;
   min-height: 200px; /* Altura mínima para centrar las instrucciones */
   justify-content: center;
+  width: 100%;
+}
+
+.game-header > * {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Header controls layout */
@@ -100,7 +106,7 @@ body, html {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  min-width: 100px;
+  min-width: 80px;
   flex: 1;
 }
 
@@ -125,18 +131,23 @@ body, html {
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
 /* Sobrescriben los estilos globales responsivos de games.css */
 
-.game-title {
+.game-container .game-title {
   color: var(--space-yellow);
   font-size: 2.2rem;
   margin: 0 0 10px 0;
   text-shadow: 3px 3px 0px var(--space-blue);
   font-weight: 700;
+  text-align: center !important;
+  width: 100%;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-.game-instruction {
+.game-container .game-instruction {
   color: white;
   font-size: 1.6rem;
-  margin: 20px 0;
+  margin: 20px auto;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   background: rgba(0, 0, 0, 0.2);
@@ -144,12 +155,22 @@ body, html {
   border-radius: 20px;
   border: 2px solid var(--space-yellow);
   max-width: 600px;
+  text-align: center;
+  width: fit-content;
 }
 
-/* Game Status original (ahora oculto, se usa el del header) */
+/* Forzar centrado si es necesario */
+.game-header .game-title,
+.game-header .game-instruction {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Game Status original (ahora oculto, se usa el del header)
 .game-content > .game-status {
   display: none;
-}
+} */
 
 /* Progress Bar */
 .progress-container {
