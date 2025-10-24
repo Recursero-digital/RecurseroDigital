@@ -182,7 +182,7 @@ const JuegoEscritura = () => {
     };
 
     return (
-        <div className="game-wrapper">
+        <div className="game-container">
             {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
             
             {gameState === 'level-select' && <LevelSelectScreen onSelectLevel={handleStartGame} />}
