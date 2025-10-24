@@ -5,7 +5,7 @@ export class JWTTokenService implements TokenService {
   private readonly secretKey: string;
   private readonly expiresIn: string;
 
-  constructor(secretKey: string = 'your-secret-key', expiresIn: string = '1h') {
+  constructor(secretKey: string = process.env.JWT_SECRET || 'your-secret-key', expiresIn: string = '1h') {
     this.secretKey = secretKey;
     this.expiresIn = expiresIn;
   }
