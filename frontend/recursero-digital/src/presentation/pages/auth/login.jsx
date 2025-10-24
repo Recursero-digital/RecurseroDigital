@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/login.css"
 import { PiStudentFill } from "react-icons/pi";
-import Logo from '../../../assets/Logo.png';
+import Logo from '../../../assets/logo.png';
 
 
 export default function RoleSelection() {

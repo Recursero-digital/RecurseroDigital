@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiRequest, AUTH_ENDPOINTS } from "../../../infrastructure/config/api";
 import "../../styles/pages/loginForm.css";
-import Logo from '../../../assets/Logo.png';
+import Logo from '../../../assets/logo.png';
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
