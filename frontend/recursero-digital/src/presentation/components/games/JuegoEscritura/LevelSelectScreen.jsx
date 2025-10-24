@@ -19,13 +19,15 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
         <div className="game-content">
             <div className="level-select-screen">
                 <div className="header-controls">
-                    <button 
-                        className="btn-back-to-levels"
-                        onClick={() => navigate('/alumno/juegos')}
-                        title="Volver a juegos"
-                    >
-                        ← Juegos
-                    </button>
+                    <div className="buttons-group">
+                        <button 
+                            className="btn-back-to-levels"
+                            onClick={() => navigate('/alumno/juegos')}
+                            title="Volver a juegos"
+                        >
+                            ← Juegos
+                        </button>
+                    </div>
                 </div>
                 
                 <div className="level-select-content">

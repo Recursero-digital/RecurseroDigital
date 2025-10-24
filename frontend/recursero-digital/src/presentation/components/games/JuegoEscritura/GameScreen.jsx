@@ -22,47 +22,49 @@ const GameScreen = ({
         <div className="game-content">
             <div className="game-header">
                 <div className="header-controls">
-                    <button 
-                        className="btn-back-to-levels"
-                        onClick={onBackToLevels}
-                        title="Volver a niveles"
-                    >
-                        ← Niveles
-                    </button>
-                    <button 
-                        className="btn-back-to-dashboard"
-                        onClick={() => navigate('/alumno/juegos')}
-                        title="Volver al dashboard"
-                    >
-                        🏠
-                    </button>
+                    <div className="buttons-group">
+                        <button 
+                            className="btn-back-to-levels"
+                            onClick={onBackToLevels}
+                            title="Volver a niveles"
+                        >
+                            ← Niveles
+                        </button>
+                        <button 
+                            className="btn-back-to-dashboard"
+                            onClick={() => navigate('/alumno/juegos')}
+                            title="Volver al dashboard"
+                        >
+                            ← Juegos
+                        </button>
+                    </div>
+                    
+                    <div className="game-status">
+                        <div className="status-item">
+                            <div className="status-icon">🏆</div>
+                            <div className="status-label">Nivel</div>
+                            <div className="status-value">{level}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">📝</div>
+                            <div className="status-label">Actividad</div>
+                            <div className="status-value">{activity}/5</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">⭐</div>
+                            <div className="status-label">Puntos</div>
+                            <div className="status-value">{points}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">🎯</div>
+                            <div className="status-label">Intentos</div>
+                            <div className="status-value">{attempts}</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <h1 className="game-title">🔤 Juego de Escritura 🔤</h1>
                 <p className="game-instruction">Arrastra cada número a su palabra correspondiente</p>
-            </div>
-
-            <div className="game-status">
-                <div className="status-item">
-                    <span className="status-icon">🏆</span>
-                    <span className="status-label">Nivel</span>
-                    <span className="status-value">{level}</span>
-                </div>
-                <div className="status-item">
-                    <span className="status-icon">📝</span>
-                    <span className="status-label">Actividad</span>
-                    <span className="status-value">{activity}/5</span>
-                </div>
-                <div className="status-item">
-                    <span className="status-icon">⭐</span>
-                    <span className="status-label">Puntos</span>
-                    <span className="status-value">{points}</span>
-                </div>
-                <div className="status-item">
-                    <span className="status-icon">🎯</span>
-                    <span className="status-label">Intentos</span>
-                    <span className="status-value">{attempts}</span>
-                </div>
             </div>
 
             <div className="game-play-area">
