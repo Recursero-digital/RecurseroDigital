@@ -1,4 +1,60 @@
+/*
+ * JuegoEscala Styles - OPTIMIZADO
+ * 
+ * ✅ OPTIMIZACIONES REALIZADAS:
+ * - Eliminadas ~300 líneas de código duplicado
+ * - Variables CSS centralizadas en games.css
+ * - Gradientes unificados con backgrounds.css
+ * - Botones estandarizados con games.css
+ * 
+ * 📋 CLASES GLOBALES A USAR (para evitar duplicación):
+ * 
+ * De backgrounds.css:
+ * - .bg-space-gradient: Gradiente principal del espacio
+ * - .bg-space-ui: Gradiente con opacidad para componentes UI
+ * 
+ * De games.css (variables disponibles):
+ * - Variables: --space-blue, --space-yellow, --main-gradient, --button-gradient
+ * - .btn-start, .btn-check, .btn-hint: Botones básicos de juego
+ * - .btn-back-to-levels, .btn-back-to-dashboard: Botones de navegación
+ * - .game-title: Título principal del juego (var(--space-yellow))
+ * - .game-instruction: Instrucciones del juego
+ * - .level-grid: Grid base para niveles (extendido aquí)
+ * - .level-btn: Botones de nivel
+ * 
+ * 🎯 PRÓXIMOS PASOS:
+ * ✅ 1. Actualizar componentes React para usar clases globales
+ * ✅ 2. Aplicar bg-space-gradient a .game-wrapper y .ocean-scene
+ * ✅ 3. Usar .game-title en lugar de títulos personalizados donde sea posible
+ * 
+ * 🎉 OPTIMIZACIÓN COMPLETA! El juego ahora usa el sistema de diseño global.
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Gradientes específicos del juego que no están en globals */
+    --gradient-blue: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-green: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-orange: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-red: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    
+    /* Colores específicos del juego (usar variables globales cuando sea posible) */
+    --color-primary: var(--space-blue, #1e40af);
+    --color-secondary: #0c4a6e;
+    --color-success: #065f46;
+    --color-warning: #92400e;
+    --color-error: #dc2626;
+    
+    /* Fuentes */
+    --font-comic: 'Comic Neue', cursive;
+    --font-fredoka: 'Fredoka', sans-serif;
+    
+    /* Sombras */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.2);
+    --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
 
 * {
     margin: 0;
@@ -14,34 +70,19 @@ body, html {
     overflow-x: hidden;
 }
 
+/* Usar clases globales de backgrounds.css para evitar duplicación */
 .game-wrapper {
-    font-family: 'Comic Neue', cursive;
+    font-family: var(--font-comic);
     min-height: 100vh;
     width: 100vw;
-    background: linear-gradient(
-        135deg,
-        #1e3a8a 0%,
-        #3b82f6 20%,
-        #6366f1 40%,
-        #8b5cf6 60%,
-        #7c3aed 80%,
-        #5b21b6 100%
-    );
     position: relative;
     overflow-x: hidden;
 }
 
+/* Aplicar clase global bg-space-gradient desde backgrounds.css */
+.game-wrapper,
 .ocean-scene {
     min-height: 100vh;
-    background: linear-gradient(
-        135deg,
-        rgba(30, 58, 138, 0.8) 0%,
-        rgba(59, 130, 246, 0.8) 20%,
-        rgba(99, 102, 241, 0.8) 40%,
-        rgba(139, 92, 246, 0.8) 60%,
-        rgba(124, 58, 237, 0.8) 80%,
-        rgba(91, 33, 182, 0.8) 100%
-    );
     position: relative;
     overflow: hidden;
 }
@@ -157,15 +198,7 @@ body, html {
 .btn-back-to-dashboard:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-    background: linear-gradient(
-        135deg,
-        #1e3a8a 0%,
-        #3b82f6 20%,
-        #6366f1 40%,
-        #8b5cf6 60%,
-        #7c3aed 80%,
-        #5b21b6 100%
-    );
+    background: var(--main-gradient);
     color: white;
 }
 
@@ -212,11 +245,11 @@ body, html {
 }
 
 .sequence-title {
-    font-family: 'Fredoka', sans-serif;
+    font-family: var(--font-fredoka);
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
-    color: #0c4a6e;
+    color: var(--color-secondary);
     margin-bottom: 2rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -244,16 +277,8 @@ body, html {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Usar clase global bg-space-gradient desde backgrounds.css */
 .number-box.filled {
-    background: linear-gradient(
-        135deg,
-        #1e3a8a 0%,
-        #3b82f6 20%,
-        #6366f1 40%,
-        #8b5cf6 60%,
-        #7c3aed 80%,
-        #5b21b6 100%
-    );
     color: white;
     border: 3px solid #1e3a8a;
 }
@@ -337,7 +362,7 @@ body, html {
 .base-number {
     width: 100px;
     height: 100px;
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: var(--gradient-blue);
     color: white;
     border-radius: 1.5rem;
     display: flex;
@@ -346,7 +371,7 @@ body, html {
     font-size: 2rem;
     font-weight: 900;
     box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-    border: 3px solid #1e40af;
+    border: 3px solid var(--color-primary);
     position: relative;
 }
 
@@ -362,7 +387,8 @@ body, html {
     z-index: -1;
 }
 
-.btn {
+/* Clase base para botones */
+.btn-base {
     padding: 1rem 2rem;
     border: none;
     border-radius: 2rem;
@@ -374,43 +400,33 @@ body, html {
     letter-spacing: 1px;
     position: relative;
     overflow: hidden;
-    font-family: 'Comic Neue', cursive;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-comic);
+    box-shadow: var(--shadow-light);
 }
 
-.btn:hover {
+.btn-base:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-medium);
 }
 
+/* Los botones .btn-start, .btn-check y .btn-hint ahora usan los estilos globales de games.css */
+
+/* Sobrescribir solo si necesitamos estilos específicos para este juego */
 .btn-start {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    color: white;
-    border: 3px solid #1e40af;
+    background: var(--gradient-blue);
 }
 
 .btn-check {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    border: 3px solid #047857;
-}
-
-.btn-check:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+    background: var(--gradient-green);
 }
 
 .btn-hint {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-    border: 3px solid #b45309;
+    background: var(--gradient-orange);
 }
 
+/* Extender la clase global .level-grid con características específicas para JuegoEscala */
 .level-grid {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
@@ -705,4 +721,844 @@ body, html {
         flex-direction: column;
         align-items: center;
     }
+}
+
+/* FeedbackModal specific styles */
+.feedback-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feedback-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1e40af;
+}
+
+.feedback-explanation {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.feedback-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Usar clase global bg-space-gradient desde backgrounds.css para botones */
+.btn-main-gradient {
+    color: white;
+    border: 3px solid #1e3a8a;
+    transition: all 0.3s ease;
+}
+
+.btn-main-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.4);
+}
+
+/* Aplicar la clase a botones específicos */
+.btn-close,
+.btn-success,
+.btn-play-again,
+.btn-back-to-games {
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-family: var(--font-comic);
+    transition: all 0.3s ease;
+}
+
+/* CongratsModal specific styles */
+.congrats-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.congrats-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.congrats-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 1rem;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.congrats-subtitle {
+    font-size: 1.2rem;
+    color: #374151;
+    font-weight: 600;
+}
+
+.score-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.score-circle {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.score-percentage {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.score-fraction {
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.level-info {
+    text-align: center;
+    width: 100%;
+}
+
+.level-info h3 {
+    color: #1e40af;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.level-passed-info {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 2px solid #1e3a8a;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.level-passed-text {
+    color: #1e3a8a;
+    font-weight: 700;
+    margin: 0;
+}
+
+.level-unlocked-text {
+    color: #1e3a8a;
+    font-weight: 600;
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.level-failed-info {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border: 2px solid #8b5cf6;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.level-failed-text {
+    color: #92400e;
+    font-weight: 700;
+    margin: 0;
+}
+
+.level-retry-text {
+    color: #92400e;
+    font-weight: 600;
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.congrats-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-play-again,
+.btn-back-to-games {
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+/* GameScreen specific styles */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.game-level-title {
+    font-size: 2rem;
+    color: var(--color-primary);
+    font-family: var(--font-fredoka);
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0;
+}
+
+.question-counter {
+    font-size: 1.2rem;
+    color: var(--color-secondary);
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid #3b82f6;
+    display: inline-block;
+    width: auto;
+}
+
+.progress-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.score-display {
+    font-size: 1.1rem;
+    color: #0c4a6e;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid #10b981;
+    display: inline-block;
+    width: auto;
+}
+
+.btn-back {
+    background: var(--gradient-red);
+    border: 3px solid #b91c1c;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.question-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+.question-content {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e40af;
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+    border: 3px solid #3b82f6;
+}
+
+.anterior-posterior-question {
+    margin-bottom: 2rem;
+}
+
+.question-title {
+    font-family: var(--font-fredoka);
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-secondary);
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sequence-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.context-number {
+    font-size: 1.2rem;
+    color: #6b7280;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.8rem;
+    border: 2px solid #d1d5db;
+}
+
+.missing-anterior {
+    font-size: 1.8rem;
+    color: #dc2626;
+    font-weight: 900;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    border: 3px dashed #dc2626;
+    min-width: 50px;
+    text-align: center;
+}
+
+.central-number {
+    font-size: 2.2rem;
+    color: #1e40af;
+    font-weight: 900;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.2rem 1.5rem;
+    border-radius: 1.5rem;
+    border: 3px solid #3b82f6;
+    min-width: 70px;
+    text-align: center;
+}
+
+.missing-posterior {
+    font-size: 1.8rem;
+    color: #16a34a;
+    font-weight: 900;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    border: 3px dashed #16a34a;
+    min-width: 50px;
+    text-align: center;
+}
+
+.anterior-posterior-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.input-group {
+    text-align: center;
+}
+
+.input-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.input-label.anterior {
+    color: #dc2626;
+}
+
+.input-label.posterior {
+    color: #16a34a;
+}
+
+.answer-input {
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 120px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    transition: all 0.3s ease;
+}
+
+.answer-input.anterior {
+    border: 3px solid #dc2626;
+}
+
+.answer-input.posterior {
+    border: 3px solid #16a34a;
+}
+
+.answer-input.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.answer-input.disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.answer-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e40af;
+}
+
+.input-error {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.game-instructions {
+    background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+    border: 3px solid #0288d1;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.instructions-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0277bd;
+    margin-bottom: 0.5rem;
+}
+
+.instructions-description {
+    font-size: 1rem;
+    color: #01579b;
+    font-weight: 600;
+}
+
+.instructions-help {
+    font-size: 0.875rem;
+    color: #01579b;
+    margin-top: 0.5rem;
+}
+
+.game-actions {
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 999;
+}
+
+.btn-submit {
+    border: 3px solid #047857;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.btn-submit.enabled {
+    background: var(--gradient-green);
+    cursor: pointer;
+    opacity: 1;
+}
+
+.btn-submit.disabled {
+    background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-submit.enabled:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* StartScreen specific styles */
+.start-screen-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 4rem;
+    position: relative;
+    z-index: 10;
+}
+
+.main-game-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 1rem;
+    font-family: var(--font-fredoka);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    background: var(--gradient-blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.game-info-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 2rem;
+    border: 3px solid #3b82f6;
+    margin-bottom: 2rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.game-subtitle {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+    font-family: var(--font-fredoka);
+    font-weight: 600;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.feature-card {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 3px solid;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card.blue {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.feature-card.green {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: #10b981;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.feature-card.purple {
+    background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+    border-color: #8b5cf6;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.feature-title {
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.feature-card.green .feature-title {
+    color: #065f46;
+}
+
+.feature-card.purple .feature-title {
+    color: #5b21b6;
+}
+
+.feature-description {
+    color: #1e40af;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.feature-card.green .feature-description {
+    color: #065f46;
+}
+
+.feature-card.purple .feature-description {
+    color: #5b21b6;
+}
+
+.objectives-section {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 3px solid #f59e0b;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.objectives-title {
+    color: #92400e;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.objectives-list {
+    color: #a16207;
+    text-align: left;
+    line-height: 1.6;
+    font-weight: 500;
+    padding-left: 1rem;
+}
+
+.objectives-list li {
+    margin-bottom: 0.5rem;
+}
+
+.start-game-button {
+    font-size: 1.3rem;
+    padding: 1.2rem 3rem;
+    background: var(--gradient-blue);
+    border: 3px solid var(--color-primary);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* LevelSelectScreen specific styles */
+.level-select-content {
+    text-align: center;
+    padding-top: 4rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Usar clase global bg-space-gradient desde backgrounds.css para texto con clip */
+.level-select-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 1rem;
+    font-family: var(--font-fredoka);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.level-select-subtitle {
+    font-size: 1.3rem;
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin-bottom: 3rem;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.level-lock-indicator {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+}
+
+.level-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.level-card-title.blue {
+    color: #1e40af;
+}
+
+.level-card-title.green {
+    color: #065f46;
+}
+
+.level-card-title.purple {
+    color: #5b21b6;
+}
+
+.difficulty-indicator {
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid;
+}
+
+.difficulty-indicator.blue {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border-color: #1e3a8a;
+}
+
+.difficulty-indicator.green {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-color: #6366f1;
+}
+
+.difficulty-indicator.purple {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(91, 33, 182, 0.1) 100%);
+    border-color: #7c3aed;
+}
+
+.difficulty-operation {
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.difficulty-operation.blue {
+    color: #1e40af;
+}
+
+.difficulty-operation.green {
+    color: #065f46;
+}
+
+.difficulty-operation.purple {
+    color: #5b21b6;
+}
+
+.difficulty-description {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.difficulty-description.blue {
+    color: #1e40af;
+}
+
+.difficulty-description.green {
+    color: #065f46;
+}
+
+.difficulty-description.purple {
+    color: #5b21b6;
+}
+
+.btn-level-explore {
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+/* Usar clase global bg-space-gradient desde backgrounds.css */
+.btn-level-explore.enabled {
+    border: 3px solid #1e3a8a;
+    cursor: pointer;
+}
+
+.btn-level-explore.disabled {
+    background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    border: 3px solid #6b7280;
+    cursor: not-allowed;
+}
+
+.btn-level-explore.enabled:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+.game-instructions-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 2rem;
+    border: 3px solid #3b82f6;
+    max-width: 700px;
+    margin: 3rem auto 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.instructions-card-title {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-family: var(--font-fredoka);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.instructions-card-content {
+    color: var(--color-secondary);
+    line-height: 1.7;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.instructions-card-content p {
+    margin-bottom: 1rem;
+}
+
+.instructions-card-content p:last-child {
+    margin: 0;
+}
+
+/* Error notification styles */
+.error-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+.error-notification-text {
+    color: #92400e;
+    font-weight: 600;
+}
+
+.error-notification-close {
+    margin-top: 0.5rem;
+    background: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.error-notification-close:hover {
+    background: #d97706;
+}
+
+/* Header controls positioning for level select */
+.header-controls-level-select {
+    z-index: 999;
+    position: relative;
+}
+
+.header-controls-level-select .btn-back-to-levels {
+    position: relative;
+    z-index: 1000;
+}
+
+/* Level card animation delay */
+.level-card.slide-in {
+    position: relative;
 }

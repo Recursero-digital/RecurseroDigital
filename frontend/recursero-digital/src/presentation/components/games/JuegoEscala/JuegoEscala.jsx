@@ -7,9 +7,20 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
-import HintModal from './HintModal';
+import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { 
+    GAME_CONFIG, 
+    MESSAGES, 
+    UI_STATES,
+    calculateActivityScore,
+    getRandomMessage,
+    calculatePercentage,
+    isLevelPassed,
+    createAnteriorPosteriorQuestion,
+    getProgressiveHint
+} from './util';
 
 const JuegoEscala = () => {
     const { unlockLevel } = useUserProgress();
@@ -22,7 +33,7 @@ const JuegoEscala = () => {
         completeActivity
     } = useGameScoring();
     
-    const [gameState, setGameState] = useState('start');
+    const [gameState, setGameState] = useState(UI_STATES.GAME_STATES.START);
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
     const [userAnswers, setUserAnswers] = useState({ anterior: '', posterior: '' });
@@ -33,7 +44,10 @@ const JuegoEscala = () => {
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [isValidationError, setIsValidationError] = useState(false);
     const [questions, setQuestions] = useState([]);
-    const [totalQuestions] = useState(5);
+    const [inputErrors, setInputErrors] = useState({ anterior: false, posterior: false });
+    const [errorNotification, setErrorNotification] = useState('');
+    const [isProcessing, setIsProcessing] = useState(false); // Prevenir doble envío
+    const [totalQuestions] = useState(GAME_CONFIG.TOTAL_QUESTIONS);
 
     useEffect(() => {
         AOS.init();
@@ -80,22 +94,14 @@ const JuegoEscala = () => {
         
         // TODAS las preguntas serán de tipo "Anterior y Posterior"
         for (let i = 0; i < totalQuestions; i++) {
-            const baseNumber = generateNumber(level);
-            newQuestions.push({
-                type: 'anteriorPosterior',
-                baseNumber,
-                correctAnterior: baseNumber - levelConfig.operation,
-                correctPosterior: baseNumber + levelConfig.operation,
-                operation: levelConfig.operation,
-                hint: `El anterior es ${levelConfig.operation} menos, el posterior es ${levelConfig.operation} más`
-            });
+            newQuestions.push(createAnteriorPosteriorQuestion(levelConfig));
         }
         
         return newQuestions;
-    }, [generateNumber, levels, totalQuestions]);
+    }, [levels, totalQuestions]);
 
     const handleStartGame = useCallback(() => {
-        setGameState('levelSelect');
+        setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
     }, []);
 
     const handleSelectLevel = useCallback((level) => {
@@ -109,83 +115,108 @@ const JuegoEscala = () => {
         setQuestions(newQuestions);
         
         resetScoring();
-        setGameState('playing');
+        setGameState(UI_STATES.GAME_STATES.PLAYING);
     }, [generateQuestions, resetScoring]);
 
     useEffect(() => {
-        if (gameState === 'playing' && questions.length > 0 && currentActivity < questions.length) {
+        if (gameState === UI_STATES.GAME_STATES.PLAYING && questions.length > 0 && currentActivity < questions.length) {
             setCurrentQuestion(questions[currentActivity]);
             setUserAnswers({ anterior: '', posterior: '' });
+            setInputErrors({ anterior: false, posterior: false });
+            setIsProcessing(false); // Reset processing state para nueva pregunta
             resetAttempts();
         }
     }, [gameState, currentActivity, questions, resetAttempts]);
 
     const handleCheckAnswer = useCallback(() => {
-        if (!currentQuestion) return;
+        if (!currentQuestion || isProcessing) return; // Prevenir múltiples envíos
 
-        // VALIDACIÓN: Solo verificamos anterior y posterior (ya no hay secuencias)
+        // VALIDACIÓN: Solo verificamos anterior y posterior
         if (!userAnswers.anterior || !userAnswers.posterior) {
             setIsValidationError(true);
             setFeedback({
                 title: '⚠️ Campos incompletos',
-                text: 'Por favor, completa tanto el número anterior como el posterior antes de verificar.',
+                text: MESSAGES.VALIDATION_ERRORS.INCOMPLETE_FIELDS,
                 isCorrect: false
             });
             setShowFeedback(true);
             return;
         }
 
+        // Marcar como procesando para prevenir doble envío
+        setIsProcessing(true);
+
         // Reset validation error flag para respuestas normales
         setIsValidationError(false);
 
         incrementAttempts();
+        const currentAttempts = attempts + 1;
         
-        // VALIDACIÓN: Solo anterior y posterior
+        // VALIDACIÓN: Solo anterior y posterior usando funciones utilitarias
         const anteriorCorrect = parseInt(userAnswers.anterior) === currentQuestion.correctAnterior;
         const posteriorCorrect = parseInt(userAnswers.posterior) === currentQuestion.correctPosterior;
         const isCorrect = anteriorCorrect && posteriorCorrect;
 
         if (isCorrect) {
-            const activityScore = 50 * (currentLevel + 1);
-            completeActivity(currentLevel, attempts + 1);
-            
-            // Mensajes de felicitaciones variados
-            const successMessages = [
-                '¡Excelente trabajo!',
-                '¡Muy bien hecho!',
-                '¡Correcto, sigue así!',
-                '¡Fantástico!',
-                '¡Perfecto!',
-                '¡Genial!'
-            ];
-            const randomMessage = successMessages[Math.floor(Math.random() * successMessages.length)];
-            
-            setFeedback({
-                title: `🎉 ${randomMessage}`,
-                text: `¡Has ganado ${activityScore} puntos! Continúa con la siguiente actividad.`,
-                isCorrect: true
-            });
+            try {
+                const activityScore = calculateActivityScore(currentLevel, currentAttempts);
+                completeActivity(
+                    currentLevel, 
+                    'escala', 
+                    currentActivity + 1, 
+                    Math.max(currentLevel + 1, 1), 
+                    {
+                        correctAnswers: 1,
+                        totalQuestions: totalQuestions
+                    }
+                );
+                
+                // Mensaje aleatorio de felicitaciones
+                const randomMessage = getRandomMessage(MESSAGES.SUCCESS);
+                
+                setFeedback({
+                    title: `🎉 ${randomMessage}`,
+                    text: `¡Has ganado ${activityScore} puntos! Continúa con la siguiente actividad.`,
+                    isCorrect: true
+                });
+            } catch (error) {
+                console.error('Error al guardar puntaje:', error);
+                setErrorNotification('No se pudo guardar el progreso, pero puedes continuar jugando');
+                
+                // Continuar con el feedback positivo aunque haya error en BD
+                const randomMessage = getRandomMessage(MESSAGES.SUCCESS);
+                setFeedback({
+                    title: `🎉 ${randomMessage}`,
+                    text: `¡Respuesta correcta! Continúa con la siguiente actividad.`,
+                    isCorrect: true
+                });
+            }
         } else {
-            // Solo anterior/posterior, mensaje directo
-            const correctText = `El anterior es ${currentQuestion.correctAnterior} y el posterior es ${currentQuestion.correctPosterior}`;
+            // Usar hint progresivo basado en intentos
+            const progressiveHint = getProgressiveHint(currentAttempts, currentQuestion);
             
             setFeedback({
                 title: '❌ Respuesta incorrecta',
-                text: `${correctText}. ¡No te rindas, inténtalo de nuevo!`,
+                text: `${progressiveHint}. ¡No te rindas, inténtalo de nuevo!`,
                 isCorrect: false
             });
+
+            // Solo resetear processing si es incorrecto para permitir reintento
+            setIsProcessing(false);
         }
 
         setShowFeedback(true);
-    }, [currentQuestion, userAnswers, incrementAttempts, currentLevel, attempts, completeActivity]);
+    }, [currentQuestion, userAnswers, incrementAttempts, currentLevel, attempts, completeActivity, currentActivity, totalQuestions, isProcessing]);
 
     const handleContinue = useCallback(() => {
         setShowFeedback(false);
         setUserAnswers({ anterior: '', posterior: '' });
+        setInputErrors({ anterior: false, posterior: false });
+        setIsProcessing(false); // Reset processing state
         
         if (currentActivity + 1 >= totalQuestions) {
-            const percentage = Math.round((points / (totalQuestions * 50 * (currentLevel + 1))) * 100);
-            if (percentage >= 60 && currentLevel < 2) {
+            const levelPassed = isLevelPassed(points, totalQuestions, currentLevel);
+            if (levelPassed && currentLevel < GAME_CONFIG.MAX_LEVELS - 1) {
                 unlockLevel('escala', currentLevel + 2);
             }
             setShowCongrats(true);
@@ -197,21 +228,23 @@ const JuegoEscala = () => {
     const handleCloseFeedback = useCallback(() => {
         setShowFeedback(false);
         setIsValidationError(false);
+        setInputErrors({ anterior: false, posterior: false });
+        setIsProcessing(false); // Reset processing state para permitir nuevo intento
         // No limpiar userAnswers para validaciones, permitir que el usuario corrija
     }, []);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
-        if (currentLevel < 2) {
+        if (currentLevel < GAME_CONFIG.MAX_LEVELS - 1) {
             handleSelectLevel(currentLevel + 1);
         } else {
-            setGameState('levelSelect');
+            setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
         }
     }, [currentLevel, handleSelectLevel]);
 
     const handleBackToLevels = useCallback(() => {
         setShowCongrats(false);
-        setGameState('levelSelect');
+        setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
     }, []);
 
     const handlePlayAgain = useCallback(() => {
@@ -220,19 +253,34 @@ const JuegoEscala = () => {
     }, [currentLevel, handleSelectLevel]);
 
     return (
-        <div className="game-wrapper">
-            {gameState === 'start' && (
+        <div className="game-wrapper bg-space-gradient">
+            {/* Notificación de error si existe */}
+            {errorNotification && (
+                <div className="error-notification">
+                    <div className="error-notification-text">
+                        ⚠️ {errorNotification}
+                    </div>
+                    <button 
+                        onClick={() => setErrorNotification('')}
+                        className="error-notification-close"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            )}
+
+            {gameState === UI_STATES.GAME_STATES.START && (
                 <StartScreen onStart={handleStartGame} />
             )}
             
-            {gameState === 'levelSelect' && (
+            {gameState === UI_STATES.GAME_STATES.LEVEL_SELECT && (
                 <LevelSelectScreen 
                     levels={levels}
                     onSelectLevel={handleSelectLevel}
                 />
             )}
             
-            {gameState === 'playing' && currentQuestion && (
+            {gameState === UI_STATES.GAME_STATES.PLAYING && currentQuestion && (
                 <GameScreen
                     activity={currentActivity + 1}
                     totalActivities={totalQuestions}
@@ -243,6 +291,9 @@ const JuegoEscala = () => {
                     onCheckAnswer={() => handleCheckAnswer()}
                     onBackToLevels={handleBackToLevels}
                     levelConfig={levels[currentLevel]}
+                    inputErrors={inputErrors}
+                    setInputErrors={setInputErrors}
+                    isProcessing={isProcessing}
                 />
             )}
 
@@ -258,10 +309,11 @@ const JuegoEscala = () => {
 
             {showCongrats && (
                 <CongratsModal
-                    level={currentLevel + 1}
-                    points={points}
-                    hasNextLevel={currentLevel < 2}
-                    onNextLevel={handleNextLevel}
+                    score={points}
+                    totalQuestions={totalQuestions * GAME_CONFIG.BASE_SCORE * (currentLevel + 1)}
+                    levelName={levels[currentLevel].name}
+                    levelPassed={isLevelPassed(points, totalQuestions, currentLevel)}
+                    nextLevelUnlocked={currentLevel < GAME_CONFIG.MAX_LEVELS - 1}
                     onPlayAgain={handlePlayAgain}
                     onBackToLevels={handleBackToLevels}
                 />
@@ -271,6 +323,10 @@ const JuegoEscala = () => {
                 <HintModal
                     hint={currentQuestion.hint}
                     onClose={() => setShowHint(false)}
+                    theme="escala"
+                    title="Pista Útil"
+                    icon="💡"
+                    buttonText="✅ Entendido"
                 />
             )}
         </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { isValidNumber } from './util';
 
 const GameScreen = ({ 
     activity,
@@ -9,61 +10,70 @@ const GameScreen = ({
     onAnswersChange,
     onCheckAnswer,
     onBackToLevels,
-    levelConfig
+    levelConfig,
+    inputErrors,
+    setInputErrors,
+    isProcessing
 }) => {
 
     const handleInputChange = (field, value) => {
-        onAnswersChange(prev => ({
+        // No permitir cambios mientras se procesa
+        if (isProcessing) return;
+
+        // Validación en tiempo real
+        const isValid = isValidNumber(value);
+        setInputErrors(prev => ({
             ...prev,
-            [field]: value
+            [field]: !isValid
         }));
+
+        if (isValid) {
+            onAnswersChange(prev => ({
+                ...prev,
+                [field]: value
+            }));
+        }
+    };
+
+    const handleKeyDown = (e, field) => {
+        // No permitir navegación mientras se procesa
+        if (isProcessing) return;
+
+        // Navegación por teclado
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (field === 'anterior') {
+                // Mover al input posterior
+                const posteriorInput = document.querySelector('input[aria-label="Número posterior en la secuencia"]');
+                if (posteriorInput) posteriorInput.focus();
+            } else if (field === 'posterior') {
+                // Verificar respuesta si ambos campos están llenos y no hay errores
+                if (userAnswers.anterior && userAnswers.posterior && !inputErrors?.anterior && !inputErrors?.posterior) {
+                    onCheckAnswer();
+                }
+            }
+        }
     };
 
     return (
-        <div className="ocean-scene">
+        <div className="ocean-scene bg-space-ui">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>
 
             <div className="game-header">
                 <div className="header-info">
-                    <h2 className="level-title" style={{
-                        fontSize: '2rem',
-                        color: '#1e40af',
-                        fontFamily: 'Fredoka, sans-serif',
-                        fontWeight: '900',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)'
-                    }}>
+                    <h2 className="game-level-title">
                         🌊 {levelConfig.name} 🌊
                     </h2>
                     
-                    <div className="question-counter" style={{
-                        fontSize: '1.2rem',
-                        color: '#0c4a6e',
-                        fontWeight: '700',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '1rem',
-                        border: '2px solid #3b82f6',
-                        display: 'inline-block',
-                        width: 'auto'
-                    }}>
+                    <div className="question-counter">
                         Actividad {activity} de {totalActivities}
                     </div>
                 </div>
 
                 <div className="progress-section">
-                    <div className="score-display" style={{
-                        fontSize: '1.1rem',
-                        color: '#0c4a6e',
-                        fontWeight: '700',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '1rem',
-                        border: '2px solid #10b981',
-                        display: 'inline-block',
-                        width: 'auto'
-                    }}>
+                    <div className="score-display">
                         ⭐ Puntos: {points}
                     </div>
                 </div>
@@ -71,16 +81,6 @@ const GameScreen = ({
                 <button 
                     className="btn-back"
                     onClick={onBackToLevels}
-                    style={{
-                        background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                        border: '3px solid #b91c1c',
-                        color: 'white',
-                        padding: '0.75rem 1.5rem',
-                        borderRadius: '1rem',
-                        fontSize: '1rem',
-                        fontWeight: '700',
-                        cursor: 'pointer'
-                    }}
                 >
                     ← Volver
                 </button>
@@ -92,74 +92,29 @@ const GameScreen = ({
                         <h3 className="question-title">🔍 Anterior y Posterior</h3>
                         
                         {/* Secuencia visual con espacios para anterior y posterior */}
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            margin: '2rem 0',
-                            flexWrap: 'wrap'
-                        }}>
+                        <div className="sequence-visual">
                             {/* Números anteriores para contexto */}
                             {Array.from({ length: 2 }, (_, i) => question.baseNumber - (3 * question.operation) + (i * question.operation)).map(num => (
                                 <div
                                     key={`before-${num}`}
-                                    style={{
-                                        fontSize: '1.2rem',
-                                        color: '#6b7280',
-                                        fontWeight: '600',
-                                        background: 'rgba(255, 255, 255, 0.7)',
-                                        padding: '0.6rem 0.8rem',
-                                        borderRadius: '0.8rem',
-                                        border: '2px solid #d1d5db'
-                                    }}
+                                    className="context-number"
                                 >
                                     {num}
                                 </div>
                             ))}
                             
                             {/* Espacio para anterior */}
-                            <div style={{
-                                fontSize: '1.8rem',
-                                color: '#dc2626',
-                                fontWeight: '900',
-                                background: 'rgba(255, 255, 255, 0.9)',
-                                padding: '0.8rem 1rem',
-                                borderRadius: '1rem',
-                                border: '3px dashed #dc2626',
-                                minWidth: '50px',
-                                textAlign: 'center'
-                            }}>
+                            <div className="missing-anterior">
                                 ?
                             </div>
                             
                             {/* Número central */}
-                            <div style={{
-                                fontSize: '2.2rem',
-                                color: '#1e40af',
-                                fontWeight: '900',
-                                background: 'rgba(255, 255, 255, 0.9)',
-                                padding: '1.2rem 1.5rem',
-                                borderRadius: '1.5rem',
-                                border: '3px solid #3b82f6',
-                                minWidth: '70px',
-                                textAlign: 'center'
-                            }}>
+                            <div className="central-number">
                                 {question.baseNumber}
                             </div>
                             
                             {/* Espacio para posterior */}
-                            <div style={{
-                                fontSize: '1.8rem',
-                                color: '#16a34a',
-                                fontWeight: '900',
-                                background: 'rgba(255, 255, 255, 0.9)',
-                                padding: '0.8rem 1rem',
-                                borderRadius: '1rem',
-                                border: '3px dashed #16a34a',
-                                minWidth: '50px',
-                                textAlign: 'center'
-                            }}>
+                            <div className="missing-posterior">
                                 ?
                             </div>
                             
@@ -167,35 +122,16 @@ const GameScreen = ({
                             {Array.from({ length: 2 }, (_, i) => question.baseNumber + (2 * question.operation) + (i * question.operation)).map(num => (
                                 <div
                                     key={`after-${num}`}
-                                    style={{
-                                        fontSize: '1.2rem',
-                                        color: '#6b7280',
-                                        fontWeight: '600',
-                                        background: 'rgba(255, 255, 255, 0.7)',
-                                        padding: '0.6rem 0.8rem',
-                                        borderRadius: '0.8rem',
-                                        border: '2px solid #d1d5db'
-                                    }}
+                                    className="context-number"
                                 >
                                     {num}
                                 </div>
                             ))}
                         </div>
 
-                        <div className="anterior-posterior-inputs" style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            gap: '3rem',
-                            flexWrap: 'wrap'
-                        }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <label style={{
-                                    fontSize: '1.2rem',
-                                    fontWeight: '700',
-                                    color: '#dc2626',
-                                    marginBottom: '1rem',
-                                    display: 'block'
-                                }}>
+                        <div className="anterior-posterior-inputs">
+                            <div className="input-group">
+                                <label className="input-label anterior">
                                     ← Anterior
                                 </label>
                                 <input
@@ -203,34 +139,29 @@ const GameScreen = ({
                                     value={userAnswers.anterior || ''}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        // Solo permitir números positivos y vacío
-                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                        // Permitir números enteros (positivos y negativos) y vacío
+                                        if (value === '' || /^-?\d+$/.test(value)) {
                                             handleInputChange('anterior', value);
                                         }
                                     }}
-                                    className="answer-input"
-                                    style={{
-                                        fontSize: '1.5rem',
-                                        padding: '1rem',
-                                        borderRadius: '1rem',
-                                        border: '3px solid #dc2626',
-                                        textAlign: 'center',
-                                        width: '120px',
-                                        WebkitAppearance: 'none',
-                                        MozAppearance: 'textfield'
-                                    }}
+                                    onKeyDown={(e) => handleKeyDown(e, 'anterior')}
+                                    disabled={isProcessing}
+                                    className={`answer-input anterior ${inputErrors?.anterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
                                     placeholder="0"
+                                    aria-label="Número anterior en la secuencia"
+                                    aria-describedby="anterior-help"
+                                    aria-invalid={inputErrors?.anterior}
+                                    role="spinbutton"
                                 />
+                                {inputErrors?.anterior && (
+                                    <div className="input-error">
+                                        Ingresa un número válido
+                                    </div>
+                                )}
                             </div>
 
-                            <div style={{ textAlign: 'center' }}>
-                                <label style={{
-                                    fontSize: '1.2rem',
-                                    fontWeight: '700',
-                                    color: '#16a34a',
-                                    marginBottom: '1rem',
-                                    display: 'block'
-                                }}>
+                            <div className="input-group">
+                                <label className="input-label posterior">
                                     Posterior →
                                 </label>
                                 <input
@@ -238,79 +169,61 @@ const GameScreen = ({
                                     value={userAnswers.posterior || ''}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        // Solo permitir números positivos y vacío
-                                        if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
+                                        // Permitir números enteros (positivos y negativos) y vacío
+                                        if (value === '' || /^-?\d+$/.test(value)) {
                                             handleInputChange('posterior', value);
                                         }
                                     }}
-                                    className="answer-input"
-                                    style={{
-                                        fontSize: '1.5rem',
-                                        padding: '1rem',
-                                        borderRadius: '1rem',
-                                        border: '3px solid #16a34a',
-                                        textAlign: 'center',
-                                        width: '120px',
-                                        WebkitAppearance: 'none',
-                                        MozAppearance: 'textfield'
-                                    }}
+                                    onKeyDown={(e) => handleKeyDown(e, 'posterior')}
+                                    disabled={isProcessing}
+                                    className={`answer-input posterior ${inputErrors?.posterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
                                     placeholder="0"
+                                    aria-label="Número posterior en la secuencia"
+                                    aria-describedby="posterior-help"
+                                    aria-invalid={inputErrors?.posterior}
+                                    role="spinbutton"
                                 />
+                                {inputErrors?.posterior && (
+                                    <div className="input-error">
+                                        Ingresa un número válido
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Cuadro informativo estático */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
-                        border: '3px solid #0288d1',
-                        borderRadius: '1rem',
-                        padding: '1.5rem',
-                        margin: '2rem auto',
-                        maxWidth: '600px',
-                        textAlign: 'center',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}>
-                        <div style={{
-                            fontSize: '1.2rem',
-                            fontWeight: '700',
-                            color: '#0277bd',
-                            marginBottom: '0.5rem'
-                        }}>
+                    {/* Cuadro informativo estático con ARIA */}
+                    <div 
+                        id="game-instructions"
+                        role="region"
+                        aria-label="Instrucciones del juego"
+                        className="game-instructions"
+                    >
+                        <div className="instructions-title">
                             📚 {levelConfig.name}
                         </div>
-                        <div style={{
-                            fontSize: '1rem',
-                            color: '#01579b',
-                            fontWeight: '600'
-                        }}>
+                        <div 
+                            id="anterior-help"
+                            className="instructions-description"
+                        >
                             {levelConfig.description}
+                        </div>
+                        <div 
+                            id="posterior-help"
+                            className="instructions-help"
+                        >
+                            Usa Enter para navegar entre campos y verificar tu respuesta
                         </div>
                     </div>
 
-                    <div className="game-actions" style={{
-                        textAlign: 'center',
-                        marginTop: '2rem',
-                        position: 'relative',
-                        zIndex: 999
-                    }}>
+                    <div className="game-actions">
                         <button 
-                            className="btn-submit"
+                            className={`btn-submit ${(!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing) ? 'disabled' : 'enabled'}`}
                             onClick={onCheckAnswer}
-                            style={{
-                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                border: '3px solid #047857',
-                                color: 'white',
-                                padding: '0.75rem 2rem',
-                                borderRadius: '1rem',
-                                fontSize: '1.2rem',
-                                fontWeight: '700',
-                                cursor: 'pointer',
-                                position: 'relative',
-                                zIndex: 1000
-                            }}
+                            disabled={!userAnswers.anterior || !userAnswers.posterior || inputErrors?.anterior || inputErrors?.posterior || isProcessing}
+                            aria-describedby="game-instructions"
                         >
-                            🚀 Verificar Respuesta
+                            {isProcessing ? '⏳ Procesando...' : '🚀 Verificar Respuesta'}
                         </button>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
 import FeedbackModal from './FeedbackModal';
 import CongratsModal from './CongratsModal';
-import HintModal from './HintModal';
+import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 
@@ -238,6 +238,10 @@ const JuegoDescomposicion = () => {
                 <HintModal
                     hint={currentQuestion.hint}
                     onClose={() => setShowHint(false)}
+                    theme="descomposicion"
+                    title="¡Aquí tienes una pista!"
+                    icon="💡"
+                    buttonText="✨ ¡Entendido!"
                 />
             )}
         </div>

@@ -228,7 +228,7 @@ const JuegoOrdenamiento = () => {
       )}
 
       {gameState === 'game' && showGameComplete && (
-        <div className="game-content">
+        <div className="juego-ordenamiento-content">
           <header className="game-header">
             <div className="header-controls">
               <div className="buttons-group">

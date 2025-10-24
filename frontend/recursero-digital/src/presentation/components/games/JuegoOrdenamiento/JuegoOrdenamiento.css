@@ -33,7 +33,7 @@ body, html {
   z-index: 1000;
 }
 
-.game-content {
+.juego-ordenamiento-content {
   width: 100%;
   height: 100vh;
   margin: 0;
@@ -46,6 +46,9 @@ body, html {
   z-index: 10;
   justify-content: flex-start;
   overflow-y: auto; /* Permitir scroll si es necesario */
+  border: 4px solid var(--space-yellow);
+  border-radius: 25px;
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
 }
 
 /* Header */
@@ -59,10 +62,16 @@ body, html {
   align-items: center;
   min-height: 200px; /* Altura mínima para centrar las instrucciones */
   justify-content: center;
+  width: 100%;
+}
+
+.game-header > * {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Header controls layout */
-.game-content .header-controls {
+.juego-ordenamiento-content .header-controls {
   position: absolute;
   top: 15px;
   left: 15px;
@@ -71,12 +80,13 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.game-content .header-controls .buttons-group {
+.juego-ordenamiento-content .header-controls .buttons-group {
   display: flex;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 /* Game Status en línea con los botones del header */
@@ -89,10 +99,8 @@ body, html {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
   border: 2px solid var(--space-yellow);
+  max-width: 400px;
   flex-shrink: 0;
-  flex-grow: 1;
-  max-width: 600px;
-  margin-left: 20px;
 }
 
 .header-controls .game-status .status-item {
@@ -100,7 +108,7 @@ body, html {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  min-width: 100px;
+  min-width: 80px;
   flex: 1;
 }
 
@@ -125,18 +133,23 @@ body, html {
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
 /* Sobrescriben los estilos globales responsivos de games.css */
 
-.game-title {
+.game-container .game-title {
   color: var(--space-yellow);
   font-size: 2.2rem;
   margin: 0 0 10px 0;
   text-shadow: 3px 3px 0px var(--space-blue);
   font-weight: 700;
+  text-align: center !important;
+  width: 100%;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-.game-instruction {
+.game-container .game-instruction {
   color: white;
   font-size: 1.6rem;
-  margin: 20px 0;
+  margin: 20px auto;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   background: rgba(0, 0, 0, 0.2);
@@ -144,12 +157,22 @@ body, html {
   border-radius: 20px;
   border: 2px solid var(--space-yellow);
   max-width: 600px;
+  text-align: center;
+  width: fit-content;
 }
 
-/* Game Status original (ahora oculto, se usa el del header) */
+/* Forzar centrado si es necesario */
+.game-header .game-title,
+.game-header .game-instruction {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Game Status original (ahora oculto, se usa el del header)
 .game-content > .game-status {
   display: none;
-}
+} */
 
 /* Progress Bar */
 .progress-container {
