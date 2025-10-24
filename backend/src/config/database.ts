@@ -4,5 +4,5 @@ export const databaseConfig = {
   database: process.env.DB_NAME || 'recurseroDigitalDB',
   user: process.env.DB_USER || 'admindb',
   password: process.env.DB_PASSWORD || 'recursero2025',
-  ssl: process.env.NODE_ENV === 'production' && process.env.DB_HOST !== 'postgres' ? { rejectUnauthorized: false } : false
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 };

@@ -60,7 +60,11 @@ export class DatabaseConnection {
 
   private async runMigrations(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const databaseUrl = `postgresql://${databaseConfig.user}:${databaseConfig.password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`;
+      let databaseUrl = `postgresql://${databaseConfig.user}:${databaseConfig.password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`;
+
+      if (process.env.NODE_ENV === 'production') {
+        databaseUrl += '?sslmode=require';
+      }
       
       const migrateProcess = spawn('npx', [
         'node-pg-migrate',
