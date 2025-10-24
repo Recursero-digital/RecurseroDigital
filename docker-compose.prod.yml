@@ -6,14 +6,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=3000
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=recurseroDigitalDB
       - DB_USER=admindb
       - DB_PASSWORD=recursero2025
-      - JWT_SECRET=tu-jwt-secret-super-seguro-local
+      - JWT_SECRET=tu-jwt-secret-super-seguro-prod-local
     networks:
       - recursero-network
     depends_on:
@@ -22,7 +22,7 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: postgres-container
+    container_name: postgres-container-prod
     restart: always
     environment:
       POSTGRES_DB: recurseroDigitalDB
@@ -30,9 +30,9 @@ services:
       POSTGRES_PASSWORD: recursero2025
       POSTGRES_ROOT_PASSWORD: 123456
     ports:
-      - "5432:5432"
+      - "5433:5432"  # Puerto diferente para evitar conflictos
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_prod:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     networks:
       - recursero-network
@@ -42,7 +42,7 @@ services:
       context: ./frontend/recursero-digital
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "5174:5173"  # Puerto diferente para evitar conflictos
     depends_on:
       - backend
     networks:
@@ -57,5 +57,4 @@ networks:
 volumes:
   backend_node_modules:
   frontend_node_modules:
-  postgres_data:
-
+  postgres_data_prod:
