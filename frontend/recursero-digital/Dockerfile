@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar dependencias con cache optimizado
-RUN npm ci --silent
+RUN npm install --silent
 
 # Copiar código fuente
 COPY . .
