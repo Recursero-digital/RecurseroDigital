@@ -10,7 +10,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
     const levelColors = ['blue', 'green', 'purple'];
 
     return (
-        <div className="ocean-scene">
+        <div className="ocean-scene bg-space-ui">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>
@@ -26,7 +26,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
             </div>
 
             <div className="level-select-content">
-                <h2 className="level-select-title">
+                <h2 className="game-title">
                     ⚡ Elige tu Aventura ⚡
                 </h2>
                 
@@ -85,7 +85,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                             </div>
                             
                             <button 
-                                className={`btn btn-level-explore ${isLocked ? 'disabled' : 'enabled'}`}
+                                className={`btn-level-explore ${isLocked ? 'disabled' : 'enabled bg-space-gradient'}`}
                                 disabled={isLocked}
                             >
                                 {isLocked ? '🔒 Bloqueado' : '🚀 ¡Explorar!'}

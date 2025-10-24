@@ -5,7 +5,7 @@ const StartScreen = ({ onStart }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="ocean-scene" data-aos="fade-down">
+        <div className="ocean-scene bg-space-ui" data-aos="fade-down">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>
@@ -21,7 +21,7 @@ const StartScreen = ({ onStart }) => {
             </div>
 
             <div className="start-screen-content slide-in">
-                <h1 className="main-game-title">
+                <h1 className="game-title">
                     🔢 ¿Cuál es el numero anterior y posterior? 🔢
                 </h1>
 
@@ -71,7 +71,7 @@ const StartScreen = ({ onStart }) => {
 
                 <button 
                     onClick={onStart} 
-                    className="btn btn-start pulse float start-game-button"
+                    className="btn-start pulse float"
                 >
                     🚀 ¡COMENZAR AVENTURA!
                 </button>

@@ -3,6 +3,25 @@
 /* =================================================================== */
 
 /* ------------------------------------------------------------------- */
+/* VARIABLES CSS GLOBALES PARA JUEGOS                                 */
+/* ------------------------------------------------------------------- */
+
+:root {
+  /* Colores del tema espacial */
+  --space-blue: #1e3a8a;
+  --space-purple: #7c3aed;
+  --space-pink: #ec4899;
+  --space-yellow: #fbbf24;
+  --space-orange: #f97316;
+  --space-green: #10b981;
+  
+  /* Gradientes principales (usa las clases de backgrounds.css en lugar de estas variables cuando sea posible) */
+  --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+  --button-gradient: var(--main-gradient);
+  --number-gradient: var(--main-gradient);
+}
+
+/* ------------------------------------------------------------------- */
 /* BOTONES COMUNES DE JUEGOS                                          */
 /* ------------------------------------------------------------------- */
 

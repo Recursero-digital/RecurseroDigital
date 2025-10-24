@@ -56,7 +56,7 @@ const GameScreen = ({
     };
 
     return (
-        <div className="ocean-scene">
+        <div className="ocean-scene bg-space-ui">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>

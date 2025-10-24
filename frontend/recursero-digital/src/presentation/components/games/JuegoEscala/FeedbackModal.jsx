@@ -22,7 +22,7 @@ const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidation
                     {/* Botón para cerrar (validaciones y respuestas incorrectas) */}
                     {(isValidationError || !isCorrect) && (
                         <button 
-                            className="btn btn-close"
+                            className="btn-close btn-main-gradient bg-space-gradient"
                             onClick={onClose}
                         >
                             ✖️ Cerrar
@@ -32,7 +32,7 @@ const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidation
                     {/* Botón siguiente pregunta (solo respuestas correctas) */}
                     {isCorrect && !isValidationError && (
                         <button 
-                            className="btn btn-success"
+                            className="btn-success btn-main-gradient bg-space-gradient"
                             onClick={onNext}
                         >
                             {isLastQuestion ? '🏁 Ver resultados' : '➡️ Siguiente pregunta'}

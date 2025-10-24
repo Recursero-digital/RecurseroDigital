@@ -253,7 +253,7 @@ const JuegoEscala = () => {
     }, [currentLevel, handleSelectLevel]);
 
     return (
-        <div className="game-wrapper">
+        <div className="game-wrapper bg-space-gradient">
             {/* Notificación de error si existe */}
             {errorNotification && (
                 <div className="error-notification">
