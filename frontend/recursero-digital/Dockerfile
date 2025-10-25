@@ -16,7 +16,9 @@ COPY . .
 # Limpiar e instalar dependencias para resolver problemas con dependencias nativas
 RUN rm -rf node_modules package-lock.json && npm install --silent
 
-# Construir la aplicación
+# Construir la aplicación con variables de entorno
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN npm run build
 
 # Exponer puerto
