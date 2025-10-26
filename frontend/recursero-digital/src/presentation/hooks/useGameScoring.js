@@ -8,6 +8,7 @@ import useGameScoringAPI from './useGameScoring.api';
 const useGameScoring = () => {
   const [points, setPoints] = useState(0);
   const [attempts, setAttempts] = useState(0);
+  const [activityStartTime, setActivityStartTime] = useState(null); // Tiempo de inicio de la actividad actual
   const { submitGameScore, isSubmitting, submitError } = useGameScoringAPI();
 
   /**
@@ -51,6 +52,15 @@ const useGameScoring = () => {
   const resetScoring = useCallback(() => {
     setPoints(0);
     setAttempts(0);
+    setActivityStartTime(null);
+  }, []);
+
+  /**
+   * Inicia el cronómetro de la actividad actual
+   * Debe llamarse cuando el usuario inicia una nueva actividad
+   */
+  const startActivityTimer = useCallback(() => {
+    setActivityStartTime(new Date().toISOString());
   }, []);
 
   /**
@@ -69,6 +79,9 @@ const useGameScoring = () => {
     // Si se proporcionan datos del juego, enviar a la base de datos
     if (gameType) {
       try {
+        // Calcular el tiempo de completado
+        const endTime = new Date().toISOString();
+        
         await submitGameScore({
           gameType,
           level,
@@ -77,6 +90,8 @@ const useGameScoring = () => {
           activityScore,
           attempts,
           maxUnlockedLevel,
+          startTime: activityStartTime, // Tiempo de inicio
+          endTime: endTime, // Tiempo de finalización
           ...additionalData
         });
       } catch (error) {
@@ -84,9 +99,11 @@ const useGameScoring = () => {
       }
     }
     
+    // Resetear el cronómetro de la actividad
+    setActivityStartTime(null);
     resetAttempts();
     return activityScore;
-  }, [calculateActivityScore, addPoints, resetAttempts, submitGameScore, points, attempts]);
+  }, [calculateActivityScore, addPoints, resetAttempts, submitGameScore, points, attempts, activityStartTime]);
 
   /**
    * Obtiene información detallada del puntaje actual
@@ -118,6 +135,7 @@ const useGameScoring = () => {
     resetAttempts,
     resetScoring,
     completeActivity,
+    startActivityTimer, // Nueva función para iniciar el cronómetro
     
     // Estado de API
     isSubmitting,

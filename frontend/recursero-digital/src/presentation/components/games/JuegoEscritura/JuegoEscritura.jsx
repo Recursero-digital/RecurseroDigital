@@ -21,6 +21,7 @@ const JuegoEscritura = () => {
         resetAttempts, 
         resetScoring, 
         completeActivity,
+        startActivityTimer,
         isSubmitting,
         submitError 
     } = useGameScoring();
@@ -51,8 +52,9 @@ const JuegoEscritura = () => {
     useEffect(() => {
         if (gameState === 'game') {
             startNewActivity();
+            startActivityTimer();
         }
-    }, [gameState, currentLevel, currentActivity, startNewActivity]);
+    }, [gameState, currentLevel, currentActivity, startNewActivity, startActivityTimer]);
     
     const handleStartGame = (level) => {
         setCurrentLevel(level - 1);
@@ -127,7 +129,7 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            const activityScore = await completeActivity(currentLevel);
+            const activityScore = await completeActivity(currentLevel, 'escritura', currentActivity, currentLevel);
             
             if (currentActivity < 4) {
                 setFeedback({ 
@@ -173,6 +175,7 @@ const JuegoEscritura = () => {
     const handleContinue = () => {
         if (feedback.isCorrect) {
             setCurrentActivity(prev => prev + 1);
+            startActivityTimer();
         }
         setGameState('game');
     };

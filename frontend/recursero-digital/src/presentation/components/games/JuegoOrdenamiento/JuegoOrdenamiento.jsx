@@ -25,7 +25,8 @@ const JuegoOrdenamiento = () => {
     attempts, 
     incrementAttempts, 
     resetScoring, 
-    completeActivity 
+    completeActivity,
+    startActivityTimer
   } = useGameScoring();
 
   // Game state
@@ -89,7 +90,7 @@ const JuegoOrdenamiento = () => {
   }, [resetScoring]);
 
   const handleActivityComplete = useCallback(() => {
-    const activityScore = completeActivity(currentLevel);
+    const activityScore = completeActivity(currentLevel, 'ordenamiento', currentActivity, currentLevel);
     const newActivity = currentActivity + 1;
     
     const result = {
@@ -123,6 +124,7 @@ const JuegoOrdenamiento = () => {
       setupLevel(currentLevel); 
       setTargetNumbers([]);
       setShowPermanentHint(true);
+      startActivityTimer();
     } else {  
       unlockLevel('ordenamiento', currentLevel + 2);
       
@@ -178,14 +180,14 @@ const JuegoOrdenamiento = () => {
     return generateHint(currentLevel, sortedNumbers);
   }, [currentLevel, sortedNumbers]);
 
-  // Effects
   useEffect(() => {
     if (gameState === 'game') {
       setupLevel(currentLevel);
       setTargetNumbers([]);
       setShowPermanentHint(true);
+      startActivityTimer();
     }
-  }, [gameState, currentLevel, setupLevel]);
+  }, [gameState, currentLevel, setupLevel, startActivityTimer]);
 
 
 
