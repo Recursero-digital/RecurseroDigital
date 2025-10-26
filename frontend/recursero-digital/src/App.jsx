@@ -15,6 +15,7 @@ import DashboardAlumno from "./presentation/pages/student/DashboardAlumno.jsx";
 import PerfilAlumno from "./presentation/pages/student/perfilAlumno.jsx";
 import JuegoDescomposicion from './presentation/components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
 import JuegoEscala from './presentation/components/games/JuegoEscala/JuegoEscala.jsx';
+import JuegoCalculos from './presentation/components/games/JuegoCalculos/JuegoCalculos.jsx';
 
 function App() {
   return (
@@ -72,6 +73,14 @@ function App() {
         />
         <Route path="/alumno/juegos/descomposicion" element={<JuegoDescomposicion />} />
         <Route path="/alumno/juegos/escala" element={<JuegoEscala />} />
+        <Route 
+          path="/alumno/juegos/calculos" 
+          element={
+            <MainLayout userRole="alumno">
+              <JuegoCalculos />
+            </MainLayout>
+          } 
+        />
         <Route
           path="/alumno/perfil"
           element={
