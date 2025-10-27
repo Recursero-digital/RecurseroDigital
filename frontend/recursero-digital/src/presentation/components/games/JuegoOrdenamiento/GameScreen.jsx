@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 
 const GameScreen = ({ 
   currentLevel, 
@@ -7,7 +7,6 @@ const GameScreen = ({
   attempts,
   points,
   numbers,
-  sortedNumbers,
   targetNumbers,
   numbersCount,
   onDrop,
@@ -15,18 +14,15 @@ const GameScreen = ({
   onBackToLevels,
   onBackToGames,
   generateHint,
-  showPermanentHint,
-  levelRanges
+  showPermanentHint
 }) => {
 
   const [shouldAnimateHint, setShouldAnimateHint] = useState(false);
   const previousShowHint = useRef(showPermanentHint);
 
-  // Detectar cuando la pista aparece por primera vez
   useEffect(() => {
     if (showPermanentHint && !previousShowHint.current) {
       setShouldAnimateHint(true);
-      // Remover la clase después de la animación
       const timer = setTimeout(() => {
         setShouldAnimateHint(false);
       }, 500);
@@ -35,11 +31,10 @@ const GameScreen = ({
     previousShowHint.current = showPermanentHint;
   }, [showPermanentHint]);
 
-  const getOrderInstruction = useCallback((level) => {
-    return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
+  const getOrderInstruction = useCallback(() => {
+    return "📈 ORDENA DE MENOR A MAYOR 📈";
   }, []);
 
-  // Components
   const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
     const handleDragStart = (e) => {
       e.dataTransfer.setData('text/plain', number.toString());
@@ -138,9 +133,7 @@ const GameScreen = ({
     </div>
   ));
 
-  // Computed values
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
-  // La barra de progreso: 0% nivel 1, 33% nivel 2, 66% nivel 3
   const progressPercentage = currentLevel === 0 ? 0 : currentLevel === 1 ? 33 : 66;
 
   return (
@@ -189,7 +182,7 @@ const GameScreen = ({
         </div>
         <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
         <p className="game-instruction">
-          {getOrderInstruction(currentLevel + 1)}
+          {getOrderInstruction()}
         </p>
       </header>
 

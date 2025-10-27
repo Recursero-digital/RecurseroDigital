@@ -1,16 +1,30 @@
 import React from 'react';
 import { useUserProgress } from '../../../hooks/useUserProgress';
+import { getLevelConfig } from './utils';
 
 const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
-    const { isLevelUnlocked, getMaxUnlockedLevel } = useUserProgress();
+    const { isLevelUnlocked } = useUserProgress();
     
     const levels = [
-        { number: 1, range: "25 - 250", difficulty: "Fácil", color: "level-1" },
-        { number: 2, range: "251 - 500", difficulty: "Intermedio", color: "level-2" },
-        { number: 3, range: "501 - 1000", difficulty: "Avanzado", color: "level-3" }
+        { 
+          number: 1, 
+          ...getLevelConfig(1),
+          difficulty: "Fácil", 
+          color: "level-1" 
+        },
+        { 
+          number: 2, 
+          ...getLevelConfig(2),
+          difficulty: "Intermedio", 
+          color: "level-2" 
+        },
+        { 
+          number: 3, 
+          ...getLevelConfig(3),
+          difficulty: "Avanzado", 
+          color: "level-3" 
+        }
     ];
-
-    const maxUnlocked = getMaxUnlockedLevel('ordenamiento');
 
     return (
         <div className="level-select-screen">
@@ -24,7 +38,7 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
                 </button>
             </div>
             <h1>Selecciona un Nivel</h1>
-            <p>Elige el rango de números que quieres ordenar</p>
+            <p>Ordená los números de menor a mayor en cada actividad</p>
             <div className="level-grid">
                 {levels.map(level => {
                     const isUnlocked = isLevelUnlocked('ordenamiento', level.number);
@@ -38,7 +52,7 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
                             disabled={isLocked}
                         >
                             <div className="level-number">
-                                {isLocked ? '🔒' : ''} Nivel {level.number}
+                                {isLocked ? '🔒' : ''} {level.name}
                             </div>
                             <div className="level-range">{level.range}</div>
                             <div className="level-difficulty">{level.difficulty}</div>

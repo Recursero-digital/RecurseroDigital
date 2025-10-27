@@ -1,96 +1,123 @@
-// Utility functions for JuegoOrdenamiento
 
-/**
- * Generate random numbers for a specific level
- * @param {number} level - The current level (0-based)
- * @param {Array} levelRanges - Array of level configurations with min/max values
- * @param {Function} getNumbersCount - Function to get the count of numbers for a level
- * @returns {Object} - Object containing shuffled numbers and sorted numbers
- */
-export const generateNumbers = (level, levelRanges, getNumbersCount) => {
-    const { min, max } = levelRanges[level];
-    const currentNumbersCount = getNumbersCount(level);
-    const generatedNumbers = new Set();
+export const levelData = {
+  1: [
+    [433, 374, 743, 304, 473, 307],
+    [123, 321, 213, 312, 231, 132],
+    [456, 465, 654, 564, 645, 546],
+    [742, 472, 247, 274, 724, 427],
+    [987, 798, 897, 789, 879, 978]
+  ],
+  2: [
+    [1863, 1736, 1836, 1667, 1788, 1879],
+    [3452, 2781, 4036, 3905, 2647, 4189],
+    [3468, 3486, 3648, 3684, 3846, 3864],
+    [2579, 2597, 2759, 2795, 2795, 2975],
+    [1689, 1698, 1869, 1896, 1968, 1986]
+  ],
+  3: [
+    [52784, 63291, 47305, 56812, 48976, 69143],
+    [36478, 36748, 37468, 37846, 38647, 38764],
+    [25879, 25897, 27589, 27958, 28579, 28957],
+    [41592, 63478, 54206, 72839, 48165, 69421],
+    [13569, 13596, 15369, 15639, 16359, 16935]
+  ]
+};
 
-    while (generatedNumbers.size < currentNumbersCount) {
-        const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
-        generatedNumbers.add(newNum);
+export const getNumbersForActivity = (level, activityIndex) => {
+  const numbers = levelData[level][activityIndex];
+  const shuffledNumbers = [...numbers].sort(() => Math.random() - 0.5);
+  
+  return {
+    shuffled: shuffledNumbers,
+    original: numbers,
+    sorted: [...numbers].sort((a, b) => a - b)
+  };
+};
+
+export const getOrderInstruction = () => {
+  return "📈 ORDENA DE MENOR A MAYOR 📈";
+};
+
+export const generateHint = (numbers) => {
+  const sortedNumbers = [...numbers].sort((a, b) => a - b);
+  const smallest = sortedNumbers[0];
+  const largest = sortedNumbers[sortedNumbers.length - 1];
+  
+  const hints = [
+    `💡 Para ordenar los números recordá mirar el primer número para saber cuál es más grande. Si hay dos números que empiezan igual, mira el segundo número.`,
+    `🔢 El número más pequeño es: ${smallest.toLocaleString()}`,
+    `🔢 El número más grande es: ${largest.toLocaleString()}`,
+    `➡️ Comienza colocando el número ${smallest.toLocaleString()} primero`,
+    `🎯 El orden correcto empieza: ${sortedNumbers.slice(0, 3).map(n => n.toLocaleString()).join(', ')}...`
+  ];
+  
+  return hints[Math.floor(Math.random() * hints.length)];
+};
+
+export const checkOrder = (currentNumbers, originalNumbers) => {
+  const correctOrder = [...originalNumbers].sort((a, b) => a - b);
+  return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
+};
+
+export const getLevelConfig = (level) => {
+  const configs = {
+    1: { 
+      name: "Nivel 1", 
+      description: "Números de 3 dígitos",
+      range: "100 - 999"
+    },
+    2: { 
+      name: "Nivel 2", 
+      description: "Números de 4 dígitos",
+      range: "1.000 - 9.999"
+    },
+    3: { 
+      name: "Nivel 3", 
+      description: "Números de 5 dígitos",
+      range: "10.000 - 99.999"
     }
-
-    const numbersArray = Array.from(generatedNumbers);
-    const shuffledNumbers = [...numbersArray].sort(() => Math.random() - 0.5);
-    const sorted = [...numbersArray].sort((a, b) => b - a);
-
-    return {
-        shuffled: shuffledNumbers,
-        sorted: sorted
-    };
+  };
+  return configs[level] || configs[1];
 };
 
-/**
- * Get the order instruction text for a level
- * @param {number} level - The current level (1-based)
- * @returns {string} - The instruction text
- */
-export const getOrderInstruction = (level) => {
-    return level % 2 === 0 ? "📈 ORDENA DE MENOR A MAYOR 📈": "📉 ORDENA DE MAYOR A MENOR 📉";
+export const formatNumber = (num) => {
+  return num.toLocaleString('es-AR');
 };
 
-/**
- * Generate a hint for the current level
- * @param {number} currentLevel - The current level (0-based)
- * @param {Array} sortedNumbers - Array of sorted numbers
- * @returns {string} - The hint text
- */
-export const generateHint = (currentLevel, sortedNumbers) => {
-    const isEvenLevel = (currentLevel + 1) % 2 === 0;
-    const sortedArray = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
-    
-    const baseHints = isEvenLevel ? [
-        `💡 Recuerda: Debes ordenar de MENOR a MAYOR`,
-        `🔢 El número más pequeño es: ${Math.min(...sortedNumbers)}`,
-        `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-        `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ] : [
-        `💡 Recuerda: Debes ordenar de MAYOR a MENOR`,
-        `🔢 El número más grande es: ${Math.max(...sortedNumbers)}`,
-        `➡️ Comienza colocando el número ${sortedArray[0]} primero`,
-        `🎯 El orden correcto empieza: ${sortedArray[0]}, ${sortedArray[1]}, ${sortedArray[2]}...`
-    ];
-    
-    return baseHints[Math.floor(Math.random() * baseHints.length)];
+export const getNumbersCount = () => 6;
+export const generateNumbers = (level, levelRanges, getNumbersCountFn) => {
+
+  const levelNumber = level + 1;
+  const activityIndex = 0; 
+  
+  if (levelData[levelNumber]) {
+    return getNumbersForActivity(levelNumber, activityIndex);
+  }
+
+  const { min, max } = levelRanges[level] || levelRanges[0];
+  const currentNumbersCount = getNumbersCountFn ? getNumbersCountFn(level) : 6;
+  const generatedNumbers = new Set();
+
+  while (generatedNumbers.size < currentNumbersCount) {
+    const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
+    generatedNumbers.add(newNum);
+  }
+
+  const numbersArray = Array.from(generatedNumbers);
+  const shuffledNumbers = [...numbersArray].sort(() => Math.random() - 0.5);
+  const sorted = [...numbersArray].sort((a, b) => a - b);
+
+  return {
+    shuffled: shuffledNumbers,
+    original: numbersArray,
+    sorted: sorted
+  };
 };
 
-/**
- * Check if the current order is correct
- * @param {Array} currentNumbers - Array of numbers in current order
- * @param {number} currentLevel - The current level (0-based)
- * @param {Array} sortedNumbers - Array of sorted numbers
- * @returns {boolean} - True if order is correct
- */
-export const checkOrder = (currentNumbers, currentLevel, sortedNumbers) => {
-    const isEvenLevel = (currentLevel + 1) % 2 === 0;
-    const correctOrder = [...sortedNumbers].sort((a, b) => isEvenLevel ? a - b : b - a);
-    return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
-};
-
-/**
- * Get the count of numbers for a specific level
- * @param {number} level - The current level (0-based)
- * @returns {number} - The count of numbers
- */
-export const getNumbersCount = (level) => 6 + (level * 2);
-
-/**
- * Level configurations
- */
 export const levelRanges = [
-    { min: 25, max: 250, name: "Números Pequeños", description: "Del 25 al 250" },
-    { min: 251, max: 500, name: "Números Medianos", description: "Del 251 al 500" },
-    { min: 501, max: 1000, name: "Números Grandes", description: "Del 501 al 1000" },
+    { min: 100, max: 999, name: "Números de 3 dígitos", description: "100 - 999" },
+    { min: 1000, max: 9999, name: "Números de 4 dígitos", description: "1.000 - 9.999" },
+    { min: 10000, max: 99999, name: "Números de 5 dígitos", description: "10.000 - 99.999" },
 ];
 
-/**
- * Total number of activities per level
- */
 export const totalActivities = 5;

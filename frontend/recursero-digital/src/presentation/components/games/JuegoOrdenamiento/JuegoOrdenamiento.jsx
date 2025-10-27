@@ -9,7 +9,7 @@ import FeedbackModal from './FeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 import { 
-  generateNumbers, 
+  getNumbersForActivity,
   checkOrder, 
   generateHint, 
   levelRanges, 
@@ -28,7 +28,6 @@ const JuegoOrdenamiento = () => {
     completeActivity 
   } = useGameScoring();
 
-  // Game state
   const [gameState, setGameState] = useState('start');
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
@@ -37,14 +36,13 @@ const JuegoOrdenamiento = () => {
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [levelResults, setLevelResults] = useState([]);
   
-  // UI state
   const [showGameComplete, setShowGameComplete] = useState(false);
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [showPermanentHint, setShowPermanentHint] = useState(false);
 
-  // Navigation handlers
+
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
   }, [navigate]);
@@ -56,7 +54,6 @@ const JuegoOrdenamiento = () => {
     setGameState('start');
   }, []);
 
-  // Game logic
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
     setCurrentActivity(0);
@@ -73,12 +70,11 @@ const JuegoOrdenamiento = () => {
   }, [resetScoring]);
 
   const setupLevel = useCallback((level) => {
-    const numbersData = generateNumbers(level, levelRanges, getNumbersCount);
+    const numbersData = getNumbersForActivity(level + 1, currentActivity);
     setNumbers(numbersData.shuffled);
-    setSortedNumbers(numbersData.sorted);
-  }, []);
+    setSortedNumbers(numbersData.original);
+  }, [currentActivity]);
 
-  // Game flow handlers
   const handleStartGame = useCallback((level) => {
     setCurrentLevel(level - 1);
     setCurrentActivity(0);
@@ -90,7 +86,6 @@ const JuegoOrdenamiento = () => {
 
   const handleActivityComplete = useCallback(() => {
     const activityScore = completeActivity(currentLevel);
-    const newActivity = currentActivity + 1;
     
     const result = {
       activity: currentActivity + 1,
@@ -126,16 +121,13 @@ const JuegoOrdenamiento = () => {
     } else {  
       unlockLevel('ordenamiento', currentLevel + 2);
       
-      // Si se completó el nivel 1 (currentLevel = 0), ir automáticamente al nivel 2
       if (currentLevel === 0) {
-        // Proceder automáticamente al siguiente nivel sin mostrar el modal
         setCurrentLevel(1);
         setCurrentActivity(0);
         setLevelResults([]);
         setShowPermanentHint(false);
         setTimeout(() => setupLevel(1), 100);
       } else if (currentLevel === 2) {
-        // Si se completó el nivel 3, mostrar completado del juego
         setShowGameComplete(true);
       } else {
         setShowLevelUp(true);
@@ -147,15 +139,15 @@ const JuegoOrdenamiento = () => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
     setTargetNumbers(newTargetNumbers);
 
-    const numbersCount = getNumbersCount(currentLevel);
+    const numbersCount = getNumbersCount(); // Always returns 6
     if (newTargetNumbers.length === numbersCount) {
-      if (checkOrder(newTargetNumbers, currentLevel, sortedNumbers)) {
+      if (checkOrder(newTargetNumbers, sortedNumbers)) {
         handleActivityComplete();
       } else {
         handleFailedAttempt();
       }
     }
-  }, [targetNumbers, currentLevel, sortedNumbers, handleActivityComplete, handleFailedAttempt]);
+  }, [targetNumbers, sortedNumbers, handleActivityComplete, handleFailedAttempt]);
 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
@@ -175,8 +167,8 @@ const JuegoOrdenamiento = () => {
   }, [currentLevel, setupLevel]);
 
   const getHint = useCallback(() => {
-    return generateHint(currentLevel, sortedNumbers);
-  }, [currentLevel, sortedNumbers]);
+    return generateHint(numbers);
+  }, [numbers]);
 
   // Effects
   useEffect(() => {
@@ -187,9 +179,6 @@ const JuegoOrdenamiento = () => {
     }
   }, [gameState, currentLevel, setupLevel]);
 
-
-
-  // Render
   return (
     <div className="game-container">
       {gameState === 'start' && (
@@ -216,7 +205,7 @@ const JuegoOrdenamiento = () => {
           numbers={numbers}
           sortedNumbers={sortedNumbers}
           targetNumbers={targetNumbers}
-          numbersCount={getNumbersCount(currentLevel)}
+          numbersCount={getNumbersCount()}
           onDrop={handleDrop}
           onRemove={handleRemove}
           onBackToLevels={handleBackToLevels}
