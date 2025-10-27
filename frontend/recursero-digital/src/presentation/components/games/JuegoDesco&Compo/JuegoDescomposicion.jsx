@@ -188,7 +188,7 @@ const JuegoDescomposicion = () => {
     }, []);
 
     return (
-        <div className="game-wrapper">
+        <div className="game-wrapper bg-space-gradient bg-stars">
             {gameState === 'start' && (
                 <StartScreen onStart={handleStartGame} />
             )}

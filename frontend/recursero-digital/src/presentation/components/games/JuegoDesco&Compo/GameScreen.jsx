@@ -24,40 +24,69 @@ const GameScreen = ({
     };
 
     return (
-        <div className="chalkboard">
-            <div className="header-controls">
-                <button 
-                    className="btn-back-to-levels"
-                    onClick={onBackToLevels}
-                    title="Volver a niveles"
-                >
-                    ← Niveles
-                </button>
-                <button 
-                    className="btn-back-to-dashboard"
-                    onClick={() => navigate('/alumno')}
-                    title="Volver al dashboard"
-                >
-                    🏠
-                </button>
-            </div>
-
-            <div className="game-hud">
-                <div>Nivel: <span>{level}</span> | Pregunta: <span>{activity}</span>/{totalActivities}</div>
-                <div>Puntos: <span>{points}</span> | Intentos: <span>{attempts}</span></div>
-            </div>
-
-            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <div className="progress-indicator">
-                    Pregunta {activity} de {totalActivities}
+        <div className="juego-descomposicion-content">
+            <header className="game-header">
+                <div className="header-controls">
+                    <div className="buttons-group">
+                        <button 
+                            className="btn-back-to-levels"
+                            onClick={onBackToLevels}
+                            title="Volver a niveles"
+                        >
+                            ← Niveles
+                        </button>
+                        <button 
+                            className="btn-back-to-dashboard"
+                            onClick={() => navigate('/alumno')}
+                            title="Volver al dashboard"
+                        >
+                            🏠 Dashboard
+                        </button>
+                    </div>
+                    
+                    <div className="game-status">
+                        <div className="status-item">
+                            <div className="status-icon">📊</div>
+                            <div className="status-label">Nivel</div>
+                            <div className="status-value">{level}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">🎯</div>
+                            <div className="status-label">Pregunta</div>
+                            <div className="status-value">{activity}/{totalActivities}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">🎯</div>
+                            <div className="status-label">Intentos</div>
+                            <div className="status-value">{attempts}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">⭐</div>
+                            <div className="status-label">Puntos</div>
+                            <div className="status-value">{points}</div>
+                        </div>
+                    </div>
                 </div>
+                <h1 className="game-title">🧮 Descomposición Numérica</h1>
+                <p className="game-instruction">
+                    Descompón o forma números según el valor posicional
+                </p>
+            </header>
+
+            <div className="progress-container">
+                <div 
+                    className="progress-bar"
+                    data-progress={Math.round((activity / totalActivities) * 100)}
+                    style={{'--progress-width': `${Math.round((activity / totalActivities) * 100)}%`}}
+                />
             </div>
 
-            <div className="paper-note slide-in" style={{ 
-                position: 'relative',
-                maxWidth: '700px',
-                margin: '0 auto'
-            }}>
+            <div className="game-play-area">
+                <div className="paper-note slide-in" style={{ 
+                    position: 'relative',
+                    maxWidth: '700px',
+                    margin: '0 auto'
+                }}>
                 <div style={{
                     background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
                     margin: '-1.5rem -1.5rem 1rem -1.5rem',
@@ -196,26 +225,27 @@ const GameScreen = ({
                     </div>
                 </div>
 
-                {/* Pista en la parte inferior */}
-                <div style={{
-                    marginTop: '1rem',
-                    padding: '1rem',
-                    background: 'rgba(33, 150, 243, 0.1)',
-                    borderRadius: '0.5rem',
-                    border: '1px solid rgba(33, 150, 243, 0.2)',
-                    textAlign: 'center'
-                }}>
-                    <p style={{
-                        color: '#1976d2',
-                        fontSize: '0.9rem',
-                        margin: 0,
-                        fontWeight: '500'
+                    {/* Pista en la parte inferior */}
+                    <div style={{
+                        marginTop: '1rem',
+                        padding: '1rem',
+                        background: 'rgba(33, 150, 243, 0.1)',
+                        borderRadius: '0.5rem',
+                        border: '1px solid rgba(33, 150, 243, 0.2)',
+                        textAlign: 'center'
                     }}>
-                        {question.type === 'decomposition' 
-                            ? '💡 Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
-                            : '💡 Suma todos los números para obtener el resultado final'
-                        }
-                    </p>
+                        <p style={{
+                            color: '#1976d2',
+                            fontSize: '0.9rem',
+                            margin: 0,
+                            fontWeight: '500'
+                        }}>
+                            {question.type === 'decomposition' 
+                                ? '💡 Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
+                                : '💡 Suma todos los números para obtener el resultado final'
+                            }
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
