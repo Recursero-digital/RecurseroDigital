@@ -162,3 +162,65 @@ export function validateNumberWordPair(number, word) {
     const correctWord = numberToWords(number);
     return normalizeText(word) === normalizeText(correctWord);
 }
+
+export function generateHintExample(level, usedNumbers) {
+    // Ejemplos educativos específicos por nivel con explicaciones
+    const levelExamples = {
+        0: { // Nivel 1 (1-50): Números básicos
+            examples: [
+                { number: 15, word: "quince" },
+                { number: 23, word: "veintitres" },
+                { number: 37, word: "treinta y siete" },
+                { number: 42, word: "cuarenta y dos" }
+            ]
+        },
+        1: { // Nivel 2 (51-200): Números intermedios  
+            examples: [
+                { number: 78, word: "setenta y ocho" },
+                { number: 100, word: "cien" },
+                { number: 156, word: "ciento cincuenta y seis" },
+                { number: 189, word: "ciento ochenta y nueve" }
+            ]
+        },
+        2: { // Nivel 3 (201-500): Números avanzados
+            examples: [
+                { number: 234, word: "doscientos treinta y cuatro" },
+                { number: 367, word: "trescientos sesenta y siete" },
+                { number: 445, word: "cuatrocientos cuarenta y cinco" },
+                { number: 489, word: "cuatrocientos ochenta y nueve" }
+            ]
+        }
+    };
+
+    const currentLevelExamples = levelExamples[level] || levelExamples[0];
+    
+    // Buscar un ejemplo que no esté en usedNumbers
+    for (const example of currentLevelExamples.examples) {
+        if (!usedNumbers.includes(example.number)) {
+            return example;
+        }
+    }
+    
+    // Si todos los ejemplos están en uso, generar uno aleatorio del rango
+    const range = levelRanges[level];
+    if (range) {
+        let attempts = 0;
+        while (attempts < 30) {
+            const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+            
+            if (!usedNumbers.includes(randomNumber) && numberToWords(randomNumber)) {
+                return {
+                    number: randomNumber,
+                    word: numberToWords(randomNumber)
+                };
+            }
+            attempts++;
+        }
+    }
+    
+    // Fallback final
+    return { 
+        number: 25, 
+        word: "veinticinco"
+    };
+}
