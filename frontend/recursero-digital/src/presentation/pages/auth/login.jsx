@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/pages/login.css"
 import { PiStudentFill } from "react-icons/pi";
+import { MdAdminPanelSettings } from "react-icons/md";
 import Logo from '../../../assets/Logo.png';
 
 
@@ -41,8 +42,17 @@ export default function RoleSelection() {
               Soy Docente
             </button>
           </div>
+
         </div>
+       
       </div>
+       <button 
+          onClick={() => handleRoleSelect("admin")} 
+          className="admin-access-btn"
+          title="Acceso de administrador"
+        >
+          <MdAdminPanelSettings />
+        </button>
     </div>
   )
 }
