@@ -5,7 +5,6 @@ import LoginForm from "./presentation/pages/auth/LoginForm";
 import HomeAlumno from "./presentation/pages/student/homeAlumno";
 import HomeDocente from "./presentation/pages/teacher/homeDocente";
 import HomeAdmin from "./presentation/pages/admin/homeAdmin";
-import AdminDashboard from "./presentation/pages/admin/AdminDashboard";
 import AdminUsers from "./presentation/pages/admin/AdminUsers";
 import AdminCourses from "./presentation/pages/admin/AdminCourses";
 import AdminStatistics from "./presentation/pages/admin/AdminStatistics";
@@ -79,14 +78,7 @@ function App() {
             </MainLayout>
           }
         />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <MainLayout userRole="admin">
-              <AdminDashboard />
-            </MainLayout>
-          }
-        />
+       
         <Route
           path="/admin/docentes"
           element={
