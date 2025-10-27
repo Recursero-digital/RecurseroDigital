@@ -24,7 +24,15 @@ export default function LoginForm() {
     setError("");
     
     try {
-      const endpoint = activeTab === "alumno" ? AUTH_ENDPOINTS.LOGIN_STUDENT : AUTH_ENDPOINTS.LOGIN_TEACHER;
+      let endpoint;
+      if (activeTab === "alumno") {
+        endpoint = AUTH_ENDPOINTS.LOGIN_STUDENT;
+      } else if (activeTab === "docente") {
+        endpoint = AUTH_ENDPOINTS.LOGIN_TEACHER;
+      } else if (activeTab === "admin") {
+        endpoint = AUTH_ENDPOINTS.LOGIN_ADMIN;
+      }
+      
       const response = await apiRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -39,8 +47,10 @@ export default function LoginForm() {
         localStorage.setItem('userEmail', email);
         if (activeTab === "alumno") {
           navigate("/alumno");
-        } else {
+        } else if (activeTab === "docente") {
           navigate("/docente");
+        } else if (activeTab === "admin") {
+          navigate("/admin");
         }
       } else {
         setError(response.data.error || 'Error al iniciar sesión');
@@ -101,7 +111,7 @@ export default function LoginForm() {
             className={`login-button ${activeTab}`}
             disabled={isLoading}
           >
-            {isLoading ? "Iniciando sesión..." : `Iniciar como ${activeTab === "alumno" ? "Estudiante" : "Docente"}`}
+            {isLoading ? "Iniciando sesión..." : `Iniciar como ${activeTab === "alumno" ? "Estudiante" : activeTab === "docente" ? "Docente" : "Administrador"}`}
           </button>
         </form>
 

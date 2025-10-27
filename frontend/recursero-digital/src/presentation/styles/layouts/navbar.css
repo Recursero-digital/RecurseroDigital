@@ -106,24 +106,46 @@
   gap: 15rem;
 }
 
+.navbar.admin .navbar-tabs {
+  gap: 5rem;
+}
+
 .navbar.alumno .tab-button, 
-.navbar.docente .tab-button {
-  background: rgba(255, 255, 255, 0.1);
+.navbar.docente .tab-button,
+.navbar.admin .tab-button{
+  background: rgba(132, 105, 105, 0.1);
   border: 2px solid rgba(139, 92, 246, 0.3);
   color: rgb(255, 255, 255);
   width: 200px;
   height: 50px;
 }
 
+
+.navbar.admin .tab-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle,#80f65c4d, transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
 .navbar.alumno .tab-button:hover,
-.navbar.docente .tab-button:hover {
-  border-color: rgba(139, 92, 246, 0.6);
+.navbar.docente .tab-button:hover, 
+.navbar.admin .tab-button:hover {
+  border-color: #80f65c;
   color: rgb(255, 255, 255);
 }
 
 .navbar.alumno .tab-button.active, 
-.navbar.navbar.docente .tab-button.active {
-  border-color: #8b5cf6;
+.navbar.navbar.docente .tab-button.active, 
+.navbar.admin .tab-button.active {
+  border-color: #80f65c;
   color: white;
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
@@ -148,7 +170,8 @@
   }
 
   .navbar.docente .navbar-tabs,
-  .navbar.alumno .navbar-tabs {
+  .navbar.alumno .navbar-tabs, 
+  .navbar.admin .navbar-tabs {
     gap: 2rem;
   }
 
