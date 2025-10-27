@@ -1,4 +1,0 @@
-// This is a placeholder file to represent the JuegoCalculos image
-// In a real scenario, you would replace this with an actual image file
-// For now, we'll use the ordenamiento image as a fallback
-export { default } from './JuegoOrdenamiento-fontpage.png';

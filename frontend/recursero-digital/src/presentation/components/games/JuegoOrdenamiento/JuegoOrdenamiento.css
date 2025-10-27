@@ -56,11 +56,11 @@ body, html {
   text-align: center;
   margin-bottom: 30px;
   position: relative;
-  padding-top: 60px; /* Reducido para aprovechar mejor el espacio */
+  padding-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 200px; /* Altura mínima para centrar las instrucciones */
+  min-height: clamp(120px, 25vh, 200px);
   justify-content: center;
   width: 100%;
 }
@@ -101,6 +101,9 @@ body, html {
   border: 2px solid var(--space-yellow);
   max-width: 400px;
   flex-shrink: 0;
+  gap: clamp(4px, 1vw, 15px);
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .header-controls .game-status .status-item {
@@ -108,26 +111,31 @@ body, html {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  min-width: 80px;
+  min-width: 0;
   flex: 1;
 }
 
 .header-controls .game-status .status-icon {
-  font-size: 1rem;
+  font-size: clamp(12px, 2.5vw, 18px);
 }
 
 .header-controls .game-status .status-label {
   color: white;
-  font-size: 0.7rem;
+  font-size: clamp(9px, 1.5vw, 12px);
   font-weight: 500;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .header-controls .game-status .status-value {
   color: var(--space-yellow);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: clamp(11px, 2vw, 16px);
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
@@ -657,6 +665,229 @@ body, html {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   line-height: 1.4;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* ========================================
+   MEJORAS RESPONSIVIDAD NETBOOKS/NOTEBOOKS
+   ======================================== */
+   
+/* Netbooks y notebooks con altura limitada */
+@media (max-height: 800px) {
+  .game-header {
+    min-height: 120px;
+    padding-top: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .game-container .game-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin: 0 0 5px 0;
+  }
+  
+  .game-container .game-instruction {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin: 0 0 10px 0;
+  }
+  
+  /* Adaptar box de estadísticas para alturas reducidas */
+  .header-controls .game-status {
+    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 12px);
+    gap: clamp(2px, 0.8vw, 8px);
+  }
+  
+  .header-controls .game-status .status-item {
+    gap: 1px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: clamp(10px, 2vw, 14px);
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: clamp(8px, 1.2vw, 10px);
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: clamp(10px, 1.8vw, 14px);
+  }
+}
+
+/* Resoluciones típicas de netbooks (1024x600, 1024x768) */
+@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 800px) {
+  .juego-ordenamiento-content {
+    padding: 10px;
+  }
+  
+  /* Box de estadísticas más compacto en netbooks */
+  .header-controls .game-status {
+    padding: 5px 10px;
+    gap: 5px;
+    border-radius: 12px;
+    max-width: 350px;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 45px;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 9px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 12px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 12px;
+  }
+  
+  /* Ajustar elementos del juego */
+  .game-content .number-item {
+    min-height: 35px;
+    padding: 6px 12px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+  }
+  
+  .start-screen .feature-item {
+    padding: 8px;
+  }
+}
+
+/* Altura muy limitada (netbooks 1024x600) */
+@media (max-height: 650px) {
+  .game-header {
+    min-height: 80px;
+    padding-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .game-container .game-title {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    margin: 5px 0;
+  }
+  
+  .game-container .game-instruction {
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    margin: 0;
+  }
+  
+  /* Box de estadísticas ultra compacto para pantallas muy pequeñas */
+  .header-controls .game-status {
+    padding: 3px 6px;
+    gap: 3px;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    max-width: 300px;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 35px;
+    gap: 0;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 10px;
+    font-weight: 800;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 10px;
+  }
+  
+  /* Elementos del juego más compactos */
+  .game-content .number-item {
+    min-height: 30px;
+    padding: 4px 8px;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+  }
+}
+
+/* Optimización para overflow en pantallas muy pequeñas */
+@media (max-width: 1366px) and (max-height: 768px) {
+  .juego-ordenamiento-content {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  /* Permitir que el box de estadísticas se adapte mejor */
+  .header-controls .game-status {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex-shrink: 1;
+    min-width: 40px;
+  }
+}
+
+/* Para pantallas muy angostas, dividir estadísticas en dos filas */
+@media (max-width: 900px) {
+  .header-controls .game-status {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 12px);
+    max-width: none;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: 0 0 calc(50% - 6px);
+    max-width: calc(50% - 6px);
+    min-width: 80px;
+  }
+}
+
+/* Para móviles, hacer las estadísticas en formato de grid compacto */
+@media (max-width: 480px) {
+  .header-controls .game-status {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px 12px;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: none;
+    min-width: 0;
+    max-width: none;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 10px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 14px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 14px;
+  }
+  
+  .juego-ordenamiento-content {
+    padding: 6px;
+  }
 }
 
 .btn-success {
