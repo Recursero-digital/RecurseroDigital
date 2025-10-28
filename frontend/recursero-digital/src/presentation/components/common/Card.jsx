@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import '../../styles/components/card.css';
 import JuegoOrdenamiento from '../../../assets/JuegoOrdenamiento-fontpage.png';
 import JuegoEscritura from '../../../assets/JuegoEscritura-fontpage.png';
-import JuegoCompoyDesco from '../../../assets/JuegoCompoyDesco-fontpage.png';
+import JuegoCompoyDesco from '../../../assets/desco y compo.png';
 import NumeroPalabras from '../../../assets/NumeroPalabras-fontpage.png';
+import JuegoCalculos from '../../../assets/imagen-juegoCalculos.png';
 
 export function Card() {
     const navigate = useNavigate();
@@ -76,6 +77,15 @@ export function Card() {
                         route: '/alumno/juegos/escala',
                         difficultyLevel: 2,
                         orderIndex: 4
+                    },
+                    {
+                        id: 'game-calculos',
+                        name: 'Juego de Cálculos Mentales',
+                        description: '¡Pon a prueba tus habilidades matemáticas! Resuelve sumas, restas y multiplicaciones de diferentes niveles.',
+                        imageUrl: JuegoCalculos,
+                        route: '/alumno/juegos/calculos',
+                        difficultyLevel: 2,
+                        orderIndex: 5
                     }
                 ];
                 setGames(mockGames);

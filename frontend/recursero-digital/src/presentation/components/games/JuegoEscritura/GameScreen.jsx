@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { generateHintExample } from './utils';
 
 const GameScreen = ({ 
     level, 
@@ -18,6 +19,11 @@ const GameScreen = ({
     onBackToLevels
 }) => {
     const navigate = useNavigate();
+    
+    // Generar ejemplo para la pista que NO esté en el ejercicio actual
+    const allUsedNumbers = [...numbers]; // Todos los números del ejercicio actual
+    const hintExample = generateHintExample(level - 1, allUsedNumbers);
+    
     return (
         <div className="game-content">
             <div className="game-header">
@@ -124,19 +130,13 @@ const GameScreen = ({
                 <div className="permanent-hint">
                     <div className="permanent-hint-header">
                         <span className="hint-icon">💡</span>
-                        <h4>Pista: Correspondencias</h4>
+                        <h4>Ejemplo</h4>
                     </div>
                     <div className="permanent-hint-content">
-                        <p className="hint-text">Estos son los números y sus palabras correctas:</p>
-                        <div className="hint-numbers">
-                            {wordPairs.map((pair, index) => (
-                                <React.Fragment key={index}>
-                                    {index > 0 && <span className="hint-label">•</span>}
-                                    <span className="hint-number">{pair.number}</span>
-                                    <span className="hint-arrow">→</span>
-                                    <span className="hint-word">{pair.word}</span>
-                                </React.Fragment>
-                            ))}
+                        <div className="hint-example">
+                            <span className="hint-number">{hintExample.number}</span>
+                            <span className="hint-arrow">→</span>
+                            <span className="hint-word">{hintExample.word}</span>
                         </div>
                     </div>
                 </div>

@@ -95,7 +95,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 200px;
+  min-height: clamp(120px, 25vh, 200px);
   justify-content: center;
   width: 100%;
   flex-shrink: 0;
@@ -141,31 +141,40 @@ body, html {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
   border: 2px solid var(--space-yellow);
-  gap: clamp(8px, 1.5vw, 15px);
+  gap: clamp(4px, 1vw, 15px);
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .header-controls .game-status .status-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
 }
 
 .header-controls .game-status .status-icon {
-  font-size: var(--text-lg);
+  font-size: clamp(12px, 2.5vw, 18px);
 }
 
 .header-controls .game-status .status-label {
   color: var(--space-yellow);
-  font-size: var(--text-sm);
+  font-size: clamp(9px, 1.5vw, 12px);
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .header-controls .game-status .status-value {
   color: white;
-  font-size: var(--text-md);
+  font-size: clamp(11px, 2vw, 16px);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 /* ========================================
@@ -544,7 +553,7 @@ body, html {
   padding: var(--space-lg);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  min-height: clamp(120px, 18vh, 140px);
+  min-height: clamp(80px, 15vh, 140px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -996,5 +1005,470 @@ body, html {
 
   .words-container {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   Pista Permanente - JuegoEscritura
+   ======================================== */
+.permanent-hint {
+  background: var(--hint-gradient);
+  border: 1px solid var(--space-yellow);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-md);
+  margin: var(--space-lg) auto var(--space-md);
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.permanent-hint-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.hint-icon {
+  font-size: var(--text-base);
+}
+
+.permanent-hint-header h4 {
+  color: var(--space-blue);
+  font-weight: 600;
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+.permanent-hint-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.hint-text {
+  color: var(--space-blue);
+  font-size: var(--text-sm);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.hint-example {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: rgba(255, 255, 255, 0.7);
+  padding: var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+}
+
+.hint-number {
+  background: var(--space-blue);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.hint-arrow {
+  font-size: var(--text-base);
+  color: var(--space-purple);
+  font-weight: bold;
+}
+
+.hint-word {
+  background: var(--space-green);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.hint-tip {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--space-purple);
+  font-size: var(--text-xs);
+  padding: var(--space-sm);
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--space-purple);
+  font-style: italic;
+  margin: 0;
+  text-align: center;
+  max-width: 100%;
+}
+
+.hint-instruction {
+  color: var(--space-blue);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========================================
+   Modal de Feedback - JuegoEscritura
+   ======================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white !important;
+  color: #1f2937 !important;
+  padding: var(--space-xl);
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  max-width: 400px;
+  margin: var(--space-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  color: #1f2937 !important;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.modal-content p {
+  color: #4b5563 !important;
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-base);
+}
+
+.feedback-correct {
+  color: var(--space-green) !important;
+}
+
+.feedback-incorrect {
+  color: #ef4444 !important;
+}
+
+/* Responsive para la pista */
+@media (max-width: 768px) {
+  .permanent-hint {
+    margin: var(--space-md) var(--space-sm) var(--space-sm);
+    padding: var(--space-sm);
+    max-width: calc(100% - 20px);
+  }
+  
+  .hint-example {
+    gap: 4px;
+  }
+  
+  .hint-tip {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .hint-text, .hint-instruction {
+    font-size: 11px;
+  }
+  
+  .modal-content {
+    margin: var(--space-sm);
+    padding: var(--space-lg);
+  }
+}
+
+/* ========================================
+   MEJORAS RESPONSIVIDAD NETBOOKS/NOTEBOOKS
+   ======================================== */
+   
+/* Netbooks y notebooks con altura limitada */
+@media (max-height: 800px) {
+  .game-header {
+    min-height: 120px;
+    padding-top: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .game-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin: var(--space-sm) 0;
+  }
+  
+  .game-instruction {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin: 0 0 var(--space-xs) 0;
+  }
+  
+  .game-play-area {
+    gap: var(--space-sm);
+    min-height: auto;
+  }
+  
+  .permanent-hint {
+    margin: var(--space-sm) auto;
+    padding: var(--space-sm);
+  }
+  
+  /* Adaptar box de estadísticas para alturas reducidas */
+  .header-controls .game-status {
+    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 12px);
+    gap: clamp(2px, 0.8vw, 8px);
+  }
+  
+  .header-controls .game-status .status-item {
+    gap: 1px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: clamp(10px, 2vw, 14px);
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: clamp(8px, 1.2vw, 10px);
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: clamp(10px, 1.8vw, 14px);
+  }
+}
+
+/* Resoluciones típicas de netbooks (1024x600, 1024x768) */
+@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 800px) {
+  .game-content {
+    padding: 10px;
+  }
+  
+  .words-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .word-box {
+    padding: 8px 12px;
+    min-height: 35px;
+  }
+  
+  .numbers-container {
+    gap: 6px;
+    min-height: 50px;
+  }
+  
+  .number-box {
+    padding: 6px 12px;
+    min-height: 35px;
+  }
+  
+  .levels-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  
+  .level-btn {
+    min-height: 80px;
+    padding: 10px;
+  }
+  
+  /* Box de estadísticas más compacto en netbooks */
+  .header-controls .game-status {
+    padding: 5px 10px;
+    gap: 5px;
+    border-radius: 12px;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 45px;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 9px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 12px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 12px;
+  }
+}
+
+/* Altura muy limitada (netbooks 1024x600) */
+@media (max-height: 650px) {
+  .game-header {
+    min-height: 80px;
+    padding-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .game-title {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    margin: 5px 0;
+  }
+  
+  .game-instruction {
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    margin: 0;
+  }
+  
+  .permanent-hint {
+    margin: 5px auto;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .levels-grid {
+    gap: 8px;
+  }
+  
+  .level-btn {
+    min-height: 60px;
+    padding: 8px;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+  }
+  
+  .words-container, .numbers-container {
+    gap: 4px;
+  }
+  
+  .word-box, .number-box {
+    padding: 4px 8px;
+    min-height: 30px;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+  }
+  
+  .start-features {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  
+  .feature-item {
+    padding: 8px;
+  }
+  
+  /* Box de estadísticas ultra compacto para pantallas muy pequeñas */
+  .header-controls .game-status {
+    padding: 3px 6px;
+    gap: 3px;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 35px;
+    gap: 0;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 10px;
+    font-weight: 800;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 10px;
+  }
+}
+
+/* Ancho reducido para tablets en orientación vertical */
+@media (max-width: 1024px) and (orientation: portrait) {
+  .words-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .levels-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+/* Optimización para overflow en pantallas muy pequeñas */
+@media (max-width: 1366px) and (max-height: 768px) {
+  .game-content {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  .game-play-area {
+    overflow: visible;
+    min-height: auto;
+    flex: none;
+  }
+  
+  /* Reducir espaciado entre elementos */
+  .permanent-hint {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .words-container, .numbers-container {
+    margin: 8px 0;
+  }
+  
+  /* Permitir que el box de estadísticas se adapte mejor */
+  .header-controls .game-status {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex-shrink: 1;
+    min-width: 40px;
+  }
+}
+
+/* Para pantallas muy angostas, dividir estadísticas en dos filas */
+@media (max-width: 900px) {
+  .header-controls .game-status {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 12px);
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: 0 0 calc(50% - 6px);
+    max-width: calc(50% - 6px);
+    min-width: 80px;
+  }
+}
+
+/* Para móviles, hacer las estadísticas en formato de grid compacto */
+@media (max-width: 480px) {
+  .header-controls .game-status {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px 12px;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: none;
+    min-width: 0;
+    max-width: none;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 10px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 14px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 14px;
   }
 }
