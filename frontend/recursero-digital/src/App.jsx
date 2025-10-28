@@ -4,6 +4,13 @@ import Login from "./presentation/pages/auth/login";
 import LoginForm from "./presentation/pages/auth/LoginForm";
 import HomeAlumno from "./presentation/pages/student/homeAlumno";
 import HomeDocente from "./presentation/pages/teacher/homeDocente";
+import HomeAdmin from "./presentation/pages/admin/homeAdmin";
+import AdminDashboard from "./presentation/pages/admin/AdminDashboard";
+import AdminUsers from "./presentation/pages/admin/AdminUsers";
+import AdminCourses from "./presentation/pages/admin/AdminCourses";
+import AdminStatistics from "./presentation/pages/admin/AdminStatistics";
+import AdminTeachers from "./presentation/pages/admin/AdminTeachers";
+import AdminAssignments from "./presentation/pages/admin/AdminAssignments";
 import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
 import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
 import TeacherGames from "./presentation/pages/teacher/TeacherGames";
@@ -36,6 +43,63 @@ function App() {
           element={
             <MainLayout userRole="docente">
               <HomeDocente />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <MainLayout userRole="admin">
+              <HomeAdmin />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/usuarios"
+          element={
+            <MainLayout userRole="admin">
+              <AdminUsers />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/cursos"
+          element={
+            <MainLayout userRole="admin">
+              <AdminCourses />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/estadisticas"
+          element={
+            <MainLayout userRole="admin">
+              <AdminStatistics />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <MainLayout userRole="admin">
+              <AdminDashboard />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/docentes"
+          element={
+            <MainLayout userRole="admin">
+              <AdminTeachers />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/admin/asignaciones"
+          element={
+            <MainLayout userRole="admin">
+              <AdminAssignments />
             </MainLayout>
           }
         />

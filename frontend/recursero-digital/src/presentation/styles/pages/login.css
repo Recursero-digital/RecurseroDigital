@@ -100,6 +100,8 @@
   color: #059669;
 }
 
+
+
 .card-description {
   margin-bottom: 1rem;
   font-size: 0.95rem;
@@ -114,6 +116,8 @@
 .card-description.teacher {
   color: #10b981;
 }
+
+
 
 .role-button {
   width: 100%;
@@ -141,6 +145,34 @@
 
 .role-button.teacher:hover {
   background-color: #059669;
+}
+
+/* Botón discreto de administrador */
+.admin-access-btn {
+
+ position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.2rem;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  z-index: 10;
+   bottom: 20px;
+  right: 20px;
+}
+
+.admin-access-btn:hover {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
 }
 
 /* Responsive design for smaller screens */
