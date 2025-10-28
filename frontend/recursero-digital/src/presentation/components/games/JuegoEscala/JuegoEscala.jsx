@@ -30,7 +30,8 @@ const JuegoEscala = () => {
         incrementAttempts, 
         resetAttempts, 
         resetScoring, 
-        completeActivity
+        completeActivity,
+        startActivityTimer
     } = useGameScoring();
     
     const [gameState, setGameState] = useState(UI_STATES.GAME_STATES.START);
@@ -123,10 +124,11 @@ const JuegoEscala = () => {
             setCurrentQuestion(questions[currentActivity]);
             setUserAnswers({ anterior: '', posterior: '' });
             setInputErrors({ anterior: false, posterior: false });
-            setIsProcessing(false); // Reset processing state para nueva pregunta
+            setIsProcessing(false);
             resetAttempts();
+            startActivityTimer();
         }
-    }, [gameState, currentActivity, questions, resetAttempts]);
+    }, [gameState, currentActivity, questions, resetAttempts, startActivityTimer]);
 
     const handleCheckAnswer = useCallback(() => {
         if (!currentQuestion || isProcessing) return; // Prevenir múltiples envíos
@@ -163,12 +165,8 @@ const JuegoEscala = () => {
                 completeActivity(
                     currentLevel, 
                     'escala', 
-                    currentActivity + 1, 
-                    Math.max(currentLevel + 1, 1), 
-                    {
-                        correctAnswers: 1,
-                        totalQuestions: totalQuestions
-                    }
+                    currentActivity, 
+                    currentLevel
                 );
                 
                 // Mensaje aleatorio de felicitaciones
@@ -222,6 +220,7 @@ const JuegoEscala = () => {
             setShowCongrats(true);
         } else {
             setCurrentActivity(prev => prev + 1);
+            startActivityTimer();
         }
     }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel]);
 
