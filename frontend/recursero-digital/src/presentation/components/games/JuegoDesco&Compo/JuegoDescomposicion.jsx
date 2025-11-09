@@ -181,6 +181,7 @@ const JuegoDescomposicion = () => {
     }, [currentLevel, handleSelectLevel]);
 
     const handleBackToLevels = useCallback(() => {
+        setShowCongrats(false);
         setGameState('levelSelect');
     }, []);
 
