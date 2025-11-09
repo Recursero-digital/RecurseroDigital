@@ -17,7 +17,8 @@ const JuegoCalculos = () => {
     incrementAttempts, 
     resetScoring, 
     completeActivity,
-    addPoints
+    addPoints,
+    startActivityTimer
   } = useGameScoring();
 
   // Game state management
@@ -45,8 +46,9 @@ const JuegoCalculos = () => {
   const handleSelectLevel = useCallback((level) => {
     setSelectedLevel(level);
     setGameState('playing');
-    resetScoring(); // Reset scoring when starting a new game
-  }, [resetScoring]);
+    resetScoring();
+    startActivityTimer();
+  }, [resetScoring, startActivityTimer]);
 
   const handleBackToStart = useCallback(() => {
     setSelectedOperation(null);
@@ -73,8 +75,12 @@ const JuegoCalculos = () => {
     if (isWin) {
       const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
       
-      // Llamar completeActivity de forma síncrona como JuegoOrdenamiento
-      completeActivity(levelNumber - 1);
+      completeActivity(
+        levelNumber - 1,           
+        'calculos',                
+        0,                         
+        levelNumber                
+      );
       
       // Unlock next level if available - usando gameId específico por operación
       if (levelNumber < 3) {
@@ -90,13 +96,15 @@ const JuegoCalculos = () => {
   const handlePlayAgain = useCallback(() => {
     setGameState('playing');
     resetScoring();
-  }, [resetScoring]);
+    startActivityTimer(); 
+  }, [resetScoring, startActivityTimer]);
 
   const handlePlayNextLevel = useCallback((nextLevel) => {
     setSelectedLevel(nextLevel);
     setGameState('playing');
     resetScoring();
-  }, [resetScoring]);
+    startActivityTimer();
+  }, [resetScoring, startActivityTimer]);
 
   const handleUpdateScore = useCallback((points) => {
     addPoints(points);
