@@ -33,6 +33,7 @@ const JuegoDescomposicion = () => {
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [questions, setQuestions] = useState([]);
     const [totalQuestions] = useState(5);
+    const [isAnswered, setIsAnswered] = useState(false);
 
     useEffect(() => {
         AOS.init();
@@ -110,12 +111,13 @@ const JuegoDescomposicion = () => {
         if (gameState === 'playing' && questions.length > 0) {
             setCurrentQuestion(questions[currentActivity]);
             setUserAnswer('');
+            setIsAnswered(false);
             startActivityTimer();
         }
     }, [gameState, currentActivity, questions, startActivityTimer]);
 
     const handleCheckAnswer = useCallback(() => {
-        if (!currentQuestion || !userAnswer.trim()) return;
+        if (!currentQuestion || !userAnswer.trim() || isAnswered) return;
 
         incrementAttempts();
         let isCorrect = false;
@@ -132,6 +134,7 @@ const JuegoDescomposicion = () => {
         if (isCorrect) {
             const activityScore = 50 * (currentLevel + 1);
             completeActivity(currentLevel, 'descomposicion', currentActivity, currentLevel);
+            setIsAnswered(true);
             setFeedback({
                 title: '¡Correcto!',
                 text: `¡Excelente! Ganaste ${activityScore} puntos`,
@@ -150,7 +153,7 @@ const JuegoDescomposicion = () => {
         }
 
         setShowFeedback(true);
-    }, [currentQuestion, userAnswer, incrementAttempts, currentLevel, attempts, completeActivity]);
+    }, [currentQuestion, userAnswer, incrementAttempts, currentLevel, attempts, completeActivity, isAnswered]);
 
     const handleContinue = useCallback(() => {
         setShowFeedback(false);
@@ -178,6 +181,7 @@ const JuegoDescomposicion = () => {
     }, [currentLevel, handleSelectLevel]);
 
     const handleBackToLevels = useCallback(() => {
+        setShowCongrats(false);
         setGameState('levelSelect');
     }, []);
 
