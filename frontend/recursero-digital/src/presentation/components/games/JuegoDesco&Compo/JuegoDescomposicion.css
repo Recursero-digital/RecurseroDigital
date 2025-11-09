@@ -376,6 +376,10 @@ body, html {
     100% { box-shadow: 0 0 5px rgba(139, 94, 52, 0.3); }
 }
 
+/* StartScreen - ahora usa estilos globales de games.css */
+/* Las clases .start-screen, .start-features, .feature-item están en globals/games.css */
+
+/* Animaciones específicas */
 .slide-in {
     animation: slideIn 0.5s ease-out;
 }
@@ -386,6 +390,12 @@ body, html {
 
 .glow {
     animation: glow 2s infinite;
+}
+
+/* Estilos específicos del chalkboard */
+.chalkboard .start-screen {
+    /* El background viene del chalkboard, mantener transparente */
+    background: transparent;
 }
 
 @media (max-width: 768px) {
