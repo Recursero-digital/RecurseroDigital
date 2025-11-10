@@ -53,6 +53,7 @@ const saveGameStatistics = async (
     } = req.body;
 
     try {
+        console.log("Received creation of statistics: ", req.body)
         const statistics = await saveGameStatisticsUseCase.execute({
             studentId,
             gameId,
@@ -68,7 +69,8 @@ const saveGameStatistics = async (
             sessionStartTime: sessionStartTime ? new Date(sessionStartTime) : undefined,
             sessionEndTime: sessionEndTime ? new Date(sessionEndTime) : undefined
         });
-        
+
+        console.log("Processed creation of statistics: ", statistics)
         res.status(201).json({ 
             message: 'Estadísticas guardadas exitosamente',
             statistics: {
