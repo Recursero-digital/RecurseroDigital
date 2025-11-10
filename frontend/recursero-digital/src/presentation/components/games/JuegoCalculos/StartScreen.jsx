@@ -4,7 +4,6 @@ import { operationConfig } from './utils';
 const StartScreen = ({ onStartGame, onBackToGames }) => {
   return (
     <div className="start-screen">
-      {/* Header Controls */}
       <div className="header-controls">
         <button 
           onClick={onBackToGames}
@@ -14,12 +13,9 @@ const StartScreen = ({ onStartGame, onBackToGames }) => {
           ← Juegos
         </button>
       </div>
-
-      {/* Title */}
       <h1>🧮 Juego de Cálculos 🧮</h1>
       <p>Elige una operación y resuélvelas!</p>
 
-      {/* Operation Selection Cards */}
       <div className="operation-selection">
         {Object.entries(operationConfig).map(([key, config]) => (
           <button 
@@ -44,8 +40,6 @@ const StartScreen = ({ onStartGame, onBackToGames }) => {
           </button>
         ))}
       </div>
-
-      {/* Instructions */}
       <div className="start-features">
         <div className="feature-item">
           <span className="feature-icon">1️⃣</span>

@@ -9,10 +9,29 @@ const useGameScoringAPI = () => {
   const [submitError, setSubmitError] = useState(null);
 
   /**
-   * Genera un ID único para la sesión de juego
+   * Extrae el userId del token JWT almacenado
    */
-  const generateSessionId = () => {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const getUserIdFromToken = () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return '';
+      
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id || '';
+    } catch (error) {
+      console.error('Error al extraer userId del token:', error);
+      return '';
+    }
+  };
+
+  const getGameId = (gameType) => {
+    const gameIdMap = {
+      'ordenamiento': 'game-ordenamiento',
+      'escritura': 'game-escritura',
+      'descomposicion': 'game-descomposicion',
+      'escala': 'game-escala'
+    };
+    return gameIdMap[gameType] || gameType;
   };
 
   /**
@@ -22,43 +41,41 @@ const useGameScoringAPI = () => {
     gameType,
     level,
     activity,
-    points,
     activityScore,
     attempts,
     maxUnlockedLevel,
     completed = true,
-    correctAnswers = null,
-    totalQuestions = null,
-    sessionId = null
+    startTime = null,
+    endTime = null
   }) => {
+    const userId = getUserIdFromToken();
+    
+    const gameId = getGameId(gameType);
+    
+    let completionTime = null;
+    if (startTime && endTime) {
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+      completionTime = Math.round((end - start) / 1000); // en segundos
+    }
+    
     return {
-      // Identificación del usuario
-      userEmail: localStorage.getItem('userEmail'),
-      userType: localStorage.getItem('userType'),
-      
-      // Información del juego
-      gameType,
-      level,
-      activity,
-      
-      // Puntuación
-      totalPoints: points,
-      activityScore,
-      baseScore: 50 * (level + 1),
-      penalty: attempts * 5,
+      studentId: userId,
+      gameId: gameId,
+      level: level + 1,
+      activity: activity !== null && activity !== undefined ? activity + 1 : 1,
+
+      points: activityScore || 0,
+
       attempts,
-      
-      // Progreso
-      maxUnlockedLevel,
-      
-      // Resultados específicos
-      correctAnswers,
-      totalQuestions,
-      
-      // Metadatos
-      timestamp: new Date().toISOString(),
-      sessionId: sessionId || generateSessionId(),
-      completed
+
+      completionTime: completionTime,
+
+      isCompleted: completed,
+
+      maxUnlockedLevel: maxUnlockedLevel !== null && maxUnlockedLevel !== undefined 
+        ? maxUnlockedLevel + 1 
+        : (level + 2)
     };
   };
 
@@ -70,18 +87,18 @@ const useGameScoringAPI = () => {
     setSubmitError(null);
 
     try {
-      const gameScoreData = prepareGameScoreData(scoreData);
+      console.log('📤 Enviando estadísticas al backend:', scoreData);
       
-      const response = await apiRequest('/api/game-scores', {
+      const response = await apiRequest('/statistics', {
         method: 'POST',
-        body: JSON.stringify(gameScoreData)
+        body: JSON.stringify(scoreData)
       });
 
       if (!response.ok) {
-        throw new Error('Error al guardar el puntaje');
+        throw new Error(`Error al guardar el puntaje: ${response.data?.error || 'Error desconocido'}`);
       }
 
-      console.log('✅ Puntaje guardado exitosamente:', gameScoreData);
+      console.log('✅ Puntaje guardado exitosamente:', response.data);
       return response.data;
     } catch (error) {
       console.error('❌ Error al guardar puntaje:', error);
@@ -133,7 +150,8 @@ const useGameScoringAPI = () => {
     prepareGameScoreData,
     isSubmitting,
     submitError,
-    generateSessionId
+    getUserIdFromToken,
+    getGameId
   };
 };
 

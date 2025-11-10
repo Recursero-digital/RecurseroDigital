@@ -19,7 +19,8 @@ const JuegoDescomposicion = () => {
         incrementAttempts, 
         resetAttempts, 
         resetScoring, 
-        completeActivity
+        completeActivity,
+        startActivityTimer
     } = useGameScoring();
     const [gameState, setGameState] = useState('start');
     const [currentLevel, setCurrentLevel] = useState(0);
@@ -32,6 +33,7 @@ const JuegoDescomposicion = () => {
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [questions, setQuestions] = useState([]);
     const [totalQuestions] = useState(5);
+    const [isAnswered, setIsAnswered] = useState(false);
 
     useEffect(() => {
         AOS.init();
@@ -101,7 +103,7 @@ const JuegoDescomposicion = () => {
         setCurrentActivity(0);
         setQuestions(generateQuestions(level));
         resetScoring();
-        resetAttempts(); // Resetear intentos al empezar un nuevo nivel
+                    resetAttempts();
         setGameState('playing');
     }, [generateQuestions, resetScoring, resetAttempts]);
 
@@ -109,11 +111,13 @@ const JuegoDescomposicion = () => {
         if (gameState === 'playing' && questions.length > 0) {
             setCurrentQuestion(questions[currentActivity]);
             setUserAnswer('');
+            setIsAnswered(false);
+            startActivityTimer();
         }
-    }, [gameState, currentActivity, questions]);
+    }, [gameState, currentActivity, questions, startActivityTimer]);
 
     const handleCheckAnswer = useCallback(() => {
-        if (!currentQuestion || !userAnswer.trim()) return;
+        if (!currentQuestion || !userAnswer.trim() || isAnswered) return;
 
         incrementAttempts();
         let isCorrect = false;
@@ -129,7 +133,8 @@ const JuegoDescomposicion = () => {
 
         if (isCorrect) {
             const activityScore = 50 * (currentLevel + 1);
-            completeActivity(currentLevel, attempts + 1);
+            completeActivity(currentLevel, 'descomposicion', currentActivity, currentLevel);
+            setIsAnswered(true);
             setFeedback({
                 title: '¡Correcto!',
                 text: `¡Excelente! Ganaste ${activityScore} puntos`,
@@ -148,7 +153,7 @@ const JuegoDescomposicion = () => {
         }
 
         setShowFeedback(true);
-    }, [currentQuestion, userAnswer, incrementAttempts, currentLevel, attempts, completeActivity]);
+    }, [currentQuestion, userAnswer, incrementAttempts, currentLevel, attempts, completeActivity, isAnswered]);
 
     const handleContinue = useCallback(() => {
         setShowFeedback(false);
@@ -161,10 +166,10 @@ const JuegoDescomposicion = () => {
             setShowCongrats(true);
         } else {
             setCurrentActivity(prev => prev + 1);
-            // Resetear intentos al pasar a la siguiente pregunta
             resetAttempts();
+            startActivityTimer();
         }
-    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel, resetAttempts]);
+    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel, resetAttempts, startActivityTimer]);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
@@ -176,6 +181,7 @@ const JuegoDescomposicion = () => {
     }, [currentLevel, handleSelectLevel]);
 
     const handleBackToLevels = useCallback(() => {
+        setShowCongrats(false);
         setGameState('levelSelect');
     }, []);
 

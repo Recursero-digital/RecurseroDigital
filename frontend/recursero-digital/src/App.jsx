@@ -10,6 +10,7 @@ import AdminCourses from "./presentation/pages/admin/AdminCourses";
 import AdminStatistics from "./presentation/pages/admin/AdminStatistics";
 import AdminTeachers from "./presentation/pages/admin/AdminTeachers";
 import AdminAssignments from "./presentation/pages/admin/AdminAssignments";
+// import AdminDashboard from "./presentation/pages/admin/AdminDashboard";
 import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
 import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
 import TeacherGames from "./presentation/pages/teacher/TeacherGames";
@@ -78,7 +79,14 @@ function App() {
             </MainLayout>
           }
         />
-       
+        <Route
+          path="/admin/dashboard"
+          element={
+            <MainLayout userRole="admin">
+              <HomeAdmin />
+            </MainLayout>
+          }
+        />
         <Route
           path="/admin/docentes"
           element={

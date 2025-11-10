@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react';
 import '../../styles/components/card.css';
 import JuegoOrdenamiento from '../../../assets/JuegoOrdenamiento-fontpage.png';
 import JuegoEscritura from '../../../assets/JuegoEscritura-fontpage.png';
-import JuegoCompoyDesco from '../../../assets/JuegoCompoyDesco-fontpage.png';
+import JuegoCompoyDesco from '../../../assets/desco y compo.png';
 import NumeroPalabras from '../../../assets/NumeroPalabras-fontpage.png';
-// Temporalmente usamos la imagen de ordenamiento para cálculos hasta tener una imagen específica
-import JuegoCalculos from '../../../assets/JuegoOrdenamiento-fontpage.png';
+import JuegoCalculos from '../../../assets/imagen-juegoCalculos.png';
 
 export function Card() {
     const navigate = useNavigate();
