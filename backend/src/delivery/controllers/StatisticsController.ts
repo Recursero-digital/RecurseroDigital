@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
+import { SaveGameStatisticsValidationError } from '../../core/models/exceptions/SaveGameStatisticsValidationError';
 
 interface SaveGameStatisticsRequest {
     studentId: string;
@@ -52,16 +53,6 @@ const saveGameStatistics = async (
     } = req.body;
 
     try {
-        if (!studentId || !gameId || level === undefined || activity === undefined || points === undefined || attempts === undefined) {
-            res.status(400).json({ error: 'Faltan campos obligatorios' });
-            return;
-        }
-
-        if (level < 1 || activity < 1 || points < 0 || attempts < 0) {
-            res.status(400).json({ error: 'Valores inválidos en los campos' });
-            return;
-        }
-
         const statistics = await saveGameStatisticsUseCase.execute({
             studentId,
             gameId,
@@ -94,6 +85,10 @@ const saveGameStatistics = async (
             }
         });
     } catch (error) {
+        if (error instanceof SaveGameStatisticsValidationError) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
         console.error('Error en saveGameStatistics:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }

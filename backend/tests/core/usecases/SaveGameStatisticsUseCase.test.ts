@@ -1,4 +1,5 @@
 import { SaveGameStatisticsUseCase, SaveGameStatisticsRequest } from '../../../src/core/usecases/SaveGameStatisticsUseCase';
+import { SaveGameStatisticsValidationError } from '../../../src/core/models/exceptions/SaveGameStatisticsValidationError';
 import { MockStudentStatisticsRepository } from '../../mocks/StudentStatisticsRepository.mock';
 import { MockIdGenerator } from '../../mocks/IdGenerator.mock';
 import { StudentStatistics } from '../../../src/core/models/StudentStatistics';
@@ -203,6 +204,33 @@ describe('SaveGameStatisticsUseCase', () => {
       expect(result.createdAt.getTime()).toBeLessThanOrEqual(afterExecution.getTime());
       expect(result.updatedAt.getTime()).toBeGreaterThanOrEqual(beforeExecution.getTime());
       expect(result.updatedAt.getTime()).toBeLessThanOrEqual(afterExecution.getTime());
+    });
+
+    it('should throw validation error when required fields are missing', async () => {
+      const request = {
+        studentId: 'student-123',
+        gameId: 'game-escritura',
+        activity: 1,
+        points: 100,
+        attempts: 1,
+        isCompleted: true
+      } as unknown as SaveGameStatisticsRequest;
+
+      await expect(saveGameStatisticsUseCase.execute(request)).rejects.toBeInstanceOf(SaveGameStatisticsValidationError);
+    });
+
+    it('should throw validation error when values are invalid', async () => {
+      const request: SaveGameStatisticsRequest = {
+        studentId: 'student-123',
+        gameId: 'game-escritura',
+        level: 0,
+        activity: 1,
+        points: -10,
+        attempts: -1,
+        isCompleted: true
+      };
+
+      await expect(saveGameStatisticsUseCase.execute(request)).rejects.toBeInstanceOf(SaveGameStatisticsValidationError);
     });
 
     it('should handle different game types', async () => {
