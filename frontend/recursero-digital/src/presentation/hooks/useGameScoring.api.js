@@ -98,7 +98,7 @@ const useGameScoringAPI = () => {
       
       console.log('📤 Enviando estadísticas al backend:', preparedData);
       
-      const response = await apiRequest('/api/statistics', {
+      const response = await apiRequest('/statistics', {
         method: 'POST',
         body: JSON.stringify(preparedData)
       });
@@ -133,7 +133,7 @@ const useGameScoringAPI = () => {
         timestamp: new Date().toISOString()
       };
 
-      const response = await apiRequest('/api/user-progress', {
+      const response = await apiRequest('/user-progress', {
         method: 'POST',
         body: JSON.stringify(progressData)
       });
