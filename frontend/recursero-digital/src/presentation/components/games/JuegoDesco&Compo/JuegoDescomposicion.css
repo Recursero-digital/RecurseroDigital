@@ -1,3 +1,17 @@
+/*
+ * JuegoDescomposicion Styles - OPTIMIZADO
+ * 
+ * ✅ USA ESTILOS GLOBALES:
+ * - Variables CSS de games.css (--space-*, --gradient-*, --font-game, etc.)
+ * - Contenedores: .game-wrapper, .game-container (definidos en globals/games.css)
+ * - Botones: .btn-start, .btn-check, .btn-hint, .btn-back-to-* (definidos en globals/games.css)
+ * - Tarjetas: .paper-note, .question-title, .question-number (definidos en globals/games.css)
+ * - Inputs: .answer-input (definido en globals/games.css)
+ * - HUD: .game-hud (definido en globals/games.css)
+ * 
+ * 🎯 Solo incluye estilos ESPECÍFICOS de JuegoDescomposicion
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
 
 * {
@@ -6,220 +20,19 @@
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+/* Remover estilos duplicados - ahora están en globals/games.css */
+/* .game-wrapper, .game-container, .btn-*, .paper-note, .question-*, .answer-input, .game-hud */
 
-.game-wrapper {
-    font-family: 'Fredoka', sans-serif;
-    min-height: 100vh;
-    width: 100vw;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-    position: relative;
-    overflow-x: hidden;
-}
-
-.game-container {
-    min-height: 100vh;
-    padding: 1rem;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
-    color: white;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.game-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-/* .header-controls removido - ahora está en globals/games.css */
-
-.btn-back-to-levels,
-.btn-back-to-dashboard {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    color: white;
-    border: 2px solid var(--space-yellow, #fbbf24);
-    padding: 0.75rem 1.5rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-back-to-levels:hover,
-.btn-back-to-dashboard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(139, 92, 246, 0.4);
-}
-
-.game-hud {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    padding: 0.75rem 1rem;
-    border-radius: 1rem;
-    border: 2px solid rgba(251, 191, 36, 0.5);
-    color: white;
-    font-weight: 600;
-    z-index: 10;
-    font-size: 0.9rem;
-}
-
-.game-hud span {
-    color: var(--space-yellow, #fbbf24);
-    font-weight: 700;
-}
-
-.paper-note {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-    color: #1e3a8a;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 
-        0 10px 25px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    position: relative;
-    max-width: 600px;
-    margin: 2rem auto;
-    border: 3px solid var(--space-yellow, #fbbf24);
-}
-
-.question-title {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #5b21b6;
-}
-
-.question-number {
-    font-size: 3rem;
-    font-weight: 900;
-    text-align: center;
-    color: #7c3aed;
-    margin: 1rem 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
+/* Extensión específica de question-decomposition para este juego */
 .question-decomposition {
     font-size: 1.5rem;
     font-weight: 700;
     text-align: center;
-    color: #6366f1;
+    color: var(--space-indigo, #6366f1);
     margin: 1rem 0;
 }
 
-.answer-input {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    border: 2px solid #c7d2fe;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.95);
-    color: #1e293b;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-align: center;
-    font-family: 'Fredoka', sans-serif;
-}
-
-.answer-input:focus {
-    outline: none;
-    border-color: #8b5cf6;
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-    background: rgba(255, 255, 255, 1);
-}
-
-.answer-input::placeholder {
-    color: #94a3b8;
-    font-style: italic;
-}
-
-.btn {
-    padding: 0.75rem 2rem;
-    border: 2px solid var(--space-yellow, #fbbf24);
-    border-radius: 2rem;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    font-family: 'Fredoka', sans-serif;
-}
-
-.btn:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn:hover:before {
-    left: 100%;
-}
-
-.btn-start {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-}
-
-.btn-start:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
-}
-
-.btn-check {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-}
-
-.btn-check:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
-}
-
-.btn-check:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-hint {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-}
-
-.btn-hint:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
-}
+/* Botones específicos - extienden los estilos globales */
 
 .level-grid {
     display: grid;

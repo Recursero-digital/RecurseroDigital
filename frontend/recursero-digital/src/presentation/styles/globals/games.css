@@ -1,6 +1,22 @@
 /* =================================================================== */
 /* ESTILOS GLOBALES PARA JUEGOS - RECURSERO DIGITAL                   */
 /* =================================================================== */
+/* 
+ * Este archivo contiene todos los estilos compartidos por los 5 juegos:
+ * - JuegoEscritura
+ * - JuegoOrdenamiento
+ * - JuegoDescomposicion (NumeroMágico)
+ * - JuegoEscala (Anterior y Posterior)
+ * - JuegoCalculos
+ * 
+ * TEMA UNIFICADO: Espacial 🌌
+ * - Gradiente principal: Azul → Índigo → Púrpura
+ * - Tipografía: Fredoka (sans-serif)
+ * - Colores consistentes en todos los juegos
+ * 
+ * Los archivos CSS individuales de cada juego solo deben contener
+ * estilos ESPECÍFICOS de ese juego, evitando duplicación.
+ */
 
 /* ------------------------------------------------------------------- */
 /* VARIABLES CSS GLOBALES PARA JUEGOS                                 */
@@ -14,11 +30,27 @@
   --space-yellow: #fbbf24;
   --space-orange: #f97316;
   --space-green: #10b981;
+  --space-indigo: #6366f1;
+  --space-violet: #8b5cf6;
   
   /* Gradientes principales (usa las clases de backgrounds.css en lugar de estas variables cuando sea posible) */
   --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
   --button-gradient: var(--main-gradient);
   --number-gradient: var(--main-gradient);
+  
+  /* Gradientes de estado compartidos por todos los juegos */
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-error: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  
+  /* Fuentes comunes */
+  --font-game: 'Fredoka', sans-serif;
+  --font-game-alt: 'Comic Neue', cursive;
+  
+  /* Sombras compartidas */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.2);
+  --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 /* ------------------------------------------------------------------- */
@@ -715,4 +747,134 @@
     max-width: calc(50% - 6px);
     min-width: 80px;
   }
+}
+
+/* ------------------------------------------------------------------- */
+/* CONTENEDORES COMUNES PARA TODOS LOS JUEGOS                         */
+/* ------------------------------------------------------------------- */
+
+/* Wrapper principal del juego */
+.game-wrapper {
+  font-family: var(--font-game);
+  min-height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Contenedor de escena del juego */
+.game-scene,
+.game-container {
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
+  color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efecto de brillo espacial */
+.game-scene::before,
+.game-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------- */
+/* PAPER NOTE - TARJETA DE PREGUNTA COMÚN                             */
+/* ------------------------------------------------------------------- */
+
+.paper-note {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  color: #1e3a8a;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+  max-width: 600px;
+  margin: 2rem auto;
+  border: 3px solid var(--space-yellow);
+}
+
+.question-title {
+  font-family: var(--font-game);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #5b21b6;
+}
+
+.question-number {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  color: var(--space-purple);
+  margin: 1rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------------------------------------------------------- */
+/* INPUTS Y FORMULARIOS COMUNES                                       */
+/* ------------------------------------------------------------------- */
+
+.answer-input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #c7d2fe;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-family: var(--font-game);
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--space-violet);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 1);
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------- */
+/* GAME HUD - INFORMACIÓN DEL JUEGO                                   */
+/* ------------------------------------------------------------------- */
+
+.game-hud {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  color: white;
+  font-weight: 600;
+  z-index: 10;
+  font-size: 0.9rem;
+}
+
+.game-hud span {
+  color: var(--space-yellow);
+  font-weight: 700;
 }

@@ -2,57 +2,31 @@
  * JuegoEscala Styles - OPTIMIZADO
  * 
  * ✅ OPTIMIZACIONES REALIZADAS:
- * - Eliminadas ~300 líneas de código duplicado
+ * - Usa estilos globales de games.css
  * - Variables CSS centralizadas en games.css
  * - Gradientes unificados con backgrounds.css
  * - Botones estandarizados con games.css
+ * - Contenedores .game-scene y .paper-note globales
  * 
- * 📋 CLASES GLOBALES A USAR (para evitar duplicación):
+ * 📋 CLASES GLOBALES USADAS (definidas en globals/games.css):
+ * - Variables: --space-*, --gradient-*, --font-game, --shadow-*
+ * - .game-wrapper, .game-scene, .game-container
+ * - .btn-start, .btn-check, .btn-hint
+ * - .btn-back-to-levels, .btn-back-to-dashboard
+ * - .game-title, .game-instruction
+ * - .paper-note, .question-title, .answer-input
+ * - .game-hud
  * 
- * De backgrounds.css:
- * - .bg-space-gradient: Gradiente principal del espacio
- * - .bg-space-ui: Gradiente con opacidad para componentes UI
- * 
- * De games.css (variables disponibles):
- * - Variables: --space-blue, --space-yellow, --main-gradient, --button-gradient
- * - .btn-start, .btn-check, .btn-hint: Botones básicos de juego
- * - .btn-back-to-levels, .btn-back-to-dashboard: Botones de navegación
- * - .game-title: Título principal del juego (var(--space-yellow))
- * - .game-instruction: Instrucciones del juego
- * - .level-grid: Grid base para niveles (extendido aquí)
- * - .level-btn: Botones de nivel
- * 
- * 🎯 PRÓXIMOS PASOS:
- * ✅ 1. Actualizar componentes React para usar clases globales
- * ✅ 2. Aplicar bg-space-gradient a .game-wrapper y .ocean-scene
- * ✅ 3. Usar .game-title en lugar de títulos personalizados donde sea posible
- * 
- * 🎉 OPTIMIZACIÓN COMPLETA! El juego ahora usa el sistema de diseño global.
+ * 🎯 Solo incluye estilos ESPECÍFICOS de JuegoEscala
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+/* Solo variables específicas de este juego que NO están en globals */
 :root {
-    /* Usar gradientes del tema espacial global */
-    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    --gradient-error: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    
-    /* Colores alineados con tema espacial global */
+    /* Colores específicos para elementos decorativos */
     --color-primary: var(--space-purple, #7c3aed);
     --color-secondary: var(--space-blue, #1e3a8a);
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-error: #dc2626;
-    
-    /* Fuentes */
-    --font-comic: 'Comic Neue', cursive;
-    --font-fredoka: 'Fredoka', sans-serif;
-    
-    /* Sombras */
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.2);
-    --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 * {
@@ -61,41 +35,9 @@
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+/* Remover estilos duplicados - .game-wrapper y .game-scene ahora están en globals/games.css */
 
-/* Usar clases globales de backgrounds.css para evitar duplicación */
-.game-wrapper {
-    font-family: var(--font-comic);
-    min-height: 100vh;
-    width: 100vw;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* Aplicar clase global bg-space-gradient desde backgrounds.css */
-.game-wrapper,
-.game-scene {
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Efecto de brillo espacial al fondo */
-.game-scene::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-}
+/* Elementos decorativos específicos de JuegoEscala */
 
 .landscape {
     position: absolute;
