@@ -137,30 +137,6 @@ describe('SaveGameStatisticsUseCase', () => {
       expect(result.correctAnswers).toBeUndefined();
       expect(result.totalQuestions).toBeUndefined();
       expect(result.completionTime).toBeUndefined();
-      expect(result.sessionStartTime).toBeUndefined();
-      expect(result.sessionEndTime).toBeUndefined();
-    });
-
-    it('should handle session times when provided', async () => {
-      const sessionStart = new Date('2024-01-01T10:00:00Z');
-      const sessionEnd = new Date('2024-01-01T10:05:00Z');
-
-      const request: SaveGameStatisticsRequest = {
-        studentId: 'student-123',
-        gameId: 'game-escritura',
-        level: 1,
-        activity: 1,
-        points: 100,
-        attempts: 1,
-        isCompleted: true,
-        sessionStartTime: sessionStart,
-        sessionEndTime: sessionEnd
-      };
-
-      const result = await saveGameStatisticsUseCase.execute(request);
-
-      expect(result.sessionStartTime).toEqual(sessionStart);
-      expect(result.sessionEndTime).toEqual(sessionEnd);
     });
 
     it('should generate unique ID for statistics', async () => {

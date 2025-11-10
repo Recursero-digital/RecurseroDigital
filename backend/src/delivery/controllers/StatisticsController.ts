@@ -14,8 +14,6 @@ interface SaveGameStatisticsRequest {
     completionTime?: number;
     isCompleted: boolean;
     maxUnlockedLevel?: number;
-    sessionStartTime?: string;
-    sessionEndTime?: string;
 }
 
 interface GetStudentProgressRequest {
@@ -47,9 +45,7 @@ const saveGameStatistics = async (
         totalQuestions, 
         completionTime, 
         isCompleted, 
-        maxUnlockedLevel,
-        sessionStartTime,
-        sessionEndTime 
+        maxUnlockedLevel
     } = req.body;
 
     try {
@@ -65,9 +61,7 @@ const saveGameStatistics = async (
             totalQuestions,
             completionTime,
             isCompleted,
-            maxUnlockedLevel,
-            sessionStartTime: sessionStartTime ? new Date(sessionStartTime) : undefined,
-            sessionEndTime: sessionEndTime ? new Date(sessionEndTime) : undefined
+            maxUnlockedLevel
         });
 
         console.log("Processed creation of statistics: ", statistics)

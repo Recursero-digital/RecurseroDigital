@@ -12,8 +12,6 @@ export class StudentStatistics {
     completionTime?: number;
     isCompleted: boolean;
     maxUnlockedLevel: number;
-    sessionStartTime?: Date;
-    sessionEndTime?: Date;
     createdAt: Date;
     updatedAt: Date;
 
@@ -32,9 +30,7 @@ export class StudentStatistics {
         updatedAt: Date,
         correctAnswers?: number,
         totalQuestions?: number,
-        completionTime?: number,
-        sessionStartTime?: Date,
-        sessionEndTime?: Date
+        completionTime?: number
     ) {
         this.id = id;
         this.studentId = studentId;
@@ -49,8 +45,6 @@ export class StudentStatistics {
         this.completionTime = completionTime;
         this.isCompleted = isCompleted;
         this.maxUnlockedLevel = maxUnlockedLevel;
-        this.sessionStartTime = sessionStartTime;
-        this.sessionEndTime = sessionEndTime;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

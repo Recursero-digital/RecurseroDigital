@@ -22,9 +22,7 @@ describe('Statistics Integration Tests', () => {
         totalQuestions: 10,
         completionTime: 120,
         isCompleted: true,
-        maxUnlockedLevel: 2,
-        sessionStartTime: new Date().toISOString(),
-        sessionEndTime: new Date().toISOString()
+        maxUnlockedLevel: 2
       };
 
       const response = await request(app)

@@ -15,9 +15,8 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
         `INSERT INTO student_statistics (
           id, student_id, game_id, level, activity, points, total_points, 
           attempts, correct_answers, total_questions, completion_time, 
-          is_completed, max_unlocked_level, session_start_time, session_end_time,
-          created_at, updated_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
+          is_completed, max_unlocked_level, created_at, updated_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
         [
           statistics.id,
           statistics.studentId,
@@ -32,8 +31,6 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
           statistics.completionTime,
           statistics.isCompleted,
           statistics.maxUnlockedLevel,
-          statistics.sessionStartTime,
-          statistics.sessionEndTime,
           statistics.createdAt,
           statistics.updatedAt
         ]
@@ -69,7 +66,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
           level = $2, activity = $3, points = $4, total_points = $5,
           attempts = $6, correct_answers = $7, total_questions = $8,
           completion_time = $9, is_completed = $10, max_unlocked_level = $11,
-          session_start_time = $12, session_end_time = $13, updated_at = $14
+          updated_at = $12
         WHERE id = $1`,
         [
           statistics.id,
@@ -83,8 +80,6 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
           statistics.completionTime,
           statistics.isCompleted,
           statistics.maxUnlockedLevel,
-          statistics.sessionStartTime,
-          statistics.sessionEndTime,
           statistics.updatedAt
         ]
       );
@@ -348,9 +343,7 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
       new Date(row.updated_at),
       row.correct_answers,
       row.total_questions,
-      row.completion_time,
-      row.session_start_time ? new Date(row.session_start_time) : undefined,
-      row.session_end_time ? new Date(row.session_end_time) : undefined
+      row.completion_time
     );
   }
 }

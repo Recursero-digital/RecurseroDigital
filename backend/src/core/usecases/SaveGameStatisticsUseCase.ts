@@ -15,8 +15,6 @@ export interface SaveGameStatisticsRequest {
     completionTime?: number;
     isCompleted: boolean;
     maxUnlockedLevel?: number;
-    sessionStartTime?: Date;
-    sessionEndTime?: Date;
 }
 
 export class SaveGameStatisticsUseCase {
@@ -60,9 +58,7 @@ export class SaveGameStatisticsUseCase {
             new Date(),
             request.correctAnswers,
             request.totalQuestions,
-            request.completionTime,
-            request.sessionStartTime,
-            request.sessionEndTime
+            request.completionTime
         );
 
         await this.statisticsRepository.saveStatistics(statistics);
