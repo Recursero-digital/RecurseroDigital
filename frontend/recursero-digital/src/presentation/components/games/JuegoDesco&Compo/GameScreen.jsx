@@ -24,7 +24,7 @@ const GameScreen = ({
     };
 
     return (
-        <div className="chalkboard">
+        <div className="game-container">
             <div className="header-controls">
                 <button 
                     className="btn-back-to-levels"

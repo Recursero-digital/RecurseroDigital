@@ -9,7 +9,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
     const levelIcons = ['📚', '🏆', '🎯'];
 
     return (
-        <div className="chalkboard">
+        <div className="game-container">
             <div className="header-controls">
                 <button 
                     className="btn-back-to-levels"
@@ -24,10 +24,10 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                 <h2 style={{
                     fontSize: '3rem',
                     fontWeight: 'bold',
-                    color: '#ffd700',
+                    color: 'var(--space-yellow, #fbbf24)',
                     marginBottom: '1rem',
-                    fontFamily: 'Playfair Display, serif',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+                    fontFamily: 'Fredoka, sans-serif',
+                    textShadow: '3px 3px 0px var(--space-blue, #1e3a8a)'
                 }}>
                     ✨ Elige tu Nivel ✨
                 </h2>

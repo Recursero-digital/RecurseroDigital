@@ -5,7 +5,7 @@ const StartScreen = ({ onStart }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="ocean-scene bg-space-ui" data-aos="fade-down">
+        <div className="game-scene bg-space-ui" data-aos="fade-down">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>

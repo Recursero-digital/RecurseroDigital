@@ -10,7 +10,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
     const levelColors = ['blue', 'green', 'purple'];
 
     return (
-        <div className="ocean-scene bg-space-ui">
+        <div className="game-scene bg-space-ui">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>

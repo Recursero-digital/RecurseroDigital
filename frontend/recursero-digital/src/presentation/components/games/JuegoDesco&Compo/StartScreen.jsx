@@ -5,7 +5,7 @@ const StartScreen = ({ onStart }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="chalkboard" data-aos="fade-down">
+        <div className="game-container" data-aos="fade-down">
             {/* Usar estructura global de start-screen */}
             <div className="start-screen">
                 <div className="header-controls">
