@@ -237,7 +237,6 @@ export class DependencyContainer {
     public get getStudentGamesUseCase(): GetStudentGamesUseCase {
         if (!this._getStudentGamesUseCase) {
             this._getStudentGamesUseCase = new GetStudentGamesUseCase(
-                this.tokenService,
                 this.studentRepository,
                 this.courseRepository
             );
@@ -268,7 +267,6 @@ export class DependencyContainer {
     public get getTeacherCoursesUseCase(): GetTeacherCoursesUseCase {
         if (!this._getTeacherCoursesUseCase) {
             this._getTeacherCoursesUseCase = new GetTeacherCoursesUseCase(
-                this.tokenService,
                 this.teacherRepository,
                 this.courseRepository
             );

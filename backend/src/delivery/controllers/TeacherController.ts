@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
-import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
 import { AssignTeacherToCoursesUseCase, AssignTeacherToCoursesRequest } from '../../core/usecases/AssignTeacherToCourseUseCase';
+import { TeacherNotFoundError } from '../../core/models/exceptions/TeacherNotFoundError';
+import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
+import { AuthenticatedRequest } from '../middleware/authMiddleWare';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -56,15 +58,13 @@ const assignTeacherToCourses = async (
     }
 };
 
-const getTeacherCourses = async (req: Request, res: Response): Promise<void> => {
+const getTeacherCourses = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ error: 'Token no proporcionado' });
+        if (!req.user) {
+            res.status(401).json({ error: 'Usuario no autenticado' });
             return;
         }
-        const token = authHeader.split(' ')[1];
-        const courses = await dependencyContainer.getTeacherCoursesUseCase.execute({ token });
+        const courses = await dependencyContainer.getTeacherCoursesUseCase.execute({ teacherId: req.user.id });
         res.status(200).json({
             courses: courses.map(course => ({
                 id: course.id,
@@ -73,20 +73,12 @@ const getTeacherCourses = async (req: Request, res: Response): Promise<void> => 
         });
     } catch (error: any) {
         console.error('Error en getTeacherCourses:', error);
-        if (error.message === 'Token no proporcionado') {
-            res.status(401).json({ error: error.message });
-            return;
-        }
-        if (error.message === 'Token inválido') {
-            res.status(401).json({ error: error.message });
-            return;
-        }
-        if (error.message === 'Usuario no autorizado para esta operación') {
-            res.status(403).json({ error: error.message });
-            return;
-        }
-        if (error.message === 'Profesor no encontrado') {
+        if (error instanceof TeacherNotFoundError) {
             res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error instanceof TeacherInvalidRequestError) {
+            res.status(400).json({ error: error.message });
             return;
         }
         res.status(500).json({ error: 'Error interno del servidor' });
