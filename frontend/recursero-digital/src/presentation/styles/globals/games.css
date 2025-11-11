@@ -157,6 +157,12 @@
   box-sizing: border-box;
 }
 
+/* Header controls en start screen y level select - solo a la izquierda */
+.start-screen .header-controls,
+.level-select-screen .header-controls {
+  right: auto;
+}
+
 .start-screen h1 {
   color: var(--space-yellow);
   font-size: clamp(2.5rem, 5vw, 4rem);
@@ -233,6 +239,8 @@
 /* ------------------------------------------------------------------- */
 
 .level-select-screen {
+  position: relative;
+  width: 100%;
   text-align: center;
   padding: clamp(1rem, 3vh, 2rem);
   min-height: 100vh;
@@ -460,16 +468,14 @@
 
 .header-controls {
   position: absolute;
-  top: clamp(1rem, 3vh, 2rem);
-  left: clamp(1rem, 3vw, 2rem);
+  top: 15px;
+  left: 15px;
+  right: 15px;
   z-index: 100;
 }
 
 /* Layout para header-controls con botones y estadísticas */
 .header-controls.header-controls-layout {
-  top: 15px;
-  left: 15px;
-  right: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -15,7 +15,7 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
             <div className="lighthouse"></div>
             <div className="house"></div>
             
-            <div className="header-controls header-controls-level-select">
+            <div className="header-controls">
                 <button 
                     className="btn-back-to-levels"
                     onClick={() => navigate('/alumno')}

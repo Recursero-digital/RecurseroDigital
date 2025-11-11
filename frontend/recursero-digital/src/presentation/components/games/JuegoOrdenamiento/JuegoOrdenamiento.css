@@ -1,16 +1,3 @@
-/* CSS Variables específicas para JuegoOrdenamiento */
-:root {
-  --space-blue: #1e3a8a;
-  --space-purple: #7c3aed;
-  --space-pink: #ec4899;
-  --space-yellow: #fbbf24;
-  --space-orange: #f97316;
-  --space-green: #10b981;
-  --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-  --button-gradient: var(--main-gradient);
-  --number-gradient: var(--main-gradient);
-}
-
 /* ================================================================
    NOTA IMPORTANTE:
    Los estilos de .header-controls y .game-status están definidos
@@ -18,28 +5,6 @@
    
    Esto permite reutilizar estos componentes en todos los juegos.
    ================================================================ */
-
-/* Base Styles */
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-.game-container {
-  height: 100vh;
-  width: 100vw;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-  padding: 0;
-  font-family: 'Fredoka', cursive;
-  box-sizing: border-box;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
 
 .juego-ordenamiento-content {
   width: 100%;
@@ -57,32 +22,6 @@ body, html {
   border: 4px solid var(--space-yellow);
   border-radius: 25px;
   box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
-}
-
-/* Header */
-.game-header {
-  text-align: center;
-  margin-bottom: 30px;
-  position: relative;
-  padding-top: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: clamp(120px, 25vh, 200px);
-  justify-content: center;
-  width: 100%;
-}
-
-.game-header > * {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Header controls layout - usa clases globales de games.css */
-.juego-ordenamiento-content .header-controls {
-  top: 15px;
-  left: 15px;
-  right: 15px;
 }
 
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */

@@ -37,85 +37,6 @@
 
 /* Remover estilos duplicados - .game-wrapper y .game-scene ahora están en globals/games.css */
 
-/* Elementos decorativos específicos de JuegoEscala */
-
-.landscape {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background: linear-gradient(
-        135deg,
-        rgba(30, 58, 138, 0.6) 0%,
-        rgba(59, 130, 246, 0.6) 20%,
-        rgba(99, 102, 241, 0.6) 40%,
-        rgba(139, 92, 246, 0.6) 60%,
-        rgba(124, 58, 237, 0.6) 80%,
-        rgba(91, 33, 182, 0.6) 100%
-    );
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    z-index: 1;
-}
-
-.lighthouse {
-    position: absolute;
-    bottom: 120px;
-    right: 15%;
-    width: 40px;
-    height: 80px;
-    background: linear-gradient(to bottom, #ef4444 0%, #dc2626 50%, #ffffff 50%, #f3f4f6 100%);
-    border-radius: 8px 8px 0 0;
-    z-index: 2;
-}
-
-.lighthouse::before {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 15px;
-    background: #fbbf24;
-    border-radius: 25px;
-}
-
-.lighthouse::after {
-    content: '';
-    position: absolute;
-    top: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 20px solid #dc2626;
-}
-
-.house {
-    position: absolute;
-    bottom: 120px;
-    left: 10%;
-    width: 60px;
-    height: 50px;
-    background: #fbbf24;
-    z-index: 2;
-}
-
-.house::before {
-    content: '';
-    position: absolute;
-    top: -30px;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 30px solid transparent;
-    border-right: 30px solid transparent;
-    border-bottom: 30px solid #dc2626;
-}
-
 /* .header-controls removido - ahora está en globals/games.css */
 
 /* Estilos específicos para JuegoEscala */
@@ -1352,17 +1273,6 @@
 
 .error-notification-close:hover {
     background: #d97706;
-}
-
-/* Header controls positioning for level select */
-.header-controls-level-select {
-    z-index: 999;
-    position: relative;
-}
-
-.header-controls-level-select .btn-back-to-levels {
-    position: relative;
-    z-index: 1000;
 }
 
 /* Level card animation delay */
