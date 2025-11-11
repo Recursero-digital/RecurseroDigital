@@ -1,4 +1,5 @@
 import { SaveGameStatisticsUseCase, SaveGameStatisticsRequest } from '../../../src/core/usecases/SaveGameStatisticsUseCase';
+import { SaveGameStatisticsValidationError } from '../../../src/core/models/exceptions/SaveGameStatisticsValidationError';
 import { MockStudentStatisticsRepository } from '../../mocks/StudentStatisticsRepository.mock';
 import { MockIdGenerator } from '../../mocks/IdGenerator.mock';
 import { StudentStatistics } from '../../../src/core/models/StudentStatistics';
@@ -136,30 +137,6 @@ describe('SaveGameStatisticsUseCase', () => {
       expect(result.correctAnswers).toBeUndefined();
       expect(result.totalQuestions).toBeUndefined();
       expect(result.completionTime).toBeUndefined();
-      expect(result.sessionStartTime).toBeUndefined();
-      expect(result.sessionEndTime).toBeUndefined();
-    });
-
-    it('should handle session times when provided', async () => {
-      const sessionStart = new Date('2024-01-01T10:00:00Z');
-      const sessionEnd = new Date('2024-01-01T10:05:00Z');
-
-      const request: SaveGameStatisticsRequest = {
-        studentId: 'student-123',
-        gameId: 'game-escritura',
-        level: 1,
-        activity: 1,
-        points: 100,
-        attempts: 1,
-        isCompleted: true,
-        sessionStartTime: sessionStart,
-        sessionEndTime: sessionEnd
-      };
-
-      const result = await saveGameStatisticsUseCase.execute(request);
-
-      expect(result.sessionStartTime).toEqual(sessionStart);
-      expect(result.sessionEndTime).toEqual(sessionEnd);
     });
 
     it('should generate unique ID for statistics', async () => {
@@ -203,6 +180,33 @@ describe('SaveGameStatisticsUseCase', () => {
       expect(result.createdAt.getTime()).toBeLessThanOrEqual(afterExecution.getTime());
       expect(result.updatedAt.getTime()).toBeGreaterThanOrEqual(beforeExecution.getTime());
       expect(result.updatedAt.getTime()).toBeLessThanOrEqual(afterExecution.getTime());
+    });
+
+    it('should throw validation error when required fields are missing', async () => {
+      const request = {
+        studentId: 'student-123',
+        gameId: 'game-escritura',
+        activity: 1,
+        points: 100,
+        attempts: 1,
+        isCompleted: true
+      } as unknown as SaveGameStatisticsRequest;
+
+      await expect(saveGameStatisticsUseCase.execute(request)).rejects.toBeInstanceOf(SaveGameStatisticsValidationError);
+    });
+
+    it('should throw validation error when values are invalid', async () => {
+      const request: SaveGameStatisticsRequest = {
+        studentId: 'student-123',
+        gameId: 'game-escritura',
+        level: 0,
+        activity: 1,
+        points: -10,
+        attempts: -1,
+        isCompleted: true
+      };
+
+      await expect(saveGameStatisticsUseCase.execute(request)).rejects.toBeInstanceOf(SaveGameStatisticsValidationError);
     });
 
     it('should handle different game types', async () => {

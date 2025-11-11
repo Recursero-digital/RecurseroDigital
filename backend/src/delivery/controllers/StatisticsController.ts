@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
+import { SaveGameStatisticsValidationError } from '../../core/models/exceptions/SaveGameStatisticsValidationError';
 
 interface SaveGameStatisticsRequest {
     studentId: string;
@@ -13,8 +14,6 @@ interface SaveGameStatisticsRequest {
     completionTime?: number;
     isCompleted: boolean;
     maxUnlockedLevel?: number;
-    sessionStartTime?: string;
-    sessionEndTime?: string;
 }
 
 interface GetStudentProgressRequest {
@@ -46,22 +45,11 @@ const saveGameStatistics = async (
         totalQuestions, 
         completionTime, 
         isCompleted, 
-        maxUnlockedLevel,
-        sessionStartTime,
-        sessionEndTime 
+        maxUnlockedLevel
     } = req.body;
 
     try {
-        if (!studentId || !gameId || level === undefined || activity === undefined || points === undefined || attempts === undefined) {
-            res.status(400).json({ error: 'Faltan campos obligatorios' });
-            return;
-        }
-
-        if (level < 1 || activity < 1 || points < 0 || attempts < 0) {
-            res.status(400).json({ error: 'Valores inválidos en los campos' });
-            return;
-        }
-
+        console.log("Received creation of statistics: ", req.body)
         const statistics = await saveGameStatisticsUseCase.execute({
             studentId,
             gameId,
@@ -73,11 +61,10 @@ const saveGameStatistics = async (
             totalQuestions,
             completionTime,
             isCompleted,
-            maxUnlockedLevel,
-            sessionStartTime: sessionStartTime ? new Date(sessionStartTime) : undefined,
-            sessionEndTime: sessionEndTime ? new Date(sessionEndTime) : undefined
+            maxUnlockedLevel
         });
-        
+
+        console.log("Processed creation of statistics: ", statistics)
         res.status(201).json({ 
             message: 'Estadísticas guardadas exitosamente',
             statistics: {
@@ -94,6 +81,10 @@ const saveGameStatistics = async (
             }
         });
     } catch (error) {
+        if (error instanceof SaveGameStatisticsValidationError) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
         console.error('Error en saveGameStatistics:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
