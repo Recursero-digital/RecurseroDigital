@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
-import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 import { StudentAlreadyExistsError } from '../../core/models/exceptions/StudentAlreadyExistsError';
+import { AuthenticatedRequest } from '../middleware/authMiddleWare';
+import { StudentNotFoundError } from '../../core/models/exceptions/StudentNotFoundError';
+import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 
 interface AddStudentRequest {
     name: string;
@@ -48,31 +50,22 @@ const addStudent = async (req: Request<{}, AddStudentResponse, AddStudentRequest
     }
 };
 
-const getMyGames = async (req: Request, res: Response): Promise<void> => {
+const getMyGames = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
-        const authHeader = req.headers.authorization;
-        
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ error: 'Token no proporcionado' });
+        if (!req.user) {
+            res.status(401).json({ error: 'Usuario no autenticado' });
             return;
         }
-
-        const token = authHeader.split(' ')[1];
-        
-        const result = await dependencyContainer.getStudentGamesUseCase.execute({ token });
+        const result = await dependencyContainer.getStudentGamesUseCase.execute({ studentId: req.user.id });
 
         res.status(200).json(result);
     } catch (error: any) {
-        if (error.message === 'Token inválido') {
-            res.status(401).json({ error: error.message });
-            return;
-        }
-        if (error.message === 'Usuario no autorizado para esta operación') {
-            res.status(403).json({ error: error.message });
-            return;
-        }
-        if (error.message === 'Estudiante no encontrado') {
+        if (error instanceof StudentNotFoundError) {
             res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error instanceof StudentInvalidRequestError) {
+            res.status(400).json({ error: error.message });
             return;
         }
         

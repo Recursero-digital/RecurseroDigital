@@ -225,4 +225,22 @@ export class PostgreSQLCourseRepository implements CourseRepository {
     }
 }
 
+  async getCoursesByTeacherId(teacherId: string): Promise<Course[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT * FROM courses WHERE teacher_id = $1 ORDER BY created_at DESC`,
+        [teacherId]
+      );
+      return result.rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        teacher_id: row.teacher_id,
+        students: row.students
+      }));
+    } catch (error) {
+      console.error('Error al obtener cursos por docente:', error);
+      throw error;
+    }
+  }
+
 }
