@@ -26,6 +26,7 @@ import { GetGameStatisticsUseCase } from '../core/usecases/GetGameStatisticsUseC
 import { GetStudentGamesUseCase } from '../core/usecases/GetStudentGamesUseCase';
 import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStudentUseCase';
 import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
+import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
 
 
 export class DependencyContainer {
@@ -50,6 +51,7 @@ export class DependencyContainer {
     private _assignTeacherToCoursesUseCase: AssignTeacherToCoursesUseCase | null = null;
     private _getStudentGamesUseCase: GetStudentGamesUseCase | null = null;
     private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
+    private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
 
 
     private constructor() {
@@ -235,7 +237,6 @@ export class DependencyContainer {
     public get getStudentGamesUseCase(): GetStudentGamesUseCase {
         if (!this._getStudentGamesUseCase) {
             this._getStudentGamesUseCase = new GetStudentGamesUseCase(
-                this.tokenService,
                 this.studentRepository,
                 this.courseRepository
             );
@@ -261,6 +262,16 @@ export class DependencyContainer {
             );
         }
         return this._assignTeacherToCoursesUseCase;
+    }
+
+    public get getTeacherCoursesUseCase(): GetTeacherCoursesUseCase {
+        if (!this._getTeacherCoursesUseCase) {
+            this._getTeacherCoursesUseCase = new GetTeacherCoursesUseCase(
+                this.teacherRepository,
+                this.courseRepository
+            );
+        }
+        return this._getTeacherCoursesUseCase;
     }
 
     public async clearAllData(): Promise<void> {

@@ -1,12 +1,12 @@
 // Configuración de la API
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 // Endpoints de autenticación
 export const AUTH_ENDPOINTS = {
-  LOGIN_STUDENT: '/api/login/student',
-  LOGIN_TEACHER: '/api/login/teacher',
-  LOGIN_ADMIN: '/api/login/admin',
-  LOGOUT: '/api/logout'
+  LOGIN_STUDENT: '/login/student',
+  LOGIN_TEACHER: '/login/teacher',
+  LOGIN_ADMIN: '/login/admin',
+  LOGOUT: '/logout'
 };
 
 // Función helper para hacer peticiones a la API

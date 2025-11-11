@@ -56,7 +56,7 @@ const GameScreen = ({
     };
 
     return (
-        <div className="ocean-scene bg-space-ui">
+        <div className="game-scene bg-space-ui">
             <div className="landscape"></div>
             <div className="lighthouse"></div>
             <div className="house"></div>
@@ -64,7 +64,7 @@ const GameScreen = ({
             <div className="game-header">
                 <div className="header-info">
                     <h2 className="game-level-title">
-                        🌊 {levelConfig.name} 🌊
+                        ✨ {levelConfig.name} ✨
                     </h2>
                     
                     <div className="question-counter">

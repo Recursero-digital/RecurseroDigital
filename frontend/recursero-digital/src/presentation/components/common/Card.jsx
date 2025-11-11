@@ -1,111 +1,93 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-//import { apiRequest } from '../../../infrastructure/config/api';
+import { apiRequest } from '../../../infrastructure/config/api';
 import '../../styles/components/card.css';
-import JuegoOrdenamiento from '../../../assets/JuegoOrdenamiento-fontpage.png';
-import JuegoEscritura from '../../../assets/JuegoEscritura-fontpage.png';
-import JuegoCompoyDesco from '../../../assets/desco y compo.png';
-import NumeroPalabras from '../../../assets/NumeroPalabras-fontpage.png';
-import JuegoCalculos from '../../../assets/imagen-juegoCalculos.png';
+import DefaultGameImage from '../../../assets/JuegoOrdenamiento-fontpage.png';
+
+const imageModules = import.meta.glob('../../../assets/*', { eager: true });
+const IMAGE_MAP = Object.entries(imageModules).reduce((acc, [path, module]) => {
+  const fileName = path.split('/').pop();
+  if (fileName && module && typeof module === 'object' && 'default' in module) {
+    acc[fileName] = module.default;
+  }
+  return acc;
+}, {});
+
+const resolveGameImage = (imageUrl) => {
+  if (!imageUrl) {
+    return IMAGE_MAP['JuegoOrdenamiento-fontpage.png'] || DefaultGameImage;
+  }
+
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+
+  const fileName = imageUrl.split('/').pop();
+  if (fileName && IMAGE_MAP[fileName]) {
+    return IMAGE_MAP[fileName];
+  }
+
+  return DefaultGameImage;
+};
 
 export function Card() {
-    const navigate = useNavigate();
-    const [games, setGames] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                // const response = await apiRequest('/api/student/me/games');
-                // if (response.ok && response.data && response.data.games) {
-                //     const gamesResponse = response.data.games
-                //         .map(courseGame => ({
-                //             id: courseGame.game.id,
-                //             name: courseGame.game.name,
-                //             description: courseGame.game.description,
-                //             imageUrl: courseGame.game.imageUrl,
-                //             route: courseGame.game.route,
-                //             difficultyLevel: courseGame.game.difficultyLevel,
-                //             orderIndex: courseGame.orderIndex
-                //         }));
-                //     setGames(gamesResponse);
-                // } else {
-                //     setGames([]);
-                // }
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-                // MOCK TEMPORAL: Simulando respuesta del backend
-                // Esto simula que el alumno tiene acceso a todos los juegos
+        const response = await apiRequest('/student/me/games');
 
-                // encargarse del apiRequest. mockgames es una respuesta ficticia dle back. Crear la API api/student/games y q el array de games este habilitado para el estudiante.
-                //Debo obtener los juegos del curso del alumno
+        if (response.ok && response.data && Array.isArray(response.data.games)) {
+          const transformedGames = response.data.games
+            .filter((courseGame) => courseGame?.game)
+            .map((courseGame) => {
+              const gameData = courseGame.game;
+              return {
+                id: gameData.id,
+                name: gameData.name,
+                description: gameData.description,
+                imageUrl: resolveGameImage(gameData.imageUrl),
+                route: gameData.route || '/alumno/juegos',
+                difficultyLevel: gameData.difficultyLevel ?? 1,
+                orderIndex: courseGame.orderIndex ?? 0
+              };
+            });
 
-                //La respuesta del backj es la siguiente:
-
-                const mockGames = [
-                    {
-                        id: 'game-ordenamiento',
-                        name: 'Ordenamiento de Números',
-                        description: '¡Aprende a ordenar números de forma divertida! Juega y mejora tus habilidades matemáticas de menor a mayor.',
-                        imageUrl: JuegoOrdenamiento,
-                        route: '/alumno/juegos/ordenamiento',
-                        difficultyLevel: 1,
-                        orderIndex: 1
-                    },
-                    {
-                        id: 'game-escritura',
-                        name: 'Escribir Números en Palabras',
-                        description: '¡Aprende a escribir los números en palabras! Arrastra las palabras para formar la respuesta correcta.',
-                        imageUrl: NumeroPalabras,
-                        route: '/alumno/juegos/escritura',
-                        difficultyLevel: 1,
-                        orderIndex: 2
-                    },
-                    {
-                        id: 'game-descomposicion',
-                        name: 'Arma la Descomposición y Composición de los numeros',
-                        description: '¡Aprende a descomponer y componer números! Descubre el misterio de los valores posicionales.',
-                        imageUrl: JuegoCompoyDesco,
-                        route: '/alumno/juegos/descomposicion',
-                        difficultyLevel: 2,
-                        orderIndex: 3
-                    },
-                    {
-                        id: 'game-escala',
-                        name: 'Escribí el número anterior y el posterior',
-                        description: '¡Explora los números anteriores y posteriores! Completa secuencias y descubre patrones numéricos.',
-                        imageUrl: JuegoEscritura,
-                        route: '/alumno/juegos/escala',
-                        difficultyLevel: 2,
-                        orderIndex: 4
-                    },
-                    {
-                        id: 'game-calculos',
-                        name: 'Juego de Cálculos Mentales',
-                        description: '¡Pon a prueba tus habilidades matemáticas! Resuelve sumas, restas y multiplicaciones de diferentes niveles.',
-                        imageUrl: JuegoCalculos,
-                        route: '/alumno/juegos/calculos',
-                        difficultyLevel: 2,
-                        orderIndex: 5
-                    }
-                ];
-                setGames(mockGames);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error al cargar juegos:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchGames();
-    }, []);
-
-    const handleJugar = (route) => {
-        navigate(route);
+          setGames(transformedGames);
+        } else {
+          setGames([]);
+          setError('No fue posible obtener los juegos del curso.');
+        }
+      } catch (fetchError) {
+        console.error('Error al cargar juegos:', fetchError);
+        setError('Error al cargar los juegos. Inténtalo nuevamente.');
+        setGames([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (loading) {
-        return <div className="container">Cargando juegos...</div>;
-    }
+    fetchGames();
+  }, []);
+
+  const handleJugar = (route) => {
+    navigate(route);
+  };
+
+  if (loading) {
+    return <div className="container">Cargando juegos...</div>;
+  }
+
+  if (error ||games.length === 0) {
+    return <div className="container">Por el momento no tienes juegos asignados.</div>;
+  }
 
     return (
         <>

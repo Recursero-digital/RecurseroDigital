@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/*
+ * JuegoDescomposicion Styles - OPTIMIZADO
+ * 
+ * ✅ USA ESTILOS GLOBALES:
+ * - Variables CSS de games.css (--space-*, --gradient-*, --font-game, etc.)
+ * - Contenedores: .game-wrapper, .game-container (definidos en globals/games.css)
+ * - Botones: .btn-start, .btn-check, .btn-hint, .btn-back-to-* (definidos en globals/games.css)
+ * - Tarjetas: .paper-note, .question-title, .question-number (definidos en globals/games.css)
+ * - Inputs: .answer-input (definido en globals/games.css)
+ * - HUD: .game-hud (definido en globals/games.css)
+ * 
+ * 🎯 Solo incluye estilos ESPECÍFICOS de JuegoDescomposicion
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -6,219 +20,19 @@
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+/* Remover estilos duplicados - ahora están en globals/games.css */
+/* .game-wrapper, .game-container, .btn-*, .paper-note, .question-*, .answer-input, .game-hud */
 
-.game-wrapper {
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    width: 100vw;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
-    position: relative;
-    overflow-x: hidden;
-}
-
-.chalkboard {
-    min-height: 100vh;
-    padding: 1rem;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
-    color: white;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.chalkboard::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-/* .header-controls removido - ahora está en globals/games.css */
-
-.btn-back-to-levels,
-.btn-back-to-dashboard {
-    background: rgba(255, 255, 255, 0.9);
-    color: #4a5568;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-back-to-levels:hover,
-.btn-back-to-dashboard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 1);
-}
-
-.game-hud {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 0.75rem 1rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    font-weight: 500;
-    z-index: 10;
-    font-size: 0.9rem;
-}
-
-.game-hud span {
-    color: #ffd700;
-    font-weight: 700;
-}
-
-.paper-note {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-    color: #1e3a8a;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 
-        0 10px 25px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    position: relative;
-    max-width: 600px;
-    margin: 2rem auto;
-    border: 1px solid #8b5cf6;
-}
-
-.question-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #6f4518;
-}
-
-.question-number {
-    font-size: 3rem;
-    font-weight: 700;
-    text-align: center;
-    color: #8b5e34;
-    margin: 1rem 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
+/* Extensión específica de question-decomposition para este juego */
 .question-decomposition {
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 700;
     text-align: center;
-    color: #8b5e34;
+    color: var(--space-indigo, #6366f1);
     margin: 1rem 0;
 }
 
-.answer-input {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    border: 2px solid #e2d5c7;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.9);
-    color: #2d3748;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.answer-input:focus {
-    outline: none;
-    border-color: #8b5e34;
-    box-shadow: 0 0 0 3px rgba(139, 94, 52, 0.1);
-    background: rgba(255, 255, 255, 1);
-}
-
-.answer-input::placeholder {
-    color: #a0aec0;
-    font-style: italic;
-}
-
-.btn {
-    padding: 0.75rem 2rem;
-    border: none;
-    border-radius: 2rem;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn:hover:before {
-    left: 100%;
-}
-
-.btn-start {
-    background: linear-gradient(135deg, #8b5e34 0%, #6f4518 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(139, 94, 52, 0.3);
-}
-
-.btn-start:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 94, 52, 0.4);
-}
-
-.btn-check {
-    background: linear-gradient(135deg, #e86a1e 0%, #d95114 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(232, 106, 30, 0.3);
-}
-
-.btn-check:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(232, 106, 30, 0.4);
-}
-
-.btn-check:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-hint {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-}
-
-.btn-hint:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-}
+/* Botones específicos - extienden los estilos globales */
 
 .level-grid {
     display: grid;
@@ -230,20 +44,21 @@ body, html {
 }
 
 .level-card {
-    background: linear-gradient(135deg, #fff8e7 0%, #f7f1e3 100%);
-    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+    border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid #e2d5c7;
+    border: 3px solid #8b5cf6;
     position: relative;
     overflow: hidden;
 }
 
 .level-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+    border-color: var(--space-yellow, #fbbf24);
 }
 
 .level-card.locked {
@@ -376,6 +191,10 @@ body, html {
     100% { box-shadow: 0 0 5px rgba(139, 94, 52, 0.3); }
 }
 
+/* StartScreen - ahora usa estilos globales de games.css */
+/* Las clases .start-screen, .start-features, .feature-item están en globals/games.css */
+
+/* Animaciones específicas */
 .slide-in {
     animation: slideIn 0.5s ease-out;
 }
@@ -386,6 +205,12 @@ body, html {
 
 .glow {
     animation: glow 2s infinite;
+}
+
+/* Estilos específicos del chalkboard */
+.chalkboard .start-screen {
+    /* El background viene del chalkboard, mantener transparente */
+    background: transparent;
 }
 
 @media (max-width: 768px) {

@@ -70,4 +70,8 @@ export class InMemoryCourseRepository implements CourseRepository {
     this.courses[courseIndex].teacher_id = teacherId;
   }
   
+  async getCoursesByTeacherId(teacherId: string): Promise<Course[]> {
+    return this.courses.filter(course => course.teacher_id === teacherId);
+  }
+  
 }

@@ -11,4 +11,5 @@ export interface CourseRepository {
     addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void>;
     createCourse(name: string, teacherId?: string): Promise<Course>;
     assignTeacherToCourse(teacherId: string, courseId: string): Promise<void>;
+    getCoursesByTeacherId(teacherId: string): Promise<Course[]>;
 }

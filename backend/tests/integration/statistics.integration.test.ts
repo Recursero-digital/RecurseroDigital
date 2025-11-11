@@ -22,9 +22,7 @@ describe('Statistics Integration Tests', () => {
         totalQuestions: 10,
         completionTime: 120,
         isCompleted: true,
-        maxUnlockedLevel: 2,
-        sessionStartTime: new Date().toISOString(),
-        sessionEndTime: new Date().toISOString()
+        maxUnlockedLevel: 2
       };
 
       const response = await request(app)
@@ -52,7 +50,7 @@ describe('Statistics Integration Tests', () => {
         .send(incompleteData)
         .expect(400);
 
-      expect(response.body.error).toBe('Faltan campos obligatorios');
+      expect(response.body.error).toBe('El campo level es obligatorio');
     });
 
     it('should return error when values are invalid', async () => {
@@ -71,7 +69,7 @@ describe('Statistics Integration Tests', () => {
         .send(invalidData)
         .expect(400);
 
-      expect(response.body.error).toBe('Valores inválidos en los campos');
+      expect(response.body.error).toBe('El campo level debe ser mayor o igual a 1');
     });
 
     it('should handle optional fields correctly', async () => {

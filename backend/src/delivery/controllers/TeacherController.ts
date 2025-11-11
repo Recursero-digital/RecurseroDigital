@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
-import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
 import { AssignTeacherToCoursesUseCase, AssignTeacherToCoursesRequest } from '../../core/usecases/AssignTeacherToCourseUseCase';
+import { TeacherNotFoundError } from '../../core/models/exceptions/TeacherNotFoundError';
+import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
+import { AuthenticatedRequest } from '../middleware/authMiddleWare';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -56,37 +58,29 @@ const assignTeacherToCourses = async (
     }
 };
 
-const getTeacherCourses = async (req: Request, res: Response): Promise<void> => {
+const getTeacherCourses = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
-        const courses = [
-            {
-                id: "1",
-                name: "3º A"
-            },
-            {
-                id: "2", 
-                name: "3º B"
-            },
-            {
-                id: "3",
-                name: "3º C"
-            },
-            {
-                id: "4",
-                name: "4º A"
-            },
-            {
-                id: "5",
-                name: "4º B"
-            }
-        ];
-
+        if (!req.user) {
+            res.status(401).json({ error: 'Usuario no autenticado' });
+            return;
+        }
+        const courses = await dependencyContainer.getTeacherCoursesUseCase.execute({ teacherId: req.user.id });
         res.status(200).json({
-            courses: courses
+            courses: courses.map(course => ({
+                id: course.id,
+                name: course.name
+            }))
         });
-
     } catch (error: any) {
         console.error('Error en getTeacherCourses:', error);
+        if (error instanceof TeacherNotFoundError) {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error instanceof TeacherInvalidRequestError) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
