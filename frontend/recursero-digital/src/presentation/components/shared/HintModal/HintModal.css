@@ -62,13 +62,13 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Theme: JuegoEscala (Ocean/Blue theme) */
+/* Theme: JuegoEscala (Tema espacial consistente) */
 .hint-modal-content.escala {
-    border-color: #3b82f6;
+    border-color: #8b5cf6;
 }
 
 .hint-modal-content.escala .hint-modal-title {
-    color: #1e40af;
+    color: #5b21b6;
 }
 
 .hint-modal-content.escala .hint-modal-box {
@@ -92,15 +92,16 @@
     box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
 }
 
-/* Theme: JuegoDescomposicion (Classical/Brown theme) */
+/* Theme: JuegoDescomposicion (Tema espacial consistente) */
 .hint-modal-content.descomposicion {
-    border-color: #92400e;
+    border-color: #8b5cf6;
 }
 
 .hint-modal-content.descomposicion .hint-modal-title {
-    color: #92400e;
-    font-family: 'Playfair Display', serif;
+    color: #5b21b6;
+    font-family: 'Fredoka', sans-serif;
     font-size: 1.8rem;
+    font-weight: 700;
 }
 
 .hint-modal-content.descomposicion .hint-modal-box {

@@ -1,6 +1,22 @@
 /* =================================================================== */
 /* ESTILOS GLOBALES PARA JUEGOS - RECURSERO DIGITAL                   */
 /* =================================================================== */
+/* 
+ * Este archivo contiene todos los estilos compartidos por los 5 juegos:
+ * - JuegoEscritura
+ * - JuegoOrdenamiento
+ * - JuegoDescomposicion (NumeroMágico)
+ * - JuegoEscala (Anterior y Posterior)
+ * - JuegoCalculos
+ * 
+ * TEMA UNIFICADO: Espacial 🌌
+ * - Gradiente principal: Azul → Índigo → Púrpura
+ * - Tipografía: Fredoka (sans-serif)
+ * - Colores consistentes en todos los juegos
+ * 
+ * Los archivos CSS individuales de cada juego solo deben contener
+ * estilos ESPECÍFICOS de ese juego, evitando duplicación.
+ */
 
 /* ------------------------------------------------------------------- */
 /* VARIABLES CSS GLOBALES PARA JUEGOS                                 */
@@ -14,11 +30,27 @@
   --space-yellow: #fbbf24;
   --space-orange: #f97316;
   --space-green: #10b981;
+  --space-indigo: #6366f1;
+  --space-violet: #8b5cf6;
   
   /* Gradientes principales (usa las clases de backgrounds.css en lugar de estas variables cuando sea posible) */
   --main-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
   --button-gradient: var(--main-gradient);
   --number-gradient: var(--main-gradient);
+  
+  /* Gradientes de estado compartidos por todos los juegos */
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-error: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  
+  /* Fuentes comunes */
+  --font-game: 'Fredoka', sans-serif;
+  --font-game-alt: 'Comic Neue', cursive;
+  
+  /* Sombras compartidas */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.2);
+  --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 /* ------------------------------------------------------------------- */
@@ -109,10 +141,106 @@
 }
 
 /* ------------------------------------------------------------------- */
+/* PANTALLA DE INICIO (START SCREEN)                                  */
+/* ------------------------------------------------------------------- */
+
+.start-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  text-align: center;
+  padding: clamp(1rem, 3vh, 2rem);
+  box-sizing: border-box;
+}
+
+/* Header controls en start screen y level select - solo a la izquierda */
+.start-screen .header-controls,
+.level-select-screen .header-controls {
+  right: auto;
+}
+
+.start-screen h1 {
+  color: var(--space-yellow);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: clamp(0.5rem, 2vh, 1rem);
+  font-weight: 700;
+  text-shadow: 3px 3px 0px var(--space-blue);
+}
+
+.start-screen p {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.start-screen .button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
+.start-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: clamp(12px, 2vw, 20px);
+  width: 100%;
+  margin: clamp(16px, 3vh, 24px) 0;
+  max-width: 600px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.5vh, 12px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 2px solid var(--space-yellow);
+  border-radius: 16px;
+  padding: clamp(16px, 3vh, 24px);
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.2);
+}
+
+.feature-icon {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.feature-text {
+  font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+  color: white;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.start-title {
+  color: var(--space-yellow);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: clamp(0.5rem, 2vh, 1rem);
+  font-weight: 700;
+  text-shadow: 3px 3px 0px var(--space-blue);
+}
+
+.start-subtitle {
+  color: white;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------- */
 /* PANTALLA DE SELECCIÓN DE NIVELES                                   */
 /* ------------------------------------------------------------------- */
 
 .level-select-screen {
+  position: relative;
+  width: 100%;
   text-align: center;
   padding: clamp(1rem, 3vh, 2rem);
   min-height: 100vh;
@@ -340,9 +468,76 @@
 
 .header-controls {
   position: absolute;
-  top: clamp(1rem, 3vh, 2rem);
-  left: clamp(1rem, 3vw, 2rem);
+  top: 15px;
+  left: 15px;
+  right: 15px;
   z-index: 100;
+}
+
+/* Layout para header-controls con botones y estadísticas */
+.header-controls.header-controls-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-controls .buttons-group {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------- */
+/* GAME STATUS - Estadísticas del juego                               */
+/* ------------------------------------------------------------------- */
+
+.header-controls .game-status {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.5vw, 18px);
+  background: var(--button-gradient);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+  border: 2px solid var(--space-yellow);
+  max-width: 400px;
+  flex-shrink: 0;
+  gap: clamp(4px, 1vw, 15px);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.header-controls .game-status .status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.header-controls .game-status .status-icon {
+  font-size: clamp(12px, 2.5vw, 18px);
+}
+
+.header-controls .game-status .status-label {
+  color: white;
+  font-size: clamp(9px, 1.5vw, 12px);
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.header-controls .game-status .status-value {
+  color: var(--space-yellow);
+  font-weight: 700;
+  font-size: clamp(11px, 2vw, 16px);
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* ------------------------------------------------------------------- */
@@ -416,4 +611,276 @@
     padding: 6px 12px;
     font-size: 0.8rem;
   }
+  
+  /* Header controls para móviles - estadísticas en grid */
+  .header-controls .game-status {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px 12px;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: none;
+    min-width: 0;
+    max-width: none;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 10px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 14px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 14px;
+  }
+}
+
+/* ------------------------------------------------------------------- */
+/* RESPONSIVE - Header Controls y Game Status (Netbooks/Tablets)     */
+/* ------------------------------------------------------------------- */
+
+/* Altura limitada - netbooks/notebooks */
+@media (max-height: 800px) {
+  .header-controls .game-status {
+    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 12px);
+    gap: clamp(2px, 0.8vw, 8px);
+  }
+  
+  .header-controls .game-status .status-item {
+    gap: 1px;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: clamp(10px, 2vw, 14px);
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: clamp(8px, 1.2vw, 10px);
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: clamp(10px, 1.8vw, 14px);
+  }
+}
+
+/* Netbooks típicas (1024x600, 1024x768) */
+@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 800px) {
+  .header-controls .game-status {
+    padding: 5px 10px;
+    gap: 5px;
+    border-radius: 12px;
+    max-width: 350px;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 45px;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 9px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 12px;
+    line-height: 1;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 12px;
+  }
+}
+
+/* Altura muy limitada (netbooks 1024x600) */
+@media (max-height: 650px) {
+  .header-controls .game-status {
+    padding: 3px 6px;
+    gap: 3px;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    max-width: 300px;
+  }
+  
+  .header-controls .game-status .status-item {
+    min-width: 35px;
+    gap: 0;
+  }
+  
+  .header-controls .game-status .status-label {
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .header-controls .game-status .status-value {
+    font-size: 10px;
+    font-weight: 800;
+  }
+  
+  .header-controls .game-status .status-icon {
+    font-size: 10px;
+  }
+}
+
+/* Pantallas pequeñas - overflow control */
+@media (max-width: 1366px) and (max-height: 768px) {
+  .header-controls .game-status {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex-shrink: 1;
+    min-width: 40px;
+  }
+}
+
+/* Pantallas angostas - dos filas de estadísticas */
+@media (max-width: 900px) {
+  .header-controls .game-status {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 12px);
+    max-width: none;
+  }
+  
+  .header-controls .game-status .status-item {
+    flex: 0 0 calc(50% - 6px);
+    max-width: calc(50% - 6px);
+    min-width: 80px;
+  }
+}
+
+/* ------------------------------------------------------------------- */
+/* CONTENEDORES COMUNES PARA TODOS LOS JUEGOS                         */
+/* ------------------------------------------------------------------- */
+
+/* Wrapper principal del juego */
+.game-wrapper {
+  font-family: var(--font-game);
+  min-height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Contenedor de escena del juego */
+.game-scene,
+.game-container {
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
+  color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efecto de brillo espacial */
+.game-scene::before,
+.game-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------- */
+/* PAPER NOTE - TARJETA DE PREGUNTA COMÚN                             */
+/* ------------------------------------------------------------------- */
+
+.paper-note {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  color: #1e3a8a;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  position: relative;
+  max-width: 600px;
+  margin: 2rem auto;
+  border: 3px solid var(--space-yellow);
+}
+
+.question-title {
+  font-family: var(--font-game);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #5b21b6;
+}
+
+.question-number {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  color: var(--space-purple);
+  margin: 1rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------------------------------------------------------- */
+/* INPUTS Y FORMULARIOS COMUNES                                       */
+/* ------------------------------------------------------------------- */
+
+.answer-input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #c7d2fe;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-family: var(--font-game);
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--space-violet);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 1);
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------- */
+/* GAME HUD - INFORMACIÓN DEL JUEGO                                   */
+/* ------------------------------------------------------------------- */
+
+.game-hud {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  color: white;
+  font-weight: 600;
+  z-index: 10;
+  font-size: 0.9rem;
+}
+
+.game-hud span {
+  color: var(--space-yellow);
+  font-weight: 700;
 }
