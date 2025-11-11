@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
 import { UserRole } from '../../core/models/User';
+import { AuthorizationHeaderService } from '../services/AuthorizationHeaderService';
+import { TokenNotProvidedError } from '../../delivery/errors/TokenNotProvidedError';
 
 export interface AuthenticatedRequest extends Request {
     user?: {
@@ -12,16 +14,8 @@ export interface AuthenticatedRequest extends Request {
 
 export const protectRoute = (...allowedRoles: UserRole[]) => {
     return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ error: 'Token no proporcionado' });
-            return;
-        }
-
-        const token = authHeader.split(' ')[1];
-
         try {
+            const token = AuthorizationHeaderService.extractBearerToken(req.headers.authorization);
             const tokenService = DependencyContainer.getInstance().tokenService;
             const decoded = tokenService.verify(token) as any;
 
@@ -50,6 +44,10 @@ export const protectRoute = (...allowedRoles: UserRole[]) => {
 
             next();
         } catch (error) {
+            if (error instanceof TokenNotProvidedError) {
+                res.status(401).json({ error: error.message });
+                return;
+            }
             res.status(403).json({ error: 'Token inválido o expirado' });
             return;
         }

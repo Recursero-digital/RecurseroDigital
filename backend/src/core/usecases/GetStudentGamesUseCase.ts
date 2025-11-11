@@ -1,10 +1,11 @@
-import { TokenService } from '../infrastructure/TokenService';
 import { StudentRepository } from '../infrastructure/StudentRepository';
 import { CourseRepository } from '../infrastructure/CourseRepository';
 import { CourseGame } from '../models/CourseGame';
+import { StudentNotFoundError } from '../models/exceptions/StudentNotFoundError';
+import { StudentInvalidRequestError } from '../models/exceptions/StudentInvalidRequestError';
 
 export interface GetStudentGamesRequest {
-    token: string;
+    studentId: string;
 }
 
 export interface StudentGamesResponse {
@@ -14,33 +15,25 @@ export interface StudentGamesResponse {
 }
 
 export class GetStudentGamesUseCase {
-    private tokenService: TokenService;
     private studentRepository: StudentRepository;
     private courseRepository: CourseRepository;
 
     constructor(
-        tokenService: TokenService,
         studentRepository: StudentRepository,
         courseRepository: CourseRepository
     ) {
-        this.tokenService = tokenService;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
     }
 
     async execute(request: GetStudentGamesRequest): Promise<StudentGamesResponse> {
-        const userFromToken = this.tokenService.getUserFromToken(request.token);
-        if (!userFromToken) {
-            throw new Error('Token inválido');
+        if (!request || !request.studentId) {
+            throw new StudentInvalidRequestError('studentId es requerido');
         }
 
-        if (userFromToken.role !== 'STUDENT') {
-            throw new Error('Usuario no autorizado para esta operación');
-        }
-
-        const student = await this.studentRepository.findByUserName(userFromToken.username);
+        const student = await this.studentRepository.findById(request.studentId);
         if (!student) {
-            throw new Error('Estudiante no encontrado');
+            throw new StudentNotFoundError();
         }
 
         const courseId = student.getCourseId();

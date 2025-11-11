@@ -15,7 +15,7 @@ const StartScreen = ({ onStart }) => {
                 <div className="header-controls">
                     <button 
                         className="btn-back-to-levels"
-                        onClick={() => navigate('/alumno')}
+                        onClick={() => navigate('/alumno/juegos')}
                         title="Volver a juegos"
                     >
                         ← Juegos

@@ -29,7 +29,8 @@ const useGameScoringAPI = () => {
       'ordenamiento': 'game-ordenamiento',
       'escritura': 'game-escritura',
       'descomposicion': 'game-descomposicion',
-      'escala': 'game-escala'
+      'escala': 'game-escala',
+      'calculos': 'game-calculos'
     };
     return gameIdMap[gameType] || gameType;
   };
@@ -46,7 +47,9 @@ const useGameScoringAPI = () => {
     maxUnlockedLevel,
     completed = true,
     startTime = null,
-    endTime = null
+    endTime = null,
+    correctAnswers = undefined,
+    totalQuestions = undefined
   }) => {
     const userId = getUserIdFromToken();
     
@@ -59,24 +62,28 @@ const useGameScoringAPI = () => {
       completionTime = Math.round((end - start) / 1000); // en segundos
     }
     
-    return {
+    const preparedData = {
       studentId: userId,
       gameId: gameId,
       level: level + 1,
       activity: activity !== null && activity !== undefined ? activity + 1 : 1,
-
       points: activityScore || 0,
-
       attempts,
-
       completionTime: completionTime,
-
       isCompleted: completed,
-
       maxUnlockedLevel: maxUnlockedLevel !== null && maxUnlockedLevel !== undefined 
         ? maxUnlockedLevel + 1 
         : (level + 2)
     };
+
+    if (correctAnswers !== undefined) {
+      preparedData.correctAnswers = correctAnswers;
+    }
+    if (totalQuestions !== undefined) {
+      preparedData.totalQuestions = totalQuestions;
+    }
+
+    return preparedData;
   };
 
   /**
@@ -87,11 +94,13 @@ const useGameScoringAPI = () => {
     setSubmitError(null);
 
     try {
-      console.log('📤 Enviando estadísticas al backend:', scoreData);
+      const preparedData = prepareGameScoreData(scoreData);
+      
+      console.log('📤 Enviando estadísticas al backend:', preparedData);
       
       const response = await apiRequest('/statistics', {
         method: 'POST',
-        body: JSON.stringify(scoreData)
+        body: JSON.stringify(preparedData)
       });
 
       if (!response.ok) {
@@ -124,7 +133,7 @@ const useGameScoringAPI = () => {
         timestamp: new Date().toISOString()
       };
 
-      const response = await apiRequest('/api/user-progress', {
+      const response = await apiRequest('/user-progress', {
         method: 'POST',
         body: JSON.stringify(progressData)
       });
