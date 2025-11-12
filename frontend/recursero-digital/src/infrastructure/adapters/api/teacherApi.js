@@ -36,7 +36,7 @@ export const getMyCourseDetails = async (courseId) => {
 
 export const getCourseStudents = async (courseId) => {
   const token = localStorage.getItem('token');
-  const response = await fetch(`${API_BASE_URL}/courses/${courseId}/students`, {
+  const response = await fetch(`${API_BASE_URL}/course/${courseId}/students`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
