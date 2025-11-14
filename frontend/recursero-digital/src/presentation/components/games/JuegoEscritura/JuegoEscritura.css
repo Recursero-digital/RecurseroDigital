@@ -28,7 +28,7 @@
   text-shadow: 2px 2px 0px var(--space-blue);
 }
 
-.numbers-container {
+.escritura-numbers-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -39,7 +39,7 @@
   padding: 10px;
 }
 
-.number-box {
+.escritura-number-box {
   background: var(--primary-gradient);
   border: 2px solid var(--space-blue);
   border-radius: 15px;
@@ -58,16 +58,16 @@
   transition: all 0.3s ease;
 }
 
-.number-box:hover {
+.escritura-number-box:hover {
   transform: translate3d(0, -2px, 0) scale(1.02);
   box-shadow: 0 6px 16px rgba(30, 58, 138, 0.4);
 }
 
-.number-box:active {
+.escritura-number-box:active {
   cursor: grabbing;
 }
 
-.number-box.in-target {
+.escritura-number-box.in-target {
   background: var(--space-green);
   border-color: var(--space-yellow);
 }

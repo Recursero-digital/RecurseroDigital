@@ -76,7 +76,7 @@ const GameScreen = ({
             <div className="game-play-area">
                 <div className="numbers-section">
                     <h3 className="numbers-title">Números Disponibles</h3>
-                    <div className="numbers-container">
+                    <div className="escritura-numbers-container">
                         {numbers.map((number, index) => {
                             if (usedNumbers.has(number)) {
                                 return null;
@@ -85,7 +85,7 @@ const GameScreen = ({
                             return (
                                 <div 
                                     key={`number-${index}`}
-                                    className="number-box"
+                                    className="escritura-number-box"
                                     draggable
                                     onDragStart={(e) => onDragStart(e, number)}
                                 >

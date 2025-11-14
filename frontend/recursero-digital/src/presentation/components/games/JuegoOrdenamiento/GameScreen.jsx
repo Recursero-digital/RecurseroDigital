@@ -52,7 +52,7 @@ const GameScreen = ({
 
     return (
       <div
-        className={`number-box ${isInTarget ? 'in-target' : ''}`}
+        className={`ordenamiento-number-box ${isInTarget ? 'in-target' : ''}`}
         draggable={!isInTarget}
         onDragStart={handleDragStart}
         onClick={handleClick}
@@ -168,7 +168,7 @@ const GameScreen = ({
         
         <div className="numbers-section">
           <h3 className="numbers-title">Números a ordenar:</h3>
-          <div className="numbers-container">
+          <div className="ordenamiento-numbers-container">
             {availableNumbers.map(number => (
               <NumberBox 
                 key={number} 
