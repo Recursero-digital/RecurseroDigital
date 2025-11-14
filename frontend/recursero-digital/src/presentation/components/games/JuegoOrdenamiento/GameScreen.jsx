@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import GameHeader from './GameHeader';
 
 const GameScreen = ({ 
   currentLevel, 
@@ -139,47 +140,15 @@ const GameScreen = ({
   return (
     <div className="juego-ordenamiento-content">
       <header className="game-header">
-        <div className="header-controls">
-          <div className="buttons-group">
-            <button 
-              className="btn-back-to-levels"
-              onClick={onBackToLevels}
-              title="Volver a niveles"
-            >
-              ← Niveles
-            </button>
-            <button 
-              className="btn-back-to-dashboard"
-              onClick={onBackToGames}
-              title="Volver a juegos"
-            >
-              ← Juegos
-            </button>
-          </div>
-          
-          <div className="game-status">
-            <div className="status-item">
-              <div className="status-icon">📊</div>
-              <div className="status-label">Nivel</div>
-              <div className="status-value">{currentLevel + 1}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">🎯</div>
-              <div className="status-label">Actividad</div>
-              <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">🎯</div>
-              <div className="status-label">Intentos</div>
-              <div className="status-value">{attempts}</div>
-            </div>
-            <div className="status-item">
-              <div className="status-icon">⭐</div>
-              <div className="status-label">Puntuación</div>
-              <div className="status-value">{points}</div>
-            </div>
-          </div>
-        </div>
+        <GameHeader
+          currentLevel={currentLevel}
+          currentActivity={currentActivity}
+          totalActivities={totalActivities}
+          attempts={attempts}
+          points={points}
+          onBackToGames={onBackToGames}
+          onBackToLevels={onBackToLevels}
+        />
         <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
         <p className="game-instruction">
           {getOrderInstruction()}

@@ -11,14 +11,13 @@
   height: 100%;
   margin: 0;
   background: var(--main-gradient);
-  padding: 12px;
+  /* padding: 12px; */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 10;
   justify-content: flex-start;
-  overflow-y: auto; /* Permitir scroll si es necesario */
   border: 4px solid var(--space-yellow);
   border-radius: 10px;
   box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
@@ -89,6 +88,7 @@
 /* Game Play Area */
 .game-play-area {
   margin-top: 8px;
+  margin-bottom: 0%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -96,7 +96,6 @@
   align-items: center;
   position: relative;
   gap: 30px;
-  min-height: calc(100vh - 120px);
 }
 
 .drop-target {
