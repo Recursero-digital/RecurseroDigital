@@ -27,6 +27,9 @@ import { GetStudentGamesUseCase } from '../core/usecases/GetStudentGamesUseCase'
 import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStudentUseCase';
 import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
+import { GenerateStudentReportUseCase } from '../core/usecases/GenerateStudentReportUseCase';
+import { AiTextGenerator } from '../core/services/AiTextGenerator';
+import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
 
 
 export class DependencyContainer {
@@ -52,6 +55,8 @@ export class DependencyContainer {
     private _getStudentGamesUseCase: GetStudentGamesUseCase | null = null;
     private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
     private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
+    private _generateStudentReportUseCase: GenerateStudentReportUseCase | null = null;
+    private _aiTextGenerator: AiTextGenerator | null = null;
 
 
     private constructor() {
@@ -272,6 +277,37 @@ export class DependencyContainer {
             );
         }
         return this._getTeacherCoursesUseCase;
+    }
+
+    private get aiTextGenerator(): AiTextGenerator {
+        if (!this._aiTextGenerator) {
+            if (process.env.NODE_ENV === 'test') {
+                this._aiTextGenerator = {
+                    async generateText(prompt: string): Promise<{ text: string; provider: string; model: string }> {
+                        return {
+                            text: 'Reporte simulado (test). No se realizaron llamadas a servicios externos.',
+                            provider: 'test-double',
+                            model: 'mock'
+                        };
+                    }
+                };
+            } else {
+                this._aiTextGenerator = new GeminiAiTextGenerator();
+            }
+        }
+        return this._aiTextGenerator;
+    }
+
+    public get generateStudentReportUseCase(): GenerateStudentReportUseCase {
+        if (!this._generateStudentReportUseCase) {
+            this._generateStudentReportUseCase = new GenerateStudentReportUseCase(
+                this.studentRepository,
+                this.statisticsRepository,
+                this.aiTextGenerator
+            );
+        }
+
+        return this._generateStudentReportUseCase;
     }
 
     public async clearAllData(): Promise<void> {
