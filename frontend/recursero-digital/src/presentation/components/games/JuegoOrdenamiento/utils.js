@@ -44,7 +44,6 @@ export const generateHint = (numbers) => {
   const largest = sortedNumbers[sortedNumbers.length - 1];
   
   const hints = [
-    `💡 Para ordenar los números recordá mirar el primer número para saber cuál es más grande. Si hay dos números que empiezan igual, mira el segundo número.`,
     `🔢 El número más pequeño es: ${smallest.toLocaleString()}`,
     `🔢 El número más grande es: ${largest.toLocaleString()}`,
     `➡️ Comienza colocando el número ${smallest.toLocaleString()} primero`,

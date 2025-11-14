@@ -716,10 +716,6 @@
   flex-shrink: 0;
 }
 
-.permanent-hint.hint-animate {
-  animation: slideInUp 0.5s ease-out;
-}
-
 .permanent-hint-header {
   display: flex;
   align-items: center;
