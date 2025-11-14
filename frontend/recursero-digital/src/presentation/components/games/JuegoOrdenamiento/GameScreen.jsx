@@ -138,7 +138,7 @@ const GameScreen = ({
   const progressPercentage = currentLevel === 0 ? 0 : currentLevel === 1 ? 33 : 66;
 
   return (
-    <div className="juego-ordenamiento-content">
+    <div className="game-content">
       <header className="game-header">
         <GameHeader
           currentLevel={currentLevel}

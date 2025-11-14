@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const StartScreen = ({ onStart }) => {
     const navigate = useNavigate();
     return (
-        <div className="game-content">
-            <div className="start-screen">
+        <div className="start-screen">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -42,7 +41,6 @@ const StartScreen = ({ onStart }) => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 

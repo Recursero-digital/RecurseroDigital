@@ -2,8 +2,7 @@ import React from 'react';
 
 const StartScreen = ({ onStart, onBackToGames }) => {
     return (
-        <div className="game-content">
-            <div className="start-screen">
+        <div className="start-screen">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -36,11 +35,8 @@ const StartScreen = ({ onStart, onBackToGames }) => {
                 
                     <div className="button-group">
                         <button onClick={onStart} className="btn btn-start">COMENZAR</button>
-                    </div>
                 </div>
             </div>
         </div>
     );
-};
-
-export default StartScreen;
+};export default StartScreen;

@@ -8,7 +8,7 @@ const GameCompleteScreen = ({
   onPlayAgain
 }) => {
   return (
-    <div className="juego-ordenamiento-content">
+    <div className="game-content">
       <header className="game-header">
         <GameHeader
           currentLevel={2}

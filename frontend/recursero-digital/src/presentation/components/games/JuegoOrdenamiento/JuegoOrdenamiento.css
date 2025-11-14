@@ -1,43 +1,13 @@
 /* ================================================================
    NOTA IMPORTANTE:
-   Los estilos de .header-controls y .game-status están definidos
-   globalmente en: presentation/styles/globals/games.css
+   Los estilos de .header-controls, .game-status y .game-content
+   están definidos globalmente en: presentation/styles/globals/games.css
    
    Esto permite reutilizar estos componentes en todos los juegos.
    ================================================================ */
 
-.juego-ordenamiento-content {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background: var(--main-gradient);
-  /* padding: 12px; */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 10;
-  justify-content: flex-start;
-  border: 4px solid var(--space-yellow);
-  border-radius: 10px;
-  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
-}
-
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
 /* Sobrescriben los estilos globales responsivos de games.css */
-
-.game-container .game-title {
-  color: var(--space-yellow);
-  font-size: 2.2rem;
-  margin: 0 0 10px 0;
-  text-shadow: 3px 3px 0px var(--space-blue);
-  font-weight: 700;
-  text-align: center !important;
-  width: 100%;
-  display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
 
 .game-container .game-instruction {
   color: white;
@@ -52,14 +22,6 @@
   max-width: 600px;
   text-align: center;
   width: fit-content;
-}
-
-/* Forzar centrado si es necesario */
-.game-header .game-title,
-.game-header .game-instruction {
-  text-align: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 /* Progress Bar */

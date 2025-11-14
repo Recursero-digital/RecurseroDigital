@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
+import "../../../styles/globals/games.css";
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';

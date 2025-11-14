@@ -27,8 +27,7 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
     ];
 
     return (
-        <div className="game-content">
-            <div className="level-select-screen">
+        <div className="level-select-screen">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -41,8 +40,8 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
                     </div>
                 </div>
                 <div className="level-select-content">
-                    <h1>Selecciona un Nivel</h1>
-                    <p>Ordená los números de menor a mayor en cada actividad</p>
+                    <h1 className="level-select-title">Selecciona un Nivel</h1>
+                    <p className="level-select-subtitle">Ordená los números de menor a mayor en cada actividad</p>
                     <div className="level-grid">
                         {levels.map(level => {
                     const isUnlocked = isLevelUnlocked('ordenamiento', level.number);
@@ -68,11 +67,8 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
                         </button>
                     );
                 })}
-                    </div>
                 </div>
             </div>
         </div>
     );
-};
-
-export default LevelSelectScreen;
+};export default LevelSelectScreen;

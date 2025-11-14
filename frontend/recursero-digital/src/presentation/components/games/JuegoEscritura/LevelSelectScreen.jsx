@@ -16,8 +16,7 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
     ];
 
     return (
-        <div className="game-content">
-            <div className="level-select-screen">
+        <div className="level-select-screen">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -31,10 +30,10 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
                 </div>
                 
                 <div className="level-select-content">
-                    <h2 className="level-select-title">Elige un nivel</h2>
+                    <h1 className="level-select-title">Elige un nivel</h1>
                     <p className="level-select-subtitle">Selecciona la dificultad que prefieras</p>
                     
-                    <div className="levels-grid">
+                    <div className="level-grid">
                         {levelRanges.map((range, index) => {
                             const levelNumber = index + 1;
                             const isUnlocked = isLevelUnlocked('escritura', levelNumber);
@@ -67,7 +66,6 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 
