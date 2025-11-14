@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
 import { SaveGameStatisticsValidationError } from '../../core/models/exceptions/SaveGameStatisticsValidationError';
+import { StudentNotFoundError } from '../../core/models/exceptions/StudentNotFoundError';
 
 interface SaveGameStatisticsRequest {
     studentId: string;
@@ -29,6 +30,7 @@ const dependencyContainer = DependencyContainer.getInstance();
 const saveGameStatisticsUseCase = dependencyContainer.saveGameStatisticsUseCase;
 const getStudentProgressUseCase = dependencyContainer.getStudentProgressUseCase;
 const getGameStatisticsUseCase = dependencyContainer.getGameStatisticsUseCase;
+const generateStudentReportUseCase = dependencyContainer.generateStudentReportUseCase;
 
 const saveGameStatistics = async (
     req: Request<{}, any, SaveGameStatisticsRequest>, 
@@ -137,8 +139,47 @@ const getGameStatistics = async (
     }
 };
 
+const generateStudentReport = async (
+    req: Request<{ studentId: string }, any, { recentDays?: number }>,
+    res: Response
+): Promise<void> => {
+    const { studentId } = req.params;
+    const { recentDays } = req.body || {};
+
+    try {
+        if (!studentId) {
+            res.status(400).json({ error: 'ID del estudiante es obligatorio' });
+            return;
+        }
+
+        const parsedDays = Number(recentDays);
+        const report = await generateStudentReportUseCase.execute({
+            studentId,
+            recentDays: !Number.isNaN(parsedDays) ? parsedDays : undefined
+        });
+
+        res.status(200).json(report);
+    } catch (error) {
+        if (error instanceof StudentNotFoundError) {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+
+        if (error instanceof Error && error.message.includes('GEMINI_API_KEY')) {
+            res.status(503).json({
+                error: 'Servicio de IA no configurado. Define GEMINI_API_KEY para generar reportes.'
+            });
+            return;
+        }
+
+        console.error('Error en generateStudentReport:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const statisticsController = { 
     saveGameStatistics, 
     getStudentProgress, 
-    getGameStatistics 
+    getGameStatistics,
+    generateStudentReport
 };

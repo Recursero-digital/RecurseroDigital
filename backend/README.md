@@ -2,6 +2,16 @@
 
 Backend del proyecto RecurseroDigital desarrollado en TypeScript con Node.js y Express.
 
+## 🤖 Reportes asistidos por IA
+
+El backend incluye un caso de uso que genera reportes pedagógicos usando **Google Gemini**:
+
+1. Crear un API Key en [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. Configurar las variables `GEMINI_API_KEY` y (opcionalmente) `GEMINI_MODEL` en el `.env`. o en las variables de entorno en el docker-compose
+3. Consumir el endpoint `POST /api/statistics/student/:studentId/report` enviando opcionalmente `{ "recentDays": 7 }`.
+
+Si no hay estadísticas para el estudiante o falta la API key, el endpoint devuelve un mensaje informativo sin invocar la IA.
+
 ## 🚀 Tecnologías
 
 - **Node.js** - Runtime de JavaScript
