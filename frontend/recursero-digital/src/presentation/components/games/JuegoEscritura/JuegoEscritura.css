@@ -131,51 +131,10 @@ body, html {
   flex-shrink: 0;
 }
 
-/* Game Status in Header */
-.header-controls .game-status {
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.5vw, 18px);
-  background: var(--primary-gradient);
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-  border: 2px solid var(--space-yellow);
-  gap: clamp(4px, 1vw, 15px);
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.header-controls .game-status .status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-
-.header-controls .game-status .status-icon {
-  font-size: clamp(12px, 2.5vw, 18px);
-}
-
-.header-controls .game-status .status-label {
-  color: var(--space-yellow);
-  font-size: clamp(9px, 1.5vw, 12px);
-  font-weight: 600;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
-.header-controls .game-status .status-value {
-  color: white;
-  font-size: clamp(11px, 2vw, 16px);
-  font-weight: 700;
-  white-space: nowrap;
-}
+/* ========================================
+   NOTA: Los estilos de .game-status están definidos
+   globalmente en: presentation/styles/globals/games.css
+   ======================================== */
 
 /* ========================================
    4. TYPOGRAPHY COMPONENTS
@@ -1092,28 +1051,6 @@ body, html {
     margin: var(--space-sm) auto;
     padding: var(--space-sm);
   }
-  
-  /* Adaptar box de estadísticas para alturas reducidas */
-  .header-controls .game-status {
-    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 12px);
-    gap: clamp(2px, 0.8vw, 8px);
-  }
-  
-  .header-controls .game-status .status-item {
-    gap: 1px;
-  }
-  
-  .header-controls .game-status .status-icon {
-    font-size: clamp(10px, 2vw, 14px);
-  }
-  
-  .header-controls .game-status .status-label {
-    font-size: clamp(8px, 1.2vw, 10px);
-  }
-  
-  .header-controls .game-status .status-value {
-    font-size: clamp(10px, 1.8vw, 14px);
-  }
 }
 
 /* Resoluciones típicas de netbooks (1024x600, 1024x768) */
@@ -1150,31 +1087,6 @@ body, html {
   .level-btn {
     min-height: 80px;
     padding: 10px;
-  }
-  
-  /* Box de estadísticas más compacto en netbooks */
-  .header-controls .game-status {
-    padding: 5px 10px;
-    gap: 5px;
-    border-radius: 12px;
-  }
-  
-  .header-controls .game-status .status-item {
-    min-width: 45px;
-  }
-  
-  .header-controls .game-status .status-label {
-    font-size: 9px;
-    line-height: 1;
-  }
-  
-  .header-controls .game-status .status-value {
-    font-size: 12px;
-    line-height: 1;
-  }
-  
-  .header-controls .game-status .status-icon {
-    font-size: 12px;
   }
 }
 
@@ -1230,34 +1142,6 @@ body, html {
   .feature-item {
     padding: 8px;
   }
-  
-  /* Box de estadísticas ultra compacto para pantallas muy pequeñas */
-  .header-controls .game-status {
-    padding: 3px 6px;
-    gap: 3px;
-    border-radius: 10px;
-    flex-wrap: nowrap;
-  }
-  
-  .header-controls .game-status .status-item {
-    min-width: 35px;
-    gap: 0;
-  }
-  
-  .header-controls .game-status .status-label {
-    font-size: 7px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  
-  .header-controls .game-status .status-value {
-    font-size: 10px;
-    font-weight: 800;
-  }
-  
-  .header-controls .game-status .status-icon {
-    font-size: 10px;
-  }
 }
 
 /* Ancho reducido para tablets en orientación vertical */
@@ -1293,58 +1177,6 @@ body, html {
   .words-container, .numbers-container {
     margin: 8px 0;
   }
-  
-  /* Permitir que el box de estadísticas se adapte mejor */
-  .header-controls .game-status {
-    max-width: 100%;
-    overflow: hidden;
-  }
-  
-  .header-controls .game-status .status-item {
-    flex-shrink: 1;
-    min-width: 40px;
-  }
-}
-
-/* Para pantallas muy angostas, dividir estadísticas en dos filas */
-@media (max-width: 900px) {
-  .header-controls .game-status {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: clamp(8px, 2vw, 12px);
-  }
-  
-  .header-controls .game-status .status-item {
-    flex: 0 0 calc(50% - 6px);
-    max-width: calc(50% - 6px);
-    min-width: 80px;
-  }
 }
 
 /* Para móviles, hacer las estadísticas en formato de grid compacto */
-@media (max-width: 480px) {
-  .header-controls .game-status {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    padding: 8px 12px;
-  }
-  
-  .header-controls .game-status .status-item {
-    flex: none;
-    min-width: 0;
-    max-width: none;
-  }
-  
-  .header-controls .game-status .status-label {
-    font-size: 10px;
-  }
-  
-  .header-controls .game-status .status-value {
-    font-size: 14px;
-  }
-  
-  .header-controls .game-status .status-icon {
-    font-size: 14px;
-  }
-}
