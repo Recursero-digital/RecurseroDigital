@@ -12,18 +12,8 @@ export interface GenerateStudentReportRequest {
 export interface GenerateStudentReportResponse {
     studentId: string;
     studentName: string;
+    studentLastname: string;
     report: string;
-    provider: string;
-    model: string;
-    recentDays: number;
-    prompt: string;
-    metadata: {
-        totalRecords: number;
-        timeframeStart: string;
-        timeframeEnd: string;
-        gamesCovered: number;
-    };
-    usedFallback: boolean;
 }
 
 interface GameAggregate {
@@ -71,52 +61,28 @@ export class GenerateStudentReportUseCase {
 
             return {
                 studentId: student.id,
-                studentName: `${student.name} ${student.lastname}`,
-                report: fallbackReport,
-                provider: 'system',
-                model: 'static-fallback',
-                recentDays,
-                prompt: '',
-                metadata: {
-                    totalRecords: 0,
-                    timeframeStart: windowStart.toISOString(),
-                    timeframeEnd: now.toISOString(),
-                    gamesCovered: 0
-                },
-                usedFallback: true
+                studentName: student.name,
+                studentLastname: student.lastname,
+                report: fallbackReport
             };
         }
 
         const aggregates = this.aggregateStatistics(statistics, windowStart);
-        const anonymizedLabel = 'Estudiante anonimizado';
-        const prompt =
-            this.buildPrompt({
-                studentName: anonymizedLabel,
-                studentId: student.id,
-                recentDays,
-                stats: statistics,
-                aggregates,
-                windowStart,
-                now
-            });
+        const prompt = this.buildPrompt({
+            recentDays,
+            stats: statistics,
+            aggregates,
+            windowStart,
+            now
+        });
 
         const result = await this.aiTextGenerator.generateText(prompt);
 
         return {
             studentId: student.id,
-            studentName: `${student.name} ${student.lastname}`,
-            report: result.text,
-            provider: result.provider,
-            model: result.model,
-            recentDays,
-            prompt,
-            metadata: {
-                totalRecords: statistics.length,
-                timeframeStart: windowStart.toISOString(),
-                timeframeEnd: now.toISOString(),
-                gamesCovered: aggregates.length
-            },
-            usedFallback: false
+            studentName: student.name,
+            studentLastname: student.lastname,
+            report: result.text
         };
     }
 
@@ -160,8 +126,6 @@ export class GenerateStudentReportUseCase {
     }
 
     private buildPrompt(params: {
-        studentName: string;
-        studentId: string;
         recentDays: number;
         stats: StudentStatistics[];
         aggregates: GameAggregate[];

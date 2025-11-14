@@ -153,12 +153,18 @@ const generateStudentReport = async (
         }
 
         const parsedDays = Number(recentDays);
-        const report = await generateStudentReportUseCase.execute({
+        const reportData = await generateStudentReportUseCase.execute({
             studentId,
             recentDays: !Number.isNaN(parsedDays) ? parsedDays : undefined
         });
 
-        res.status(200).json(report);
+        const { report, studentName, studentLastname } = reportData;
+
+        res.status(200).json({
+            report,
+            studentName,
+            studentLastname
+        });
     } catch (error) {
         if (error instanceof StudentNotFoundError) {
             res.status(404).json({ error: error.message });

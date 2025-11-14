@@ -308,4 +308,38 @@ describe('Statistics Integration Tests', () => {
       expect(gameStatsResponse.body.completionRate).toBe(100);
     });
   });
+
+  describe('POST /api/statistics/student/:studentId/report', () => {
+    it('should return a mocked AI report for the student', async () => {
+      const studentId = '1';
+
+      await request(app)
+        .post('/api/statistics')
+        .send({
+          studentId,
+          gameId: 'game-escritura',
+          level: 1,
+          activity: 1,
+          points: 120,
+          attempts: 2,
+          correctAnswers: 8,
+          totalQuestions: 10,
+          completionTime: 150,
+          isCompleted: true,
+          maxUnlockedLevel: 1
+        })
+        .expect(201);
+
+      const response = await request(app)
+        .post(`/api/statistics/student/${studentId}/report`)
+        .send({ recentDays: 7 })
+        .expect(200);
+
+      expect(response.body).toEqual({
+        report: 'Reporte simulado (test). No se realizaron llamadas a servicios externos.',
+        studentName: 'Nicolás',
+        studentLastname: 'García'
+      });
+    });
+  });
 });
