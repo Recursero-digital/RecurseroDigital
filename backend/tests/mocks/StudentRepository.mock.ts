@@ -25,7 +25,9 @@ export class MockStudentRepository implements StudentRepository {
               student.lastname,
               student.dni,
               student.courseId,
-              user
+          user,
+          student.createdAt,
+          student.updatedAt
           );
       }
       return null;
@@ -59,7 +61,9 @@ export class MockStudentRepository implements StudentRepository {
         student.lastname,
         student.dni,
         student.courseId,
-        user
+        user,
+        student.createdAt,
+        student.updatedAt
       );
     });
   }
@@ -79,7 +83,9 @@ export class MockStudentRepository implements StudentRepository {
         student.lastname,
         student.dni,
         student.courseId,
-        user
+        user,
+        student.createdAt,
+        student.updatedAt
       );
     }
     return null;
@@ -96,7 +102,9 @@ export class MockStudentRepository implements StudentRepository {
         studentData.name,
         studentData.lastname,
         studentData.dni,
-        studentData.courseId
+        studentData.courseId,
+        studentData.createdAt,
+        new Date()
       );
     }
   }
@@ -112,6 +120,7 @@ export class MockStudentRepository implements StudentRepository {
     const student = this.students.find(s => s.id === studentId);
     if (student) {
       student.courseId = courseId;
+      student.updatedAt = new Date();
     }
   }
 
@@ -130,5 +139,28 @@ export class MockStudentRepository implements StudentRepository {
       '12345678'
     );
     this.students.push(studentEntity);
+  }
+
+  async getStudentsByCourse(courseId: string): Promise<Student[]> {
+    return this.students
+      .filter(student => student.courseId === courseId)
+      .map(student => {
+        const user = new User(
+          student.userId,
+          student.username,
+          student.passwordHash,
+          UserRole.STUDENT
+        );
+        return new Student(
+          student.id,
+          student.name,
+          student.lastname,
+          student.dni,
+          student.courseId,
+          user,
+          student.createdAt,
+          student.updatedAt
+        );
+      });
   }
 }

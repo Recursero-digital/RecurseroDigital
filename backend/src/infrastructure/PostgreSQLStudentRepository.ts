@@ -32,7 +32,9 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         row.lastname,
         row.dni,
         row.course_id,
-        user
+        user,
+        row.created_at,
+        row.updated_at
       );
     } catch (error) {
       console.error('Error al buscar estudiante por nombre de usuario:', error);
@@ -83,14 +85,16 @@ export class PostgreSQLStudentRepository implements StudentRepository {
          ORDER BY s.created_at DESC`
       );
       return result.rows.map((row: any) => {
-        const user = new User(row.username, row.username, row.password_hash, row.role);
+        const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
         return new Student(
           row.id,
           row.name,
           row.lastname,
           row.dni,
           row.course_id,
-          user
+          user,
+          row.created_at,
+          row.updated_at
         );
       });
     } catch (error) {
@@ -121,7 +125,9 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         row.lastname,
         row.dni,
         row.course_id,
-        user
+        user,
+        row.created_at,
+        row.updated_at
       );
     } catch (error) {
       console.error('Error al buscar estudiante por ID:', error);
@@ -183,6 +189,36 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       );
     } catch (error) {
       console.error('Error al asignar curso a estudiante:', error);
+      throw error;
+    }
+  }
+
+  async getStudentsByCourse(courseId: string): Promise<Student[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT s.*, u.username, u.password_hash, u.role
+         FROM students s
+         JOIN users u ON s.user_id = u.id
+         WHERE s.course_id = $1
+         ORDER BY s.created_at DESC`,
+        [courseId]
+      );
+
+      return result.rows.map((row: any) => {
+        const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
+        return new Student(
+          row.id,
+          row.name,
+          row.lastname,
+          row.dni,
+          row.course_id,
+          user,
+          row.created_at,
+          row.updated_at
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener estudiantes por curso:', error);
       throw error;
     }
   }

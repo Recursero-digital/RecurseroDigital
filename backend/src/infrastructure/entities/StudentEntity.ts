@@ -8,6 +8,8 @@ export class StudentEntity {
     lastname: string;
     dni: string;
     courseId: string | null;
+    createdAt: Date;
+    updatedAt: Date;
 
     constructor(
         id: string,
@@ -17,7 +19,9 @@ export class StudentEntity {
         name: string,
         lastname: string,
         dni: string,
-        courseId: string | null = null
+        courseId: string | null = null,
+        createdAt: Date = new Date(),
+        updatedAt: Date = new Date()
     ) {
         this.id = id;
         this.userId = userId;
@@ -27,5 +31,7 @@ export class StudentEntity {
         this.username = username;
         this.passwordHash = passwordHash;
         this.courseId = courseId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

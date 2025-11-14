@@ -27,6 +27,7 @@ import { GetStudentGamesUseCase } from '../core/usecases/GetStudentGamesUseCase'
 import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStudentUseCase';
 import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
+import { GetCourseStudentsUseCase } from '../core/usecases/GetCourseStudentsUseCase';
 
 
 export class DependencyContainer {
@@ -52,6 +53,7 @@ export class DependencyContainer {
     private _getStudentGamesUseCase: GetStudentGamesUseCase | null = null;
     private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
     private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
+    private _getCourseStudentsUseCase: GetCourseStudentsUseCase | null = null;
 
 
     private constructor() {
@@ -272,6 +274,17 @@ export class DependencyContainer {
             );
         }
         return this._getTeacherCoursesUseCase;
+    }
+
+    public get getCourseStudentsUseCase(): GetCourseStudentsUseCase {
+        if (!this._getCourseStudentsUseCase) {
+            this._getCourseStudentsUseCase = new GetCourseStudentsUseCase(
+                this.courseRepository,
+                this.studentRepository,
+                this.statisticsRepository
+            );
+        }
+        return this._getCourseStudentsUseCase;
     }
 
     public async clearAllData(): Promise<void> {

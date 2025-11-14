@@ -7,6 +7,8 @@ export class Student {
     dni: string;
     courseId: string | null;
     user: User;
+    createdAt: Date;
+    updatedAt: Date;
 
     constructor(
         id: string,
@@ -14,7 +16,9 @@ export class Student {
         lastname: string,
         dni: string,
         courseId: string | null,
-        user: User
+        user: User,
+        createdAt?: Date,
+        updatedAt?: Date
     ) {
         this.id = id;
         this.name = name;
@@ -22,6 +26,8 @@ export class Student {
         this.dni = dni;
         this.courseId = courseId;
         this.user = user;
+        this.createdAt = createdAt ?? new Date();
+        this.updatedAt = updatedAt ?? new Date();
     }
 
     getUsername(): string {

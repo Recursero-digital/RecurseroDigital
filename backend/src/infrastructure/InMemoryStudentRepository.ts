@@ -7,16 +7,20 @@ export class InMemoryStudentRepository implements StudentRepository {
   private students: StudentEntity[] = [];
 
   constructor() {
+    const now = new Date();
     this.students = [
-        new StudentEntity(
-            '1',
-            '1', // user_id
-            'nico@gmail.com',
-            '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // hash de 'Recursero2025!'
-            'Nicolás',
-            'García',
-            '12345678'
-        )
+      new StudentEntity(
+        '1',
+        '1', // user_id
+        'nico@gmail.com',
+        '$2b$10$T9xOluqoDwlRMZ/LeIdsL.MUagpZUkBOtq.ZR95Bp98tbYCr/yKr6', // hash de 'Recursero2025!'
+        'Nicolás',
+        'García',
+        '12345678',
+        null,
+        now,
+        now
+      )
     ];
   }
 
@@ -35,7 +39,9 @@ export class InMemoryStudentRepository implements StudentRepository {
             student.lastname,
             student.dni,
             student.courseId,
-            user
+            user,
+            student.createdAt,
+            student.updatedAt
         );
     }
     return null;
@@ -69,7 +75,9 @@ export class InMemoryStudentRepository implements StudentRepository {
         student.lastname,
         student.dni,
         student.courseId,
-        user
+        user,
+        student.createdAt,
+        student.updatedAt
       );
     });
   }
@@ -89,7 +97,9 @@ export class InMemoryStudentRepository implements StudentRepository {
         student.lastname,
         student.dni,
         student.courseId,
-        user
+        user,
+        student.createdAt,
+        student.updatedAt
       );
     }
     return null;
@@ -106,7 +116,9 @@ export class InMemoryStudentRepository implements StudentRepository {
         studentData.name,
         studentData.lastname,
         studentData.dni,
-        studentData.courseId
+        studentData.courseId,
+        studentData.createdAt,
+        new Date()
       );
     }
   }
@@ -136,7 +148,32 @@ export class InMemoryStudentRepository implements StudentRepository {
       current.name,
       current.lastname,
       current.dni,
-      courseId
+        courseId,
+        current.createdAt,
+        new Date()
     );
+  }
+
+  async getStudentsByCourse(courseId: string): Promise<Student[]> {
+    return this.students
+      .filter(student => student.courseId === courseId)
+      .map(student => {
+        const user = new User(
+          student.userId,
+          student.username,
+          student.passwordHash,
+          UserRole.STUDENT
+        );
+        return new Student(
+          student.id,
+          student.name,
+          student.lastname,
+          student.dni,
+          student.courseId,
+          user,
+          student.createdAt,
+          student.updatedAt
+        );
+      });
   }
 }
