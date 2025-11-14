@@ -14,13 +14,28 @@
  * - Tipografía: Fredoka (sans-serif)
  * - Colores consistentes en todos los juegos
  * 
- * Los archivos CSS individuales de cada juego solo deben contener
- * estilos ESPECÍFICOS de ese juego, evitando duplicación.
+ * ÍNDICE:
+ * 1. Variables CSS
+ * 2. Contenedores Principales
+ * 3. Layouts de Pantallas
+ *    - Start Screen
+ *    - Level Select Screen
+ * 4. Componentes de UI
+ *    - Botones
+ *    - Inputs
+ *    - Modales
+ *    - Header Controls
+ *    - Game Status
+ * 5. Elementos de Juego
+ *    - Paper Note
+ *    - Hints
+ *    - Game HUD
+ * 6. Animaciones
  */
 
-/* ------------------------------------------------------------------- */
-/* VARIABLES CSS GLOBALES PARA JUEGOS                                 */
-/* ------------------------------------------------------------------- */
+/* ================================================================
+   1. VARIABLES CSS
+   ================================================================ */
 
 :root {
   /* Colores del tema espacial */
@@ -57,96 +72,66 @@
   --hint-gradient: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
 }
 
-/* ------------------------------------------------------------------- */
-/* BOTONES COMUNES DE JUEGOS                                          */
-/* ------------------------------------------------------------------- */
+/* ================================================================
+   2. CONTENEDORES PRINCIPALES
+   ================================================================ */
 
-.btn-start,
-.btn-check,
-.btn-hint,
-.btn-verify,
-.btn-clear,
-.btn-secondary {
-  background: var(--button-gradient);
+/* Wrapper principal del juego */
+.game-wrapper {
+  font-family: var(--font-game);
+  min-height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Contenedor de escena del juego */
+.game-scene,
+.game-container {
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
   color: white;
-  border: 2px solid var(--space-yellow);
-  padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
-  border-radius: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-start:hover,
-.btn-check:hover,
-.btn-hint:hover,
-.btn-verify:hover:not(:disabled),
-.btn-clear:hover:not(:disabled),
-.btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+/* Efecto de brillo espacial */
+.game-scene::before,
+.game-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.btn-start:disabled,
-.btn-check:disabled,
-.btn-hint:disabled,
-.btn-verify:disabled,
-.btn-clear:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+/* Contenedor interno de contenido del juego */
+.game-content {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
 }
 
-/* ------------------------------------------------------------------- */
-/* BOTONES DE NAVEGACIÓN                                              */
-/* ------------------------------------------------------------------- */
+/* ================================================================
+   3. LAYOUTS DE PANTALLAS
+   ================================================================ */
 
-.btn-back-to-levels,
-.btn-back-to-dashboard {
-  background: var(--button-gradient);
-  color: white;
-  border: 2px solid var(--space-yellow);
-  padding: 8px 16px;
-  border-radius: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.btn-back-to-levels:hover,
-.btn-back-to-dashboard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
-}
-
-/* ------------------------------------------------------------------- */
-/* TÍTULOS Y TEXTOS DE JUEGOS                                         */
-/* ------------------------------------------------------------------- */
-
-.game-title {
-  color: var(--space-yellow);
-  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-  margin: clamp(10px, 2vh, 20px) 0 clamp(5px, 1vh, 10px) 0;
-  text-shadow: 3px 3px 0px var(--space-blue);
-  font-weight: 700;
-}
-
-.game-instruction {
-  color: white;
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  margin: 0 0 clamp(5px, 1vh, 10px) 0;
-  font-weight: 600;
-}
-
-/* ------------------------------------------------------------------- */
-/* PANTALLA DE INICIO (START SCREEN)                                  */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   3.1 START SCREEN
+   ---------------------------------------------------------------- */
 
 .start-screen {
   position: relative;
@@ -163,12 +148,23 @@
   border-radius: 10px;
 }
 
-/* Header controls en start screen y level select - solo a la izquierda */
-.start-screen .header-controls,
-.level-select-screen .header-controls {
+/* Header controls en start screen - solo a la izquierda */
+.start-screen .header-controls {
   right: auto;
 }
 
+/* Contenedor de contenido centrado */
+.start-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 4vh, 32px);
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Títulos */
+.start-title,
 .start-screen h1 {
   color: var(--space-yellow);
   font-size: clamp(2.5rem, 5vw, 4rem);
@@ -177,6 +173,7 @@
   text-shadow: 3px 3px 0px var(--space-blue);
 }
 
+.start-subtitle,
 .start-screen p {
   color: white;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
@@ -185,14 +182,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.start-screen .button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: 2rem;
-}
-
+/* Features Grid */
 .start-features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -225,24 +215,9 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.start-title {
-  color: var(--space-yellow);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  margin-bottom: clamp(0.5rem, 2vh, 1rem);
-  font-weight: 700;
-  text-shadow: 3px 3px 0px var(--space-blue);
-}
-
-.start-subtitle {
-  color: white;
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  margin-bottom: clamp(1.5rem, 4vh, 3rem);
-  font-weight: 500;
-}
-
-/* ------------------------------------------------------------------- */
-/* PANTALLA DE SELECCIÓN DE NIVELES                                   */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   3.2 LEVEL SELECT SCREEN
+   ---------------------------------------------------------------- */
 
 .level-select-screen {
   position: relative;
@@ -258,6 +233,23 @@
   border-radius: 10px;
 }
 
+/* Header controls en level select - solo a la izquierda */
+.level-select-screen .header-controls {
+  right: auto;
+}
+
+/* Contenedor de contenido */
+.level-select-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 4vh, 32px);
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Títulos */
+.level-select-title,
 .level-select-screen h1 {
   color: var(--space-yellow);
   font-size: clamp(2rem, 4vw, 3rem);
@@ -266,22 +258,8 @@
   font-weight: 700;
 }
 
+.level-select-subtitle,
 .level-select-screen p {
-  color: white;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  margin-bottom: clamp(1rem, 3vh, 2rem);
-  font-weight: 500;
-}
-
-.level-select-title {
-  color: var(--space-yellow);
-  font-size: clamp(2rem, 4vw, 3rem);
-  margin-bottom: clamp(0.5rem, 2vh, 1rem);
-  text-shadow: 3px 3px 0px var(--space-blue);
-  font-weight: 700;
-}
-
-.level-select-subtitle {
   color: white;
   font-size: clamp(1rem, 2.5vw, 1.2rem);
   margin-bottom: clamp(1rem, 3vh, 2rem);
@@ -289,17 +267,7 @@
   opacity: 0.9;
 }
 
-.level-select-content {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
-}
-
-/* ------------------------------------------------------------------- */
-/* GRID Y BOTONES DE NIVELES                                          */
-/* ------------------------------------------------------------------- */
-
+/* Grid de niveles */
 .level-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -309,6 +277,7 @@
   width: 100%;
 }
 
+/* Botones de nivel */
 .level-btn {
   background: var(--button-gradient);
   color: white;
@@ -345,10 +314,7 @@
   box-shadow: none;
 }
 
-/* ------------------------------------------------------------------- */
-/* ELEMENTOS DE TEXTO EN BOTONES DE NIVEL                             */
-/* ------------------------------------------------------------------- */
-
+/* Elementos de texto en botones de nivel */
 .level-number {
   color: white;
   font-size: clamp(1rem, 2.5vw, 1.2rem);
@@ -398,16 +364,116 @@
   opacity: 0.9;
 }
 
-/* Estilos específicos para botones bloqueados */
+/* Estilos para botones bloqueados */
 .level-btn.locked .level-number,
 .level-btn.locked .level-range,
 .level-btn.locked .level-difficulty {
   opacity: 0.7;
 }
 
-/* ------------------------------------------------------------------- */
-/* MODALES                                                             */
-/* ------------------------------------------------------------------- */
+/* ================================================================
+   4. COMPONENTES DE UI
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   4.1 BOTONES
+   ---------------------------------------------------------------- */
+
+/* Botones principales de juego */
+.btn-start,
+.btn-check,
+.btn-hint,
+.btn-verify,
+.btn-clear,
+.btn-secondary {
+  background: var(--button-gradient);
+  color: white;
+  border: 2px solid var(--space-yellow);
+  padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-start:hover,
+.btn-check:hover,
+.btn-hint:hover,
+.btn-verify:hover:not(:disabled),
+.btn-clear:hover:not(:disabled),
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+.btn-start:disabled,
+.btn-check:disabled,
+.btn-hint:disabled,
+.btn-verify:disabled,
+.btn-clear:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Botones de navegación */
+.btn-back-to-levels,
+.btn-back-to-dashboard {
+  background: var(--button-gradient);
+  color: white;
+  border: 2px solid var(--space-yellow);
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn-back-to-levels:hover,
+.btn-back-to-dashboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+/* ----------------------------------------------------------------
+   4.2 INPUTS Y FORMULARIOS
+   ---------------------------------------------------------------- */
+
+.answer-input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #c7d2fe;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-family: var(--font-game);
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--space-violet);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 1);
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ----------------------------------------------------------------
+   4.3 MODALES
+   ---------------------------------------------------------------- */
 
 .modal-overlay {
   position: fixed;
@@ -470,13 +536,9 @@
   color: #92400e;
 }
 
-/* ------------------------------------------------------------------- */
-/* CONTROLES DE ENCABEZADO                                             */
-/* ------------------------------------------------------------------- */
-/* 
- * .header-controls contiene tanto .buttons-group como .game-status
- * organizados en un layout flex que los distribuye a izquierda y derecha
- */
+/* ----------------------------------------------------------------
+   4.4 HEADER CONTROLS
+   ---------------------------------------------------------------- */
 
 .header-controls {
   position: absolute;
@@ -486,7 +548,6 @@
   z-index: 100;
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   gap: 15px;
 }
 
@@ -497,9 +558,9 @@
   height: min-content;
 }
 
-/* ------------------------------------------------------------------- */
-/* GAME STATUS - Estadísticas del juego                               */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   4.5 GAME STATUS
+   ---------------------------------------------------------------- */
 
 .header-controls .game-status {
   width: 25%;
@@ -549,73 +610,32 @@
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------------- */
-/* ANIMACIONES                                                         */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   4.6 TEXTOS Y TÍTULOS
+   ---------------------------------------------------------------- */
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.game-title {
+  color: var(--space-yellow);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  margin: clamp(10px, 2vh, 20px) 0 clamp(5px, 1vh, 10px) 0;
+  text-shadow: 3px 3px 0px var(--space-blue);
+  font-weight: 700;
 }
 
-@keyframes modalSlideIn {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* ------------------------------------------------------------------- */
-/* CONTENEDORES COMUNES PARA TODOS LOS JUEGOS                         */
-/* ------------------------------------------------------------------- */
-
-/* Wrapper principal del juego */
-.game-wrapper {
-  font-family: var(--font-game);
-  min-height: 100vh;
-  width: 100vw;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Contenedor de escena del juego */
-.game-scene,
-.game-container {
-  min-height: 100vh;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
+.game-instruction {
   color: white;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  margin: 0 0 clamp(5px, 1vh, 10px) 0;
+  font-weight: 600;
 }
 
-/* Efecto de brillo espacial */
-.game-scene::before,
-.game-container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60%;
-  background: radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-  pointer-events: none;
-}
+/* ================================================================
+   5. ELEMENTOS DE JUEGO
+   ================================================================ */
 
-/* ------------------------------------------------------------------- */
-/* PAPER NOTE - TARJETA DE PREGUNTA COMÚN                             */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   5.1 PAPER NOTE - TARJETA DE PREGUNTA
+   ---------------------------------------------------------------- */
 
 .paper-note {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
@@ -649,63 +669,9 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ------------------------------------------------------------------- */
-/* INPUTS Y FORMULARIOS COMUNES                                       */
-/* ------------------------------------------------------------------- */
-
-.answer-input {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.1rem;
-  border: 2px solid #c7d2fe;
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #1e293b;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-align: center;
-  font-family: var(--font-game);
-}
-
-.answer-input:focus {
-  outline: none;
-  border-color: var(--space-violet);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-  background: rgba(255, 255, 255, 1);
-}
-
-.answer-input::placeholder {
-  color: #94a3b8;
-  font-style: italic;
-}
-
-/* ------------------------------------------------------------------- */
-/* GAME HUD - INFORMACIÓN DEL JUEGO                                   */
-/* ------------------------------------------------------------------- */
-
-.game-hud {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  border: 2px solid rgba(251, 191, 36, 0.5);
-  color: white;
-  font-weight: 600;
-  z-index: 10;
-  font-size: 0.9rem;
-}
-
-.game-hud span {
-  color: var(--space-yellow);
-  font-weight: 700;
-}
-
-/* ------------------------------------------------------------------- */
-/* PERMANENT HINT - AYUDA PERMANENTE                                  */
-/* ------------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   5.2 HINTS - AYUDA PERMANENTE
+   ---------------------------------------------------------------- */
 
 .permanent-hint {
   width: 50%;
@@ -782,4 +748,52 @@
   color: var(--space-blue);
   font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   font-weight: 700;
+}
+
+/* ----------------------------------------------------------------
+   5.3 GAME HUD
+   ---------------------------------------------------------------- */
+
+.game-hud {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  color: white;
+  font-weight: 600;
+  z-index: 10;
+  font-size: 0.9rem;
+}
+
+.game-hud span {
+  color: var(--space-yellow);
+  font-weight: 700;
+}
+
+/* ================================================================
+   6. ANIMACIONES
+   ================================================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
