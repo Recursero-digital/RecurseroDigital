@@ -711,7 +711,7 @@
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: clamp(0.5rem, 1vh, 0.75rem);
-  margin-top: clamp(0.5rem, 1vh, 0.75rem);
+  margin: clamp(0.5rem, 1vh, 0.75rem) auto 0 auto;
   box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
   flex-shrink: 0;
 }
