@@ -5,7 +5,7 @@ const ErrorPopup = ({ show, onClose }) => {
         if (show) {
             const timer = setTimeout(() => {
                 onClose();
-            }, 2000); // Se cierra automáticamente después de 2 segundos
+            }, 2000);
 
             return () => clearTimeout(timer);
         }

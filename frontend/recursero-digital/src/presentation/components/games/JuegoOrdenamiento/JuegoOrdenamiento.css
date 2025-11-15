@@ -149,44 +149,9 @@
   margin: 0;
 }
 
-/* Permanent Hint - Estilos específicos JuegoOrdenamiento */
+/* Permanent Hint - Los estilos están definidos globalmente en games.css */
 
-.hint-label {
-  color: var(--space-purple);
-  font-weight: bold;
-  font-size: 0.75rem;
-  margin-right: 0.3rem;
-}
-
-.hint-number {
-  background: var(--space-purple);
-  color: white;
-  padding: 0.15rem 0.3rem;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.7rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Botones generales */
-.btn {
-  background: var(--button-gradient);
-  color: white;
-  border: 3px solid var(--space-yellow);
-  padding: 15px 30px;
-  border-radius: 20px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 10px;
-  min-width: 200px;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
-}
+/* Botones generales - Los estilos .btn están definidos globalmente en games.css */
 
 .modal {
   background: var(--main-gradient);

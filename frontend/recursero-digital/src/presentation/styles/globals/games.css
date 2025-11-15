@@ -732,6 +732,13 @@
   font-style: italic;
 }
 
+.hint-label {
+  color: var(--space-purple);
+  font-weight: bold;
+  font-size: clamp(0.65rem, 1.3vw, 0.75rem);
+  margin-right: 0.3rem;
+}
+
 .hint-numbers {
   display: flex;
   flex-wrap: wrap;
@@ -803,4 +810,25 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* ----------------------------------------------------------------
+   BOTONES GENERALES
+   ---------------------------------------------------------------- */
+
+.btn {
+  background: var(--button-gradient);
+  color: white;
+  border: 3px solid var(--space-yellow);
+  padding: clamp(12px, 2vh, 15px) clamp(25px, 4vw, 30px);
+  border-radius: 20px;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
 }
