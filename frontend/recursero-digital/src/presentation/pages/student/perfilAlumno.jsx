@@ -1,78 +1,73 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React from "react";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import "../../styles/pages/perfilAlumno.css";
 
+/**
+ * Componente de perfil del estudiante
+ * 
+ * TODO BACKEND: Una vez implementados los endpoints reales:
+ * 1. Los datos vendrán automáticamente del backend vía useStudentProfile
+ * 2. Verificar que la estructura de datos del backend coincida con la UI
+ * 3. Ajustar manejo de estados de loading y error según necesidades
+ */
 export default function PerfilAlumno() {
-  const avatarOptions = [
-    { id: 1, emoji: "🚀", name: "Explorador Espacial", color: "#7c3aed" },
-    { id: 2, emoji: "🦖", name: "Dino Matemático", color: "#10b981" },
-    { id: 3, emoji: "🧙‍♂️", name: "Mago de Números", color: "#f59e0b" },
-    { id: 4, emoji: "🦸‍♀️", name: "Súper Estudiante", color: "#ef4444" }
-  ];
+  // TODO BACKEND: Este hook ya estará conectado al API real
+  const { data: studentData, loading, error } = useStudentProfile();
 
-  const [selectedAvatar, setSelectedAvatar] = useState(() => {
-    const saved = localStorage.getItem("selectedAvatar");
-    return saved ? JSON.parse(saved) : avatarOptions[0];
-  });
+  // TODO BACKEND: Personalizar mensajes según errores específicos del API
+  if (loading) {
+    return (
+      <div className="perfil-container">
+        <div className="perfil-header">
+          <div className="loading-message">
+            <h2> Cargando tu perfil...</h2>
+            <p>Recopilando tus aventuras</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  // TODO BACKEND: Personalizar manejo de errores según respuestas del API
+  if (error) {
+    return (
+      <div className="perfil-container">
+        <div className="perfil-header">
+          <div className="error-message">
+            <h2>😱 Oops! Algo salió mal</h2>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()}>Intentar nuevamente</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    localStorage.setItem("selectedAvatar", JSON.stringify(selectedAvatar));
-  }, [selectedAvatar]);
-
-  const handleAvatarSelect = (avatar) => {
-    setSelectedAvatar(avatar);
-    setShowAvatarSelector(false);
-  };
-
-  const userNameOrEmail = useMemo(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedName = localStorage.getItem("userName");
-    if (storedName) return storedName.toUpperCase();
-    if (storedEmail) {
-      const nameFromEmail = storedEmail.split("@")[0];
-      return nameFromEmail.toUpperCase();
-    }
-    return "ALUMNO";
-  }, []);
-
-  const studentData = {
-    name: userNameOrEmail,
-    level: 15,
-    totalScore: 22300,
-    stats: {
-      ordenamiento: {
-        highScore: 12500,
-        gamesPlayed: 42,
-        accuracy: "92%",
-        stars: 3,
-      },
-      escritura: {
-        highScore: 9800,
-        gamesPlayed: 35,
-        accuracy: "88%",
-        stars: 3,
-      },
-    },
-  };
+  // TODO BACKEND: Verificar que studentData tenga la estructura esperada
+  if (!studentData) {
+    return (
+      <div className="perfil-container">
+        <div className="perfil-header">
+          <div className="no-data-message">
+            <h2>📊 No hay datos disponibles</h2>
+            <p>No se pudieron cargar las estadísticas</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="perfil-container">
       <div className="perfil-header">
         <div className="avatar-section">
-          <div className="avatar-frame" onClick={() => setShowAvatarSelector(true)}>
-            <div 
-              className="perfil-avatar emoji-avatar" 
-              style={{ backgroundColor: selectedAvatar.color }}
-            >
-              {selectedAvatar.emoji}
-            </div>
-            <div className="avatar-change-hint">✨ </div>
+          <div className="perfil-avatar emoji-avatar">
+            🚀
           </div>
         </div>
         <div className="profile-info">
-          <h1 className="profile-name">🌟 ¡Hola {studentData.name}! 🌟</h1>
-          <p className="profile-title">🚀 Explorador Galáctico de Matemáticas 🚀</p>
+          <h1 className="profile-name">¡Hola {studentData.name}!</h1>
+          <p className="profile-title">🚀 Explorador de Matemáticas 🚀</p>
           <div className="achievements">
             <div className="achievement-item">
               🏆 <span>{studentData.totalScore}</span> puntos totales
@@ -165,33 +160,6 @@ export default function PerfilAlumno() {
           </div>
         </div>
       </div>
-
-      {showAvatarSelector && (
-        <div className="avatar-selector-overlay" onClick={() => setShowAvatarSelector(false)}>
-          <div className="avatar-selector-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>🎨 ¡Elige tu Avatar! 🎨</h3>
-            <div className="avatar-options">
-              {avatarOptions.map((avatar) => (
-                <div 
-                  key={avatar.id}
-                  className={`avatar-option ${selectedAvatar.id === avatar.id ? 'selected' : ''}`}
-                  onClick={() => handleAvatarSelect(avatar)}
-                  style={{ backgroundColor: avatar.color }}
-                >
-                  <div className="avatar-emoji">{avatar.emoji}</div>
-                  <span className="avatar-name">{avatar.name}</span>
-                </div>
-              ))}
-            </div>
-            <button 
-              className="close-selector-btn" 
-              onClick={() => setShowAvatarSelector(false)}
-            >
-              ✨ Listo ✨
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

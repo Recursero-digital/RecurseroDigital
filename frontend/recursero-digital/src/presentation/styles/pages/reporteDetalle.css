@@ -1,4 +1,4 @@
-/* Reporte Detalle Styles - Siguiendo diseño global espacial */
+
 .reporte-detalle-container {
   width: 100vw;
   max-width: none;
@@ -15,12 +15,12 @@
     #7c3aed 80%,
     #5b21b6 100%
   );
-  /* Expandir para cubrir cualquier margen del contenedor padre */
+ 
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
 }
 
-/* Wrapper interno para centrar contenido */
+
 .reporte-detalle-wrapper {
   max-width: 1000px;
   margin: 0 auto;
@@ -28,7 +28,7 @@
   position: relative;
 }
 
-/* Estrellas animadas para el fondo */
+
 .reporte-detalle-container::before {
   content: '';
   position: fixed;
@@ -47,7 +47,7 @@
   50% { opacity: 1; }
 }
 
-/* Botones individuales posicionados como el botón de dashboard */
+
 .reporte-actions {
   position: static;
   display: contents;
@@ -283,5 +283,3 @@
   border-left-width: 4px;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
-
-/* Diseño optimizado para PC y Notebooks únicamente */
