@@ -26,25 +26,45 @@ const GameScreen = ({
     return (
         <div className="game-container">
             <div className="header-controls">
-                <button 
-                    className="btn-back-to-levels"
-                    onClick={onBackToLevels}
-                    title="Volver a niveles"
-                >
-                    ← Niveles
-                </button>
-                <button 
-                    className="btn-back-to-dashboard"
-                    onClick={() => navigate('/alumno/juegos')}
-                    title="Volver al dashboard"
-                >
-                    🏠
-                </button>
-            </div>
-
-            <div className="game-hud">
-                <div>Nivel: <span>{level}</span> | Pregunta: <span>{activity}</span>/{totalActivities}</div>
-                <div>Puntos: <span>{points}</span> | Intentos: <span>{attempts}</span></div>
+                <div className="buttons-group">
+                    <button 
+                        className="btn-back-to-dashboard"
+                        onClick={() => navigate('/alumno/juegos')}
+                        title="Volver al dashboard"
+                    >
+                        ← Juegos
+                    </button>
+                    <button 
+                        className="btn-back-to-levels"
+                        onClick={onBackToLevels}
+                        title="Volver a niveles"
+                    >
+                        ← Niveles
+                    </button>
+                </div>
+                
+                <div className="game-status">
+                    <div className="status-item">
+                        <div className="status-icon">🏆</div>
+                        <div className="status-label">Nivel</div>
+                        <div className="status-value">{level}</div>
+                    </div>
+                    <div className="status-item">
+                        <div className="status-icon">📝</div>
+                        <div className="status-label">Actividad</div>
+                        <div className="status-value">{activity}/{totalActivities}</div>
+                    </div>
+                    <div className="status-item">
+                        <div className="status-icon">⭐</div>
+                        <div className="status-label">Puntos</div>
+                        <div className="status-value">{points}</div>
+                    </div>
+                    <div className="status-item">
+                        <div className="status-icon">🎯</div>
+                        <div className="status-label">Intentos</div>
+                        <div className="status-value">{attempts}</div>
+                    </div>
+                </div>
             </div>
 
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
@@ -53,19 +73,19 @@ const GameScreen = ({
                 </div>
             </div>
 
-            <div className="paper-note slide-in" style={{ 
+            <div style={{ 
                 position: 'relative',
                 maxWidth: '700px',
                 margin: '0 auto'
             }}>
                 <div style={{
                     background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
-                    margin: '-1.5rem -1.5rem 1rem -1.5rem',
                     padding: '1rem 1.5rem',
                     borderRadius: '1rem',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    marginBottom: '1rem'
                 }}>
-                    <h3 className="question-title" style={{
+                    <h3 style={{
                         margin: 0,
                         color: '#0277bd',
                         fontSize: '1.5rem',
@@ -196,26 +216,20 @@ const GameScreen = ({
                     </div>
                 </div>
 
-                {/* Pista en la parte inferior */}
-                <div style={{
-                    marginTop: '1rem',
-                    padding: '1rem',
-                    background: 'rgba(33, 150, 243, 0.1)',
-                    borderRadius: '0.5rem',
-                    border: '1px solid rgba(33, 150, 243, 0.2)',
-                    textAlign: 'center'
-                }}>
-                    <p style={{
-                        color: '#1976d2',
-                        fontSize: '0.9rem',
-                        margin: 0,
-                        fontWeight: '500'
-                    }}>
-                        {question.type === 'decomposition' 
-                            ? '💡 Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
-                            : '💡 Suma todos los números para obtener el resultado final'
-                        }
-                    </p>
+                {/* Pista permanente */}
+                <div className="permanent-hint">
+                    <div className="permanent-hint-header">
+                        <span className="hint-icon">💡</span>
+                        <h4>Ayuda</h4>
+                    </div>
+                    <div className="permanent-hint-content">
+                        <p className="hint-text">
+                            {question.type === 'decomposition' 
+                                ? 'Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
+                                : 'Suma todos los números para obtener el resultado final'
+                            }
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
