@@ -1,20 +1,13 @@
-import { useMemo } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 import "../../styles/pages/homeAlumno.css";
 
 export default function HomeAlumno() {
   const navigate = useNavigate();
-
-  const userNameOrEmail = useMemo(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedName = localStorage.getItem("userName");
-    if (storedName) return storedName.toUpperCase();
-    if (storedEmail) {
-      const nameFromEmail = storedEmail.split('@')[0];
-      return nameFromEmail.toUpperCase();
-    }
-    return "ALUMNO";
-  }, []);
+  
+  // TODO BACKEND: Hook compartido - ya estará preparado para API real
+  const userNameOrEmail = useUser();
 
   const handleJugarClick = () => {
     navigate('/alumno/juegos');

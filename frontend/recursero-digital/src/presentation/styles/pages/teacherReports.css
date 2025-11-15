@@ -188,16 +188,6 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.alumnos-table th::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
-}
-
 .alumnos-table td {
   padding: 1.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
