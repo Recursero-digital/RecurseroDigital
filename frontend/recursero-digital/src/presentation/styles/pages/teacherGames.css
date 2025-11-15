@@ -175,7 +175,7 @@
   line-height: 1.4;
 }
 
-.game-status {
+.game-card .game-status {
   position: absolute;
   right: 0;
   top: 0;
@@ -187,12 +187,12 @@
   letter-spacing: 0.05em;
 }
 
-.game-status.active {
+.game-card .game-status.active {
   background: #dcfce7;
   color: #166534;
 }
 
-.game-status.inactive {
+.game-card .game-status.inactive {
   background: #fecaca;
   color: #991b1b;
 }

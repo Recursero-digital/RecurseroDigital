@@ -763,16 +763,6 @@
     box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
-/* GameScreen specific styles */
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
 .header-info {
     display: flex;
     flex-direction: column;

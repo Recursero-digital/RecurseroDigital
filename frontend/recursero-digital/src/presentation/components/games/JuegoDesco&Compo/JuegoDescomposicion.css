@@ -5,9 +5,8 @@
  * - Variables CSS de games.css (--space-*, --gradient-*, --font-game, etc.)
  * - Contenedores: .game-wrapper, .game-container (definidos en globals/games.css)
  * - Botones: .btn-start, .btn-check, .btn-hint, .btn-back-to-* (definidos en globals/games.css)
- * - Tarjetas: .paper-note, .question-title, .question-number (definidos en globals/games.css)
  * - Inputs: .answer-input (definido en globals/games.css)
- * - HUD: .game-hud (definido en globals/games.css)
+ * - Hints: .permanent-hint, .hint-text, .hint-icon (definidos en globals/games.css)
  * 
  * 🎯 Solo incluye estilos ESPECÍFICOS de JuegoDescomposicion
  */
@@ -21,7 +20,9 @@
 }
 
 /* Remover estilos duplicados - ahora están en globals/games.css */
-/* .game-wrapper, .game-container, .btn-*, .paper-note, .question-*, .answer-input, .game-hud */
+/* .game-wrapper, .game-container, .btn-*, .answer-input */
+/* .level-grid, .level-btn, .header-controls, .game-status - todos en globals/games.css */
+/* .permanent-hint, .hint-text, .hint-icon - todos en globals/games.css */
 
 /* Extensión específica de question-decomposition para este juego */
 .question-decomposition {
@@ -31,72 +32,6 @@
     color: var(--space-indigo, #6366f1);
     margin: 1rem 0;
 }
-
-/* Botones específicos - extienden los estilos globales */
-
-.level-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 2rem;
-}
-
-.level-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 3px solid #8b5cf6;
-    position: relative;
-    overflow: hidden;
-}
-
-.level-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-    border-color: var(--space-yellow, #fbbf24);
-}
-
-.level-card.locked {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(100%);
-}
-
-.level-icon {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-}
-
-.level-chocolate .level-icon {
-    background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%);
-    color: #6f4518;
-}
-
-.level-terracotta .level-icon {
-    background: linear-gradient(135deg, #fbe4d4 0%, #f8ccaa 100%);
-    color: #d95114;
-}
-
-.level-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
-}
-
-/* level-range removido - ahora está en globals/games.css */
 
 .modal-overlay {
     position: fixed;
@@ -137,37 +72,6 @@
     color: #dc2626;
 }
 
-.hint-box {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-left: 4px solid #f59e0b;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
-    border: 1px solid #f3d078;
-}
-
-.hint-title {
-    font-weight: 600;
-    color: #92400e;
-    margin-bottom: 0.5rem;
-}
-
-.hint-text {
-    color: #a16207;
-    line-height: 1.5;
-}
-
-.progress-indicator {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
-    padding: 0.75rem 1.5rem;
-    margin-bottom: 2rem;
-    display: inline-block;
-    color: #7c3aed;
-    font-weight: 600;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
 @keyframes slideIn {
     from {
         transform: translateY(20px);
@@ -205,67 +109,4 @@
 
 .glow {
     animation: glow 2s infinite;
-}
-
-/* Estilos específicos del chalkboard */
-.chalkboard .start-screen {
-    /* El background viene del chalkboard, mantener transparente */
-    background: transparent;
-}
-
-@media (max-width: 768px) {
-    .game-hud {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-bottom: 2rem;
-        font-size: 0.9rem;
-    }
-    
-    .header-controls {
-        position: relative;
-        top: auto;
-        left: auto;
-        margin-bottom: 2rem;
-        justify-content: center;
-    }
-    
-    .paper-note {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
-    
-    .question-number {
-        font-size: 2.5rem;
-    }
-    
-    .level-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 0 1rem;
-    }
-    
-    .chalkboard {
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .btn {
-        padding: 0.6rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    .question-number {
-        font-size: 2rem;
-    }
-    
-    .question-title {
-        font-size: 1.25rem;
-    }
-    
-    .modal-content {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
 }

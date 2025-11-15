@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
+import "../../../styles/globals/games.css";
 import "./JuegoOrdenamiento.css";
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
+import GameCompleteScreen from './GameCompleteScreen';
 import CongratsModal from './CongratsModal';
 import FeedbackModal from './FeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
@@ -220,64 +222,12 @@ const JuegoOrdenamiento = () => {
       )}
 
       {gameState === 'game' && showGameComplete && (
-        <div className="juego-ordenamiento-content">
-          <header className="game-header">
-            <div className="header-controls">
-              <div className="buttons-group">
-                <button 
-                  className="btn-back-to-levels"
-                  onClick={handleBackToLevels}
-                  title="Volver a niveles"
-                >
-                  ← Niveles
-                </button>
-                <button 
-                  className="btn-back-to-dashboard"
-                  onClick={handleBackToGames}
-                  title="Volver a juegos"
-                >
-                  ← Juegos
-                </button>
-              </div>
-              
-              <div className="game-status">
-                <div className="status-item">
-                  <div className="status-icon">📊</div>
-                  <div className="status-label">Nivel</div>
-                  <div className="status-value">3</div>
-                </div>
-                <div className="status-item">
-                  <div className="status-icon">⭐</div>
-                  <div className="status-label">Puntuación</div>
-                  <div className="status-value">{points}</div>
-                </div>
-              </div>
-            </div>
-            <h1 className="game-title">� Ordenamiento Numérico</h1>
-          </header>
-
-          <div className="progress-container">
-            <div 
-              className="progress-bar"
-              data-progress="100"
-              style={{'--progress-width': '100%'}}
-            />
-          </div>
-
-          <div className="game-complete">
-            <h2 className="complete-title">🎉 ¡Felicitaciones!</h2>
-            <p className="complete-message">¡Has completado todos los niveles del juego de ordenamiento!</p>
-            <p className="final-score">Puntuación final: {points}</p>
-            <div className="complete-buttons">
-              <button className="restart-button" onClick={handleBackToLevels}>
-                📊 Ver Niveles
-              </button>
-              <button className="restart-button" onClick={handleBackToStart}>
-                🔄 Jugar de nuevo
-              </button>
-            </div>
-          </div>
-        </div>
+        <GameCompleteScreen
+          points={points}
+          onBackToGames={handleBackToGames}
+          onBackToLevels={handleBackToLevels}
+          onPlayAgain={handleBackToStart}
+        />
       )}
 
       {showLevelUp && !showGameComplete && (
