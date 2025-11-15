@@ -24,191 +24,130 @@ const GameScreen = ({
     };
 
     return (
-        <div className="game-container">
-            <div className="header-controls">
-                <div className="buttons-group">
-                    <button 
-                        className="btn-back-to-dashboard"
-                        onClick={() => navigate('/alumno/juegos')}
-                        title="Volver al dashboard"
-                    >
-                        ← Juegos
-                    </button>
-                    <button 
-                        className="btn-back-to-levels"
-                        onClick={onBackToLevels}
-                        title="Volver a niveles"
-                    >
-                        ← Niveles
-                    </button>
+        <div className="game-content">
+            <header className="desco-game-header">
+                <div className="header-controls">
+                    <div className="buttons-group">
+                        <button 
+                            className="btn-back-to-dashboard"
+                            onClick={() => navigate('/alumno/juegos')}
+                            title="Volver al dashboard"
+                        >
+                            ← Juegos
+                        </button>
+                        <button 
+                            className="btn-back-to-levels"
+                            onClick={onBackToLevels}
+                            title="Volver a niveles"
+                        >
+                            ← Niveles
+                        </button>
+                    </div>
+                    
+                    <div className="game-status">
+                        <div className="status-item">
+                            <div className="status-icon">🏆</div>
+                            <div className="status-label">Nivel</div>
+                            <div className="status-value">{level}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">📝</div>
+                            <div className="status-label">Actividad</div>
+                            <div className="status-value">{activity}/{totalActivities}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">⭐</div>
+                            <div className="status-label">Puntos</div>
+                            <div className="status-value">{points}</div>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-icon">🎯</div>
+                            <div className="status-label">Intentos</div>
+                            <div className="status-value">{attempts}</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div className="game-status">
-                    <div className="status-item">
-                        <div className="status-icon">🏆</div>
-                        <div className="status-label">Nivel</div>
-                        <div className="status-value">{level}</div>
-                    </div>
-                    <div className="status-item">
-                        <div className="status-icon">📝</div>
-                        <div className="status-label">Actividad</div>
-                        <div className="status-value">{activity}/{totalActivities}</div>
-                    </div>
-                    <div className="status-item">
-                        <div className="status-icon">⭐</div>
-                        <div className="status-label">Puntos</div>
-                        <div className="status-value">{points}</div>
-                    </div>
-                    <div className="status-item">
-                        <div className="status-icon">🎯</div>
-                        <div className="status-label">Intentos</div>
-                        <div className="status-value">{attempts}</div>
+                <h1 className="game-title">🧩 Descomposición y Composición Numérica</h1>
+                <p className="game-instruction">
+                    {question.type === 'decomposition' 
+                        ? '🔢 Descompone el número en sus valores posicionales'
+                        : '➕ Suma los valores para formar el número'
+                    }
+                </p>
+            </header>
+
+            <div className="game-play-area">
+                {/* Pregunta principal */}
+                <div className="question-card">
+                    {question.type === 'decomposition' ? (
+                        <div className="question-number">
+                            {formatNumber(question.number)}
+                        </div>
+                    ) : (
+                        <div className="question-decomposition-text">
+                            {question.decomposition.join(' + ')}
+                        </div>
+                    )}
+                </div>
+
+                {/* Sección de respuesta */}
+                <div className="answer-card">
+                    <p className="answer-instruction">
+                        {question.type === 'decomposition' 
+                            ? 'Escribe la descomposición:'
+                            : 'Escribe el número:'
+                        }
+                    </p>
+
+                    <form onSubmit={handleSubmit} className="answer-form">
+                        <input
+                            type="text"
+                            className="answer-input-styled"
+                            value={userAnswer}
+                            onChange={(e) => onAnswerChange(e.target.value)}
+                            placeholder={
+                                question.type === 'decomposition' 
+                                    ? 'Ej: 2000 + 300 + 40 + 7'
+                                    : 'Escribe el número completo'
+                            }
+                        />
+                    </form>
+
+                    <div className="button-group">
+                        <button
+                            onClick={onCheckAnswer}
+                            disabled={!userAnswer.trim()}
+                            className="btn-verify"
+                            title="Verificar respuesta"
+                        >
+                            ✓ Verificar
+                        </button>
+                        
+                        <button
+                            onClick={() => onAnswerChange('')}
+                            className="btn-clear"
+                            title="Limpiar respuesta"
+                        >
+                            ↺ Limpiar
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div style={{ 
-                position: 'relative',
-                maxWidth: '700px',
-                margin: '0 auto'
-            }}>
-                <h1 className="game-title">🧩 Descomposición y Composición Numérica</h1>
-
-                {/* Contenido principal centralizado */}
-                <div style={{ 
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '1.5rem',
-                    padding: '0.5rem'
-                }}>
-                    {/* Pregunta principal */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
-                        padding: '1.5rem',
-                        borderRadius: '1rem',
-                        border: '2px solid #ce93d8',
-                        textAlign: 'center',
-                        minWidth: '280px',
-                        maxWidth: '450px'
-                    }}>
-                        {question.type === 'decomposition' ? (
-                            <div className="question-number" style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#4a148c' }}>
-                                {formatNumber(question.number)}
-                            </div>
-                        ) : (
-                            <div className="question-decomposition" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4a148c' }}>
-                                {question.decomposition.join(' + ')}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Sección de respuesta */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
-                        padding: '1.5rem',
-                        borderRadius: '1rem',
-                        border: '2px solid #ffcc02',
-                        textAlign: 'center',
-                        minWidth: '280px',
-                        maxWidth: '450px'
-                    }}>
-                        <p style={{
-                            fontSize: '1rem',
-                            color: '#e65100',
-                            marginBottom: '1rem',
-                            fontWeight: '600'
-                        }}>
-                            {question.type === 'decomposition' 
-                                ? 'Escribe la descomposición:'
-                                : 'Escribe el número:'
-                            }
-                        </p>
-
-                        <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
-                            <input
-                                type="text"
-                                className="answer-input"
-                                value={userAnswer}
-                                onChange={(e) => onAnswerChange(e.target.value)}
-                                placeholder={
-                                    question.type === 'decomposition' 
-                                        ? 'Ej: 2000 + 300 + 40 + 7'
-                                        : 'Escribe el número completo'
-                                }
-                                style={{
-                                    fontSize: '1.2rem',
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                    background: 'rgba(255, 255, 255, 0.9)',
-                                    border: '2px solid #ffb74d',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.75rem',
-                                    width: '100%',
-                                    maxWidth: '350px'
-                                }}
-                            />
-                        </form>
-
-                        <div style={{
-                            display: 'flex',
-                            gap: '1rem',
-                            justifyContent: 'center'
-                        }}>
-                            <button
-                                onClick={onCheckAnswer}
-                                disabled={!userAnswer.trim()}
-                                style={{
-                                    background: userAnswer.trim() ? '#4caf50' : '#e0e0e0',
-                                    color: userAnswer.trim() ? 'white' : '#9e9e9e',
-                                    border: 'none',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.6rem 1.2rem',
-                                    cursor: userAnswer.trim() ? 'pointer' : 'not-allowed',
-                                    fontSize: '0.9rem',
-                                    fontWeight: '600',
-                                    transition: 'all 0.3s ease'
-                                }}
-                                title="Verificar respuesta"
-                            >
-                                ✓ Verificar
-                            </button>
-                            
-                            <button
-                                onClick={() => onAnswerChange('')}
-                                style={{
-                                    background: '#f44336',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.6rem 1.2rem',
-                                    cursor: 'pointer',
-                                    fontSize: '0.9rem',
-                                    fontWeight: '600',
-                                    transition: 'all 0.3s ease'
-                                }}
-                                title="Limpiar respuesta"
-                            >
-                                ↺ Limpiar
-                            </button>
-                        </div>
-                    </div>
+            {/* Pista permanente */}
+            <div className="permanent-hint">
+                <div className="permanent-hint-header">
+                    <span className="hint-icon">💡</span>
+                    <h4>Ayuda</h4>
                 </div>
-
-                {/* Pista permanente */}
-                <div className="permanent-hint">
-                    <div className="permanent-hint-header">
-                        <span className="hint-icon">💡</span>
-                        <h4>Ayuda</h4>
-                    </div>
-                    <div className="permanent-hint-content">
-                        <p className="hint-text">
-                            {question.type === 'decomposition' 
-                                ? 'Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
-                                : 'Suma todos los números para obtener el resultado final'
-                            }
-                        </p>
-                    </div>
+                <div className="permanent-hint-content">
+                    <p className="hint-text">
+                        {question.type === 'decomposition' 
+                            ? 'Separa cada cifra según su valor posicional (unidades, decenas, centenas, etc.)'
+                            : 'Suma todos los números para obtener el resultado final'
+                        }
+                    </p>
                 </div>
             </div>
         </div>

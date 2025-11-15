@@ -148,7 +148,7 @@ const GameScreen = ({
   }
 
   return (
-    <div className="game-screen">
+    <div className="calculos-game-screen">
       {/* Header */}
       <div className="header-controls">
         <button 

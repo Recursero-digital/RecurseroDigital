@@ -24,14 +24,143 @@
 /* .level-grid, .level-btn, .header-controls, .game-status - todos en globals/games.css */
 /* .permanent-hint, .hint-text, .hint-icon - todos en globals/games.css */
 
-/* Extensión específica de question-decomposition para este juego */
-.question-decomposition {
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    color: var(--space-indigo, #6366f1);
-    margin: 1rem 0;
+/* ========================================
+   COMPONENTES ESPECÍFICOS DEL JUEGO
+   ======================================== */
+
+/* Game header */
+
+.desco-game-header {
+  text-align: center;
+  padding-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(120px, 25vh, 200px);
 }
+
+/* Game Play Area - similar a JuegoOrdenamiento */
+.game-play-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    gap: 30px;
+}
+
+/* Tarjeta de pregunta (púrpura) */
+.question-card {
+    background: var(--paper-gradient);
+    padding: auto;
+    border-radius: 1rem;
+    border: 3px dashed var(--space-yellow);
+    border-radius: 20px;
+    text-align: center;
+    min-width: 100px;
+    max-width: 450px;
+}
+
+.question-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4a148c;
+}
+
+.question-decomposition-text {
+    padding: 10%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4a148c;
+}
+
+/* Tarjeta de respuesta (naranja) */
+.answer-card {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 2px solid #ffcc02;
+    text-align: center;
+    min-width: 280px;
+    max-width: 450px;
+}
+
+.answer-instruction {
+    font-size: 1rem;
+    color: #e65100;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.answer-form {
+    margin-bottom: 1rem;
+}
+
+.answer-input-styled {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ffb74d;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    width: 100%;
+    max-width: 350px;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-verify {
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-verify:disabled {
+    background: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+}
+
+.btn-verify:hover:not(:disabled) {
+    background: #43a047;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-clear {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    background: #e53935;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* ========================================
+   MODALES
+   ======================================== */
 
 .modal-overlay {
     position: fixed;

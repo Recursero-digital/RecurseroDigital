@@ -26,13 +26,13 @@ const GameScreen = ({
     
     return (
         <div className="game-content">
-            <div className="game-header">
+            <div className="escritura-game-header">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
                             className="btn-back-to-dashboard"
                             onClick={() => navigate('/alumno/juegos')}
-                            title="Volver al dashboard"
+                            title="Volver a Juegos"
                         >
                             ← Juegos
                         </button>

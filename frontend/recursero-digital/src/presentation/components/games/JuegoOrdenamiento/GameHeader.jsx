@@ -30,24 +30,24 @@ const GameHeader = ({
       
       <div className="game-status">
         <div className="status-item">
-          <div className="status-icon">📊</div>
+          <div className="status-icon">🏆</div>
           <div className="status-label">Nivel</div>
           <div className="status-value">{currentLevel + 1}</div>
         </div>
         <div className="status-item">
-          <div className="status-icon">🎯</div>
+          <div className="status-icon">📝</div>
           <div className="status-label">Actividad</div>
           <div className="status-value">{currentActivity + 1}/{totalActivities}</div>
+        </div>
+        <div className="status-item">
+          <div className="status-icon">⭐</div>
+          <div className="status-label">Puntos</div>
+          <div className="status-value">{points}</div>
         </div>
         <div className="status-item">
           <div className="status-icon">🎯</div>
           <div className="status-label">Intentos</div>
           <div className="status-value">{attempts}</div>
-        </div>
-        <div className="status-item">
-          <div className="status-icon">⭐</div>
-          <div className="status-label">Puntuación</div>
-          <div className="status-value">{points}</div>
         </div>
       </div>
     </div>
