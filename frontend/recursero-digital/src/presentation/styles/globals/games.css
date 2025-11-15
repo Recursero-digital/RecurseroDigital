@@ -631,9 +631,17 @@
 
 .game-instruction {
   color: white;
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  margin: 0 0 clamp(5px, 1vh, 10px) 0;
-  font-weight: 600;
+  font-size: 1.6rem;
+  margin: 20px auto;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px 30px;
+  border-radius: 20px;
+  border: 2px solid var(--space-yellow);
+  max-width: 600px;
+  text-align: center;
+  width: fit-content;
 }
 
 /* ================================================================

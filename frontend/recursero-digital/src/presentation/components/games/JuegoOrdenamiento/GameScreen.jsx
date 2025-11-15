@@ -155,7 +155,7 @@ const GameScreen = ({
         </p>
       </header>
 
-      <div className="progress-container">
+      <div className="ordenamiento-progress-container">
         <div 
           className="progress-bar"
           data-progress={progressPercentage}

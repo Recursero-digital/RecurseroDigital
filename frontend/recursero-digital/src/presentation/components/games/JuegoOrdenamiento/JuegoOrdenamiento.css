@@ -9,23 +9,10 @@
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
 /* Sobrescriben los estilos globales responsivos de games.css */
 
-.game-container .game-instruction {
-  color: white;
-  font-size: 1.6rem;
-  margin: 20px auto;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  background: rgba(0, 0, 0, 0.2);
-  padding: 15px 30px;
-  border-radius: 20px;
-  border: 2px solid var(--space-yellow);
-  max-width: 600px;
-  text-align: center;
-  width: fit-content;
-}
+/* .game-instruction ahora está definido globalmente en games.css */
 
 /* Progress Bar */
-.progress-container {
+.ordenamiento-progress-container {
   height: 20px;
   min-height: 20px;
   width: 100%;

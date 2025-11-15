@@ -67,33 +67,12 @@ const GameScreen = ({
                 </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <div className="progress-indicator">
-                    Pregunta {activity} de {totalActivities}
-                </div>
-            </div>
-
             <div style={{ 
                 position: 'relative',
                 maxWidth: '700px',
                 margin: '0 auto'
             }}>
-                <div style={{
-                    background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
-                    padding: '1rem 1.5rem',
-                    borderRadius: '1rem',
-                    textAlign: 'center',
-                    marginBottom: '1rem'
-                }}>
-                    <h3 style={{
-                        margin: 0,
-                        color: '#0277bd',
-                        fontSize: '1.5rem',
-                        fontWeight: '600'
-                    }}>
-                        ¿Qué número se forma?
-                    </h3>
-                </div>
+                <h1 className="game-title">🧩 Descomposición y Composición Numérica</h1>
 
                 {/* Contenido principal centralizado */}
                 <div style={{ 
