@@ -119,7 +119,7 @@ export default function DocenteDashboard() {
           </div>
 
           <div className="accion-card" onClick={() => navigate('/docente/reportes')}>
-            <div className="accion-icon">📈</div>
+            <div className="accion-icon">📊</div>
             <h3>Ver Reportes</h3>
             <p>Analiza el rendimiento del curso</p>
           </div>
