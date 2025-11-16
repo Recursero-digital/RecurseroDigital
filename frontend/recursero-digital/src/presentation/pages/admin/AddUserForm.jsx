@@ -13,6 +13,7 @@ export default function AddUserForm({
     username: "",
     password: "",
     dni: "",
+    email: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -64,6 +65,13 @@ export default function AddUserForm({
       } else if (!/^\d{8}$/.test(formData.dni)) {
         newErrors.dni = "El DNI debe tener 8 dígitos";
       }
+    } else {
+      // Validar email para docentes
+      if (!formData.email.trim()) {
+        newErrors.email = "El email es requerido";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "El email no tiene un formato válido";
+      }
     }
 
     setErrors(newErrors);
@@ -83,9 +91,12 @@ export default function AddUserForm({
         userType,
       };
 
-      // Solo agregar password y DNI para estudiantes
+      // Solo agregar DNI para estudiantes
       if (isStudent) {
         userData.dni = formData.dni;
+      } else {
+        // Para docentes, agregar email
+        userData.email = formData.email;
       }
 
       onSubmit(userData);
@@ -97,6 +108,7 @@ export default function AddUserForm({
         username: "",
         password: "",
         dni: "",
+        email: "",
       });
       onClose();
     }
@@ -176,26 +188,40 @@ export default function AddUserForm({
             )}
           </div>
 
-          {/* Solo mostrar contraseña y DNI para estudiantes */}
-          {isStudent && (
-            <>
-              <div className="form-group">
-                <label htmlFor="dni">DNI *</label>
-                <input
-                  type="text"
-                  id="dni"
-                  name="dni"
-                  value={formData.dni}
-                  onChange={handleChange}
-                  className={errors.dni ? "error" : ""}
-                  placeholder="Ingrese el DNI (8 dígitos)"
-                  maxLength="8"
-                />
-                {errors.dni && (
-                  <span className="error-message">{errors.dni}</span>
-                )}
-              </div>
-            </>
+          {/* Solo mostrar DNI para estudiantes, email para docentes */}
+          {isStudent ? (
+            <div className="form-group">
+              <label htmlFor="dni">DNI *</label>
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                value={formData.dni}
+                onChange={handleChange}
+                className={errors.dni ? "error" : ""}
+                placeholder="Ingrese el DNI (8 dígitos)"
+                maxLength="8"
+              />
+              {errors.dni && (
+                <span className="error-message">{errors.dni}</span>
+              )}
+            </div>
+          ) : (
+            <div className="form-group">
+              <label htmlFor="email">Email *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={errors.email ? "error" : ""}
+                placeholder="Ingrese el email"
+              />
+              {errors.email && (
+                <span className="error-message">{errors.email}</span>
+              )}
+            </div>
           )}
 
           <div className="form-buttons">

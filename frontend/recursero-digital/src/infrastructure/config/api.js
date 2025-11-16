@@ -37,7 +37,28 @@ export const apiRequest = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(url, config);
-    const data = await response.json();
+    
+    // Verificar si la respuesta es JSON válido
+    let data;
+    const contentType = response.headers.get('content-type');
+    
+    // Clonar la respuesta para poder leerla múltiples veces si es necesario
+    const responseClone = response.clone();
+    
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error('Error al parsear JSON:', jsonError);
+        const text = await responseClone.text();
+        console.error('Respuesta del servidor (texto):', text);
+        data = { error: 'Error al parsear la respuesta del servidor' };
+      }
+    } else {
+      const text = await response.text();
+      console.error('Respuesta no es JSON:', text);
+      data = { error: 'La respuesta del servidor no es JSON válido' };
+    }
     
     return {
       ok: response.ok,

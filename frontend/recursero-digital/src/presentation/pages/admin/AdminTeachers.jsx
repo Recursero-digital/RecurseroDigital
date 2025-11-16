@@ -1,36 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../styles/pages/adminTeachers.css';
 
-export default function AdminTeachers() {
-  const [teachers] = useState([
-    { 
-      id: 1, 
-      name: 'Prof. Ana Martín', 
-      email: 'ana.martin@example.com', 
-      specialization: 'Matemáticas',
-      courses: 3,
-      students: 45,
-      status: 'Activo' 
-    },
-    { 
-      id: 2, 
-      name: 'Prof. Luis Rodríguez', 
-      email: 'luis.rodriguez@example.com', 
-      specialization: 'Álgebra',
-      courses: 2,
-      students: 38,
-      status: 'Activo' 
-    },
-    { 
-      id: 3, 
-      name: 'Prof. Carmen López', 
-      email: 'carmen.lopez@example.com', 
-      specialization: 'Geometría',
-      courses: 2,
-      students: 42,
-      status: 'Inactivo' 
-    }
-  ]);
+export default function AdminTeachers({ teachers = [] }) {
+  // Si no hay teachers, mostrar mensaje
+  if (!teachers || teachers.length === 0) {
+    return (
+      <div className="admin-teachers">
+        <p>No hay docentes registrados</p>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-teachers">
@@ -81,14 +60,14 @@ export default function AdminTeachers() {
               </div>
               <div className="teacher-info">
                 <p><strong>Email:</strong> {teacher.email}</p>
-                <p><strong>Especialización:</strong> {teacher.specialization}</p>
+                <p><strong>Username:</strong> {teacher.username}</p>
                 <div className="teacher-metrics">
                   <div className="metric">
-                    <span className="metric-value">{teacher.courses}</span>
+                    <span className="metric-value">-</span>
                     <span className="metric-label">Cursos</span>
                   </div>
                   <div className="metric">
-                    <span className="metric-value">{teacher.students}</span>
+                    <span className="metric-value">-</span>
                     <span className="metric-label">Estudiantes</span>
                   </div>
                 </div>
