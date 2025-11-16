@@ -299,7 +299,7 @@
 .level-btn .level-operation {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--space-purple);
+    color: var(white);
     margin-top: 0.25rem;
     opacity: 0.9;
 }
