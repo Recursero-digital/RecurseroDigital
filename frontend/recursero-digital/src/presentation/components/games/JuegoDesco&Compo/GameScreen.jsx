@@ -114,7 +114,7 @@ const GameScreen = ({
                         />
                     </form>
 
-                    <div className="button-group">
+                    <div className="desco-button-group">
                         <button
                             onClick={onCheckAnswer}
                             disabled={!userAnswer.trim()}

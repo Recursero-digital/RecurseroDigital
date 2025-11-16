@@ -704,11 +704,14 @@
 /* Tarjeta de pregunta especifica Juego Escala */
 .escala-question-card {
     background: var(--paper-gradient);
-    padding: auto;
+    padding: clamp(1rem, 2vw, 2rem);
     border-radius: 1rem;
     border: 3px dashed var(--space-yellow);
-    border-radius: 20px;
     text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vh, 1.5rem);
 }
 
 .question-counter {
@@ -796,9 +799,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    margin: 2rem 0;
-    flex-wrap: wrap;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* padding: 0.5rem; */
 }
 
 .context-number {
@@ -816,11 +821,46 @@
     color: #dc2626;
     font-weight: 900;
     background: rgba(255, 255, 255, 0.9);
-    padding: 0.8rem 1rem;
+    padding: 0.3rem;
     border-radius: 1rem;
     border: 3px dashed #dc2626;
     min-width: 50px;
+    max-width: 80px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.missing-anterior .sequence-input {
+    width: 100%;
+    max-width: 70px;
+    border: none;
+    background: transparent;
+    font-size: 1.8rem;
+    color: #dc2626;
+    font-weight: 900;
+    text-align: center;
+    outline: none;
+    padding: 0.2rem;
+}
+
+.missing-anterior .sequence-input::placeholder {
+    color: #dc2626;
+    opacity: 0.5;
+}
+
+.missing-anterior .sequence-input:focus {
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.missing-anterior .sequence-input.error {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.missing-anterior .sequence-input.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .central-number {
@@ -840,18 +880,54 @@
     color: #16a34a;
     font-weight: 900;
     background: rgba(255, 255, 255, 0.9);
-    padding: 0.8rem 1rem;
+    padding: 0.3rem;
     border-radius: 1rem;
     border: 3px dashed #16a34a;
     min-width: 50px;
+    max-width: 80px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.missing-posterior .sequence-input {
+    width: 100%;
+    max-width: 70px;
+    border: none;
+    background: transparent;
+    font-size: 1.8rem;
+    color: #16a34a;
+    font-weight: 900;
+    text-align: center;
+    outline: none;
+    padding: 0.2rem;
+}
+
+.missing-posterior .sequence-input::placeholder {
+    color: #16a34a;
+    opacity: 0.5;
+}
+
+.missing-posterior .sequence-input:focus {
+    background: rgba(22, 163, 74, 0.1);
+}
+
+.missing-posterior .sequence-input.error {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.missing-posterior .sequence-input.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .anterior-posterior-inputs {
     display: flex;
     justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .input-group {
@@ -1025,3 +1101,19 @@
 
 /* Level card animation delay */
 /* Animaciones y estilos específicos se mantienen en este archivo */
+
+/* Contenedores específicos de JuegoEscala */
+.escala-game-content {
+    min-height: 100vh;
+    height: 100%;
+}
+
+.escala-game-play-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: clamp(1rem, 2vh, 2rem);
+}

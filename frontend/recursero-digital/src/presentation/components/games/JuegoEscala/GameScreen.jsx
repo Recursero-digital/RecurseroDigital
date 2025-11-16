@@ -12,6 +12,7 @@ const GameScreen = ({
     onAnswersChange,
     onCheckAnswer,
     onBackToLevels,
+    level,
     levelConfig,
     inputErrors,
     setInputErrors,
@@ -59,7 +60,7 @@ const GameScreen = ({
     };
 
     return (
-        <div className="game-content">
+        <div className="game-content escala-game-content">
             <header className="desco-game-header">
                 <div className="header-controls">
                     <div className="buttons-group">
@@ -83,7 +84,7 @@ const GameScreen = ({
                         <div className="status-item">
                             <div className="status-icon">🏆</div>
                             <div className="status-label">Nivel</div>
-                            <div className="status-value">{levelConfig.name}</div>
+                            <div className="status-value">{level}</div>
                         </div>
                         <div className="status-item">
                             <div className="status-icon">📝</div>
@@ -109,8 +110,8 @@ const GameScreen = ({
                 </p>
             </header>
 
-            <div className="game-play-area">
-                {/* Secuencia visual */}
+            <div className="game-play-area escala-game-play-area">
+                {/* Secuencia visual con inputs integrados */}
                 <div className="escala-question-card">
                     <div className="escala-sequence-visual">
                         {/* Números anteriores para contexto */}
@@ -123,9 +124,25 @@ const GameScreen = ({
                             </div>
                         ))}
                         
-                        {/* Espacio para anterior */}
+                        {/* Input para anterior */}
                         <div className="missing-anterior">
-                            ?
+                            <input
+                                type="text"
+                                value={userAnswers.anterior || ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === '' || /^-?\d+$/.test(value)) {
+                                        handleInputChange('anterior', value);
+                                    }
+                                }}
+                                onKeyDown={(e) => handleKeyDown(e, 'anterior')}
+                                disabled={isProcessing}
+                                className={`sequence-input ${inputErrors?.anterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
+                                placeholder="?"
+                                aria-label="Número anterior en la secuencia"
+                                aria-invalid={inputErrors?.anterior}
+                                role="spinbutton"
+                            />
                         </div>
                         
                         {/* Número central */}
@@ -133,9 +150,25 @@ const GameScreen = ({
                             {question.baseNumber}
                         </div>
                         
-                        {/* Espacio para posterior */}
+                        {/* Input para posterior */}
                         <div className="missing-posterior">
-                            ?
+                            <input
+                                type="text"
+                                value={userAnswers.posterior || ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === '' || /^-?\d+$/.test(value)) {
+                                        handleInputChange('posterior', value);
+                                    }
+                                }}
+                                onKeyDown={(e) => handleKeyDown(e, 'posterior')}
+                                disabled={isProcessing}
+                                className={`sequence-input ${inputErrors?.posterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
+                                placeholder="?"
+                                aria-label="Número posterior en la secuencia"
+                                aria-invalid={inputErrors?.posterior}
+                                role="spinbutton"
+                            />
                         </div>
                         
                         {/* Números posteriores para contexto */}
@@ -148,76 +181,8 @@ const GameScreen = ({
                             </div>
                         ))}
                     </div>
-                </div>
-
-                {/* Sección de respuesta */}
-                <div className="answer-card">
-                    <p className="answer-instruction">
-                        Completa la secuencia:
-                    </p>
-
-                    <div className="anterior-posterior-inputs">
-                        <div className="input-group">
-                            <label className="input-label anterior">
-                                ← Anterior
-                            </label>
-                            <input
-                                type="text"
-                                value={userAnswers.anterior || ''}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    // Permitir números enteros (positivos y negativos) y vacío
-                                    if (value === '' || /^-?\d+$/.test(value)) {
-                                        handleInputChange('anterior', value);
-                                    }
-                                }}
-                                onKeyDown={(e) => handleKeyDown(e, 'anterior')}
-                                disabled={isProcessing}
-                                className={`answer-input anterior ${inputErrors?.anterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
-                                placeholder="0"
-                                aria-label="Número anterior en la secuencia"
-                                aria-describedby="anterior-help"
-                                aria-invalid={inputErrors?.anterior}
-                                role="spinbutton"
-                            />
-                            {inputErrors?.anterior && (
-                                <div className="input-error">
-                                    Ingresa un número válido
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="input-group">
-                            <label className="input-label posterior">
-                                Posterior →
-                            </label>
-                            <input
-                                type="text"
-                                value={userAnswers.posterior || ''}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    // Permitir números enteros (positivos y negativos) y vacío
-                                    if (value === '' || /^-?\d+$/.test(value)) {
-                                        handleInputChange('posterior', value);
-                                    }
-                                }}
-                                onKeyDown={(e) => handleKeyDown(e, 'posterior')}
-                                disabled={isProcessing}
-                                className={`answer-input posterior ${inputErrors?.posterior ? 'error' : ''} ${isProcessing ? 'disabled' : ''}`}
-                                placeholder="0"
-                                aria-label="Número posterior en la secuencia"
-                                aria-describedby="posterior-help"
-                                aria-invalid={inputErrors?.posterior}
-                                role="spinbutton"
-                            />
-                            {inputErrors?.posterior && (
-                                <div className="input-error">
-                                    Ingresa un número válido
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
+                    
+                    {/* Botones de acción */}
                     <div className="button-group">
                         <button
                             onClick={onCheckAnswer}

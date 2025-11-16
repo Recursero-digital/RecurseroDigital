@@ -110,7 +110,7 @@
     max-width: 350px;
 }
 
-.button-group {
+.desco-button-group {
     display: flex;
     gap: 1rem;
     justify-content: center;

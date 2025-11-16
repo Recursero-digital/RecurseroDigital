@@ -290,6 +290,7 @@ const JuegoEscala = () => {
                     onAnswersChange={setUserAnswers}
                     onCheckAnswer={() => handleCheckAnswer()}
                     onBackToLevels={handleBackToLevels}
+                    level={currentLevel + 1}
                     levelConfig={levels[currentLevel]}
                     inputErrors={inputErrors}
                     setInputErrors={setInputErrors}

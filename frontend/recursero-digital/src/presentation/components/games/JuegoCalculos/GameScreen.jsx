@@ -7,7 +7,8 @@ import {
   getLevelName,
   getRandomEncouragement,
   getRandomMotivation,
-  formatNumber
+  formatNumber,
+  getLevelNumber
 } from './utils';
 
 const GameScreen = ({ 
@@ -174,7 +175,7 @@ const GameScreen = ({
             <div className="status-item">
               <div className="status-icon">🏆</div>
               <div className="status-label">Nivel</div>
-              <div className="status-value">{getLevelName(level)}</div>
+              <div className="status-value">{getLevelNumber(level)}</div>
             </div>
             <div className="status-item">
               <div className="status-icon">📝</div>
@@ -202,23 +203,18 @@ const GameScreen = ({
         </p>
       </header>
 
-      <div className="game-play-area">
-        <div className="question-card">
-          <div className="calculation-display">
-            <span className="question-text">{currentQuestion.pregunta.replace(' =', '')}</span>
-          </div>
-          <div className="equals-display">
-            <span className="equals-sign">=</span>
-          </div>
-        </div>
+      <div className="calculos-game-play-area">
+        
 
         {/* Sección de respuesta */}
         <div className="answer-card">
-          <p className="answer-instruction">
-            Escribe el resultado:
-          </p>
-
-          <form onSubmit={(e) => { e.preventDefault(); handleSubmitAnswer(); }} className="answer-form">
+          <div className="answer-section">
+            <div className="calculation-display">
+              <span className="question-text">{currentQuestion.pregunta.replace(' =', '')}</span>
+            </div>
+          <div className="equals-display">
+            <span className="equals-sign">=</span>
+          </div>
             <input
               ref={inputRef}
               type="text"
@@ -234,9 +230,9 @@ const GameScreen = ({
               className="answer-input-styled"
               placeholder="Tu respuesta"
             />
-          </form>
+          </div>
 
-          <div className="button-group">
+          <div className="calculos-button-group">
             <button
               onClick={handleSubmitAnswer}
               disabled={userAnswer.trim() === '' || isAnswerSubmitted}
