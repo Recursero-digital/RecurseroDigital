@@ -32,6 +32,7 @@ export const apiRequest = async (endpoint, options = {}) => {
       ...defaultOptions.headers,
       ...options.headers,
     },
+    credentials: 'include',
   };
 
   try {
