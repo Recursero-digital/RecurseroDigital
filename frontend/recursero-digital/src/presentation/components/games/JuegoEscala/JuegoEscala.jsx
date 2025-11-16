@@ -106,18 +106,23 @@ const JuegoEscala = () => {
     }, []);
 
     const handleSelectLevel = useCallback((level) => {
+        const newQuestions = generateQuestions(level);
+        
         setCurrentLevel(level);
         setCurrentActivity(0);
         setUserAnswers({ anterior: '', posterior: '' });
         setShowFeedback(false);
         setIsValidationError(false);
-        
-        const newQuestions = generateQuestions(level);
         setQuestions(newQuestions);
+        setCurrentQuestion(newQuestions[0]);
+        setInputErrors({ anterior: false, posterior: false });
+        setIsProcessing(false);
         
         resetScoring();
+        resetAttempts();
+        startActivityTimer();
         setGameState(UI_STATES.GAME_STATES.PLAYING);
-    }, [generateQuestions, resetScoring]);
+    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer]);
 
     useEffect(() => {
         if (gameState === UI_STATES.GAME_STATES.PLAYING && questions.length > 0 && currentActivity < questions.length) {
