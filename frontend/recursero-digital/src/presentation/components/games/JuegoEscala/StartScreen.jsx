@@ -6,13 +6,8 @@ const StartScreen = ({ onStart }) => {
 
     return (
         <div className="game-container">
-            <div className="game-scene bg-space-ui">
-                <div className="landscape"></div>
-                <div className="lighthouse"></div>
-                <div className="house"></div>
-                
-                {/* Usar estructura global de start-screen */}
-                <div className="start-screen">
+            {/* Usar estructura global de start-screen */}
+            <div className="start-screen">
                 <div className="header-controls">
                     <button 
                         className="btn-back-to-levels"
@@ -51,7 +46,6 @@ const StartScreen = ({ onStart }) => {
                         🚀 COMENZAR AVENTURA
                     </button>
                 </div>
-            </div>
             </div>
         </div>
     );
