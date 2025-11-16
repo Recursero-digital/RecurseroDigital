@@ -1,12 +1,12 @@
 import express, { Router } from 'express';
 import { courseController } from '../controllers/courseController';
-import { protectAdminRoute, protectTeacherOrAdminRoute } from '../middleware/authMiddleWare';
+import { protectAdminRoute } from '../middleware/authMiddleWare';
 
 const router: Router = express.Router();
 
+router.get('/', protectAdminRoute(), courseController.getAllCourses);
 router.post('/:courseId/game', protectAdminRoute(), courseController.addGameToCourse);
 router.get('/:courseId/students', courseController.getCourseStudents);
-// POST /api/courses { name }
 router.post('/', protectAdminRoute(), courseController.createCourse);
 
 export default router;

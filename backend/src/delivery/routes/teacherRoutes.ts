@@ -4,6 +4,8 @@ import { protectAdminRoute, protectTeacherRoute, protectTeacherOrAdminRoute } fr
 
 const router: Router = express.Router();
 
+router.post('/', protectAdminRoute(), teacherController.addTeacher);
+router.get('/', protectAdminRoute(), teacherController.getAllTeachers);
 router.post('/:teacherId/courses', protectAdminRoute(), teacherController.assignTeacherToCourses);
 router.get('/me/courses', protectTeacherOrAdminRoute(), teacherController.getTeacherCourses);
 router.get('/me/course/:courseId', protectTeacherRoute(), teacherController.getMyCourseDetails);
