@@ -108,4 +108,28 @@ export const assignCourseToStudent = async ({ studentId, courseId }) => {
   return data;
 };
 
+export const assignTeacherToCourses = async ({ teacherId, courseIds }) => {
+  const response = await fetch(`${API_BASE_URL}/teacher/${teacherId}/courses`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ courseIds })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al asignar docente a cursos');
+  }
+  return data;
+};
+
+export const getCourseStudents = async (courseId) => {
+  const response = await fetch(`${API_BASE_URL}/course/${courseId}/students`, {
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al obtener estudiantes del curso');
+  }
+  return data.students || [];
+};
+
 
