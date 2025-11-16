@@ -79,7 +79,7 @@ const GameScreen = ({
 
             <div className="game-play-area">
                 {/* Pregunta principal */}
-                <div className="question-card">
+                <div className="desco-question-card">
                     {question.type === 'decomposition' ? (
                         <div className="question-number">
                             {formatNumber(question.number)}

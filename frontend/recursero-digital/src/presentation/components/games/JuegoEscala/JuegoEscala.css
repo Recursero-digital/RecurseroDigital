@@ -701,6 +701,16 @@
     margin: 0;
 }
 
+/* Tarjeta de pregunta especifica Juego Escala */
+.escala-question-card {
+    background: var(--paper-gradient);
+    padding: auto;
+    border-radius: 1rem;
+    border: 3px dashed var(--space-yellow);
+    border-radius: 20px;
+    text-align: center;
+}
+
 .question-counter {
     font-size: 1.2rem;
     color: var(--color-secondary);
@@ -782,7 +792,7 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.sequence-visual {
+.escala-sequence-visual {
     display: flex;
     justify-content: center;
     align-items: center;

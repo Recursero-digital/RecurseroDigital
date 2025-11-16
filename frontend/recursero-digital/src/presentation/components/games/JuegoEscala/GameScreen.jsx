@@ -111,8 +111,8 @@ const GameScreen = ({
 
             <div className="game-play-area">
                 {/* Secuencia visual */}
-                <div className="question-card">
-                    <div className="sequence-visual">
+                <div className="escala-question-card">
+                    <div className="escala-sequence-visual">
                         {/* Números anteriores para contexto */}
                         {Array.from({ length: 2 }, (_, i) => question.baseNumber - (3 * question.operation) + (i * question.operation)).map(num => (
                             <div

@@ -51,8 +51,8 @@
     gap: 30px;
 }
 
-/* Tarjeta de pregunta (púrpura) */
-.question-card {
+/* Tarjeta de pregunta especifica Juego Desco */
+.desco-question-card {
     background: var(--paper-gradient);
     padding: auto;
     border-radius: 1rem;
