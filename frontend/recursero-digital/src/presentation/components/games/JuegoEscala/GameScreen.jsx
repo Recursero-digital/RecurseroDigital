@@ -60,8 +60,9 @@ const GameScreen = ({
     };
 
     return (
-        <div className="game-content escala-game-content">
-            <header className="desco-game-header">
+        <div className="game-container">
+            <div className="game-content escala-game-content">
+                <header className="desco-game-header">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -219,6 +220,7 @@ const GameScreen = ({
                         Usa Enter para navegar entre campos y verificar tu respuesta
                     </p>
                 </div>
+            </div>
             </div>
         </div>
     );
