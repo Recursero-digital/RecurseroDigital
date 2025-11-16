@@ -41,10 +41,33 @@ export default function LoginForm() {
         })
       });
 
+      console.log('Respuesta del login:', response); // Debug
+
       if (response.ok) {
-        localStorage.setItem('token', response.data.token);
+        // Validar que el token exista en la respuesta
+        if (!response.data || !response.data.token) {
+          console.error('No se recibió token en la respuesta:', response.data);
+          setError('Error: No se recibió token del servidor. Verifica la respuesta del backend.');
+          return;
+        }
+
+        const token = response.data.token;
+        console.log('Token recibido:', token ? 'Token presente' : 'Token vacío'); // Debug
+        
+        // Guardar el token
+        localStorage.setItem('token', token);
         localStorage.setItem('userType', activeTab);
         localStorage.setItem('userEmail', email);
+        
+        // Verificar que se guardó correctamente
+        const savedToken = localStorage.getItem('token');
+        console.log('Token guardado en localStorage:', savedToken ? 'Sí' : 'No'); // Debug
+        
+        if (!savedToken) {
+          setError('Error: No se pudo guardar el token. Verifica la configuración del navegador.');
+          return;
+        }
+
         if (activeTab === "alumno") {
           navigate("/alumno");
         } else if (activeTab === "docente") {
@@ -53,7 +76,7 @@ export default function LoginForm() {
           navigate("/admin");
         }
       } else {
-        setError(response.data.error || 'Error al iniciar sesión');
+        setError(response.data?.error || 'Error al iniciar sesión');
       }
     } catch (error) {
       console.error('Error en la petición:', error);
