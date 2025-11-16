@@ -42,6 +42,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
     : userRole === "docente"
     ? [
         { id: "home", label: "🏠 Inicio", path: "/docente/" },
+        { id: "statistics", label: "📊 Estadísticas", path: "/docente/estadisticas" },
         { id: "profile", label: "👤 Perfil", path: "/docente/perfil" }
       ]
     : [
