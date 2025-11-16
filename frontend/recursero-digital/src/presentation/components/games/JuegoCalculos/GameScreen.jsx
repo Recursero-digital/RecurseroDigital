@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   getQuestionsForLevel, 
   validateAnswer, 
@@ -17,6 +18,7 @@ const GameScreen = ({
   onUpdateScore,
   onUpdateAttempts 
 }) => {
+  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [score, setScore] = useState(0);
@@ -148,70 +150,75 @@ const GameScreen = ({
   }
 
   return (
-    <div className="calculos-game-screen">
-      {/* Header */}
-      <div className="header-controls">
-        <button 
-          onClick={onBackToLevelSelect}
-          className="btn-back-to-levels"
-          title="Volver a niveles"
-        >
-          ← Volver a Niveles
-        </button>
-      </div>
-      
-      <div className="game-header">
-        <h1 className="game-title">
-          {getOperationName(operation)} - {getLevelName(level)}
-        </h1>
-        <p className="game-instruction">
-          Pregunta {currentQuestionIndex + 1} de {questions.length}
-        </p>
-      </div>
-
-      {/* Game Stats */}
-      <div className="game-status">
-        <div className="score-display">
-          <div className="stat-label">Puntaje</div>
-          <div className="stat-value">{score}</div>
+    <div className="game-content">
+      <header className="desco-game-header">
+        <div className="header-controls">
+          <div className="buttons-group">
+            <button 
+              onClick={() => navigate('/alumno/juegos')}
+              className="btn-back-to-dashboard"
+              title="Volver a juegos"
+            >
+              ← Juegos
+            </button>
+            <button 
+              onClick={onBackToLevelSelect}
+              className="btn-back-to-levels"
+              title="Volver a niveles"
+            >
+              ← Niveles
+            </button>
+          </div>
+          
+          <div className="game-status">
+            <div className="status-item">
+              <div className="status-icon">🏆</div>
+              <div className="status-label">Nivel</div>
+              <div className="status-value">{getLevelName(level)}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">📝</div>
+              <div className="status-label">Actividad</div>
+              <div className="status-value">{currentQuestionIndex + 1}/{questions.length}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">⭐</div>
+              <div className="status-label">Puntos</div>
+              <div className="status-value">{score}</div>
+            </div>
+            <div className="status-item">
+              <div className="status-icon">🎯</div>
+              <div className="status-label">Intentos</div>
+              <div className="status-value">{totalAttempts}</div>
+            </div>
+          </div>
         </div>
         
-        <div className="questions-display">
-          <div className="stat-label">Progreso</div>
-          <div className="stat-value">{currentQuestionIndex + 1}/{questions.length}</div>
-        </div>
+        <h1 className="game-title">
+          🧮 {getOperationName(operation)} - {getLevelName(level)}
+        </h1>
+        <p className="game-instruction">
+          Resuelve la operación y escribe el resultado
+        </p>
+      </header>
 
-        <div className="attempts-display">
-          <div className="stat-label">Intentos</div>
-          <div className="stat-value">{attempts}</div>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="progress-container">
-        <div className="progress-bar">
-          <div 
-            className="progress-fill"
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
-        </div>
-      </div>
-
-      {/* Question Area */}
       <div className="game-play-area">
-        <div className="question-container">
-          {/* Cálculo arriba */}
+        <div className="question-card">
           <div className="calculation-display">
             <span className="question-text">{currentQuestion.pregunta.replace(' =', '')}</span>
           </div>
-          
-          {/* Signo igual */}
           <div className="equals-display">
             <span className="equals-sign">=</span>
           </div>
-          
-          {/* Input de respuesta abajo */}
-          <div className="answer-section">
+        </div>
+
+        {/* Sección de respuesta */}
+        <div className="answer-card">
+          <p className="answer-instruction">
+            Escribe el resultado:
+          </p>
+
+          <form onSubmit={(e) => { e.preventDefault(); handleSubmitAnswer(); }} className="answer-form">
             <input
               ref={inputRef}
               type="text"
@@ -219,40 +226,56 @@ const GameScreen = ({
               pattern="[0-9]*"
               value={userAnswer}
               onChange={(e) => {
-                // Solo permitir números
                 const value = e.target.value.replace(/[^0-9]/g, '');
                 setUserAnswer(value);
               }}
               onKeyPress={handleKeyPress}
               disabled={isAnswerSubmitted}
-              className="answer-input"
+              className="answer-input-styled"
               placeholder="Tu respuesta"
             />
-          </div>
-          
-          {/* Botón enviar debajo */}
-          <div className="submit-section">
+          </form>
+
+          <div className="button-group">
             <button
               onClick={handleSubmitAnswer}
               disabled={userAnswer.trim() === '' || isAnswerSubmitted}
-              className="btn-check"
+              className="btn-verify"
+              title="Verificar respuesta"
             >
-              {isAnswerSubmitted ? 'Enviado' : 'Enviar'}
+              {isAnswerSubmitted ? '⏳ Enviado' : '✓ Verificar'}
+            </button>
+            
+            <button
+              onClick={() => setUserAnswer('')}
+              className="btn-clear"
+              title="Limpiar respuesta"
+              disabled={isAnswerSubmitted}
+            >
+              ↺ Limpiar
             </button>
           </div>
         </div>
       </div>
 
-      {/* Feedback */}
+      {/* Feedback y pista */}
       {showFeedback && (
         <div className={`feedback-message ${feedbackType === 'success' ? 'feedback-success' : 'feedback-error'}`}>
           {feedbackMessage}
         </div>
       )}
 
-      {/* Help Text */}
-      <div className="help-text">
-        💡 Presiona Enter para enviar tu respuesta rápidamente
+      {/* Pista permanente */}
+      <div className="permanent-hint">
+        <div className="permanent-hint-header">
+          <span className="hint-icon">💡</span>
+          <h4>Ayuda</h4>
+        </div>
+        <div className="permanent-hint-content">
+          <p className="hint-text">
+            Presiona Enter para enviar tu respuesta rápidamente
+          </p>
+        </div>
       </div>
     </div>
   );

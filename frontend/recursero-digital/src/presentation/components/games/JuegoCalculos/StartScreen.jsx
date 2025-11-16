@@ -3,15 +3,18 @@ import { operationConfig } from './utils';
 
 const StartScreen = ({ onStartGame, onBackToGames }) => {
   return (
+    
     <div className="start-screen">
       <div className="header-controls">
-        <button 
-          onClick={onBackToGames}
-          className="btn-back-to-levels"
-          title="Volver a juegos"
-        >
-          ← Juegos
-        </button>
+        <div className="buttons-group">
+          <button 
+            onClick={onBackToGames}
+            className="btn-back-to-dashboard"
+            title="Volver a juegos"
+          >
+            ← Juegos
+          </button>
+        </div>
       </div>
       <h1>🧮 Juego de Cálculos 🧮</h1>
       <p>Elige una operación y resuélvelas!</p>

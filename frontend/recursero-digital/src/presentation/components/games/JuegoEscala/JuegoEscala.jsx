@@ -284,6 +284,7 @@ const JuegoEscala = () => {
                     activity={currentActivity + 1}
                     totalActivities={totalQuestions}
                     points={points}
+                    attempts={attempts}
                     question={currentQuestion}
                     userAnswers={userAnswers}
                     onAnswersChange={setUserAnswers}
