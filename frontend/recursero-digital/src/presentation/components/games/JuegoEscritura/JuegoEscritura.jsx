@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import '../../../styles/globals/games.css';
 import './JuegoEscritura.css';
 import { generateDragDropActivity, validateNumberWordPair } from './utils'; 
 import StartScreen from './StartScreen';

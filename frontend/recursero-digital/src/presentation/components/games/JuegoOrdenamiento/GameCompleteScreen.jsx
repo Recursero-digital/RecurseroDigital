@@ -1,0 +1,50 @@
+import React from 'react';
+import GameHeader from './GameHeader';
+
+const GameCompleteScreen = ({
+  points,
+  onBackToGames,
+  onBackToLevels,
+  onPlayAgain
+}) => {
+  return (
+    <div className="game-content">
+      <header className="game-header">
+        <GameHeader
+          currentLevel={2}
+          currentActivity={0}
+          totalActivities={5}
+          attempts={0}
+          points={points}
+          onBackToGames={onBackToGames}
+          onBackToLevels={onBackToLevels}
+        />
+        <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
+      </header>
+
+      <div className="progress-container">
+        <div 
+          className="progress-bar"
+          data-progress="100"
+          style={{'--progress-width': '100%'}}
+        />
+      </div>
+
+      <div className="game-complete">
+        <h2 className="complete-title">🎉 ¡Felicitaciones!</h2>
+        <p className="complete-message">¡Has completado todos los niveles del juego de ordenamiento!</p>
+        <p className="final-score">Puntuación final: {points}</p>
+        <div className="complete-buttons">
+          <button className="restart-button" onClick={onBackToLevels}>
+            📊 Ver Niveles
+          </button>
+          <button className="restart-button" onClick={onPlayAgain}>
+            🔄 Jugar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GameCompleteScreen;

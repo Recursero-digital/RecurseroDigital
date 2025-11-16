@@ -1,88 +1,35 @@
 /* ================================================================
    NOTA IMPORTANTE:
-   Los estilos de .header-controls y .game-status están definidos
-   globalmente en: presentation/styles/globals/games.css
+   Los estilos de .header-controls, .game-status y .game-content
+   están definidos globalmente en: presentation/styles/globals/games.css
    
    Esto permite reutilizar estos componentes en todos los juegos.
    ================================================================ */
 
-.juego-ordenamiento-content {
-  width: 100%;
-  height: 100vh;
-  margin: 0;
-  background: var(--main-gradient);
-  padding: 12px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 10;
-  justify-content: flex-start;
-  overflow-y: auto; /* Permitir scroll si es necesario */
-  border: 4px solid var(--space-yellow);
-  border-radius: 25px;
-  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
-}
-
 /* Estilos específicos para JuegoOrdenamiento - Desktop only */
 /* Sobrescriben los estilos globales responsivos de games.css */
 
-.game-container .game-title {
-  color: var(--space-yellow);
-  font-size: 2.2rem;
-  margin: 0 0 10px 0;
-  text-shadow: 3px 3px 0px var(--space-blue);
-  font-weight: 700;
-  text-align: center !important;
-  width: 100%;
-  display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-.game-container .game-instruction {
-  color: white;
-  font-size: 1.6rem;
-  margin: 20px auto;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  background: rgba(0, 0, 0, 0.2);
-  padding: 15px 30px;
-  border-radius: 20px;
-  border: 2px solid var(--space-yellow);
-  max-width: 600px;
-  text-align: center;
-  width: fit-content;
-}
-
-/* Forzar centrado si es necesario */
-.game-header .game-title,
-.game-header .game-instruction {
-  text-align: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* Game Status original (ahora oculto, se usa el del header)
-.game-content > .game-status {
-  display: none;
-} */
+/* .game-instruction ahora está definido globalmente en games.css */
 
 /* Progress Bar */
-.progress-container {
+.ordenamiento-progress-container {
   height: 20px;
-  background: rgba(30, 58, 138, 0.3);
+  min-height: 20px;
+  width: 100%;
+  max-width: 600px;
   border-radius: 15px;
-  margin: 10px 0;
   overflow: hidden;
-  border: 2px solid var(--space-yellow);
+  border: 3px solid var(--space-yellow);
+  margin: clamp(1rem, 2vh, 1.5rem) auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 20%, #6366f1 40%, #8b5cf6 60%, #7c3aed 80%, #5b21b6 100%);
+  background: linear-gradient(135deg, #10b981 0%, #22c55e 25%, #84cc16 50%, #facc15 75%, #fbbf24 100%);
   border-radius: 13px;
   transition: width 0.8s ease;
+  box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.3);
 }
 
 /* Dynamic progress bar width - controlled by data attribute */
@@ -93,6 +40,7 @@
 /* Game Play Area */
 .game-play-area {
   margin-top: 8px;
+  margin-bottom: 0%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -100,12 +48,11 @@
   align-items: center;
   position: relative;
   gap: 30px;
-  min-height: calc(100vh - 120px);
 }
 
 .drop-target {
   height: 100px;
-  border: 3px dashed var(--space-purple);
+  border: 3px dashed var(--space-yellow);
   border-radius: 20px;
   padding: 15px;
   display: flex;
@@ -113,21 +60,14 @@
   justify-content: center;
   align-items: center;
   align-content: center;
-  background: var(--button-gradient);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
   min-width: 500px;
   gap: 10px;
   box-sizing: border-box;
-}
-
-.drop-target:hover,
-.drop-target.drag-over {
-  border-color: #8b5cf6;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.8) 0%, rgba(124, 58, 237, 0.8) 50%, rgba(91, 33, 182, 0.8) 100%);
+  background: var(--paper-gradient);
 }
 
 .drop-hint {
-  color: var(--space-yellow);
+  color: var(--space-blue);
   font-size: 1.2rem;
   font-weight: 600;
   text-align: center;
@@ -148,7 +88,7 @@
   text-shadow: 2px 2px 0px var(--space-blue);
 }
 
-.numbers-container {
+.ordenamiento-numbers-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -159,9 +99,9 @@
   padding: 10px;
 }
 
-.number-box {
+.ordenamiento-number-box {
   background: var(--number-gradient);
-  border: 2px solid var(--space-blue);
+  border: 2px solid var(--space-yellow);
   border-radius: 15px;
   padding: 15px 25px;
   cursor: grab;
@@ -180,119 +120,25 @@
   margin: 0;
 }
 
-.number-box:hover {
+.ordenamiento-number-box:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 20px rgba(30, 58, 138, 0.5);
 }
 
-.number-box:active {
+.ordenamiento-number-box:active {
   cursor: grabbing;
 }
 
-.number-box.in-target {
+.ordenamiento-number-box.in-target {
   background: var(--space-green);
   border-color: var(--space-yellow);
   align-self: center;
   margin: 0;
 }
 
-/* Permanent Hint */
-.permanent-hint {
-  background: linear-gradient(135deg, var(--space-yellow) 0%, #f59e0b 100%);
-  border-radius: 12px;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  box-shadow: 0 3px 10px rgba(251, 191, 36, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  flex-shrink: 0;
-}
+/* Permanent Hint - Los estilos están definidos globalmente en games.css */
 
-.permanent-hint.hint-animate {
-  animation: slideInUp 0.5s ease-out;
-}
-
-.permanent-hint-header {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-bottom: 0.4rem;
-}
-
-.hint-icon {
-  font-size: 1.2rem;
-}
-
-.permanent-hint-header h4 {
-  margin: 0;
-  color: var(--space-blue);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.permanent-hint-content {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  padding: 0.4rem;
-}
-
-.hint-text {
-  margin: 0 0 0.3rem 0;
-  color: var(--space-blue);
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-align: center;
-  line-height: 1.2;
-}
-
-.hint-numbers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.hint-label {
-  color: var(--space-purple);
-  font-weight: bold;
-  font-size: 0.75rem;
-  margin-right: 0.3rem;
-}
-
-.hint-number {
-  background: var(--space-purple);
-  color: white;
-  padding: 0.15rem 0.3rem;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.7rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Start Screen - ajustes específicos (estilos base en games.css) */
-.start-screen .header-controls {
-  top: 20px;
-}
-
-/* Botones generales */
-.btn {
-  background: var(--button-gradient);
-  color: white;
-  border: 3px solid var(--space-yellow);
-  padding: 15px 30px;
-  border-radius: 20px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 10px;
-  min-width: 200px;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
-}
+/* Botones generales - Los estilos .btn están definidos globalmente en games.css */
 
 .modal {
   background: var(--main-gradient);
@@ -465,88 +311,6 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-/* ========================================
-   MEJORAS RESPONSIVIDAD NETBOOKS/NOTEBOOKS
-   ======================================== */
-   
-/* Netbooks y notebooks con altura limitada */
-@media (max-height: 800px) {
-  .game-header {
-    min-height: 120px;
-    padding-top: 40px;
-    margin-bottom: 15px;
-  }
-  
-  .game-container .game-title {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    margin: 0 0 5px 0;
-  }
-  
-  .game-container .game-instruction {
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    margin: 0 0 10px 0;
-  }
-}
-
-/* Resoluciones típicas de netbooks (1024x600, 1024x768) */
-@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 800px) {
-  .juego-ordenamiento-content {
-    padding: 10px;
-  }
-  
-  /* Ajustar elementos del juego */
-  .game-content .number-item {
-    min-height: 35px;
-    padding: 6px 12px;
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-  }
-  
-  .start-screen .feature-item {
-    padding: 8px;
-  }
-}
-
-/* Altura muy limitada (netbooks 1024x600) */
-@media (max-height: 650px) {
-  .game-header {
-    min-height: 80px;
-    padding-top: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .game-container .game-title {
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
-    margin: 5px 0;
-  }
-  
-  .game-container .game-instruction {
-    font-size: clamp(0.8rem, 1.8vw, 1rem);
-    margin: 0;
-  }
-  
-  /* Elementos del juego más compactos */
-  .game-content .number-item {
-    min-height: 30px;
-    padding: 4px 8px;
-    font-size: clamp(0.8rem, 1.8vw, 1rem);
-  }
-}
-
-/* Optimización para overflow en pantallas muy pequeñas */
-@media (max-width: 1366px) and (max-height: 768px) {
-  .juego-ordenamiento-content {
-    overflow-y: auto;
-    height: 100vh;
-  }
-}
-
-/* Para móviles, ajustes de padding */
-@media (max-width: 480px) {
-  .juego-ordenamiento-content {
-    padding: 6px;
-  }
 }
 
 .btn-success {

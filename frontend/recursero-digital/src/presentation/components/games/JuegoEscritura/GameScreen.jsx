@@ -30,18 +30,18 @@ const GameScreen = ({
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
-                            className="btn-back-to-levels"
-                            onClick={onBackToLevels}
-                            title="Volver a niveles"
-                        >
-                            ← Niveles
-                        </button>
-                        <button 
                             className="btn-back-to-dashboard"
                             onClick={() => navigate('/alumno/juegos')}
                             title="Volver al dashboard"
                         >
                             ← Juegos
+                        </button>
+                        <button 
+                            className="btn-back-to-levels"
+                            onClick={onBackToLevels}
+                            title="Volver a niveles"
+                        >
+                            ← Niveles
                         </button>
                     </div>
                     
@@ -76,7 +76,7 @@ const GameScreen = ({
             <div className="game-play-area">
                 <div className="numbers-section">
                     <h3 className="numbers-title">Números Disponibles</h3>
-                    <div className="numbers-container">
+                    <div className="escritura-numbers-container">
                         {numbers.map((number, index) => {
                             if (usedNumbers.has(number)) {
                                 return null;
@@ -85,7 +85,7 @@ const GameScreen = ({
                             return (
                                 <div 
                                     key={`number-${index}`}
-                                    className="number-box"
+                                    className="escritura-number-box"
                                     draggable
                                     onDragStart={(e) => onDragStart(e, number)}
                                 >
@@ -133,7 +133,8 @@ const GameScreen = ({
                         <h4>Ejemplo</h4>
                     </div>
                     <div className="permanent-hint-content">
-                        <div className="hint-example">
+                        <div className="hint-numbers">
+                            <span className="hint-label">Ejemplo:</span>
                             <span className="hint-number">{hintExample.number}</span>
                             <span className="hint-arrow">→</span>
                             <span className="hint-word">{hintExample.word}</span>

@@ -9,8 +9,8 @@
   font-family: "Fredoka", cursive;
 }
 
-.welcome-card,
-.info-card {
+/* Clase base unificada para las cards de bienvenida */
+.welcome-card {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -18,18 +18,13 @@
   padding: 50px;
   margin-bottom: 30px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s;
+   transition: all 0.1s; 
 }
 
-.welcome-card:hover,
-.info-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 70px rgba(138, 43, 226, 0.4);
-  border-color: rgba(138, 43, 226, 0.5);
-}
 
+/* Título específico de la card de bienvenida */
 .welcome-card h1 {
-  font-size: 52px;
+  font-size: 60px;
   background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -38,26 +33,55 @@
   text-align: center;
 }
 
-.welcome-card p,
-.info-card p {
+/* Estilos base para párrafos en welcome-card */
+.welcome-card p {
   font-size: 20px;
-  line-height: 1.8;
+  line-height: 2.5;
+  margin-top: 8px;
+  margin-bottom: 12px;
   text-align: center;
   color: rgba(255, 255, 255, 0.9);
 }
 
-.info-card h2 {
-  font-size: 38px;
-  color: #fff;
+/* Botón de "¡A JUGAR!" */
+.jugar-button {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  color: #FDF5E6;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 12px;
+  font-family: "Fredoka", cursive;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.jugar-button:hover {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+}
+
+.jugar-button:active {
+  transform: translateY(0) scale(1.02);
+}
+
+/* Títulos específicos dentro de welcome-card */
+.welcome-card h2 {
+  font-size: 30px;
+  color: #FDF5E6;
+  margin-top: 30px;
   margin-bottom: 25px;
   text-align: center;
   text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
 }
 
-.info-card h3 {
+.welcome-card h3 {
   font-size: 24px;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin-top: 50px;
+  margin-bottom: 75px;
   text-align: center;
   color: white;
 }

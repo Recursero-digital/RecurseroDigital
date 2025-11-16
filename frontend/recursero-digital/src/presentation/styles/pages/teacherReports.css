@@ -1,4 +1,4 @@
-/* Teacher Reports Styles - Siguiendo diseño global espacial */
+
 .teacher-reports-container {
   width: 100vw;
   max-width: none;
@@ -15,12 +15,12 @@
     #7c3aed 80%,
     #5b21b6 100%
   );
-  /* Expandir para cubrir cualquier margen del contenedor padre */
+ 
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
 }
 
-/* Botón de navegación a la altura del header */
+
 .reports-back-button {
   position: absolute;
   top: 0;
@@ -51,7 +51,7 @@
   box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
 }
 
-/* Wrapper interno para centrar contenido */
+
 .teacher-reports-wrapper {
   max-width: 1200px;
   margin: 0 auto;
@@ -59,7 +59,7 @@
   position: relative;
 }
 
-/* Estrellas animadas para el fondo */
+
 .teacher-reports-container::before {
   content: '';
   position: fixed;
@@ -186,16 +186,6 @@
   letter-spacing: 0.05em;
   position: relative;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.alumnos-table th::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
 }
 
 .alumnos-table td {

@@ -194,7 +194,7 @@ const JuegoDescomposicion = () => {
     }, []);
 
     return (
-        <div className="game-wrapper">
+        <div className="game-container">
             {gameState === 'start' && (
                 <StartScreen onStart={handleStartGame} />
             )}
