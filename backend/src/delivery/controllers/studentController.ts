@@ -50,6 +50,25 @@ const addStudent = async (req: Request<{}, AddStudentResponse, AddStudentRequest
     }
 };
 
+const getAllStudents = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const students = await dependencyContainer.studentRepository.getAllStudents();
+        res.status(200).json({
+            students: students.map(student => ({
+                id: student.id,
+                name: `${student.name} ${student.lastname}`,
+                firstName: student.name,
+                lastName: student.lastname,
+                username: student.user.username,
+                dni: student.dni
+            }))
+        });
+    } catch (error) {
+        console.error('Error en getAllStudents:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 const getMyGames = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
         if (!req.user) {
@@ -74,7 +93,7 @@ const getMyGames = async (req: AuthenticatedRequest, res: Response): Promise<voi
     }
 };
 
-export const studentController = { addStudent, getMyGames };
+export const studentController = { addStudent, getMyGames, getAllStudents };
 
 export const assignCourseToStudent = async (req: Request, res: Response): Promise<void> => {
     try {

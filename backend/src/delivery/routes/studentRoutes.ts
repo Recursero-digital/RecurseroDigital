@@ -6,6 +6,7 @@ import { UserRole } from '../../core/models/User';
 const router: Router = express.Router();
 
 router.post('/', protectAdminRoute(), studentController.addStudent);
+router.get('/', protectAdminRoute(), studentController.getAllStudents);
 
 // /api/student/me/games
 router.get('/me/games', protectRoute(UserRole.STUDENT), studentController.getMyGames);

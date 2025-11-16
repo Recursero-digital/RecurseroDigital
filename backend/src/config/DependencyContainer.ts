@@ -11,6 +11,7 @@ import { JWTTokenService } from '../infrastructure/JWTTokenService';
 import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
 import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
+import {AddTeacherUseCase} from "../core/usecases/addTeacherUseCase";
 import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
 import {PostgreSQLCourseRepository} from "../infrastructure/PostgreSQLCoursesRepository";
 import {InMemoryCourseRepository} from "../infrastructure/InMemoryCourseRepository";
@@ -48,6 +49,7 @@ export class DependencyContainer {
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
     private _addStudentUseCase: AddStudentUseCase | null = null;
+    private _addTeacherUseCase: AddTeacherUseCase | null = null;
     private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
     private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
     private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
@@ -209,6 +211,17 @@ export class DependencyContainer {
             );
         }
         return this._addStudentUseCase;
+    }
+
+    public get addTeacherUseCase(): AddTeacherUseCase {
+        if (!this._addTeacherUseCase) {
+            this._addTeacherUseCase = new AddTeacherUseCase(
+                this.teacherRepository,
+                this.passwordEncoder,
+                this.uuidGenerator
+            );
+        }
+        return this._addTeacherUseCase;
     }
 
     public get saveGameStatisticsUseCase(): SaveGameStatisticsUseCase {
