@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import StudentList from '../../components/teacher/StudentList';
-import DashboardStats from '../../components/teacher/DashboardStats';
 import '../../styles/pages/teacherStudents.css';
 
 const TeacherStudents = () => {
@@ -23,21 +22,6 @@ const TeacherStudents = () => {
       <div className="students-header">
         <h1>👥 Gestión de Estudiantes</h1>
         <p>Administra y supervisa el progreso de tus estudiantes</p>
-        
-        <div className="view-controls">
-          <button 
-            className={`botones ${currentView === 'list' ? 'active' : ''}`}
-            onClick={() => setCurrentView('list')}
-          >
-            📋 Lista de Estudiantes
-          </button>
-          <button 
-            className={`botones ${currentView === 'stats' ? 'active' : ''}`}
-            onClick={() => setCurrentView('stats')}
-          >
-            📊 Estadísticas del Curso
-          </button>
-        </div>
       </div>
 
       <div className="contenido-alumno">
@@ -46,10 +30,6 @@ const TeacherStudents = () => {
             courseId={selectedCourse}
             onSelectStudent={handleSelectStudent}
           />
-        )}
-        
-        {currentView === 'stats' && (
-          <DashboardStats courseId={selectedCourse} />
         )}
         
         {currentView === 'student' && selectedStudent && (

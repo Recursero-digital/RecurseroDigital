@@ -15,6 +15,7 @@ import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
 import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
 import TeacherGames from "./presentation/pages/teacher/TeacherGames";
 import TeacherReports from "./presentation/pages/teacher/TeacherReports";
+import TeacherStatistics from "./presentation/pages/teacher/TeacherStatistics";
 import ReporteDetalle from "./presentation/pages/teacher/ReporteDetalle";
 import MainLayout from "./presentation/layouts/MainLayout";
 //import DocenteConCurso from "./pages/docenteConCurso";
@@ -131,6 +132,14 @@ function App() {
             element={
               <MainLayout userRole="docente">
                 <TeacherGames />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/docente/estadisticas"
+            element={
+              <MainLayout userRole="docente">
+                <TeacherStatistics />
               </MainLayout>
             }
           />

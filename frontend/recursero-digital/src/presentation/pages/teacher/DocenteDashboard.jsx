@@ -124,10 +124,10 @@ export default function DocenteDashboard() {
             <p>Analiza el rendimiento del curso</p>
           </div>
 
-          <div className="accion-card" onClick={() => navigate('/docente/perfil')}>
-            <div className="accion-icon">⚙️</div>
-            <h3>Configuración</h3>
-            <p>Ajusta las preferencias del curso</p>
+          <div className="accion-card" onClick={() => navigate('/docente/estadisticas')}>
+            <div className="accion-icon">📈</div>
+            <h3>Estadísticas del Curso</h3>
+            <p>Visualiza métricas y análisis detallados</p>
           </div>
         </div>
       </div>
