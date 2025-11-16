@@ -25,7 +25,7 @@ app.use("/api/logout", logoutRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/statistics", statisticsRoutes);
-app.use("/api/course", courseRoutes);
+app.use("/api/courses", courseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");
