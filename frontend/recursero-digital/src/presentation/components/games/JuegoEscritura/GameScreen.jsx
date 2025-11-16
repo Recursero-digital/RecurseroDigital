@@ -97,10 +97,9 @@ const GameScreen = ({
                 </div>
                 
                 <div className="words-section">
-                    <h3 className="words-title">Palabras a Completar</h3>
-                    <div className="words-container">
+                    <div className="escritura-words-container">
                         {wordPairs.map((wordPair, index) => (
-                            <div key={`word-${index}`} className="word-pair">
+                            <div key={`word-${index}`} className="escritura-word-pair">
                                 <div 
                                     className={`drop-zone ${dragAnswers[index] ? 'filled' : 'empty'}`}
                                     onDragOver={onDragOver}
@@ -110,7 +109,7 @@ const GameScreen = ({
                                 >
                                     {dragAnswers[index] ? dragAnswers[index] : ''}
                                 </div>
-                                <div className="word-text">{wordPair.word}</div>
+                                <div className="escritura-word-text">{wordPair.word}</div>
                             </div>
                         ))}
                     </div>
