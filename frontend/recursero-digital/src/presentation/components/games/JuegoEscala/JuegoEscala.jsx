@@ -284,11 +284,13 @@ const JuegoEscala = () => {
                     activity={currentActivity + 1}
                     totalActivities={totalQuestions}
                     points={points}
+                    attempts={attempts}
                     question={currentQuestion}
                     userAnswers={userAnswers}
                     onAnswersChange={setUserAnswers}
                     onCheckAnswer={() => handleCheckAnswer()}
                     onBackToLevels={handleBackToLevels}
+                    level={currentLevel + 1}
                     levelConfig={levels[currentLevel]}
                     inputErrors={inputErrors}
                     setInputErrors={setInputErrors}

@@ -187,16 +187,7 @@ const JuegoCalculos = () => {
 
   return (
     <div className="game-container">
-      <div className="juego-calculos-content">
-        {renderCurrentScreen()}
-      </div>
-
-      {/* Development Info - only show in development */}
-      {import.meta.env?.DEV && (
-        <div className="fixed bottom-4 left-4 bg-black/50 text-white text-xs p-2 rounded">
-          State: {gameState} | Op: {selectedOperation} | Level: {selectedLevel} | Points: {points} | Attempts: {attempts}
-        </div>
-      )}
+      {renderCurrentScreen()}
     </div>
   );
 };

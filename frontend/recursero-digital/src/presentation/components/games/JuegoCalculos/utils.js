@@ -175,6 +175,11 @@ export const getLevelName = (level) => {
     return `Nivel ${levelNumber}`;
 };
 
+export const getLevelNumber = (level) => {
+    const levelNumber = level.replace('nivel', '');
+    return levelNumber;
+};
+
 /**
  * Calculate score based on level and attempts
  * @param {string} level - The level key
