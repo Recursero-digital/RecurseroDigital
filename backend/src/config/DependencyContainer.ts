@@ -32,6 +32,8 @@ import { GenerateStudentReportUseCase } from '../core/usecases/GenerateStudentRe
 import { GetCourseStudentsUseCase } from '../core/usecases/GetCourseStudentsUseCase';
 import { AiTextGenerator } from '../core/services/AiTextGenerator';
 import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
+import { PostgreSQLGameLevelRepository } from '../infrastructure/PostgreSQLGameLevelRepository';
+import { GetGameLevelsUseCase } from '../core/usecases/GetGameLevelsUseCase';
 
 
 export class DependencyContainer {
@@ -61,6 +63,8 @@ export class DependencyContainer {
     private _generateStudentReportUseCase: GenerateStudentReportUseCase | null = null;
     private _getCourseStudentsUseCase: GetCourseStudentsUseCase | null = null;
     private _aiTextGenerator: AiTextGenerator | null = null;
+    private _gameLevelRepository: PostgreSQLGameLevelRepository | null = null;
+    private _getGameLevelsUseCase: GetGameLevelsUseCase | null = null;
 
 
     private constructor() {
@@ -334,6 +338,22 @@ export class DependencyContainer {
         }
 
         return this._getCourseStudentsUseCase;
+    }
+
+    public get gameLevelRepository(): PostgreSQLGameLevelRepository {
+        if (!this._gameLevelRepository) {
+            this._gameLevelRepository = new PostgreSQLGameLevelRepository();
+        }
+        return this._gameLevelRepository;
+    }
+
+    public get getGameLevelsUseCase(): GetGameLevelsUseCase {
+        if (!this._getGameLevelsUseCase) {
+            this._getGameLevelsUseCase = new GetGameLevelsUseCase(
+                this.gameLevelRepository
+            );
+        }
+        return this._getGameLevelsUseCase;
     }
 
     public async clearAllData(): Promise<void> {
