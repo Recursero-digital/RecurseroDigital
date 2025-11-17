@@ -30,8 +30,13 @@
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 25px 70px rgba(138, 43, 226, 0.4);
-  border-color: rgba(138, 43, 226, 0.5);
+  box-shadow: 0 25px 70px rgba(16, 185, 129, 0.4);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.card:active {
+  box-shadow: 0 20px 60px rgba(16, 185, 129, 0.6);
+  border-color: rgba(16, 185, 129, 0.7);
 }
 
 .imagegame {
