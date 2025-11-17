@@ -31,7 +31,7 @@ export const createStudent = async ({ nombre, apellido, username, password, dni 
 };
 
 export const createCourse = async ({ name }) => {
-  const response = await fetch(`${API_BASE_URL}/course`, {
+  const response = await fetch(`${API_BASE_URL}/courses`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({ name })
@@ -66,7 +66,7 @@ export const getAllTeachers = async () => {
 };
 
 export const getAllCourses = async () => {
-  const response = await fetch(`${API_BASE_URL}/course`, {
+  const response = await fetch(`${API_BASE_URL}/courses`, {
     headers: authHeaders()
   });
   const data = await response.json();
@@ -96,7 +96,7 @@ export const createTeacher = async ({ nombre, apellido, email, username, passwor
 };
 
 export const assignCourseToStudent = async ({ studentId, courseId }) => {
-  const response = await fetch(`${API_BASE_URL}/student/${studentId}/course`, {
+  const response = await fetch(`${API_BASE_URL}/student/${studentId}/courses`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({ courseId })
@@ -122,7 +122,7 @@ export const assignTeacherToCourses = async ({ teacherId, courseIds }) => {
 };
 
 export const getCourseStudents = async (courseId) => {
-  const response = await fetch(`${API_BASE_URL}/course/${courseId}/students`, {
+  const response = await fetch(`${API_BASE_URL}/courses/${courseId}/students`, {
     headers: authHeaders()
   });
   const data = await response.json();
