@@ -3,43 +3,22 @@ import React from 'react';
 const FeedbackModal = ({ feedback, onContinue }) => (
     <div className="modal-overlay">
         <div className="modal-content slide-in" data-aos="zoom-in">
-            <div style={{
-                fontSize: '4rem',
-                textAlign: 'center',
-                marginBottom: '1rem'
-            }}>
+            <div className="desco-feedback-icon">
                 {feedback.isCorrect ? '🎉' : '😢'}
             </div>
             
-            <h3 className={feedback.isCorrect ? 'feedback-correct' : 'feedback-incorrect'}
-                style={{
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    marginBottom: '1rem',
-                    fontFamily: 'Playfair Display, serif'
-                }}>
+            <h3 className={`desco-feedback-title ${feedback.isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`}>
                 {feedback.title}
             </h3>
             
-            <p style={{
-                fontSize: '1.1rem',
-                textAlign: 'center',
-                marginBottom: '2rem',
-                color: '#4a5568',
-                lineHeight: '1.5'
-            }}>
+            <p className="desco-feedback-text">
                 {feedback.text}
             </p>
             
-            <div style={{ textAlign: 'center' }}>
+            <div className="desco-feedback-button-container">
                 <button 
                     onClick={onContinue} 
-                    className="btn btn-check"
-                    style={{
-                        padding: '0.75rem 2rem',
-                        fontSize: '1.1rem'
-                    }}
+                    className="btn btn-check desco-feedback-button"
                 >
                     {feedback.isCorrect ? '🚀 Continuar' : '📚 Siguiente'}
                 </button>

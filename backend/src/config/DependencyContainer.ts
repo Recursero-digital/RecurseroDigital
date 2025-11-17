@@ -11,6 +11,7 @@ import { JWTTokenService } from '../infrastructure/JWTTokenService';
 import {LoginStudentUseCase} from "../core/usecases/loginStudentUseCase";
 import {LoginAdminUseCase} from "../core/usecases/loginAdminUseCase";
 import {AddStudentUseCase} from "../core/usecases/addStudentUseCase";
+import {AddTeacherUseCase} from "../core/usecases/addTeacherUseCase";
 import {UUIDGenerator} from "../infrastructure/UUIDGenerator";
 import {PostgreSQLCourseRepository} from "../infrastructure/PostgreSQLCoursesRepository";
 import {InMemoryCourseRepository} from "../infrastructure/InMemoryCourseRepository";
@@ -28,8 +29,12 @@ import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStu
 import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
 import { GenerateStudentReportUseCase } from '../core/usecases/GenerateStudentReportUseCase';
+import { GetCourseStudentsUseCase } from '../core/usecases/GetCourseStudentsUseCase';
 import { AiTextGenerator } from '../core/services/AiTextGenerator';
 import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
+import { PostgreSQLGameLevelRepository } from '../infrastructure/PostgreSQLGameLevelRepository';
+import { GetGameLevelsUseCase } from '../core/usecases/GetGameLevelsUseCase';
+import { UpdateGameLevelUseCase } from '../core/usecases/UpdateGameLevelUseCase';
 
 
 export class DependencyContainer {
@@ -48,6 +53,7 @@ export class DependencyContainer {
     private _loginStudentUseCase: LoginStudentUseCase | null = null;
     private _loginAdminUseCase: LoginAdminUseCase | null = null;
     private _addStudentUseCase: AddStudentUseCase | null = null;
+    private _addTeacherUseCase: AddTeacherUseCase | null = null;
     private _saveGameStatisticsUseCase: SaveGameStatisticsUseCase | null = null;
     private _getStudentProgressUseCase: GetStudentProgressUseCase | null = null;
     private _getGameStatisticsUseCase: GetGameStatisticsUseCase | null = null;
@@ -56,7 +62,11 @@ export class DependencyContainer {
     private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
     private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
     private _generateStudentReportUseCase: GenerateStudentReportUseCase | null = null;
+    private _getCourseStudentsUseCase: GetCourseStudentsUseCase | null = null;
     private _aiTextGenerator: AiTextGenerator | null = null;
+    private _gameLevelRepository: PostgreSQLGameLevelRepository | null = null;
+    private _getGameLevelsUseCase: GetGameLevelsUseCase | null = null;
+    private _updateGameLevelUseCase: UpdateGameLevelUseCase | null = null;
 
 
     private constructor() {
@@ -211,6 +221,17 @@ export class DependencyContainer {
         return this._addStudentUseCase;
     }
 
+    public get addTeacherUseCase(): AddTeacherUseCase {
+        if (!this._addTeacherUseCase) {
+            this._addTeacherUseCase = new AddTeacherUseCase(
+                this.teacherRepository,
+                this.passwordEncoder,
+                this.uuidGenerator
+            );
+        }
+        return this._addTeacherUseCase;
+    }
+
     public get saveGameStatisticsUseCase(): SaveGameStatisticsUseCase {
         if (!this._saveGameStatisticsUseCase) {
             this._saveGameStatisticsUseCase = new SaveGameStatisticsUseCase(
@@ -308,6 +329,42 @@ export class DependencyContainer {
         }
 
         return this._generateStudentReportUseCase;
+    }
+
+    public get getCourseStudentsUseCase(): GetCourseStudentsUseCase {
+        if (!this._getCourseStudentsUseCase) {
+            this._getCourseStudentsUseCase = new GetCourseStudentsUseCase(
+                this.studentRepository,
+                this.statisticsRepository
+            );
+        }
+
+        return this._getCourseStudentsUseCase;
+    }
+
+    public get gameLevelRepository(): PostgreSQLGameLevelRepository {
+        if (!this._gameLevelRepository) {
+            this._gameLevelRepository = new PostgreSQLGameLevelRepository();
+        }
+        return this._gameLevelRepository;
+    }
+
+    public get getGameLevelsUseCase(): GetGameLevelsUseCase {
+        if (!this._getGameLevelsUseCase) {
+            this._getGameLevelsUseCase = new GetGameLevelsUseCase(
+                this.gameLevelRepository
+            );
+        }
+        return this._getGameLevelsUseCase;
+    }
+
+    public get updateGameLevelUseCase(): UpdateGameLevelUseCase {
+        if (!this._updateGameLevelUseCase) {
+            this._updateGameLevelUseCase = new UpdateGameLevelUseCase(
+                this.gameLevelRepository
+            );
+        }
+        return this._updateGameLevelUseCase;
     }
 
     public async clearAllData(): Promise<void> {

@@ -5,11 +5,7 @@ const StartScreen = ({ onStart }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="game-scene bg-space-ui" data-aos="fade-down">
-            <div className="landscape"></div>
-            <div className="lighthouse"></div>
-            <div className="house"></div>
-            
+        <div className="game-container">
             {/* Usar estructura global de start-screen */}
             <div className="start-screen">
                 <div className="header-controls">

@@ -3,7 +3,9 @@ import { DependencyContainer } from '../../config/DependencyContainer';
 import { AssignTeacherToCoursesUseCase, AssignTeacherToCoursesRequest } from '../../core/usecases/AssignTeacherToCourseUseCase';
 import { TeacherNotFoundError } from '../../core/models/exceptions/TeacherNotFoundError';
 import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
+import { TeacherAlreadyExistsError } from '../../core/models/exceptions/TeacherAlreadyExistsError';
 import { AuthenticatedRequest } from '../middleware/authMiddleWare';
+import { AddTeacherUseCase, AddTeacherRequest } from '../../core/usecases/addTeacherUseCase';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -11,6 +13,61 @@ interface AssignTeacherResponse {
 }
 
 const dependencyContainer = DependencyContainer.getInstance();
+
+interface AddTeacherResponse {
+    message?: string;
+    error?: string;
+}
+
+const addTeacher = async (req: Request<{}, AddTeacherResponse, AddTeacherRequest>, res: Response<AddTeacherResponse>): Promise<void> => {
+    const { name, surname, email, username, password } = req.body;
+
+    try {
+        await dependencyContainer.addTeacherUseCase.execute({
+            name,
+            surname,
+            email,
+            username,
+            password
+        });
+        
+        res.status(201).json({ message: 'Docente creado exitosamente' });
+    } catch (error) {
+        if (error instanceof TeacherInvalidRequestError) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
+        
+        if (error instanceof TeacherAlreadyExistsError) {
+            res.status(409).json({ error: error.message });
+            return;
+        }
+        
+        console.error('Error en addTeacher:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+const getAllTeachers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const teachers = await dependencyContainer.teacherRepository.getAllTeachers();
+        res.status(200).json({
+            teachers: teachers.map(teacher => ({
+                id: teacher.id,
+                firstName: teacher.name,
+                lastName: teacher.surname,
+                name: `${teacher.name} ${teacher.surname}`,
+                surname: teacher.surname,
+                fullName: `${teacher.name} ${teacher.surname}`,
+                email: teacher.email,
+                username: teacher.user.username
+            }))
+        });
+    } catch (error) {
+        console.error('Error en getAllTeachers:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
 
 const assignTeacherToCourses = async (
     req: Request<{}, AssignTeacherResponse, AssignTeacherToCoursesRequest>,
@@ -113,6 +170,8 @@ const getMyCourseDetails = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const teacherController = {
+    addTeacher,
+    getAllTeachers,
     assignTeacherToCourses,
     getTeacherCourses,
     getMyCourseDetails

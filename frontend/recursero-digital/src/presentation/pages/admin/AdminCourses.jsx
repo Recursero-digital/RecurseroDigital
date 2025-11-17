@@ -1,19 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/pages/adminCourses.css';
+import { createCourse, getAllCourses } from '../../services/adminService';
 
 export default function AdminCourses() {
-  const [courses] = useState([
-    { id: 1, name: 'Matemáticas Básicas', teacher: 'Prof. Ana Martín', students: 25, status: 'Activo' },
-    { id: 2, name: 'Álgebra Intermedia', teacher: 'Prof. Luis Rodríguez', students: 18, status: 'Activo' },
-    { id: 3, name: 'Geometría', teacher: 'Prof. Ana Martín', students: 22, status: 'Inactivo' }
-  ]);
+  const [courses, setCourses] = useState([]);
+  const [newCourseName, setNewCourseName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllCourses();
+        setCourses(
+          data.map((c) => ({
+            id: c.id,
+            name: c.name,
+            teacher: c.teacherName || 'Sin docente asignado',
+            students: c.students || 0,
+            status: 'Activo',
+          }))
+        );
+      } catch (err) {
+        console.error('Error al cargar cursos:', err);
+        setError('No se pudieron cargar los cursos');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCourses();
+  }, []);
+
+  const handleCreateCourse = async () => {
+    if (!newCourseName.trim()) return;
+    try {
+      setLoading(true);
+      setError(null);
+      const created = await createCourse({ name: newCourseName.trim() });
+
+      setCourses(prev => [
+        ...prev,
+        {
+          id: created.id || Date.now(),
+          name: created.name || newCourseName.trim(),
+          teacher: created.teacherName || 'Sin docente asignado',
+          students: created.studentsCount || 0,
+          status: 'Activo'
+        }
+      ]);
+      setNewCourseName('');
+    } catch (err) {
+      console.error('Error al crear curso:', err);
+      setError(err.message || 'Error al crear curso');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="admin-courses">
       <div className="courses-header">
         <h1>Gestión de Cursos</h1>
-        <button className="add-course-btn">+ Crear Curso</button>
+        <div className="create-course-inline">
+          <input
+            type="text"
+            placeholder="Nombre del nuevo curso"
+            value={newCourseName}
+            onChange={(e) => setNewCourseName(e.target.value)}
+            disabled={loading}
+          />
+          <button className="add-course-btn" onClick={handleCreateCourse} disabled={loading}>
+            {loading ? 'Creando...' : '+ Crear Curso'}
+          </button>
+        </div>
       </div>
+
+      {error && <div className="error-message-admin">{error}</div>}
 
       <div className="courses-filters">
         <div className="filter-group">
@@ -44,9 +107,9 @@ export default function AdminCourses() {
               <p><strong>Estudiantes:</strong> {course.students}</p>
             </div>
             <div className="course-actions">
-              <button className="view-btn">Ver Detalles</button>
-              <button className="edit-btn-cursos">Editar</button>
-              <button className="delete-btn-cursos">Eliminar</button>
+              <button className="view-btn" disabled>Ver Detalles</button>
+              <button className="edit-btn-cursos" disabled>Editar</button>
+              <button className="delete-btn-cursos" disabled>Eliminar</button>
             </div>
           </div>
         ))}

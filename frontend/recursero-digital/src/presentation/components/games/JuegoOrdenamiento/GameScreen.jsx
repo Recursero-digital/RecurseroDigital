@@ -139,7 +139,7 @@ const GameScreen = ({
 
   return (
     <div className="game-content">
-      <header className="game-header">
+      <header className="ordenamiento-game-header">
         <GameHeader
           currentLevel={currentLevel}
           currentActivity={currentActivity}

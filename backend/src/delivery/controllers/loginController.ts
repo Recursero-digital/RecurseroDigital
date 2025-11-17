@@ -85,10 +85,20 @@ const loginAdmin = async (req: Request<{}, LoginResponse, LoginRequest>, res: Re
     }
 
     try {
+        console.log('Intentando login de admin con usuario:', user);
         const token = await loginAdminUseCase.execute(user, password);
+        console.log('Token generado para admin:', token ? 'Token presente' : 'Token vacío');
+        
+        if (!token) {
+            console.error('Error: El token generado está vacío');
+            res.status(500).json({ error: 'Error al generar el token' });
+            return;
+        }
+        
         res.status(200).json({ token });
     } catch (error) {
         if (error instanceof InvalidCredentials) {
+            console.log('Credenciales inválidas para admin:', user);
             res.status(401).json({ error: 'Credenciales inválidas' });
             return;
         }

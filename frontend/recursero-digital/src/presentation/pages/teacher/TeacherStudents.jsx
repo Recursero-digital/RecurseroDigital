@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StudentList from '../../components/teacher/StudentList';
-import DashboardStats from '../../components/teacher/DashboardStats';
 import '../../styles/pages/teacherStudents.css';
 
 const TeacherStudents = () => {
+  const navigate = useNavigate();
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [currentView, setCurrentView] = useState('list');
-  const [selectedCourse] = useState('1');
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const cursoGuardado = localStorage.getItem('cursoSeleccionado');
+    if (cursoGuardado) {
+      try {
+        const curso = JSON.parse(cursoGuardado);
+        // El ID ya debería ser un string, pero nos aseguramos
+        if (curso && curso.id) {
+          setSelectedCourse(curso.id.toString());
+          setLoading(false);
+        } else {
+          console.error('Curso sin ID válido:', curso);
+          navigate('/docente');
+        }
+      } catch (error) {
+        console.error('Error al parsear curso seleccionado:', error);
+        navigate('/docente');
+      }
+    } else {
+      // Si no hay curso seleccionado, redirigir al selector
+      navigate('/docente');
+    }
+  }, [navigate]);
 
   const handleSelectStudent = (student) => {
     setSelectedStudent(student);
@@ -18,26 +43,33 @@ const TeacherStudents = () => {
     setCurrentView('list');
   };
 
+  if (loading) {
+    return (
+      <div className="teacher-students">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Cargando curso...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedCourse) {
+    return (
+      <div className="teacher-students">
+        <div className="error-message">
+          <p>No hay curso seleccionado</p>
+          <button onClick={() => navigate('/docente')}>Seleccionar Curso</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="teacher-students">
       <div className="students-header">
         <h1>👥 Gestión de Estudiantes</h1>
         <p>Administra y supervisa el progreso de tus estudiantes</p>
-        
-        <div className="view-controls">
-          <button 
-            className={`botones ${currentView === 'list' ? 'active' : ''}`}
-            onClick={() => setCurrentView('list')}
-          >
-            📋 Lista de Estudiantes
-          </button>
-          <button 
-            className={`botones ${currentView === 'stats' ? 'active' : ''}`}
-            onClick={() => setCurrentView('stats')}
-          >
-            📊 Estadísticas del Curso
-          </button>
-        </div>
       </div>
 
       <div className="contenido-alumno">
@@ -46,10 +78,6 @@ const TeacherStudents = () => {
             courseId={selectedCourse}
             onSelectStudent={handleSelectStudent}
           />
-        )}
-        
-        {currentView === 'stats' && (
-          <DashboardStats courseId={selectedCourse} />
         )}
         
         {currentView === 'student' && selectedStudent && (

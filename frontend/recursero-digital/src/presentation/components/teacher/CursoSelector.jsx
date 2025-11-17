@@ -12,6 +12,7 @@ export default function CursoSelector() {
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [username, setUsername] = useState('');
 
   // Colores predefinidos para los cursos
   const coloresDisponibles = ["#7c3aed", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#84cc16"];
@@ -19,6 +20,14 @@ export default function CursoSelector() {
   const obtenerIcono = () => {
     return "🔢";
   };
+
+  useEffect(() => {
+    // Obtener el username del localStorage
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      setUsername(userEmail);
+    }
+  }, []);
 
   useEffect(() => {
     const cargarCursos = async () => {
@@ -45,7 +54,7 @@ export default function CursoSelector() {
           ];
           
           const cursosConEstilo = cursosMock.map((curso) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(),
             nombre: curso.name,
             icono: obtenerIcono(),
             color: curso.color
@@ -60,7 +69,7 @@ export default function CursoSelector() {
         
         if (response.courses && response.courses.length > 0) {
           const cursosConEstilo = response.courses.map((curso, index) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(), // Mantener el ID como string para preservar UUIDs o IDs no numéricos
             nombre: curso.name,
             icono: obtenerIcono(),
             color: coloresDisponibles[index % coloresDisponibles.length]
@@ -79,7 +88,7 @@ export default function CursoSelector() {
           ];
           
           const cursosConEstilo = cursosMock.map((curso) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(),
             nombre: curso.name,
             icono: obtenerIcono(),
             color: curso.color
@@ -134,7 +143,7 @@ export default function CursoSelector() {
     return (
       <div className="curso-selector-container">
         <div className="curso-selector-header">
-          <h1>Bienvenido Docente</h1>
+          <h1>Bienvenido {username ? username : 'Docente'}</h1>
           <p>Cargando tus cursos...</p>
         </div>
         <div className="loading-spinner">
@@ -148,7 +157,7 @@ export default function CursoSelector() {
     return (
       <div className="curso-selector-container">
         <div className="curso-selector-header">
-          <h1>Bienvenido Docente</h1>
+          <h1>Bienvenido {username ? username : 'Docente'}</h1>
           <p>Error al cargar los cursos</p>
         </div>
         <div className="error-message">
@@ -162,7 +171,7 @@ export default function CursoSelector() {
   return (
     <div className="curso-selector-container">
       <div className="curso-selector-header">
-        <h1>Bienvenido Docente</h1>
+        <h1>Bienvenido {username ? username : 'Docente'}</h1>
         <p>Selecciona el curso que deseas gestionar</p>
       </div>
       
