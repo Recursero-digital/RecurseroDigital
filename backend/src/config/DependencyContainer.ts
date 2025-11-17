@@ -29,6 +29,7 @@ import { AssignCourseToStudentUseCase } from '../core/usecases/AssignCourseToStu
 import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToCourseUseCase';
 import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
 import { GenerateStudentReportUseCase } from '../core/usecases/GenerateStudentReportUseCase';
+import { GetCourseStudentsUseCase } from '../core/usecases/GetCourseStudentsUseCase';
 import { AiTextGenerator } from '../core/services/AiTextGenerator';
 import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
 
@@ -58,6 +59,7 @@ export class DependencyContainer {
     private _assignCourseToStudentUseCase: AssignCourseToStudentUseCase | null = null;
     private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
     private _generateStudentReportUseCase: GenerateStudentReportUseCase | null = null;
+    private _getCourseStudentsUseCase: GetCourseStudentsUseCase | null = null;
     private _aiTextGenerator: AiTextGenerator | null = null;
 
 
@@ -321,6 +323,17 @@ export class DependencyContainer {
         }
 
         return this._generateStudentReportUseCase;
+    }
+
+    public get getCourseStudentsUseCase(): GetCourseStudentsUseCase {
+        if (!this._getCourseStudentsUseCase) {
+            this._getCourseStudentsUseCase = new GetCourseStudentsUseCase(
+                this.studentRepository,
+                this.statisticsRepository
+            );
+        }
+
+        return this._getCourseStudentsUseCase;
     }
 
     public async clearAllData(): Promise<void> {

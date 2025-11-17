@@ -186,4 +186,50 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       throw error;
     }
   }
+
+  async getEnrollmentDate(studentId: string): Promise<Date | null> {
+    try {
+      const result = await this.db.query(
+        `SELECT created_at FROM students WHERE id = $1`,
+        [studentId]
+      );
+
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      return new Date(result.rows[0].created_at);
+    } catch (error) {
+      console.error('Error al obtener fecha de inscripción:', error);
+      throw error;
+    }
+  }
+
+  async getStudentsByCourseId(courseId: string): Promise<Student[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT s.*, u.username, u.password_hash, u.role 
+         FROM students s 
+         JOIN users u ON s.user_id = u.id 
+         WHERE s.course_id = $1
+         ORDER BY s.created_at DESC`,
+        [courseId]
+      );
+
+      return result.rows.map((row: any) => {
+        const user = new User(row.username, row.username, row.password_hash, row.role);
+        return new Student(
+          row.id,
+          row.name,
+          row.lastname,
+          row.dni,
+          row.course_id,
+          user
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener estudiantes por curso:', error);
+      throw error;
+    }
+  }
 }

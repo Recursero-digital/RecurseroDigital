@@ -139,4 +139,24 @@ export class InMemoryStudentRepository implements StudentRepository {
       courseId
     );
   }
+
+  async getEnrollmentDate(studentId: string): Promise<Date | null> {
+    const student = this.students.find(s => s.id === studentId);
+    return student ? new Date() : null;
+  }
+
+  async getStudentsByCourseId(courseId: string): Promise<Student[]> {
+    const filteredStudents = this.students.filter(s => s.courseId === courseId);
+    return filteredStudents.map(student => {
+      const user = new User(student.userId, student.username, student.passwordHash, UserRole.STUDENT);
+      return new Student(
+        student.id,
+        student.name,
+        student.lastname,
+        student.dni,
+        student.courseId,
+        user
+      );
+    });
+  }
 }

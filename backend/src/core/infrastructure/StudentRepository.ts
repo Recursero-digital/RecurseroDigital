@@ -8,4 +8,6 @@ export interface StudentRepository {
     updateStudent(studentData: Student): Promise<void>;
     deleteStudent(id: string): Promise<void>;
     assignCourseToStudent(studentId: string, courseId: string): Promise<void>;
+    getEnrollmentDate(studentId: string): Promise<Date | null>;
+    getStudentsByCourseId(courseId: string): Promise<Student[]>;
 }
