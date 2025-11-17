@@ -10,6 +10,7 @@ import CongratsModal from './CongratsModal';
 import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { useGameLevels, transformToDescomposicionFormat } from '../../../../hooks/useGameLevels';
 
 const JuegoDescomposicion = () => {
     const { unlockLevel } = useUserProgress();
@@ -35,15 +36,12 @@ const JuegoDescomposicion = () => {
     const [totalQuestions] = useState(5);
     const [isAnswered, setIsAnswered] = useState(false);
 
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('descomposicion', true);
+    const levels = useMemo(() => transformToDescomposicionFormat(backendLevels), [backendLevels]);
+
     useEffect(() => {
         AOS.init();
     }, []);
-
-    const levels = useMemo(() => [
-        { name: "Fácil", range: "0 al 99", min: 10, max: 99, color: "chocolate" },
-        { name: "Intermedio", range: "100 al 999", min: 100, max: 999, color: "terracotta" },
-        { name: "Avanzado", range: "1.000 al 9.999", min: 1000, max: 9999, color: "chocolate" }
-    ], []);
 
     const generateNumber = useCallback((level) => {
         const levelConfig = levels[level];
@@ -192,6 +190,10 @@ const JuegoDescomposicion = () => {
     const formatNumber = useCallback((num) => {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }, []);
+
+    if (levelsLoading) {
+        return <div className="game-container"><div>Cargando niveles...</div></div>;
+    }
 
     return (
         <div className="game-container">

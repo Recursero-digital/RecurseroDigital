@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../../../styles/globals/games.css";
 import "./JuegoOrdenamiento.css";
@@ -10,11 +10,11 @@ import CongratsModal from './CongratsModal';
 import FeedbackModal from './FeedbackModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { useGameLevels, transformToOrdenamientoFormat } from '../../../../hooks/useGameLevels';
 import { 
   getNumbersForActivity,
   checkOrder, 
   generateHint, 
-  levelRanges, 
   totalActivities, 
   getNumbersCount 
 } from './utils';
@@ -45,6 +45,8 @@ const JuegoOrdenamiento = () => {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [showPermanentHint, setShowPermanentHint] = useState(false);
 
+  const { levels: backendLevels, loading: levelsLoading } = useGameLevels('ordenamiento', true);
+  const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
 
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
@@ -183,6 +185,10 @@ const JuegoOrdenamiento = () => {
       startActivityTimer();
     }
   }, [gameState, currentLevel, setupLevel, startActivityTimer]);
+
+  if (levelsLoading) {
+    return <div className="game-container"><div>Cargando niveles...</div></div>;
+  }
 
   return (
     <div className="game-container">

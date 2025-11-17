@@ -10,6 +10,7 @@ import CongratsModal from './CongratsModal';
 import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { useGameLevels, transformToEscalaFormat } from '../../../../hooks/useGameLevels';
 import { 
     GAME_CONFIG, 
     MESSAGES, 
@@ -50,39 +51,12 @@ const JuegoEscala = () => {
     const [isProcessing, setIsProcessing] = useState(false); // Prevenir doble envío
     const [totalQuestions] = useState(GAME_CONFIG.TOTAL_QUESTIONS);
 
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escala', true);
+    const levels = useMemo(() => transformToEscalaFormat(backendLevels), [backendLevels]);
+    
     useEffect(() => {
         AOS.init();
     }, []);
-
-    const levels = useMemo(() => [
-        { 
-            name: "Vecinos Cercanos", 
-            range: "1 al 100", 
-            operation: 1, 
-            min: 5, 
-            max: 95, 
-            color: "blue",
-            description: "Encuentra el anterior y posterior (+1 y -1)"
-        },
-        { 
-            name: "Saltos de 10", 
-            range: "20 al 500", 
-            operation: 10, 
-            min: 30, 
-            max: 490, 
-            color: "green",
-            description: "Encuentra el anterior y posterior (+10 y -10)"
-        },
-        { 
-            name: "Grandes Saltos", 
-            range: "200 al 1000", 
-            operation: 100, 
-            min: 300, 
-            max: 900, 
-            color: "purple",
-            description: "Encuentra el anterior y posterior (+100 y -100)"
-        }
-    ], []);
 
     const generateNumber = useCallback((level) => {
         const levelConfig = levels[level];
@@ -106,18 +80,23 @@ const JuegoEscala = () => {
     }, []);
 
     const handleSelectLevel = useCallback((level) => {
+        const newQuestions = generateQuestions(level);
+        
         setCurrentLevel(level);
         setCurrentActivity(0);
         setUserAnswers({ anterior: '', posterior: '' });
         setShowFeedback(false);
         setIsValidationError(false);
-        
-        const newQuestions = generateQuestions(level);
         setQuestions(newQuestions);
+        setCurrentQuestion(newQuestions[0]);
+        setInputErrors({ anterior: false, posterior: false });
+        setIsProcessing(false);
         
         resetScoring();
+        resetAttempts();
+        startActivityTimer();
         setGameState(UI_STATES.GAME_STATES.PLAYING);
-    }, [generateQuestions, resetScoring]);
+    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer]);
 
     useEffect(() => {
         if (gameState === UI_STATES.GAME_STATES.PLAYING && questions.length > 0 && currentActivity < questions.length) {
@@ -251,9 +230,12 @@ const JuegoEscala = () => {
         handleSelectLevel(currentLevel);
     }, [currentLevel, handleSelectLevel]);
 
+    if (levelsLoading) {
+        return <div className="game-wrapper bg-space-gradient"><div>Cargando niveles...</div></div>;
+    }
+
     return (
         <div className="game-wrapper bg-space-gradient">
-            {/* Notificación de error si existe */}
             {errorNotification && (
                 <div className="error-notification">
                     <div className="error-notification-text">
@@ -284,11 +266,13 @@ const JuegoEscala = () => {
                     activity={currentActivity + 1}
                     totalActivities={totalQuestions}
                     points={points}
+                    attempts={attempts}
                     question={currentQuestion}
                     userAnswers={userAnswers}
                     onAnswersChange={setUserAnswers}
                     onCheckAnswer={() => handleCheckAnswer()}
                     onBackToLevels={handleBackToLevels}
+                    level={currentLevel + 1}
                     levelConfig={levels[currentLevel]}
                     inputErrors={inputErrors}
                     setInputErrors={setInputErrors}

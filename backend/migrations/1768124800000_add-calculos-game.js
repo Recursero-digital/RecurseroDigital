@@ -10,7 +10,7 @@ exports.up = (pgm) => {
       'Cálculos Matemáticos',
       'Juego de operaciones matemáticas con múltiples niveles y actividades.',
       'https://example.com/images/game-calculos.png',
-      '/juegos/calculos',
+      '/alumno/juegos/calculos',
       2,
       true
     )

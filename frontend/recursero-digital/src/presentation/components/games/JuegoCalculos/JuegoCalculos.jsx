@@ -7,6 +7,7 @@ import GameScreen from './GameScreen';
 import CongratsModal from './CongratsModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { useGameLevels } from '../../../../hooks/useGameLevels';
 
 const JuegoCalculos = () => {
   const navigate = useNavigate();
@@ -33,7 +34,8 @@ const JuegoCalculos = () => {
     totalQuestions: 0
   });
 
-  // Navigation handlers
+  const { levels: allLevels, loading: levelsLoading } = useGameLevels('calculos', true);
+
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
   }, [navigate]);
@@ -114,7 +116,10 @@ const JuegoCalculos = () => {
     incrementAttempts();
   }, [incrementAttempts]);
 
-  // Render current screen based on game state
+  if (levelsLoading) {
+    return <div className="game-container"><div>Cargando niveles...</div></div>;
+  }
+
   const renderCurrentScreen = () => {
     switch(gameState) {
       case 'start':
@@ -187,16 +192,7 @@ const JuegoCalculos = () => {
 
   return (
     <div className="game-container">
-      <div className="juego-calculos-content">
-        {renderCurrentScreen()}
-      </div>
-
-      {/* Development Info - only show in development */}
-      {import.meta.env?.DEV && (
-        <div className="fixed bottom-4 left-4 bg-black/50 text-white text-xs p-2 rounded">
-          State: {gameState} | Op: {selectedOperation} | Level: {selectedLevel} | Points: {points} | Attempts: {attempts}
-        </div>
-      )}
+      {renderCurrentScreen()}
     </div>
   );
 };

@@ -2,12 +2,24 @@
 import Logo from '../../../assets/logo.png';
 import '../../styles/layouts/header.css';
 import { useNavigate } from 'react-router-dom';
+import { apiRequest, AUTH_ENDPOINTS } from '../../../infrastructure/config/api';
 
 export function Header() {
   const navigate = useNavigate();
 
-  const handleCerrarSesion = () => {
-    navigate("/"); // Te lleva a la ruta "/"
+  const handleCerrarSesion = async () => {
+    try {
+      await apiRequest(AUTH_ENDPOINTS.LOGOUT, {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userEmail');
+      navigate("/");
+    }
   };
 
     return (
