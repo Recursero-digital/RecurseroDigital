@@ -3,7 +3,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../../../styles/globals/games.css';
 import './JuegoEscritura.css';
-import { generateDragDropActivity, validateNumberWordPair } from './utils'; 
+import { generateDragDropActivity, validateNumberWordPair, levelRanges as defaultLevelRanges } from './utils'; 
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -12,6 +12,7 @@ import CongratsModal from './CongratsModal';
 import ErrorPopup from './ErrorPopup';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
+import { useGameLevels } from '../../../../hooks/useGameLevels';
 
 const JuegoEscritura = () => {
     const { unlockLevel, getMaxUnlockedLevel } = useUserProgress();
@@ -36,6 +37,8 @@ const JuegoEscritura = () => {
     const [usedNumbers, setUsedNumbers] = useState(new Set());
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [showErrorPopup, setShowErrorPopup] = useState(false);
+    
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escritura', true);
     
     useEffect(() => { 
         AOS.init(); 
@@ -184,6 +187,10 @@ const JuegoEscritura = () => {
     const handleCloseErrorPopup = () => {
         setShowErrorPopup(false);
     };
+
+    if (levelsLoading) {
+        return <div className="game-container"><div>Cargando niveles...</div></div>;
+    }
 
     return (
         <div className="game-container">
