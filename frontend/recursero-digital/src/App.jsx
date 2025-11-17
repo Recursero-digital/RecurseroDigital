@@ -22,6 +22,7 @@ import JuegoOrdenamiento from "./presentation/components/games/JuegoOrdenamiento
 import JuegoEscritura from "./presentation/components/games/JuegoEscritura/JuegoEscritura.jsx";
 import DashboardAlumno from "./presentation/pages/student/DashboardAlumno.jsx";
 import PerfilAlumno from "./presentation/pages/student/perfilAlumno.jsx";
+import PerfilDocente from "./presentation/pages/teacher/DocentePerfil.jsx";
 import JuegoDescomposicion from './presentation/components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
 import JuegoEscala from './presentation/components/games/JuegoEscala/JuegoEscala.jsx';
 import JuegoCalculos from './presentation/components/games/JuegoCalculos/JuegoCalculos.jsx';
@@ -175,7 +176,7 @@ function App() {
           path="/docente/perfil"
           element={
             <MainLayout userRole="docente">
-              <HomeDocente />
+              <PerfilDocente />
             </MainLayout>
           }
         />
