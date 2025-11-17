@@ -11,6 +11,7 @@ import AdminCourses from "./presentation/pages/admin/AdminCourses";
 import AdminStatistics from "./presentation/pages/admin/AdminStatistics";
 import AdminTeachers from "./presentation/pages/admin/AdminTeachers";
 import AdminAssignments from "./presentation/pages/admin/AdminAssignments";
+import AdminGameLevels from "./presentation/pages/admin/AdminGameLevels";
 import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
 import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
 import TeacherGames from "./presentation/pages/teacher/TeacherGames";
@@ -199,6 +200,14 @@ function App() {
             element={
               <MainLayout userRole="admin">
                 <AdminStatistics />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/admin/juegos"
+            element={
+              <MainLayout userRole="admin">
+                <AdminGameLevels />
               </MainLayout>
             }
           />

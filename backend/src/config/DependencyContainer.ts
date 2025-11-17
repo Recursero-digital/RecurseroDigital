@@ -34,6 +34,7 @@ import { AiTextGenerator } from '../core/services/AiTextGenerator';
 import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
 import { PostgreSQLGameLevelRepository } from '../infrastructure/PostgreSQLGameLevelRepository';
 import { GetGameLevelsUseCase } from '../core/usecases/GetGameLevelsUseCase';
+import { UpdateGameLevelUseCase } from '../core/usecases/UpdateGameLevelUseCase';
 
 
 export class DependencyContainer {
@@ -65,6 +66,7 @@ export class DependencyContainer {
     private _aiTextGenerator: AiTextGenerator | null = null;
     private _gameLevelRepository: PostgreSQLGameLevelRepository | null = null;
     private _getGameLevelsUseCase: GetGameLevelsUseCase | null = null;
+    private _updateGameLevelUseCase: UpdateGameLevelUseCase | null = null;
 
 
     private constructor() {
@@ -354,6 +356,15 @@ export class DependencyContainer {
             );
         }
         return this._getGameLevelsUseCase;
+    }
+
+    public get updateGameLevelUseCase(): UpdateGameLevelUseCase {
+        if (!this._updateGameLevelUseCase) {
+            this._updateGameLevelUseCase = new UpdateGameLevelUseCase(
+                this.gameLevelRepository
+            );
+        }
+        return this._updateGameLevelUseCase;
     }
 
     public async clearAllData(): Promise<void> {
