@@ -6,6 +6,7 @@ import studentRoutes from '../delivery/routes/studentRoutes';
 import statisticsRoutes from '../delivery/routes/statisticsRoutes';
 import courseRoutes from '../delivery/routes/courseRoutes';
 import teacherRoutes from "../delivery/routes/teacherRoutes";
+import gameRoutes from "../delivery/routes/gameRoutes";
 
 const app: Application = express();
 
@@ -26,6 +27,7 @@ app.use("/api/student", studentRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/statistics", statisticsRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/games", gameRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Servidor Express funcionando correctamente");
