@@ -73,5 +73,21 @@ export class InMemoryCourseRepository implements CourseRepository {
   async getCoursesByTeacherId(teacherId: string): Promise<Course[]> {
     return this.courses.filter(course => course.teacher_id === teacherId);
   }
+
+  async updateCourse(course: Course): Promise<void> {
+    const courseIndex = this.courses.findIndex(c => c.id === course.id);
+    if (courseIndex === -1) {
+      throw new Error('Curso no encontrado');
+    }
+    this.courses[courseIndex] = course;
+  }
+
+  async deleteCourse(id: string): Promise<void> {
+    const courseIndex = this.courses.findIndex(c => c.id === id);
+    if (courseIndex === -1) {
+      throw new Error('Curso no encontrado');
+    }
+    this.courses.splice(courseIndex, 1);
+  }
   
 }

@@ -12,4 +12,6 @@ export interface CourseRepository {
     createCourse(name: string, teacherId?: string): Promise<Course>;
     assignTeacherToCourse(teacherId: string, courseId: string): Promise<void>;
     getCoursesByTeacherId(teacherId: string): Promise<Course[]>;
+    updateCourse(course: Course): Promise<void>;
+    deleteCourse(id: string): Promise<void>;
 }
