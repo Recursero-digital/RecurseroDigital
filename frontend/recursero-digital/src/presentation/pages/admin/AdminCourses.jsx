@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/pages/adminCourses.css';
 import { createCourse, getAllCourses } from '../../services/adminService';
+import AddCourseForm from './AddCourseForm';
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([]);
-  const [newCourseName, setNewCourseName] = useState('');
+  const [showAddCourseForm, setShowAddCourseForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -32,24 +33,31 @@ export default function AdminCourses() {
     loadCourses();
   }, []);
 
-  const handleCreateCourse = async () => {
-    if (!newCourseName.trim()) return;
+  const handleAddCourse = () => {
+    setShowAddCourseForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowAddCourseForm(false);
+  };
+
+  const handleCreateCourse = async (courseData) => {
     try {
       setLoading(true);
       setError(null);
-      const created = await createCourse({ name: newCourseName.trim() });
+      const created = await createCourse({ name: courseData.name });
 
       setCourses(prev => [
         ...prev,
         {
           id: created.id || Date.now(),
-          name: created.name || newCourseName.trim(),
+          name: created.name || courseData.name,
           teacher: created.teacherName || 'Sin docente asignado',
           students: created.studentsCount || 0,
           status: 'Activo'
         }
       ]);
-      setNewCourseName('');
+      setShowAddCourseForm(false);
     } catch (err) {
       console.error('Error al crear curso:', err);
       setError(err.message || 'Error al crear curso');
@@ -62,18 +70,9 @@ export default function AdminCourses() {
     <div className="admin-courses">
       <div className="courses-header">
         <h1>Gestión de Cursos</h1>
-        <div className="create-course-inline">
-          <input
-            type="text"
-            placeholder="Nombre del nuevo curso"
-            value={newCourseName}
-            onChange={(e) => setNewCourseName(e.target.value)}
-            disabled={loading}
-          />
-          <button className="add-course-btn" onClick={handleCreateCourse} disabled={loading}>
-            {loading ? 'Creando...' : '+ Crear Curso'}
-          </button>
-        </div>
+        <button className="add-course-btn" onClick={handleAddCourse} disabled={loading}>
+          {loading ? 'Creando...' : '+ Crear Curso'}
+        </button>
       </div>
 
       {error && <div className="error-message-admin">{error}</div>}
@@ -129,6 +128,13 @@ export default function AdminCourses() {
           <span className="summary-label">Total Estudiantes</span>
         </div>
       </div>
+
+      {showAddCourseForm && (
+        <AddCourseForm
+          onClose={handleCloseForm}
+          onSubmit={handleCreateCourse}
+        />
+      )}
     </div>
   );
 }
