@@ -84,6 +84,17 @@ class MockCourseRepository implements CourseRepository {
   async getCoursesByTeacherId(teacherId: string): Promise<Course[]> {
     return this.courses.filter(course => course.teacher_id === teacherId);
   }
+
+  async updateCourse(course: Course): Promise<void> {
+    const index = this.courses.findIndex(c => c.id === course.id);
+    if (index !== -1) {
+      this.courses[index] = course;
+    }
+  }
+
+  async deleteCourse(id: string): Promise<void> {
+    this.courses = this.courses.filter(c => c.id !== id);
+  }
 }
 
 describe("GetTeacherCoursesUseCase", () => {

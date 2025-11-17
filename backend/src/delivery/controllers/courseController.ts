@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
 import { AssignGameToCourseUseCase } from '../../core/usecases/AssignGameToCourseUseCase';
 import { CreateCourseUseCase } from '../../core/usecases/CreateCourseUseCase';
+import { UpdateCourseUseCase } from '../../core/usecases/UpdateCourseUseCase';
+import { DeleteCourseUseCase } from '../../core/usecases/DeleteCourseUseCase';
 
 const container = DependencyContainer.getInstance();
 
@@ -89,6 +91,67 @@ export const courseController = {
         } catch (error: any) {
             console.error('Error en getCourseStudents:', error);
             res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    },
+
+    updateCourse: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { courseId } = req.params as { courseId: string };
+            const { name } = req.body as { name: string };
+
+            if (!courseId) {
+                res.status(400).json({ error: 'courseId es requerido' });
+                return;
+            }
+
+            if (!name || name.trim() === '') {
+                res.status(400).json({ error: 'El nombre del curso es requerido' });
+                return;
+            }
+
+            const useCase = new UpdateCourseUseCase(container.courseRepository);
+            const result = await useCase.execute({ courseId, name: name.trim() });
+
+            res.status(200).json({
+                message: 'Curso actualizado exitosamente',
+                course: result
+            });
+        } catch (error: any) {
+            if (error.message === 'El curso no existe') {
+                res.status(404).json({ error: error.message });
+                return;
+            }
+            if (error.message === 'Ya existe un curso con ese nombre') {
+                res.status(409).json({ error: error.message });
+                return;
+            }
+            console.error('Error en updateCourse:', error);
+            res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+        }
+    },
+
+    deleteCourse: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { courseId } = req.params as { courseId: string };
+
+            if (!courseId) {
+                res.status(400).json({ error: 'courseId es requerido' });
+                return;
+            }
+
+            const useCase = new DeleteCourseUseCase(container.courseRepository);
+            await useCase.execute({ courseId });
+
+            res.status(200).json({
+                message: 'Curso eliminado exitosamente'
+            });
+        } catch (error: any) {
+            if (error.message === 'El curso no existe') {
+                res.status(404).json({ error: error.message });
+                return;
+            }
+            console.error('Error en deleteCourse:', error);
+            res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
         }
     }
 };

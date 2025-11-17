@@ -51,6 +51,14 @@ class MockCourseRepository implements CourseRepository {
     async getCoursesByTeacherId(teacherId: string): Promise<any[]> {
         return [];
     }
+
+    async updateCourse(course: any): Promise<void> {
+        // Mock implementation - no hace nada en el mock
+    }
+
+    async deleteCourse(id: string): Promise<void> {
+        // Mock implementation - no hace nada en el mock
+    }
 }
 
 class MockIdGenerator implements IdGenerator {
