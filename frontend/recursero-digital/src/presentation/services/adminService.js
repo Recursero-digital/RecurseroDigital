@@ -132,4 +132,29 @@ export const getCourseStudents = async (courseId) => {
   return data.students || [];
 };
 
+export const updateCourse = async ({ courseId, name }) => {
+  const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    body: JSON.stringify({ name })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al actualizar curso');
+  }
+  return data.course;
+};
+
+export const deleteCourse = async (courseId) => {
+  const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+    method: 'DELETE',
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al eliminar curso');
+  }
+  return data;
+};
+
 

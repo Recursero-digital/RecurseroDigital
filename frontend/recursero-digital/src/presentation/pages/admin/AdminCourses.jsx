@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/pages/adminCourses.css';
-import { createCourse, getAllCourses } from '../../services/adminService';
+import { createCourse, getAllCourses, updateCourse, deleteCourse } from '../../services/adminService';
 import AddCourseForm from './AddCourseForm';
 import EditCourseForm from './EditCourseForm';
 import DeleteCourseForm from './DeleteCourseForm';
@@ -83,14 +83,21 @@ export default function AdminCourses() {
     try {
       setLoading(true);
       setError(null);
-      // TODO: Implementar llamada al backend para actualizar curso
-      console.log('Actualizando curso:', courseData);
+      const updated = await updateCourse({ 
+        courseId: courseData.id, 
+        name: courseData.name 
+      });
       
-      // Por ahora solo actualizamos el estado local
+      // Actualizar el estado local con los datos del backend
       setCourses(prev => 
         prev.map(c => 
           c.id === courseData.id 
-            ? { ...c, name: courseData.name }
+            ? { 
+                ...c, 
+                name: updated.name,
+                teacher: updated.teacherName || c.teacher,
+                students: updated.studentsCount || c.students
+              }
             : c
         )
       );
@@ -113,10 +120,9 @@ export default function AdminCourses() {
     try {
       setLoading(true);
       setError(null);
-      // TODO: Implementar llamada al backend para eliminar curso
-      console.log('Eliminando curso:', course);
+      await deleteCourse(course.id);
       
-      // Por ahora solo actualizamos el estado local
+      // Actualizar el estado local eliminando el curso
       setCourses(prev => prev.filter(c => c.id !== course.id));
       setShowDeleteCourseForm(false);
       setSelectedCourse(null);
