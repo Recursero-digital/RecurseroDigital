@@ -67,11 +67,6 @@ const TeacherStudents = () => {
 
   return (
     <div className="teacher-students">
-      <div className="students-header">
-        <h1>👥 Gestión de Estudiantes</h1>
-        <p>Administra y supervisa el progreso de tus estudiantes</p>
-      </div>
-
       <div className="contenido-alumno">
         {currentView === 'list' && (
           <StudentList 
