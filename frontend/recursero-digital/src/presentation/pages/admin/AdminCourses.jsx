@@ -145,20 +145,6 @@ export default function AdminCourses() {
 
       {error && <div className="error-message-admin">{error}</div>}
 
-      <div className="courses-filters">
-        <div className="filter-group">
-          <label>Filtrar por estado:</label>
-          <select>
-            <option value="all">Todos</option>
-            <option value="active">Activos</option>
-            <option value="inactive">Inactivos</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <label>Buscar curso:</label>
-          <input type="text" placeholder="Nombre del curso..." />
-        </div>
-      </div>
 
       <div className="courses-grid">
         {courses.map(course => (
@@ -174,8 +160,7 @@ export default function AdminCourses() {
               <p><strong>Estudiantes:</strong> {course.students}</p>
             </div>
             <div className="course-actions">
-              <button className="view-btn" disabled>Ver Detalles</button>
-              <button 
+              <button
                 className="edit-btn-cursos" 
                 onClick={() => handleEditCourse(course)}
                 disabled={loading}
