@@ -20,6 +20,11 @@ export default function HomeAdmin() {
   const handleVerReportes = () => {
     navigate('/admin/estadisticas');
   };
+
+  const handleConfigurarJuegos = () => {
+    navigate('/admin/juegos');
+  };
+
   return (
     <div className="home-admin">
       <div className="admin-welcome">
@@ -83,6 +88,10 @@ export default function HomeAdmin() {
           <button className="action-card-admin" onClick={handleVerReportes}>
             <span className="action-icon">📊</span>
             <span className="action-text">Ver Reportes</span>
+          </button>
+          <button className="action-card-admin" onClick={handleConfigurarJuegos}>
+            <span className="action-icon">🎮</span>
+            <span className="action-text">Configurar Juegos</span>
           </button>
         </div>
       </div>
