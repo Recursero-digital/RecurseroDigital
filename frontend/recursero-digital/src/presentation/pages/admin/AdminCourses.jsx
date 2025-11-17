@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/pages/adminCourses.css';
 import { createCourse, getAllCourses } from '../../services/adminService';
 import AddCourseForm from './AddCourseForm';
+import EditCourseForm from './EditCourseForm';
+import DeleteCourseForm from './DeleteCourseForm';
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([]);
   const [showAddCourseForm, setShowAddCourseForm] = useState(false);
+  const [showEditCourseForm, setShowEditCourseForm] = useState(false);
+  const [showDeleteCourseForm, setShowDeleteCourseForm] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -39,6 +44,9 @@ export default function AdminCourses() {
 
   const handleCloseForm = () => {
     setShowAddCourseForm(false);
+    setShowEditCourseForm(false);
+    setShowDeleteCourseForm(false);
+    setSelectedCourse(null);
   };
 
   const handleCreateCourse = async (courseData) => {
@@ -61,6 +69,60 @@ export default function AdminCourses() {
     } catch (err) {
       console.error('Error al crear curso:', err);
       setError(err.message || 'Error al crear curso');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditCourse = (course) => {
+    setSelectedCourse(course);
+    setShowEditCourseForm(true);
+  };
+
+  const handleUpdateCourse = async (courseData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      // TODO: Implementar llamada al backend para actualizar curso
+      console.log('Actualizando curso:', courseData);
+      
+      // Por ahora solo actualizamos el estado local
+      setCourses(prev => 
+        prev.map(c => 
+          c.id === courseData.id 
+            ? { ...c, name: courseData.name }
+            : c
+        )
+      );
+      setShowEditCourseForm(false);
+      setSelectedCourse(null);
+    } catch (err) {
+      console.error('Error al actualizar curso:', err);
+      setError(err.message || 'Error al actualizar curso');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCourse = (course) => {
+    setSelectedCourse(course);
+    setShowDeleteCourseForm(true);
+  };
+
+  const handleConfirmDelete = async (course) => {
+    try {
+      setLoading(true);
+      setError(null);
+      // TODO: Implementar llamada al backend para eliminar curso
+      console.log('Eliminando curso:', course);
+      
+      // Por ahora solo actualizamos el estado local
+      setCourses(prev => prev.filter(c => c.id !== course.id));
+      setShowDeleteCourseForm(false);
+      setSelectedCourse(null);
+    } catch (err) {
+      console.error('Error al eliminar curso:', err);
+      setError(err.message || 'Error al eliminar curso');
     } finally {
       setLoading(false);
     }
@@ -107,8 +169,20 @@ export default function AdminCourses() {
             </div>
             <div className="course-actions">
               <button className="view-btn" disabled>Ver Detalles</button>
-              <button className="edit-btn-cursos" disabled>Editar</button>
-              <button className="delete-btn-cursos" disabled>Eliminar</button>
+              <button 
+                className="edit-btn-cursos" 
+                onClick={() => handleEditCourse(course)}
+                disabled={loading}
+              >
+                Editar
+              </button>
+              <button 
+                className="delete-btn-cursos" 
+                onClick={() => handleDeleteCourse(course)}
+                disabled={loading}
+              >
+                Eliminar
+              </button>
             </div>
           </div>
         ))}
@@ -133,6 +207,22 @@ export default function AdminCourses() {
         <AddCourseForm
           onClose={handleCloseForm}
           onSubmit={handleCreateCourse}
+        />
+      )}
+
+      {showEditCourseForm && selectedCourse && (
+        <EditCourseForm
+          onClose={handleCloseForm}
+          onSubmit={handleUpdateCourse}
+          course={selectedCourse}
+        />
+      )}
+
+      {showDeleteCourseForm && selectedCourse && (
+        <DeleteCourseForm
+          onClose={handleCloseForm}
+          onConfirm={handleConfirmDelete}
+          course={selectedCourse}
         />
       )}
     </div>
