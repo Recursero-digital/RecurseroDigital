@@ -11,7 +11,7 @@ router.get('/', protectAdminRoute(), studentController.getAllStudents);
 // /api/student/me/games
 router.get('/me/games', protectRoute(UserRole.STUDENT), studentController.getMyGames);
 
-// POST /api/student/:studentId/course
-router.post('/:studentId/course', protectAdminRoute(), studentExtendedController.assignCourseToStudent);
+// POST /api/student/:studentId/courses
+router.post('/:studentId/courses', protectAdminRoute(), studentExtendedController.assignCourseToStudent);
 
 export default router;

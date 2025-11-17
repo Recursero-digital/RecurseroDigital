@@ -8,5 +8,7 @@ router.get('/', protectAdminRoute(), courseController.getAllCourses);
 router.post('/:courseId/game', protectAdminRoute(), courseController.addGameToCourse);
 router.get('/:courseId/students', courseController.getCourseStudents);
 router.post('/', protectAdminRoute(), courseController.createCourse);
+router.patch('/:courseId', protectAdminRoute(), courseController.updateCourse);
+router.delete('/:courseId', protectAdminRoute(), courseController.deleteCourse);
 
 export default router;
