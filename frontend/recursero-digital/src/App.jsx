@@ -23,6 +23,7 @@ import JuegoOrdenamiento from "./presentation/components/games/JuegoOrdenamiento
 import JuegoEscritura from "./presentation/components/games/JuegoEscritura/JuegoEscritura.jsx";
 import DashboardAlumno from "./presentation/pages/student/DashboardAlumno.jsx";
 import PerfilAlumno from "./presentation/pages/student/perfilAlumno.jsx";
+import PerfilDocente from "./presentation/pages/teacher/DocentePerfil.jsx";
 import JuegoDescomposicion from './presentation/components/games/JuegoDesco&Compo/JuegoDescomposicion.jsx';
 import JuegoEscala from './presentation/components/games/JuegoEscala/JuegoEscala.jsx';
 import JuegoCalculos from './presentation/components/games/JuegoCalculos/JuegoCalculos.jsx';
@@ -34,7 +35,64 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login-form" element={<LoginForm />} />
-
+        <Route path="/alumno/juegos/descomposicion" element={<JuegoDescomposicion />} />
+        <Route path="/alumno/juegos/escala" element={<JuegoEscala />} />
+        <Route 
+          path="/alumno/juegos/calculos" 
+          element={
+            <MainLayout userRole="alumno">
+              <JuegoCalculos />
+            </MainLayout>
+          } 
+        />
+        <Route
+          path="/alumno/perfil"
+          element={
+            <MainLayout userRole="alumno">
+              <PerfilAlumno />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/docente/estudiantes"
+          element={
+            <MainLayout userRole="docente">
+              <TeacherStudents />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/docente/juegos"
+          element={
+            <MainLayout userRole="docente">
+              <TeacherGames />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/docente/perfil"
+          element={
+           <MainLayout userRole="docente">
+              <PerfilDocente />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/docente/reportes"
+          element={
+            <MainLayout userRole="docente">
+              <TeacherReports />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/reportes/:studentId"
+          element={
+            <MainLayout userRole="docente">
+              <ReporteDetalle />
+            </MainLayout>
+          }
+        />
         <Route element={<ProtectedRoute allowedRoles={["alumno"]} />}>
           <Route
             path="/alumno"
@@ -147,7 +205,7 @@ function App() {
             path="/docente/perfil"
             element={
               <MainLayout userRole="docente">
-                <HomeDocente />
+                <PerfilDocente/>
               </MainLayout>
             }
           />
