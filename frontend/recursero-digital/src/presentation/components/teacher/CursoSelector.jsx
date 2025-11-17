@@ -54,7 +54,7 @@ export default function CursoSelector() {
           ];
           
           const cursosConEstilo = cursosMock.map((curso) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(),
             nombre: curso.name,
             icono: obtenerIcono(),
             color: curso.color
@@ -69,7 +69,7 @@ export default function CursoSelector() {
         
         if (response.courses && response.courses.length > 0) {
           const cursosConEstilo = response.courses.map((curso, index) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(), // Mantener el ID como string para preservar UUIDs o IDs no numéricos
             nombre: curso.name,
             icono: obtenerIcono(),
             color: coloresDisponibles[index % coloresDisponibles.length]
@@ -88,7 +88,7 @@ export default function CursoSelector() {
           ];
           
           const cursosConEstilo = cursosMock.map((curso) => ({
-            id: parseInt(curso.id),
+            id: curso.id.toString(),
             nombre: curso.name,
             icono: obtenerIcono(),
             color: curso.color

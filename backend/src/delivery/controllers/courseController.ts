@@ -75,7 +75,6 @@ export const courseController = {
     },
 
     getCourseStudents: async (req: Request, res: Response): Promise<void> => {
-        // Se mantiene la implementación mock por ahora
         try {
             const { courseId } = req.params as { courseId: string };
 
@@ -84,13 +83,9 @@ export const courseController = {
                 return;
             }
 
-            // TODO: Reemplazar por consulta real a la base de datos
-            const students: any[] = [];
-
-            res.status(200).json({
-                courseId,
-                students
-            });
+            const result = await container.getCourseStudentsUseCase.execute({ courseId });
+            
+            res.status(200).json(result);
         } catch (error: any) {
             console.error('Error en getCourseStudents:', error);
             res.status(500).json({ error: 'Error interno del servidor' });
