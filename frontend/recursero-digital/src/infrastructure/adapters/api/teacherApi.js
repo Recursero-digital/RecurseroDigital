@@ -45,6 +45,37 @@ export const getCourseStudents = async (courseId) => {
   return await response.json();
 };
 
+export const getCourseGames = async (courseId) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_BASE_URL}/courses/${courseId}/games`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`Error al obtener juegos del curso: ${response.statusText}`);
+  }
+  return await response.json();
+};
+
+export const updateCourseGameStatus = async (courseGameId, isEnabled) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${API_BASE_URL}/courses/games/${courseGameId}/status`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ isEnabled })
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(errorData.error || `Error al actualizar estado del juego: ${response.statusText}`);
+  }
+  return await response.json();
+};
+
 export const getStudentDetails = async (studentId) => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_BASE_URL}/students/${studentId}/details`, {

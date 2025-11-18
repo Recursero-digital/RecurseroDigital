@@ -157,4 +157,54 @@ export const deleteCourse = async (courseId) => {
   return data;
 };
 
+export const updateStudent = async ({ studentId, name, lastname, username, password, courseId }) => {
+  const response = await fetch(`${API_BASE_URL}/student/${studentId}`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    body: JSON.stringify({ name, lastname, username, password, courseId })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al actualizar estudiante');
+  }
+  return data.student;
+};
+
+export const deleteStudent = async (studentId) => {
+  const response = await fetch(`${API_BASE_URL}/student/${studentId}`, {
+    method: 'DELETE',
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al eliminar estudiante');
+  }
+  return data;
+};
+
+export const updateTeacher = async ({ teacherId, name, surname, username, email, password, courseIds }) => {
+  const response = await fetch(`${API_BASE_URL}/teacher/${teacherId}`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    body: JSON.stringify({ name, surname, username, email, password, courseIds })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al actualizar docente');
+  }
+  return data.teacher;
+};
+
+export const deleteTeacher = async (teacherId) => {
+  const response = await fetch(`${API_BASE_URL}/teacher/${teacherId}`, {
+    method: 'DELETE',
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al eliminar docente');
+  }
+  return data;
+};
+
 

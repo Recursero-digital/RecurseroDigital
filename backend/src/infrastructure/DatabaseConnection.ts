@@ -107,98 +107,10 @@ export class DatabaseConnection {
       console.log('Ejecutando migraciones...');
       await this.runMigrations();
 
-      console.log('Creando datos por defecto...');
-      await this.createDefaultUsers();
-      await this.createDefaultCourses();
-
       console.log('Tablas inicializadas correctamente en PostgreSQL');
     } catch (error) {
       console.error('Error al inicializar las tablas:', error);
       throw error;
     }
   }
-
-  private async createDefaultUsers(): Promise<void> {
-    try {
-      console.log('Creando usuarios por defecto...');
-
-      const existingUsers = await this.query('SELECT COUNT(*) as count FROM users');
-      
-      if (existingUsers.rows[0].count > 0) {
-        console.log('Usuarios por defecto ya existen, omitiendo creación...');
-        return;
-      }
-
-      await this.query(`
-        INSERT INTO users (id, username, password_hash, role) 
-        VALUES ($1, $2, $3, $4)
-      `, ['default-user-teacher-1', 'docente@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'TEACHER']);
-
-      await this.query(`
-        INSERT INTO teachers (id, user_id, name, surname, email) 
-        VALUES ($1, $2, $3, $4, $5)
-      `, ['default-teacher-1', 'default-user-teacher-1', 'Docente', 'Por Defecto', 'docente@email.com']);
-
-      await this.query(`
-        INSERT INTO users (id, username, password_hash, role) 
-        VALUES ($1, $2, $3, $4)
-      `, ['default-user-student-1', 'alumno@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'STUDENT']);
-
-      await this.query(`
-        INSERT INTO students (id, user_id, name, lastname, dni) 
-        VALUES ($1, $2, $3, $4, $5)
-      `, ['default-student-1', 'default-user-student-1', 'Alumno', 'Por Defecto', '12345678']);
-
-      await this.query(`
-        INSERT INTO users (id, username, password_hash, role) 
-        VALUES ($1, $2, $3, $4)
-      `, ['default-user-admin-1', 'admin@email.com', '$2b$10$Zfjew4nsyIgb/5obd3xeGuLjlp9MtWYfAyYCnlyfVgXk3CRYo2X5K', 'ADMIN']);
-
-      await this.query(`
-        INSERT INTO admins (id, user_id, nivel_acceso, permisos) 
-        VALUES ($1, $2, $3, $4)
-      `, ['default-admin-1', 'default-user-admin-1', 1, '{all}']);
-
-      console.log('Usuarios por defecto creados:');
-      console.log('   docente@email.com / 123456');
-      console.log('   alumno@email.com / 123456');
-      console.log('   admin@email.com / 123456');
-    } catch (error) {
-      console.error('Error al crear usuarios por defecto:', error);
-      throw error;
-    }
-  }
-
-    private async createDefaultCourses(): Promise<void> {
-        try {
-            console.log('Creando cursos por defecto...');
-
-            const existingCourses = await this.query('SELECT COUNT(*) as count FROM courses');
-            
-            if (existingCourses.rows[0].count > 0) {
-                console.log('Cursos por defecto ya existen, omitiendo creación...');
-                return;
-            }
-
-            await this.query(`
-                INSERT INTO courses (id, name, teacher_id) 
-                VALUES ($1, $2, $3)
-            `, ['default-course-1', 'Curso A', 'default-teacher-1']);
-
-            await this.query(`
-                UPDATE students
-                SET course_id = $1
-                WHERE id = $2
-            `, ['default-course-1', 'default-student-1']);
-
-            console.log('Cursos por defecto creados:');
-        } catch (error) {
-            console.error('Error al crear cursos por defecto:', error);
-            throw error;
-        }
-    }
-
-
-
-
 }

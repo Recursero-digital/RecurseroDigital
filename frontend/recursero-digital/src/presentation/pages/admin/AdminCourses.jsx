@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/pages/adminCourses.css';
-import { createCourse, getAllCourses, updateCourse, deleteCourse } from '../../services/adminService';
+import { createCourse, getAllCourses, updateCourse, deleteCourse, getAllTeachers, getCourseStudents } from '../../services/adminService';
 import AddCourseForm from './AddCourseForm';
 import EditCourseForm from './EditCourseForm';
 import DeleteCourseForm from './DeleteCourseForm';
@@ -18,16 +18,42 @@ export default function AdminCourses() {
     const loadCourses = async () => {
       try {
         setLoading(true);
-        const data = await getAllCourses();
-        setCourses(
-          data.map((c) => ({
-            id: c.id,
-            name: c.name,
-            teacher: c.teacherName || 'Sin docente asignado',
-            students: c.students || 0,
-            status: 'Activo',
-          }))
+        setError(null);
+        
+        // Cargar cursos y docentes
+        const [coursesData, teachersData] = await Promise.all([
+          getAllCourses(),
+          getAllTeachers()
+        ]);
+        
+        const coursesWithDetails = await Promise.all(
+          coursesData.map(async (course) => {
+            let studentsCount = 0;
+            try {
+              const courseStudents = await getCourseStudents(course.id);
+              // El servicio devuelve un array directamente
+              studentsCount = courseStudents ? courseStudents.length : 0;
+            } catch (err) {
+              console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+              studentsCount = 0;
+            }
+            
+            const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
+            const teacherName = teacher 
+              ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim())
+              : 'Sin docente asignado';
+            
+            return {
+              id: course.id,
+              name: course.name,
+              teacher: teacherName,
+              students: studentsCount,
+              status: 'Activo',
+            };
+          })
         );
+        
+        setCourses(coursesWithDetails);
       } catch (err) {
         console.error('Error al cargar cursos:', err);
         setError('No se pudieron cargar los cursos');
@@ -53,18 +79,40 @@ export default function AdminCourses() {
     try {
       setLoading(true);
       setError(null);
-      const created = await createCourse({ name: courseData.name });
+      await createCourse({ name: courseData.name });
 
-      setCourses(prev => [
-        ...prev,
-        {
-          id: created.id || Date.now(),
-          name: created.name || courseData.name,
-          teacher: created.teacherName || 'Sin docente asignado',
-          students: created.studentsCount || 0,
-          status: 'Activo'
-        }
+      // Recargar todos los cursos para obtener datos actualizados
+      const [coursesData, teachersData] = await Promise.all([
+        getAllCourses(),
+        getAllTeachers()
       ]);
+      
+      const coursesWithDetails = await Promise.all(
+        coursesData.map(async (course) => {
+          let studentsCount = 0;
+          try {
+            const courseStudents = await getCourseStudents(course.id);
+            studentsCount = courseStudents.students ? courseStudents.students.length : 0;
+          } catch (err) {
+            console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+          }
+          
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
+          const teacherName = teacher 
+            ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim())
+            : 'Sin docente asignado';
+          
+          return {
+            id: course.id,
+            name: course.name,
+            teacher: teacherName,
+            students: studentsCount,
+            status: 'Activo',
+          };
+        })
+      );
+      
+      setCourses(coursesWithDetails);
       setShowAddCourseForm(false);
     } catch (err) {
       console.error('Error al crear curso:', err);
@@ -83,24 +131,43 @@ export default function AdminCourses() {
     try {
       setLoading(true);
       setError(null);
-      const updated = await updateCourse({ 
+      await updateCourse({ 
         courseId: courseData.id, 
         name: courseData.name 
       });
       
-      // Actualizar el estado local con los datos del backend
-      setCourses(prev => 
-        prev.map(c => 
-          c.id === courseData.id 
-            ? { 
-                ...c, 
-                name: updated.name,
-                teacher: updated.teacherName || c.teacher,
-                students: updated.studentsCount || c.students
-              }
-            : c
-        )
+      // Recargar todos los cursos para obtener datos actualizados
+      const [coursesData, teachersData] = await Promise.all([
+        getAllCourses(),
+        getAllTeachers()
+      ]);
+      
+      const coursesWithDetails = await Promise.all(
+        coursesData.map(async (course) => {
+          let studentsCount = 0;
+          try {
+            const courseStudents = await getCourseStudents(course.id);
+            studentsCount = courseStudents.students ? courseStudents.students.length : 0;
+          } catch (err) {
+            console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+          }
+          
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
+          const teacherName = teacher 
+            ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim())
+            : 'Sin docente asignado';
+          
+          return {
+            id: course.id,
+            name: course.name,
+            teacher: teacherName,
+            students: studentsCount,
+            status: 'Activo',
+          };
+        })
       );
+      
+      setCourses(coursesWithDetails);
       setShowEditCourseForm(false);
       setSelectedCourse(null);
     } catch (err) {
@@ -145,20 +212,6 @@ export default function AdminCourses() {
 
       {error && <div className="error-message-admin">{error}</div>}
 
-      <div className="courses-filters">
-        <div className="filter-group">
-          <label>Filtrar por estado:</label>
-          <select>
-            <option value="all">Todos</option>
-            <option value="active">Activos</option>
-            <option value="inactive">Inactivos</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <label>Buscar curso:</label>
-          <input type="text" placeholder="Nombre del curso..." />
-        </div>
-      </div>
 
       <div className="courses-grid">
         {courses.map(course => (
@@ -174,8 +227,7 @@ export default function AdminCourses() {
               <p><strong>Estudiantes:</strong> {course.students}</p>
             </div>
             <div className="course-actions">
-              <button className="view-btn" disabled>Ver Detalles</button>
-              <button 
+              <button
                 className="edit-btn-cursos" 
                 onClick={() => handleEditCourse(course)}
                 disabled={loading}

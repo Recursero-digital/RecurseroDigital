@@ -35,6 +35,10 @@ import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
 import { PostgreSQLGameLevelRepository } from '../infrastructure/PostgreSQLGameLevelRepository';
 import { GetGameLevelsUseCase } from '../core/usecases/GetGameLevelsUseCase';
 import { UpdateGameLevelUseCase } from '../core/usecases/UpdateGameLevelUseCase';
+import { UpdateStudentUseCase } from '../core/usecases/UpdateStudentUseCase';
+import { DeleteStudentUseCase } from '../core/usecases/DeleteStudentUseCase';
+import { UpdateTeacherUseCase } from '../core/usecases/UpdateTeacherUseCase';
+import { DeleteTeacherUseCase } from '../core/usecases/DeleteTeacherUseCase';
 
 
 export class DependencyContainer {
@@ -67,6 +71,10 @@ export class DependencyContainer {
     private _gameLevelRepository: PostgreSQLGameLevelRepository | null = null;
     private _getGameLevelsUseCase: GetGameLevelsUseCase | null = null;
     private _updateGameLevelUseCase: UpdateGameLevelUseCase | null = null;
+    private _updateStudentUseCase: UpdateStudentUseCase | null = null;
+    private _deleteStudentUseCase: DeleteStudentUseCase | null = null;
+    private _updateTeacherUseCase: UpdateTeacherUseCase | null = null;
+    private _deleteTeacherUseCase: DeleteTeacherUseCase | null = null;
 
 
     private constructor() {
@@ -365,6 +373,49 @@ export class DependencyContainer {
             );
         }
         return this._updateGameLevelUseCase;
+    }
+
+    public get updateStudentUseCase(): UpdateStudentUseCase {
+        if (!this._updateStudentUseCase) {
+            this._updateStudentUseCase = new UpdateStudentUseCase(
+                this.studentRepository,
+                this.teacherRepository,
+                this.adminRepository,
+                this.passwordEncoder
+            );
+        }
+        return this._updateStudentUseCase;
+    }
+
+    public get deleteStudentUseCase(): DeleteStudentUseCase {
+        if (!this._deleteStudentUseCase) {
+            this._deleteStudentUseCase = new DeleteStudentUseCase(
+                this.studentRepository
+            );
+        }
+        return this._deleteStudentUseCase;
+    }
+
+    public get updateTeacherUseCase(): UpdateTeacherUseCase {
+        if (!this._updateTeacherUseCase) {
+            this._updateTeacherUseCase = new UpdateTeacherUseCase(
+                this.teacherRepository,
+                this.studentRepository,
+                this.adminRepository,
+                this.courseRepository,
+                this.passwordEncoder
+            );
+        }
+        return this._updateTeacherUseCase;
+    }
+
+    public get deleteTeacherUseCase(): DeleteTeacherUseCase {
+        if (!this._deleteTeacherUseCase) {
+            this._deleteTeacherUseCase = new DeleteTeacherUseCase(
+                this.teacherRepository
+            );
+        }
+        return this._deleteTeacherUseCase;
     }
 
     public async clearAllData(): Promise<void> {

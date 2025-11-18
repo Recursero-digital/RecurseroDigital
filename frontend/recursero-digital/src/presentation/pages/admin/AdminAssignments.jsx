@@ -12,10 +12,13 @@ export default function AdminAssignments() {
   const [error, setError] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [showCourseStudentsModal, setShowCourseStudentsModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedCourses, setSelectedCourses] = useState([]); // Para asignar múltiples cursos a un docente
+  const [courseStudents, setCourseStudents] = useState([]);
+  const [selectedCourseForStudents, setSelectedCourseForStudents] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -48,19 +51,18 @@ export default function AdminAssignments() {
             
             // Buscar docente del curso
             const teacher = teachersData.find(t => {
-              // Necesitamos verificar si el docente tiene este curso
-              // Por ahora, si el curso tiene teacher_id, buscamos ese docente
-              return course.teacher_id && t.id === course.teacher_id;
+              // Buscar el docente por el teacherId del curso
+              return course.teacherId && t.id === course.teacherId;
             });
             
             return {
               id: course.id,
               courseName: course.name,
               courseId: course.id,
-              teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-              teacherId: course.teacher_id || null,
+              teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+              teacherId: course.teacherId || null,
               studentsCount,
-              status: course.teacher_id ? 'Activa' : 'Pendiente'
+              status: course.teacherId ? 'Activa' : 'Pendiente'
             };
           })
         );
@@ -134,16 +136,16 @@ export default function AdminAssignments() {
             console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
           }
           
-          const teacher = teachersData.find(t => course.teacher_id && t.id === course.teacher_id);
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
           
           return {
             id: course.id,
             courseName: course.name,
             courseId: course.id,
-            teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-            teacherId: course.teacher_id || null,
+            teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+            teacherId: course.teacherId || null,
             studentsCount,
-            status: course.teacher_id ? 'Activa' : 'Pendiente'
+            status: course.teacherId ? 'Activa' : 'Pendiente'
           };
         })
       );
@@ -193,16 +195,16 @@ export default function AdminAssignments() {
             console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
           }
           
-          const teacher = teachersData.find(t => course.teacher_id && t.id === course.teacher_id);
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
           
           return {
             id: course.id,
             courseName: course.name,
             courseId: course.id,
-            teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-            teacherId: course.teacher_id || null,
+            teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+            teacherId: course.teacherId || null,
             studentsCount,
-            status: course.teacher_id ? 'Activa' : 'Pendiente'
+            status: course.teacherId ? 'Activa' : 'Pendiente'
           };
         })
       );
@@ -225,6 +227,30 @@ export default function AdminAssignments() {
         return [...prev, courseId];
       }
     });
+  };
+
+  const handleViewCourseStudents = async (assignment) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSelectedCourseForStudents(assignment);
+      
+      // Obtener estudiantes del curso
+      const students = await getCourseStudents(assignment.courseId);
+      setCourseStudents(Array.isArray(students) ? students : []);
+      setShowCourseStudentsModal(true);
+    } catch (err) {
+      console.error('Error al cargar estudiantes del curso:', err);
+      setError(err.message || 'Error al cargar estudiantes del curso');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseCourseStudentsModal = () => {
+    setShowCourseStudentsModal(false);
+    setCourseStudents([]);
+    setSelectedCourseForStudents(null);
   };
 
   return (
@@ -272,28 +298,8 @@ export default function AdminAssignments() {
 
       <div className="assignments-content">
         <div className="assignments-filters">
-          <div className="filter-group">
-            <label>Filtrar por estado:</label>
-            <select>
-              <option value="all">Todas</option>
-              <option value="active">Activas</option>
-              <option value="finished">Finalizadas</option>
-              <option value="pending">Pendientes</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Filtrar por docente:</label>
-            <select>
-              <option value="all">Todos los docentes</option>
-              <option value="ana">Prof. Ana Martín</option>
-              <option value="luis">Prof. Luis Rodríguez</option>
-              <option value="carmen">Prof. Carmen López</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Buscar asignación:</label>
-            <input type="text" placeholder="Curso o docente..." />
-          </div>
+
+
         </div>
 
         <div className="assignments-table">
@@ -303,9 +309,6 @@ export default function AdminAssignments() {
                 <th>Curso</th>
                 <th>Docente</th>
                 <th>Estudiantes</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -321,19 +324,15 @@ export default function AdminAssignments() {
                   <td>
                     <span className="students-count">{assignment.studentsCount}</span>
                   </td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>
-                    <span className={`assignment-status ${assignment.status.toLowerCase()}`}>
-                      {assignment.status}
-                    </span>
-                  </td>
                   <td>
                     <div className="action-buttons">
-                      <button className="view-btn-asig">Ver</button>
-                      <button className="edit-btn-asig">Editar</button>
-                      <button className="students-btn-asig">Estudiantes</button>
-                      <button className="delete-btn-asig">Eliminar</button>
+                      <button 
+                        className="students-btn-asig"
+                        onClick={() => handleViewCourseStudents(assignment)}
+                        disabled={loading}
+                      >
+                        Estudiantes
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -491,6 +490,104 @@ export default function AdminAssignments() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para ver estudiantes del curso */}
+      {showCourseStudentsModal && selectedCourseForStudents && (
+        <div className="add-user-overlay" onClick={handleCloseCourseStudentsModal}>
+          <div className="add-user-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '800px' }}>
+            <div className="modal-header">
+              <h2>Estudiantes del Curso: {selectedCourseForStudents.courseName}</h2>
+              <button className="close-btn" onClick={handleCloseCourseStudentsModal}>×</button>
+            </div>
+            
+            <div className="user-form" style={{ padding: '2rem' }}>
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                  <p>Cargando estudiantes...</p>
+                </div>
+              ) : courseStudents.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                  <p>No hay estudiantes asignados a este curso</p>
+                </div>
+              ) : (
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ 
+                    width: '100%', 
+                    borderCollapse: 'collapse',
+                    borderRadius: '0.5rem',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                  }}>
+                    <thead>
+                      <tr>
+                        <th style={{
+                          padding: '1rem',
+                          textAlign: 'left',
+                          background: '#f7fafc',
+                          fontWeight: '600',
+                          color: '#348267',
+                          textTransform: 'uppercase',
+                          fontSize: '0.875rem',
+                          letterSpacing: '0.5px',
+                          borderBottom: '1px solid #e2e8f0'
+                        }}>Nombre</th>
+                        <th style={{
+                          padding: '1rem',
+                          textAlign: 'left',
+                          background: '#f7fafc',
+                          fontWeight: '600',
+                          color: '#348267',
+                          textTransform: 'uppercase',
+                          fontSize: '0.875rem',
+                          letterSpacing: '0.5px',
+                          borderBottom: '1px solid #e2e8f0'
+                        }}>Username</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {courseStudents.map((student) => (
+                        <tr key={student.id} style={{
+                          borderBottom: '1px solid #e2e8f0',
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#f7fafc'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <td style={{
+                            padding: '1rem',
+                            textAlign: 'left',
+                            color: 'black'
+                          }}>
+                            {student.name} {student.lastname}
+                          </td>
+                          <td style={{
+                            padding: '1rem',
+                            textAlign: 'left',
+                            color: 'black'
+                          }}>
+                            {student.userName || student.username}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              <div className="form-buttons" style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                <button 
+                  type="button"
+                  className="cancel-btn" 
+                  onClick={handleCloseCourseStudentsModal}
+                  style={{ width: '100%' }}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
