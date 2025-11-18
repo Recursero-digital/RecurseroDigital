@@ -72,7 +72,7 @@ export default function EditStudentForm({ onClose, onSubmit, student, courses = 
 
     if (validateForm()) {
       onSubmit({ 
-        id: student.id,
+        studentId: student.id,
         name: formData.name.trim(),
         lastname: formData.lastname.trim(),
         username: formData.username.trim(),

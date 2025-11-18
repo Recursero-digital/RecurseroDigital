@@ -89,7 +89,7 @@ export default function EditTeacherForm({ onClose, onSubmit, teacher, courses = 
 
     if (validateForm()) {
       onSubmit({ 
-        id: teacher.id,
+        teacherId: teacher.id,
         name: formData.name.trim(),
         surname: formData.surname.trim(),
         username: formData.username.trim(),
