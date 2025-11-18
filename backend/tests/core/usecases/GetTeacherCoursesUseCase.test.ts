@@ -77,6 +77,10 @@ class MockCourseRepository implements CourseRepository {
     return [];
   }
 
+  async updateCourseGameStatus(): Promise<void> {
+    return;
+  }
+
   async addGameToCourse(): Promise<void> {
     return;
   }

@@ -33,6 +33,9 @@ class MockCourseRepository implements CourseRepository {
         return [];
     }
 
+    async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
+    }
+
     async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
         if (!this.courseGames[courseId]) {
             this.courseGames[courseId] = new Set<string>();

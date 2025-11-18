@@ -38,6 +38,28 @@ class MockCourseRepository implements CourseRepository {
         return [];
     }
 
+    async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
+        const games = this.courseGames.get(courseGameId.split('-')[0]) || [];
+        const game = games.find(g => g.id === courseGameId);
+        if (game) {
+            const updatedGame = new CourseGame(
+                game.id,
+                game.getCourseId(),
+                game.getGameId(),
+                isEnabled,
+                game.getOrderIndex(),
+                game.getGame()
+            );
+            const courseId = game.getCourseId();
+            const courseGames = this.courseGames.get(courseId) || [];
+            const index = courseGames.findIndex(g => g.id === courseGameId);
+            if (index !== -1) {
+                courseGames[index] = updatedGame;
+                this.courseGames.set(courseId, courseGames);
+            }
+        }
+    }
+
     async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     }
 

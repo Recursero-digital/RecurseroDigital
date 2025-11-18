@@ -11,6 +11,7 @@ export interface CourseRepository {
     getEnabledGamesByCourseId(courseId: string): Promise<CourseGame[]>;
     getAllGamesByCourseId(courseId: string): Promise<CourseGame[]>;
     addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void>;
+    updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void>;
     createCourse(name: string, teacherId?: string): Promise<Course>;
     assignTeacherToCourse(teacherId: string, courseId: string): Promise<void>;
     getCoursesByTeacherId(teacherId: string): Promise<Course[]>;

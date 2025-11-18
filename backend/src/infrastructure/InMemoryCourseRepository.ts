@@ -50,7 +50,6 @@ export class InMemoryCourseRepository implements CourseRepository {
   }
 
   async getAllGames(): Promise<Game[]> {
-    // Para tests, retornar array vacío o juegos mock si es necesario
     return [];
   }
 
@@ -61,15 +60,15 @@ export class InMemoryCourseRepository implements CourseRepository {
     this.courseGames[courseId].add(gameId);
   }
 
+  async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
+  }
+
 
   async createCourse(name: string, teacherId?: string): Promise<Course> {
     const courseId = `course_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const course = new Course(courseId, name, teacherId || '', []);
     this.courses.push(course);
-
-    // En memoria, no necesitamos crear los registros de games ya que no hay persistencia real
-    // Esto se manejará en los tests si es necesario
 
     return course;
   }

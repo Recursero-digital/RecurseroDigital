@@ -303,6 +303,26 @@
   color: white;
 }
 
+.action-btn.enable-game {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.action-btn.enable-game:hover {
+  background: #10b981;
+  color: white;
+}
+
+.action-btn.disable-game {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.action-btn.disable-game:hover {
+  background: #ef4444;
+  color: white;
+}
+
 .game-detail {
   background: white;
   border-radius: 1rem;

@@ -22,7 +22,6 @@ class MockCourseRepository implements CourseRepository {
 
     async addCourse(courseData: Course): Promise<void> {
         this.courses.push(courseData);
-        // Cuando se agrega un curso con addCourse, también crear los course_games
         for (let i = 0; i < this.games.length; i++) {
             const courseGameId = `course_game_${courseData.id}_${i}`;
             await this.addGameToCourse(courseGameId, courseData.id, this.games[i].id);
@@ -49,6 +48,13 @@ class MockCourseRepository implements CourseRepository {
         return [...this.games];
     }
 
+    async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
+        const courseGame = this.courseGames.find(cg => cg.courseId === courseGameId || cg.gameId === courseGameId);
+        if (courseGame) {
+            courseGame.isEnabled = isEnabled;
+        }
+    }
+
     async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
         this.courseGames.push({ courseId, gameId, isEnabled: false });
     }
@@ -57,7 +63,6 @@ class MockCourseRepository implements CourseRepository {
         const courseId = `course-${Date.now()}`;
         const course = new Course(courseId, name, teacherId || '', []);
 
-        // Simular la creación de registros en courses_games para todos los juegos
         for (let i = 0; i < this.games.length; i++) {
             const courseGameId = `course_game_${courseId}_${i}`;
             await this.addGameToCourse(courseGameId, courseId, this.games[i].id);

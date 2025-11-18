@@ -5,6 +5,7 @@ import { CreateCourseUseCase } from '../../core/usecases/CreateCourseUseCase';
 import { UpdateCourseUseCase } from '../../core/usecases/UpdateCourseUseCase';
 import { DeleteCourseUseCase } from '../../core/usecases/DeleteCourseUseCase';
 import { GetAllCourseGamesUseCase } from '../../core/usecases/GetAllCourseGamesUseCase';
+import { UpdateCourseGameStatusUseCase } from '../../core/usecases/UpdateCourseGameStatusUseCase';
 
 const container = DependencyContainer.getInstance();
 
@@ -196,6 +197,41 @@ export const courseController = {
                 return;
             }
             console.error('Error en getAllCourseGames:', error);
+            res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+        }
+    },
+
+    updateCourseGameStatus: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { courseGameId } = req.params as { courseGameId: string };
+            const { isEnabled } = req.body as { isEnabled: boolean };
+
+            if (!courseGameId) {
+                res.status(400).json({ error: 'courseGameId es requerido' });
+                return;
+            }
+
+            if (typeof isEnabled !== 'boolean') {
+                res.status(400).json({ error: 'isEnabled debe ser un valor booleano' });
+                return;
+            }
+
+            const useCase = new UpdateCourseGameStatusUseCase(container.courseRepository);
+            await useCase.execute({ courseGameId, isEnabled });
+
+            res.status(200).json({
+                message: `Juego ${isEnabled ? 'habilitado' : 'deshabilitado'} correctamente`
+            });
+        } catch (error: any) {
+            if (error.message === 'courseGameId es requerido' || error.message === 'isEnabled debe ser un valor booleano') {
+                res.status(400).json({ error: error.message });
+                return;
+            }
+            if (error.message === 'El juego del curso no existe') {
+                res.status(404).json({ error: error.message });
+                return;
+            }
+            console.error('Error en updateCourseGameStatus:', error);
             res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
         }
     }

@@ -252,14 +252,12 @@ export class PostgreSQLCourseRepository implements CourseRepository {
 
   async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     try {
-      // Primero obtenemos el próximo order_index
       const orderResult = await this.db.query(
         'SELECT COALESCE(MAX(order_index) + 1, 0) as next_order FROM courses_games WHERE course_id = $1',
         [courseId]
       );
       const nextOrder = orderResult.rows[0]?.next_order || 0;
 
-      // Luego insertamos el juego al curso
       await this.db.query(
         `INSERT INTO courses_games (id, course_id, game_id, is_enabled, order_index)
          VALUES ($1, $2, $3, true, $4)
@@ -273,9 +271,26 @@ export class PostgreSQLCourseRepository implements CourseRepository {
     }
   }
 
+  async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
+    try {
+      const result = await this.db.query(
+        `UPDATE courses_games 
+         SET is_enabled = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $2`,
+        [isEnabled, courseGameId]
+      );
+
+      if (result.rowCount === 0) {
+        throw new Error('El juego del curso no existe');
+      }
+    } catch (error) {
+      console.error('Error al actualizar estado del juego del curso:', error);
+      throw error;
+    }
+  }
+
   async createCourse(name: string, teacherId?: string): Promise<Course> {
     try {
-      //ID para el curso
       const courseId = `course_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       await this.db.query(
@@ -284,10 +299,8 @@ export class PostgreSQLCourseRepository implements CourseRepository {
         [courseId, name, teacherId || null]
       );
 
-      // Obtener todos los juegos existentes
       const allGames = await this.getAllGames();
 
-      // Crear un registro en courses_games por cada juego, todos deshabilitados por defecto
       for (let i = 0; i < allGames.length; i++) {
         const game = allGames[i];
         const courseGameId = `course_game_${Date.now()}_${i}_${Math.random().toString(36).substr(2, 9)}`;
