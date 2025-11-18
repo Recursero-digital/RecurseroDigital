@@ -322,12 +322,14 @@ export class PostgreSQLCourseRepository implements CourseRepository {
 
   async assignTeacherToCourse(teacherId: string, courseId: string): Promise<void> {
     try {
+        // Si teacherId es cadena vacía, desasignar (poner null)
+        const teacherIdValue = teacherId === '' ? null : teacherId;
         await this.db.query(
             `UPDATE courses 
              SET teacher_id = $1, 
                  updated_at = CURRENT_TIMESTAMP 
              WHERE id = $2`,
-            [teacherId, courseId]
+            [teacherIdValue, courseId]
         );
     } catch (error) {
         console.error('Error al asignar profesor al curso:', error);

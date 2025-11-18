@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import '../../styles/pages/adminTeachers.css';
 
-export default function AdminTeachers({ teachers = [] }) {
+export default function AdminTeachers({ teachers = [], onEdit, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filtrar docentes según búsqueda
@@ -66,8 +66,18 @@ export default function AdminTeachers({ teachers = [] }) {
                   </div>
                 </div>
                 <div className="teacher-actions">
-                  <button className="edit-boton">Editar</button>
-                  <button className="delete-boton">Eliminar</button>
+                  <button 
+                    className="edit-boton" 
+                    onClick={() => onEdit && onEdit(teacher)}
+                  >
+                    Editar
+                  </button>
+                  <button 
+                    className="delete-boton" 
+                    onClick={() => onDelete && onDelete(teacher)}
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </div>
             ))

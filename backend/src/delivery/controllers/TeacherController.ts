@@ -6,6 +6,8 @@ import { TeacherInvalidRequestError } from '../../core/models/exceptions/Teacher
 import { TeacherAlreadyExistsError } from '../../core/models/exceptions/TeacherAlreadyExistsError';
 import { AuthenticatedRequest } from '../middleware/authMiddleWare';
 import { AddTeacherUseCase, AddTeacherRequest } from '../../core/usecases/addTeacherUseCase';
+import { UpdateTeacherUseCase } from '../../core/usecases/UpdateTeacherUseCase';
+import { DeleteTeacherUseCase } from '../../core/usecases/DeleteTeacherUseCase';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -169,10 +171,120 @@ const getMyCourseDetails = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+const updateTeacher = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { teacherId } = req.params as { teacherId: string };
+        const { name, surname, username, email, password, courseIds } = req.body as { 
+            name: string;
+            surname: string;
+            username: string; 
+            email: string; 
+            password?: string | null;
+            courseIds: string[];
+        };
+
+        if (!teacherId) {
+            res.status(400).json({ error: 'teacherId es requerido' });
+            return;
+        }
+
+        if (!name || name.trim() === '') {
+            res.status(400).json({ error: 'El nombre es requerido' });
+            return;
+        }
+
+        if (!surname || surname.trim() === '') {
+            res.status(400).json({ error: 'El apellido es requerido' });
+            return;
+        }
+
+        if (!username || username.trim() === '') {
+            res.status(400).json({ error: 'El username es requerido' });
+            return;
+        }
+
+        if (!email || email.trim() === '') {
+            res.status(400).json({ error: 'El email es requerido' });
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            res.status(400).json({ error: 'El email no tiene un formato válido' });
+            return;
+        }
+
+        if (password && password.trim() !== '' && password.trim().length < 6) {
+            res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+            return;
+        }
+
+        if (!Array.isArray(courseIds)) {
+            res.status(400).json({ error: 'courseIds debe ser un array' });
+            return;
+        }
+
+        const useCase = dependencyContainer.updateTeacherUseCase;
+        const result = await useCase.execute({ 
+            teacherId,
+            name: name.trim(),
+            surname: surname.trim(),
+            username: username.trim(), 
+            email: email.trim(),
+            password: password || null,
+            courseIds
+        });
+
+        res.status(200).json({ 
+            message: 'Docente actualizado exitosamente', 
+            teacher: result 
+        });
+    } catch (error: any) {
+        if (error.message === 'El docente no existe') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error.message.includes('username ya está en uso')) {
+            res.status(409).json({ error: error.message });
+            return;
+        }
+        if (error.message.includes('no existe')) {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en updateTeacher:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+const deleteTeacher = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { teacherId } = req.params as { teacherId: string };
+
+        if (!teacherId) {
+            res.status(400).json({ error: 'teacherId es requerido' });
+            return;
+        }
+
+        const useCase = new DeleteTeacherUseCase(dependencyContainer.teacherRepository);
+        await useCase.execute({ teacherId });
+
+        res.status(200).json({ message: 'Docente eliminado exitosamente' });
+    } catch (error: any) {
+        if (error.message === 'El docente no existe') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en deleteTeacher:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
 export const teacherController = {
     addTeacher,
     getAllTeachers,
     assignTeacherToCourses,
     getTeacherCourses,
-    getMyCourseDetails
+    getMyCourseDetails,
+    updateTeacher,
+    deleteTeacher
 };

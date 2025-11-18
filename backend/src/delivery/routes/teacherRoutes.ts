@@ -10,4 +10,10 @@ router.post('/:teacherId/courses', protectAdminRoute(), teacherController.assign
 router.get('/me/courses', protectTeacherOrAdminRoute(), teacherController.getTeacherCourses);
 router.get('/me/courses/:courseId', protectTeacherRoute(), teacherController.getMyCourseDetails);
 
+// PATCH /api/teacher/:teacherId
+router.patch('/:teacherId', protectAdminRoute(), teacherController.updateTeacher);
+
+// DELETE /api/teacher/:teacherId
+router.delete('/:teacherId', protectAdminRoute(), teacherController.deleteTeacher);
+
 export default router;
