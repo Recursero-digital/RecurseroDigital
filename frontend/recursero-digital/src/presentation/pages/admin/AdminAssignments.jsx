@@ -12,10 +12,13 @@ export default function AdminAssignments() {
   const [error, setError] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [showCourseStudentsModal, setShowCourseStudentsModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedCourses, setSelectedCourses] = useState([]); // Para asignar múltiples cursos a un docente
+  const [courseStudents, setCourseStudents] = useState([]);
+  const [selectedCourseForStudents, setSelectedCourseForStudents] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -226,6 +229,30 @@ export default function AdminAssignments() {
     });
   };
 
+  const handleViewCourseStudents = async (assignment) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSelectedCourseForStudents(assignment);
+      
+      // Obtener estudiantes del curso
+      const students = await getCourseStudents(assignment.courseId);
+      setCourseStudents(Array.isArray(students) ? students : []);
+      setShowCourseStudentsModal(true);
+    } catch (err) {
+      console.error('Error al cargar estudiantes del curso:', err);
+      setError(err.message || 'Error al cargar estudiantes del curso');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseCourseStudentsModal = () => {
+    setShowCourseStudentsModal(false);
+    setCourseStudents([]);
+    setSelectedCourseForStudents(null);
+  };
+
   return (
     <div className="admin-assignments">
       <div className="assignments-header">
@@ -299,10 +326,13 @@ export default function AdminAssignments() {
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <button className="view-btn-asig">Ver</button>
-                      <button className="edit-btn-asig">Editar</button>
-                      <button className="students-btn-asig">Estudiantes</button>
-                      <button className="delete-btn-asig">Eliminar</button>
+                      <button 
+                        className="students-btn-asig"
+                        onClick={() => handleViewCourseStudents(assignment)}
+                        disabled={loading}
+                      >
+                        Estudiantes
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -460,6 +490,104 @@ export default function AdminAssignments() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para ver estudiantes del curso */}
+      {showCourseStudentsModal && selectedCourseForStudents && (
+        <div className="add-user-overlay" onClick={handleCloseCourseStudentsModal}>
+          <div className="add-user-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '800px' }}>
+            <div className="modal-header">
+              <h2>Estudiantes del Curso: {selectedCourseForStudents.courseName}</h2>
+              <button className="close-btn" onClick={handleCloseCourseStudentsModal}>×</button>
+            </div>
+            
+            <div className="user-form" style={{ padding: '2rem' }}>
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                  <p>Cargando estudiantes...</p>
+                </div>
+              ) : courseStudents.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                  <p>No hay estudiantes asignados a este curso</p>
+                </div>
+              ) : (
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ 
+                    width: '100%', 
+                    borderCollapse: 'collapse',
+                    borderRadius: '0.5rem',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                  }}>
+                    <thead>
+                      <tr>
+                        <th style={{
+                          padding: '1rem',
+                          textAlign: 'left',
+                          background: '#f7fafc',
+                          fontWeight: '600',
+                          color: '#348267',
+                          textTransform: 'uppercase',
+                          fontSize: '0.875rem',
+                          letterSpacing: '0.5px',
+                          borderBottom: '1px solid #e2e8f0'
+                        }}>Nombre</th>
+                        <th style={{
+                          padding: '1rem',
+                          textAlign: 'left',
+                          background: '#f7fafc',
+                          fontWeight: '600',
+                          color: '#348267',
+                          textTransform: 'uppercase',
+                          fontSize: '0.875rem',
+                          letterSpacing: '0.5px',
+                          borderBottom: '1px solid #e2e8f0'
+                        }}>Username</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {courseStudents.map((student) => (
+                        <tr key={student.id} style={{
+                          borderBottom: '1px solid #e2e8f0',
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#f7fafc'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <td style={{
+                            padding: '1rem',
+                            textAlign: 'left',
+                            color: 'black'
+                          }}>
+                            {student.name} {student.lastname}
+                          </td>
+                          <td style={{
+                            padding: '1rem',
+                            textAlign: 'left',
+                            color: 'black'
+                          }}>
+                            {student.userName || student.username}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              <div className="form-buttons" style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                <button 
+                  type="button"
+                  className="cancel-btn" 
+                  onClick={handleCloseCourseStudentsModal}
+                  style={{ width: '100%' }}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
