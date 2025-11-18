@@ -24,8 +24,6 @@ export default function MainLayout({ children, userRole = "alumno" }) {
       setActiveTab("users");
     } else if (path.includes('/cursos')) {
       setActiveTab("courses");
-    } else if (path.includes('/estadisticas')) {
-      setActiveTab("statistics");
     } else if (path.includes('/asignaciones')) {
       setActiveTab("assignments");
     } else {
@@ -48,7 +46,6 @@ export default function MainLayout({ children, userRole = "alumno" }) {
     : [
         { id: "home", label: "🏠 Inicio", path: "/admin" },
         { id: "courses", label: "📚 Cursos", path: "/admin/cursos" },
-        { id: "statistics", label: "📊 Estadisticas", path: "/admin/estadisticas" },
         { id: "users", label: "👥 Usuarios", path: "/admin/usuarios" },
         { id: "assignments", label: "📋 Asignaciones", path: "/admin/asignaciones" }
       ];
