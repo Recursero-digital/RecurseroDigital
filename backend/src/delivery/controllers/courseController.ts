@@ -4,6 +4,7 @@ import { AssignGameToCourseUseCase } from '../../core/usecases/AssignGameToCours
 import { CreateCourseUseCase } from '../../core/usecases/CreateCourseUseCase';
 import { UpdateCourseUseCase } from '../../core/usecases/UpdateCourseUseCase';
 import { DeleteCourseUseCase } from '../../core/usecases/DeleteCourseUseCase';
+import { GetAllCourseGamesUseCase } from '../../core/usecases/GetAllCourseGamesUseCase';
 
 const container = DependencyContainer.getInstance();
 
@@ -57,8 +58,7 @@ export const courseController = {
             }
 
             const useCase = new CreateCourseUseCase(
-                container.courseRepository,
-                container.uuidGenerator
+                container.courseRepository
             );
 
             const result = await useCase.execute({ name: name.trim() });
@@ -151,6 +151,51 @@ export const courseController = {
                 return;
             }
             console.error('Error en deleteCourse:', error);
+            res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+        }
+    },
+
+    getAllCourseGames: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { courseId } = req.params as { courseId: string };
+
+            if (!courseId) {
+                res.status(400).json({ error: 'courseId es requerido' });
+                return;
+            }
+
+            const useCase = new GetAllCourseGamesUseCase(container.courseRepository);
+            const result = await useCase.execute({ courseId });
+
+            res.status(200).json({
+                courseId: result.courseId,
+                games: result.games.map(courseGame => ({
+                    id: courseGame.id,
+                    courseId: courseGame.getCourseId(),
+                    gameId: courseGame.getGameId(),
+                    isEnabled: courseGame.getIsEnabled(),
+                    orderIndex: courseGame.getOrderIndex(),
+                    game: courseGame.getGame() ? {
+                        id: courseGame.getGame()!.id,
+                        name: courseGame.getGame()!.getName(),
+                        description: courseGame.getGame()!.getDescription(),
+                        imageUrl: courseGame.getGame()!.getImageUrl(),
+                        route: courseGame.getGame()!.getRoute(),
+                        difficultyLevel: courseGame.getGame()!.getDifficultyLevel(),
+                        isActive: courseGame.getGame()!.getIsActive()
+                    } : null
+                }))
+            });
+        } catch (error: any) {
+            if (error.message === 'courseId es requerido') {
+                res.status(400).json({ error: error.message });
+                return;
+            }
+            if (error.message === 'El curso no existe') {
+                res.status(404).json({ error: error.message });
+                return;
+            }
+            console.error('Error en getAllCourseGames:', error);
             res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
         }
     }

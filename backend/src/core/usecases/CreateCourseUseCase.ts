@@ -1,5 +1,4 @@
 import { CourseRepository } from '../infrastructure/CourseRepository';
-import { IdGenerator } from '../infrastructure/IdGenerator';
 import { Course } from '../models/Course';
 
 export interface CreateCourseRequest {
@@ -15,14 +14,11 @@ export interface CreateCourseResponse {
 
 export class CreateCourseUseCase {
     private courseRepository: CourseRepository;
-    private idGenerator: IdGenerator;
 
     constructor(
-        courseRepository: CourseRepository,
-        idGenerator: IdGenerator
+        courseRepository: CourseRepository
     ) {
         this.courseRepository = courseRepository;
-        this.idGenerator = idGenerator;
     }
 
     async execute(request: CreateCourseRequest): Promise<CreateCourseResponse> {
@@ -35,19 +31,13 @@ export class CreateCourseUseCase {
             throw new Error('Ya existe un curso con ese nombre');
         }
 
-        const courseId = this.idGenerator.generate();
-
-        const course = new Course(
-            courseId,
+        const course = await this.courseRepository.createCourse(
             request.name.trim(),
-            request.teacherId || '',
-            [] // Array vacío de estudiantes inicialmente
+            request.teacherId
         );
 
-        await this.courseRepository.addCourse(course);
-
         return {
-            id: courseId,
+            id: course.id,
             name: course.name,
             teacherId: course.teacher_id
         };

@@ -168,6 +168,87 @@ export class PostgreSQLCourseRepository implements CourseRepository {
     }
   }
 
+  async getAllGamesByCourseId(courseId: string): Promise<CourseGame[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT 
+           cg.id,
+           cg.course_id,
+           cg.game_id,
+           cg.is_enabled,
+           cg.order_index,
+           cg.created_at,
+           cg.updated_at,
+           g.name as game_name,
+           g.description as game_description,
+           g.image_url as game_image_url,
+           g.route as game_route,
+           g.difficulty_level as game_difficulty_level,
+           g.is_active as game_is_active,
+           g.created_at as game_created_at,
+           g.updated_at as game_updated_at
+         FROM courses_games cg
+         JOIN games g ON cg.game_id = g.id
+         WHERE cg.course_id = $1
+         ORDER BY cg.order_index ASC`,
+        [courseId]
+      );
+
+      return result.rows.map((row: any) => {
+        const game = new Game(
+          row.game_id,
+          row.game_name,
+          row.game_description,
+          row.game_image_url,
+          row.game_route,
+          row.game_difficulty_level,
+          row.game_is_active,
+          row.game_created_at,
+          row.game_updated_at
+        );
+
+        return new CourseGame(
+          row.id,
+          row.course_id,
+          row.game_id,
+          row.is_enabled,
+          row.order_index,
+          game,
+          row.created_at,
+          row.updated_at
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener todos los juegos del curso:', error);
+      throw error;
+    }
+  }
+
+  async getAllGames(): Promise<Game[]> {
+    try {
+      const result = await this.db.query(
+        `SELECT * FROM games ORDER BY created_at ASC`
+      );
+
+      return result.rows.map((row: any) => {
+        return new Game(
+          row.id,
+          row.name,
+          row.description,
+          row.image_url,
+          row.route,
+          row.difficulty_level,
+          row.is_active,
+          row.created_at,
+          row.updated_at
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener todos los juegos:', error);
+      throw error;
+    }
+  }
+
 
   async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     try {
@@ -202,6 +283,22 @@ export class PostgreSQLCourseRepository implements CourseRepository {
          VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         [courseId, name, teacherId || null]
       );
+
+      // Obtener todos los juegos existentes
+      const allGames = await this.getAllGames();
+
+      // Crear un registro en courses_games por cada juego, todos deshabilitados por defecto
+      for (let i = 0; i < allGames.length; i++) {
+        const game = allGames[i];
+        const courseGameId = `course_game_${Date.now()}_${i}_${Math.random().toString(36).substr(2, 9)}`;
+        
+        await this.db.query(
+          `INSERT INTO courses_games (id, course_id, game_id, is_enabled, order_index, created_at, updated_at)
+           VALUES ($1, $2, $3, false, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+           ON CONFLICT (course_id, game_id) DO NOTHING`,
+          [courseGameId, courseId, game.id, i]
+        );
+      }
 
       return new Course(courseId, name, teacherId || '', []);
     } catch (error) {

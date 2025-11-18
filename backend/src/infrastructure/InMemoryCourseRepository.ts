@@ -1,6 +1,7 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
 import { Course } from '../core/models/Course';
 import { CourseGame } from '../core/models/CourseGame';
+import { Game } from '../core/models/Game';
 
 export class InMemoryCourseRepository implements CourseRepository {
   private courses: Course[] = [];
@@ -44,6 +45,15 @@ export class InMemoryCourseRepository implements CourseRepository {
     return [];
   }
 
+  async getAllGamesByCourseId(courseId: string): Promise<CourseGame[]> {
+    return [];
+  }
+
+  async getAllGames(): Promise<Game[]> {
+    // Para tests, retornar array vacío o juegos mock si es necesario
+    return [];
+  }
+
   async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     if (!this.courseGames[courseId]) {
       this.courseGames[courseId] = new Set<string>();
@@ -57,6 +67,9 @@ export class InMemoryCourseRepository implements CourseRepository {
 
     const course = new Course(courseId, name, teacherId || '', []);
     this.courses.push(course);
+
+    // En memoria, no necesitamos crear los registros de games ya que no hay persistencia real
+    // Esto se manejará en los tests si es necesario
 
     return course;
   }
