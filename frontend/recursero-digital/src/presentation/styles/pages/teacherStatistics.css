@@ -1,5 +1,5 @@
 .teacher-statistics {
-  padding: 2rem;
+  padding: 2rem 10rem;
   min-height: 100vh;
 }
 
@@ -21,5 +21,22 @@
 
 .statistics-content {
   width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1.5rem 0.1rem;
+}
+
+@media (max-width: 768px) {
+  .teacher-statistics {
+    padding: 1rem;
+  }
+  
+  .statistics-content {
+    padding: 1rem;
+  }
 }
 

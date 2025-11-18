@@ -76,8 +76,8 @@ const TeacherStudents = () => {
         )}
         
         {currentView === 'student' && selectedStudent && (
-          <div className="student-detail">
-            <div className="detail-header">
+          <div>
+            <div className="detalle-header">
               <button className="back-btn" onClick={handleBackToList}>
                 ← Volver a la Lista
               </button>
@@ -86,15 +86,11 @@ const TeacherStudents = () => {
 
             <div className="student-profile-placeholder">
               <div className="profile-card">
-                <h3>📋 Información del Estudiante</h3>
+                <h3>Información del Estudiante</h3>
                 <div className="info-grid">
                   <div className="info-item">
                     <label>Nombre:</label>
                     <span>{selectedStudent.name}</span>
-                  </div>
-                  <div className="info-item">
-                    <label>Email:</label>
-                    <span>{selectedStudent.email}</span>
                   </div>
                   <div className="info-item">
                     <label>Juegos Jugados:</label>
@@ -108,7 +104,7 @@ const TeacherStudents = () => {
               </div>
               
               <div className="games-detail">
-                <h3>🎮 Progreso por Juego</h3>
+                <h3>Progreso por Juego</h3>
                 <div className="games-grid">
                   {Object.entries(selectedStudent.progressByGame || {}).map(([game, progress]) => {
                     const gameNames = {
@@ -121,18 +117,18 @@ const TeacherStudents = () => {
                     return (
                       <div key={game} className="game-detail-card">
                         <h4>{gameNames[game]}</h4>
-                        <div className="game-stats">
+                        <div className="game-estadisticas">
                           <div className="stat">
-                            <span className="stat-label">Completados</span>
-                            <span className="stat-value">{progress.completed}</span>
+                            <span className="labels">Completados</span>
+                            <span className="values">{progress.completed}</span>
                           </div>
                           <div className="stat">
-                            <span className="stat-label">Promedio</span>
-                            <span className="stat-value">{progress.averageScore}%</span>
+                            <span className="labels">Promedio</span>
+                            <span className="values">{progress.averageScore}%</span>
                           </div>
                           <div className="stat">
-                            <span className="stat-label">Tiempo Total</span>
-                            <span className="stat-value">{Math.round(progress.totalTime / 60)}m</span>
+                            <span className="labels">Tiempo Total</span>
+                            <span className="values">{Math.round(progress.totalTime / 60)}m</span>
                           </div>
                         </div>
                       </div>
