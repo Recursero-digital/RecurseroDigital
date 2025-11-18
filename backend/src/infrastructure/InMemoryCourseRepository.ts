@@ -1,6 +1,7 @@
 import { CourseRepository } from '../core/infrastructure/CourseRepository';
 import { Course } from '../core/models/Course';
 import { CourseGame } from '../core/models/CourseGame';
+import { Game } from '../core/models/Game';
 
 export class InMemoryCourseRepository implements CourseRepository {
   private courses: Course[] = [];
@@ -44,11 +45,22 @@ export class InMemoryCourseRepository implements CourseRepository {
     return [];
   }
 
+  async getAllGamesByCourseId(courseId: string): Promise<CourseGame[]> {
+    return [];
+  }
+
+  async getAllGames(): Promise<Game[]> {
+    return [];
+  }
+
   async addGameToCourse(courseGameId: string, courseId: string, gameId: string): Promise<void> {
     if (!this.courseGames[courseId]) {
       this.courseGames[courseId] = new Set<string>();
     }
     this.courseGames[courseId].add(gameId);
+  }
+
+  async updateCourseGameStatus(courseGameId: string, isEnabled: boolean): Promise<void> {
   }
 
 
