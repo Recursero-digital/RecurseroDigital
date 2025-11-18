@@ -7,7 +7,6 @@ import HomeDocente from "./presentation/pages/teacher/homeDocente";
 import HomeAdmin from "./presentation/pages/admin/homeAdmin";
 import AdminUsers from "./presentation/pages/admin/AdminUsers";
 import AdminCourses from "./presentation/pages/admin/AdminCourses";
-import AdminStatistics from "./presentation/pages/admin/AdminStatistics";
 import AdminTeachers from "./presentation/pages/admin/AdminTeachers";
 import AdminAssignments from "./presentation/pages/admin/AdminAssignments";
 import AdminGameLevels from "./presentation/pages/admin/AdminGameLevels";
@@ -249,14 +248,6 @@ function App() {
             element={
               <MainLayout userRole="admin">
                 <AdminCourses />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/admin/estadisticas"
-            element={
-              <MainLayout userRole="admin">
-                <AdminStatistics />
               </MainLayout>
             }
           />

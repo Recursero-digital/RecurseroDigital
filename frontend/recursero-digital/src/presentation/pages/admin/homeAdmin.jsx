@@ -17,10 +17,6 @@ export default function HomeAdmin() {
     navigate('/admin/asignaciones');
   };
 
-  const handleVerReportes = () => {
-    navigate('/admin/estadisticas');
-  };
-
   const handleConfigurarJuegos = () => {
     navigate('/admin/juegos');
   };
@@ -84,10 +80,6 @@ export default function HomeAdmin() {
           <button className="action-card-admin" onClick={handleNuevaAsignacion}>
             <span className="action-icon">🔗</span>
             <span className="action-text">Nueva Asignación</span>
-          </button>
-          <button className="action-card-admin" onClick={handleVerReportes}>
-            <span className="action-icon">📊</span>
-            <span className="action-text">Ver Reportes</span>
           </button>
           <button className="action-card-admin" onClick={handleConfigurarJuegos}>
             <span className="action-icon">🎮</span>
