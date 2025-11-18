@@ -272,19 +272,7 @@ export default function AdminAssignments() {
       <div className="assignments-content">
         <div className="assignments-filters">
 
-          <div className="filter-group">
-            <label>Filtrar por docente:</label>
-            <select>
-              <option value="all">Todos los docentes</option>
-              <option value="ana">Prof. Ana Martín</option>
-              <option value="luis">Prof. Luis Rodríguez</option>
-              <option value="carmen">Prof. Carmen López</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Buscar asignación:</label>
-            <input type="text" placeholder="Curso o docente..." />
-          </div>
+
         </div>
 
         <div className="assignments-table">
