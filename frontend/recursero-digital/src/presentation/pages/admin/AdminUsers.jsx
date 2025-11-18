@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddUserForm from "./AddUserForm";
 import "../../styles/pages/adminUsers.css";
 import AdminTeachers from "../admin/AdminTeachers";
-import { createStudent, getAllStudents, createTeacher, getAllTeachers } from "../../services/adminService";
+import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents } from "../../services/adminService";
 
 export default function AdminUsers() {
   const [activeTab, setActiveTab] = useState("students");
@@ -35,16 +35,44 @@ export default function AdminUsers() {
             }))
           );
         } else if (activeTab === "teachers") {
-          const data = await getAllTeachers();
-          setTeachers(
-            data.map((t) => ({
-              id: t.id,
-              name: t.fullName || `${t.name} ${t.surname}`,
-              username: t.username,
-              email: t.email,
-              status: "Activo",
-            }))
+          const [teachersData, coursesData] = await Promise.all([
+            getAllTeachers(),
+            getAllCourses()
+          ]);
+          
+          // Para cada docente, obtener sus cursos y estudiantes
+          const teachersWithDetails = await Promise.all(
+            teachersData.map(async (teacher) => {
+              // Filtrar cursos asignados a este docente
+              const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+              
+              // Obtener estudiantes de todos los cursos del docente
+              const allStudents = new Set(); // Usar Set para evitar duplicados
+              
+              for (const course of teacherCourses) {
+                try {
+                  const courseStudents = await getCourseStudents(course.id);
+                  if (Array.isArray(courseStudents)) {
+                    courseStudents.forEach(student => allStudents.add(student.id));
+                  }
+                } catch (err) {
+                  console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+                }
+              }
+              
+              return {
+                id: teacher.id,
+                name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+                username: teacher.username,
+                email: teacher.email,
+                status: "Activo",
+                courses: teacherCourses,
+                students: Array.from(allStudents).map(id => ({ id })) // Array de IDs únicos
+              };
+            })
           );
+          
+          setTeachers(teachersWithDetails);
         }
       } catch (err) {
         console.error("Error al cargar datos:", err);
@@ -89,17 +117,41 @@ export default function AdminUsers() {
           username: userData.username,
           password: userData.password,
         });
-        // Recargar la lista desde el backend
-        const data = await getAllTeachers();
-        setTeachers(
-          data.map((t) => ({
-            id: t.id,
-            name: t.fullName || `${t.name} ${t.surname}`,
-            username: t.username,
-            email: t.email,
-            status: "Activo",
-          }))
+        // Recargar la lista desde el backend con cursos y estudiantes
+        const [teachersData, coursesData] = await Promise.all([
+          getAllTeachers(),
+          getAllCourses()
+        ]);
+        
+        const teachersWithDetails = await Promise.all(
+          teachersData.map(async (teacher) => {
+            const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+            const allStudents = new Set();
+            
+            for (const course of teacherCourses) {
+              try {
+                const courseStudents = await getCourseStudents(course.id);
+                if (Array.isArray(courseStudents)) {
+                  courseStudents.forEach(student => allStudents.add(student.id));
+                }
+              } catch (err) {
+                console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+              }
+            }
+            
+            return {
+              id: teacher.id,
+              name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+              username: teacher.username,
+              email: teacher.email,
+              status: "Activo",
+              courses: teacherCourses,
+              students: Array.from(allStudents).map(id => ({ id }))
+            };
+          })
         );
+        
+        setTeachers(teachersWithDetails);
       }
 
       setShowAddUserForm(false);

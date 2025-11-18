@@ -7,7 +7,6 @@ export default function AdminTeachers({ teachers = [] }) {
   // Filtrar docentes según búsqueda
   const filteredTeachers = useMemo(() => {
     return teachers.filter(teacher => {
-      // Filtro por búsqueda (nombre o email)
       const matchesSearch = searchTerm === '' ||
         teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         teacher.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -16,7 +15,6 @@ export default function AdminTeachers({ teachers = [] }) {
     });
   }, [teachers, searchTerm]);
 
-  // Si no hay teachers, mostrar mensaje
   if (!teachers || teachers.length === 0) {
     return (
       <div className="admin-teachers">
@@ -27,12 +25,6 @@ export default function AdminTeachers({ teachers = [] }) {
 
   return (
     <div className="admin-teachers">
-
-
-      {/*      <div className="stat-card">
-          <h3>Total Estudiantes</h3>
-          <div className="stat-number">{teachers.reduce((acc, t) => acc + t.students, 0)}</div>
-        </div>*/}
 
       <div className="teachers-content">
         <div className="teachers-filters">
@@ -64,19 +56,17 @@ export default function AdminTeachers({ teachers = [] }) {
                   <p><strong>Username:</strong> {teacher.username}</p>
                   <div className="teacher-metrics">
                     <div className="metric">
-                      <span className="metric-value">-</span>
+                      <span className="metric-value">{teacher.courses?.length || 0}</span>
                       <span className="metric-label">Cursos</span>
                     </div>
                     <div className="metric">
-                      <span className="metric-value">-</span>
+                      <span className="metric-value">{teacher.students?.length || 0}</span>
                       <span className="metric-label">Estudiantes</span>
                     </div>
                   </div>
                 </div>
                 <div className="teacher-actions">
-                  <button className="view-boton">Ver Perfil</button>
                   <button className="edit-boton">Editar</button>
-                  <button className="courses-boton">Ver Cursos</button>
                   <button className="delete-boton">Eliminar</button>
                 </div>
               </div>
