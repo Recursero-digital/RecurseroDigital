@@ -13,20 +13,7 @@ export default function AdminTeachers({ teachers = [] }) {
 
   return (
     <div className="admin-teachers">
-      <div className="teachers-stats">
-        <div className="cartas-docente">
-          <h3>Total Docentes</h3>
-          <div className="docente-numeros">{teachers.length}</div>
-        </div>
-        <div className="cartas-docente">
-          <h3>Docentes Activos</h3>
-          <div className="docente-numeros">{teachers.filter(t => t.status === 'Activo').length}</div>
-        </div>
-        <div className="cartas-docente">
-          <h3>Total Cursos</h3>
-          <div className="docente-numeros">{teachers.reduce((acc, t) => acc + t.courses, 0)}</div>
-        </div>
-      </div>
+
 
       {/*      <div className="stat-card">
           <h3>Total Estudiantes</h3>
