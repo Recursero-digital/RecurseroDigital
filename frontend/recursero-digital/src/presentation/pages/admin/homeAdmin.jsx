@@ -45,13 +45,7 @@ export default function HomeAdmin() {
           </div>
         </div>
 
-        <div className="overview-card">
-          <div className="card-icon">👨‍🏫</div>
-          <div className="card-content">
-            <h3>Docentes</h3>
-            <p>Gestiona el personal docente</p>
-          </div>
-        </div>
+
 
         <div className="overview-card">
           <div className="card-icon">📋</div>
