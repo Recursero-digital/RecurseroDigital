@@ -48,19 +48,18 @@ export default function AdminAssignments() {
             
             // Buscar docente del curso
             const teacher = teachersData.find(t => {
-              // Necesitamos verificar si el docente tiene este curso
-              // Por ahora, si el curso tiene teacher_id, buscamos ese docente
-              return course.teacher_id && t.id === course.teacher_id;
+              // Buscar el docente por el teacherId del curso
+              return course.teacherId && t.id === course.teacherId;
             });
             
             return {
               id: course.id,
               courseName: course.name,
               courseId: course.id,
-              teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-              teacherId: course.teacher_id || null,
+              teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+              teacherId: course.teacherId || null,
               studentsCount,
-              status: course.teacher_id ? 'Activa' : 'Pendiente'
+              status: course.teacherId ? 'Activa' : 'Pendiente'
             };
           })
         );
@@ -134,16 +133,16 @@ export default function AdminAssignments() {
             console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
           }
           
-          const teacher = teachersData.find(t => course.teacher_id && t.id === course.teacher_id);
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
           
           return {
             id: course.id,
             courseName: course.name,
             courseId: course.id,
-            teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-            teacherId: course.teacher_id || null,
+            teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+            teacherId: course.teacherId || null,
             studentsCount,
-            status: course.teacher_id ? 'Activa' : 'Pendiente'
+            status: course.teacherId ? 'Activa' : 'Pendiente'
           };
         })
       );
@@ -193,16 +192,16 @@ export default function AdminAssignments() {
             console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
           }
           
-          const teacher = teachersData.find(t => course.teacher_id && t.id === course.teacher_id);
+          const teacher = teachersData.find(t => course.teacherId && t.id === course.teacherId);
           
           return {
             id: course.id,
             courseName: course.name,
             courseId: course.id,
-            teacherName: teacher ? `${teacher.firstName || teacher.name} ${teacher.lastName || teacher.surname}` : 'Sin docente asignado',
-            teacherId: course.teacher_id || null,
+            teacherName: teacher ? (teacher.name || teacher.fullName || `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim()) : 'Sin docente asignado',
+            teacherId: course.teacherId || null,
             studentsCount,
-            status: course.teacher_id ? 'Activa' : 'Pendiente'
+            status: course.teacherId ? 'Activa' : 'Pendiente'
           };
         })
       );
@@ -272,28 +271,8 @@ export default function AdminAssignments() {
 
       <div className="assignments-content">
         <div className="assignments-filters">
-          <div className="filter-group">
-            <label>Filtrar por estado:</label>
-            <select>
-              <option value="all">Todas</option>
-              <option value="active">Activas</option>
-              <option value="finished">Finalizadas</option>
-              <option value="pending">Pendientes</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Filtrar por docente:</label>
-            <select>
-              <option value="all">Todos los docentes</option>
-              <option value="ana">Prof. Ana Martín</option>
-              <option value="luis">Prof. Luis Rodríguez</option>
-              <option value="carmen">Prof. Carmen López</option>
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Buscar asignación:</label>
-            <input type="text" placeholder="Curso o docente..." />
-          </div>
+
+
         </div>
 
         <div className="assignments-table">
@@ -303,9 +282,6 @@ export default function AdminAssignments() {
                 <th>Curso</th>
                 <th>Docente</th>
                 <th>Estudiantes</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -320,13 +296,6 @@ export default function AdminAssignments() {
                   <td>{assignment.teacherName}</td>
                   <td>
                     <span className="students-count">{assignment.studentsCount}</span>
-                  </td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>
-                    <span className={`assignment-status ${assignment.status.toLowerCase()}`}>
-                      {assignment.status}
-                    </span>
                   </td>
                   <td>
                     <div className="action-buttons">
