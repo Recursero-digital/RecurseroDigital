@@ -34,7 +34,6 @@ export default function HomeAdmin() {
           <div className="card-content">
             <h3> Usuarios</h3>
             <p>Gestiona estudiantes y docentes</p>
-            <span className="card-number">145 usuarios</span>
           </div>
         </div>
 
@@ -43,7 +42,6 @@ export default function HomeAdmin() {
           <div className="card-content">
             <h3>Cursos</h3>
             <p>Administra cursos del sistema</p>
-            <span className="card-number">25 cursos</span>
           </div>
         </div>
 
@@ -52,7 +50,6 @@ export default function HomeAdmin() {
           <div className="card-content">
             <h3>Docentes</h3>
             <p>Gestiona el personal docente</p>
-            <span className="card-number">12 docentes</span>
           </div>
         </div>
 
@@ -61,7 +58,6 @@ export default function HomeAdmin() {
           <div className="card-content">
             <h3>Asignaciones</h3>
             <p>Administra asignaciones activas</p>
-            <span className="card-number">18 asignaciones</span>
           </div>
         </div>
       </div>
