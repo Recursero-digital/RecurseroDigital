@@ -4,6 +4,8 @@ import { StudentAlreadyExistsError } from '../../core/models/exceptions/StudentA
 import { AuthenticatedRequest } from '../middleware/authMiddleWare';
 import { StudentNotFoundError } from '../../core/models/exceptions/StudentNotFoundError';
 import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
+import { UpdateStudentUseCase } from '../../core/usecases/UpdateStudentUseCase';
+import { DeleteStudentUseCase } from '../../core/usecases/DeleteStudentUseCase';
 
 interface AddStudentRequest {
     name: string;
@@ -60,7 +62,8 @@ const getAllStudents = async (req: Request, res: Response): Promise<void> => {
                 firstName: student.name,
                 lastName: student.lastname,
                 username: student.user.username,
-                dni: student.dni
+                dni: student.dni,
+                courseId: student.courseId || null
             }))
         });
     } catch (error) {
@@ -93,7 +96,89 @@ const getMyGames = async (req: AuthenticatedRequest, res: Response): Promise<voi
     }
 };
 
-export const studentController = { addStudent, getMyGames, getAllStudents };
+const updateStudent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { studentId } = req.params as { studentId: string };
+        const { name, lastname, username, password, courseId } = req.body as { 
+            name: string; 
+            lastname: string; 
+            username: string; 
+            password?: string | null;
+            courseId?: string | null;
+        };
+
+        if (!studentId) {
+            res.status(400).json({ error: 'studentId es requerido' });
+            return;
+        }
+
+        if (!name || name.trim() === '') {
+            res.status(400).json({ error: 'El nombre es requerido' });
+            return;
+        }
+
+        if (!lastname || lastname.trim() === '') {
+            res.status(400).json({ error: 'El apellido es requerido' });
+            return;
+        }
+
+        if (!username || username.trim() === '') {
+            res.status(400).json({ error: 'El username es requerido' });
+            return;
+        }
+
+        const useCase = dependencyContainer.updateStudentUseCase;
+        const result = await useCase.execute({ 
+            studentId, 
+            name: name.trim(), 
+            lastname: lastname.trim(), 
+            username: username.trim(),
+            password: password || null,
+            courseId: courseId || null
+        });
+
+        res.status(200).json({ 
+            message: 'Estudiante actualizado exitosamente', 
+            student: result 
+        });
+    } catch (error: any) {
+        if (error.message === 'El estudiante no existe') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        if (error.message.includes('username ya está en uso')) {
+            res.status(409).json({ error: error.message });
+            return;
+        }
+        console.error('Error en updateStudent:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+const deleteStudent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { studentId } = req.params as { studentId: string };
+
+        if (!studentId) {
+            res.status(400).json({ error: 'studentId es requerido' });
+            return;
+        }
+
+        const useCase = new DeleteStudentUseCase(dependencyContainer.studentRepository);
+        await useCase.execute({ studentId });
+
+        res.status(200).json({ message: 'Estudiante eliminado exitosamente' });
+    } catch (error: any) {
+        if (error.message === 'El estudiante no existe') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en deleteStudent:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+export const studentController = { addStudent, getMyGames, getAllStudents, updateStudent, deleteStudent };
 
 export const assignCourseToStudent = async (req: Request, res: Response): Promise<void> => {
     try {

@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import AddUserForm from "./AddUserForm";
+import EditStudentForm from "./EditStudentForm";
+import DeleteStudentForm from "./DeleteStudentForm";
+import EditTeacherForm from "./EditTeacherForm";
+import DeleteTeacherForm from "./DeleteTeacherForm";
 import "../../styles/pages/adminUsers.css";
 import AdminTeachers from "../admin/AdminTeachers";
-import { createStudent, getAllStudents, createTeacher, getAllTeachers } from "../../services/adminService";
+import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents, updateStudent, deleteStudent, updateTeacher, deleteTeacher } from "../../services/adminService";
 
 export default function AdminUsers() {
   const [activeTab, setActiveTab] = useState("students");
   const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [showEditStudentForm, setShowEditStudentForm] = useState(false);
+  const [showDeleteStudentForm, setShowDeleteStudentForm] = useState(false);
+  const [showEditTeacherForm, setShowEditTeacherForm] = useState(false);
+  const [showDeleteTeacherForm, setShowDeleteTeacherForm] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -24,27 +35,66 @@ export default function AdminUsers() {
       try {
         setLoading(true);
         setError(null);
+        
+        // Cargar cursos siempre para los formularios
+        const coursesData = await getAllCourses();
+        setCourses(coursesData);
+        
         if (activeTab === "students") {
           const data = await getAllStudents();
           setStudents(
             data.map((s) => ({
               id: s.id,
               name: s.name || `${s.firstName} ${s.lastName}`,
+              firstName: s.firstName,
+              lastName: s.lastName,
               username: s.username,
+              courseId: s.courseId || null,
               status: "Activo",
             }))
           );
         } else if (activeTab === "teachers") {
-          const data = await getAllTeachers();
-          setTeachers(
-            data.map((t) => ({
-              id: t.id,
-              name: t.fullName || `${t.name} ${t.surname}`,
-              username: t.username,
-              email: t.email,
-              status: "Activo",
-            }))
+          const [teachersData, coursesData] = await Promise.all([
+            getAllTeachers(),
+            getAllCourses()
+          ]);
+          
+          // Para cada docente, obtener sus cursos y estudiantes
+          const teachersWithDetails = await Promise.all(
+            teachersData.map(async (teacher) => {
+              // Filtrar cursos asignados a este docente
+              const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+              
+              // Obtener estudiantes de todos los cursos del docente
+              const allStudents = new Set(); // Usar Set para evitar duplicados
+              
+              for (const course of teacherCourses) {
+                try {
+                  const courseStudents = await getCourseStudents(course.id);
+                  if (Array.isArray(courseStudents)) {
+                    courseStudents.forEach(student => allStudents.add(student.id));
+                  }
+                } catch (err) {
+                  console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+                }
+              }
+              
+              return {
+                id: teacher.id,
+                name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+                firstName: teacher.firstName || teacher.name,
+                lastName: teacher.lastName || teacher.surname,
+                surname: teacher.surname,
+                username: teacher.username,
+                email: teacher.email,
+                status: "Activo",
+                courses: teacherCourses,
+                students: Array.from(allStudents).map(id => ({ id })) // Array de IDs únicos
+              };
+            })
           );
+          
+          setTeachers(teachersWithDetails);
         }
       } catch (err) {
         console.error("Error al cargar datos:", err);
@@ -62,6 +112,190 @@ export default function AdminUsers() {
 
   const handleCloseForm = () => {
     setShowAddUserForm(false);
+    setShowEditStudentForm(false);
+    setShowDeleteStudentForm(false);
+    setShowEditTeacherForm(false);
+    setShowDeleteTeacherForm(false);
+    setSelectedStudent(null);
+    setSelectedTeacher(null);
+  };
+
+  const handleEditStudent = (student) => {
+    setSelectedStudent(student);
+    setShowEditStudentForm(true);
+  };
+
+  const handleDeleteStudent = (student) => {
+    setSelectedStudent(student);
+    setShowDeleteStudentForm(true);
+  };
+
+  const handleEditTeacher = (teacher) => {
+    setSelectedTeacher(teacher);
+    setShowEditTeacherForm(true);
+  };
+
+  const handleDeleteTeacher = (teacher) => {
+    setSelectedTeacher(teacher);
+    setShowDeleteTeacherForm(true);
+  };
+
+  const handleUpdateStudent = async (studentData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await updateStudent(studentData);
+      
+      // Recargar estudiantes
+      const data = await getAllStudents();
+      setStudents(
+        data.map((s) => ({
+          id: s.id,
+          name: s.name || `${s.firstName} ${s.lastName}`,
+          firstName: s.firstName,
+          lastName: s.lastName,
+          username: s.username,
+          courseId: s.courseId || null,
+          status: "Activo",
+        }))
+      );
+      
+      handleCloseForm();
+    } catch (err) {
+      console.error("Error al actualizar estudiante:", err);
+      setError(err.message || "Error al actualizar estudiante");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmDeleteStudent = async (student) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await deleteStudent(student.id);
+      
+      // Recargar estudiantes
+      const data = await getAllStudents();
+      setStudents(
+        data.map((s) => ({
+          id: s.id,
+          name: s.name || `${s.firstName} ${s.lastName}`,
+          firstName: s.firstName,
+          lastName: s.lastName,
+          username: s.username,
+          courseId: s.courseId || null,
+          status: "Activo",
+        }))
+      );
+      
+      handleCloseForm();
+    } catch (err) {
+      console.error("Error al eliminar estudiante:", err);
+      setError(err.message || "Error al eliminar estudiante");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateTeacher = async (teacherData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await updateTeacher(teacherData);
+      
+      // Recargar docentes
+      const [teachersData, coursesData] = await Promise.all([
+        getAllTeachers(),
+        getAllCourses()
+      ]);
+      
+      const teachersWithDetails = await Promise.all(
+        teachersData.map(async (teacher) => {
+          const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+          const allStudents = new Set();
+          
+          for (const course of teacherCourses) {
+            try {
+              const courseStudents = await getCourseStudents(course.id);
+              if (Array.isArray(courseStudents)) {
+                courseStudents.forEach(student => allStudents.add(student.id));
+              }
+            } catch (err) {
+              console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+            }
+          }
+          
+          return {
+            id: teacher.id,
+            name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+            username: teacher.username,
+            email: teacher.email,
+            status: "Activo",
+            courses: teacherCourses,
+            students: Array.from(allStudents).map(id => ({ id }))
+          };
+        })
+      );
+      
+      setTeachers(teachersWithDetails);
+      handleCloseForm();
+    } catch (err) {
+      console.error("Error al actualizar docente:", err);
+      setError(err.message || "Error al actualizar docente");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmDeleteTeacher = async (teacher) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await deleteTeacher(teacher.id);
+      
+      // Recargar docentes
+      const [teachersData, coursesData] = await Promise.all([
+        getAllTeachers(),
+        getAllCourses()
+      ]);
+      
+      const teachersWithDetails = await Promise.all(
+        teachersData.map(async (teacher) => {
+          const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+          const allStudents = new Set();
+          
+          for (const course of teacherCourses) {
+            try {
+              const courseStudents = await getCourseStudents(course.id);
+              if (Array.isArray(courseStudents)) {
+                courseStudents.forEach(student => allStudents.add(student.id));
+              }
+            } catch (err) {
+              console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+            }
+          }
+          
+          return {
+            id: teacher.id,
+            name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+            username: teacher.username,
+            email: teacher.email,
+            status: "Activo",
+            courses: teacherCourses,
+            students: Array.from(allStudents).map(id => ({ id }))
+          };
+        })
+      );
+      
+      setTeachers(teachersWithDetails);
+      handleCloseForm();
+    } catch (err) {
+      console.error("Error al eliminar docente:", err);
+      setError(err.message || "Error al eliminar docente");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUserSubmit = async (userData) => {
@@ -77,7 +311,10 @@ export default function AdminUsers() {
           data.map((s) => ({
             id: s.id,
             name: s.name || `${s.firstName} ${s.lastName}`,
+            firstName: s.firstName,
+            lastName: s.lastName,
             username: s.username,
+            courseId: s.courseId || null,
             status: "Activo",
           }))
         );
@@ -89,17 +326,44 @@ export default function AdminUsers() {
           username: userData.username,
           password: userData.password,
         });
-        // Recargar la lista desde el backend
-        const data = await getAllTeachers();
-        setTeachers(
-          data.map((t) => ({
-            id: t.id,
-            name: t.fullName || `${t.name} ${t.surname}`,
-            username: t.username,
-            email: t.email,
-            status: "Activo",
-          }))
+        // Recargar la lista desde el backend con cursos y estudiantes
+        const [teachersData, coursesData] = await Promise.all([
+          getAllTeachers(),
+          getAllCourses()
+        ]);
+        
+        const teachersWithDetails = await Promise.all(
+          teachersData.map(async (teacher) => {
+            const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+            const allStudents = new Set();
+            
+            for (const course of teacherCourses) {
+              try {
+                const courseStudents = await getCourseStudents(course.id);
+                if (Array.isArray(courseStudents)) {
+                  courseStudents.forEach(student => allStudents.add(student.id));
+                }
+              } catch (err) {
+                console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+              }
+            }
+            
+            return {
+              id: teacher.id,
+              name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+              firstName: teacher.firstName || teacher.name,
+              lastName: teacher.lastName || teacher.surname,
+              surname: teacher.surname,
+              username: teacher.username,
+              email: teacher.email,
+              status: "Activo",
+              courses: teacherCourses,
+              students: Array.from(allStudents).map(id => ({ id }))
+            };
+          })
         );
+        
+        setTeachers(teachersWithDetails);
       }
 
       setShowAddUserForm(false);
@@ -162,10 +426,18 @@ export default function AdminUsers() {
                     </span>
                   </td>
                   <td>
-                    <button className="edit-botn" disabled>
+                    <button 
+                      className="edit-botn" 
+                      onClick={() => handleEditStudent(student)}
+                      disabled={loading}
+                    >
                       Editar
                     </button>
-                    <button className="delete-botn" disabled>
+                    <button 
+                      className="delete-botn" 
+                      onClick={() => handleDeleteStudent(student)}
+                      disabled={loading}
+                    >
                       Eliminar
                     </button>
                   </td>
@@ -176,7 +448,13 @@ export default function AdminUsers() {
         </div>
       )}
 
-      {activeTab === "teachers" && <AdminTeachers teachers={teachers} />}
+      {activeTab === "teachers" && (
+        <AdminTeachers 
+          teachers={teachers} 
+          onEdit={handleEditTeacher}
+          onDelete={handleDeleteTeacher}
+        />
+      )}
 
       {showAddUserForm && (
         <AddUserForm
@@ -189,6 +467,40 @@ export default function AdminUsers() {
               ? "docente"
               : "administrador"
           }
+        />
+      )}
+
+      {showEditStudentForm && selectedStudent && (
+        <EditStudentForm
+          onClose={handleCloseForm}
+          onSubmit={handleUpdateStudent}
+          student={selectedStudent}
+          courses={courses}
+        />
+      )}
+
+      {showDeleteStudentForm && selectedStudent && (
+        <DeleteStudentForm
+          onClose={handleCloseForm}
+          onConfirm={handleConfirmDeleteStudent}
+          student={selectedStudent}
+        />
+      )}
+
+      {showEditTeacherForm && selectedTeacher && (
+        <EditTeacherForm
+          onClose={handleCloseForm}
+          onSubmit={handleUpdateTeacher}
+          teacher={selectedTeacher}
+          courses={courses}
+        />
+      )}
+
+      {showDeleteTeacherForm && selectedTeacher && (
+        <DeleteTeacherForm
+          onClose={handleCloseForm}
+          onConfirm={handleConfirmDeleteTeacher}
+          teacher={selectedTeacher}
         />
       )}
     </div>
