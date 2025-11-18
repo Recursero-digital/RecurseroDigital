@@ -2,84 +2,40 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
- background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);  min-height: 100vh;
-}
-
-.students-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.students-header h1 {
-  font-size: 2.5rem;
-  color: #feffff;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.students-header p {
-  color: white;
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-}
-
-.view-controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.botones {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 0.75rem;
-  color: #3d567e;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.botones:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
-}
-
-.botones.active {
-  background: linear-gradient(
-    135deg,
-    #7c3aed 0%,
-    #6366f1 25%,
-    #3b82f6 50%,
-    #1e40af 75%,
-    #1e3a8a 100%
-  );
-  border: 2px solid rgba(251, 191, 36, 0.3);
-  color: white;
-
+  min-height: 100vh;
 }
 
 .contenido-alumno {
   width: 100%;
-}
-
-.student-detail {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1.5rem;
 }
 
-.detail-header {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+
+
+.detalle-header {
+  background: transparent;
   color: white;
   padding: 2rem;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
+  position: relative;
+}
+.detalle-header h2{
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  flex: 1;
+    text-shadow:
+  0 0 10px rgb(136, 239, 179),
+  0 0 30px rgb(136, 239, 179);
 }
 
 .back-btn {
@@ -90,6 +46,8 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: absolute;
+  left: 2rem;
 }
 
 .back-btn:hover {
@@ -106,15 +64,16 @@
 }
 
 .profile-card {
-  background: #f9fafb;
-  border-radius: 1rem;
+  background: #cbd7e444;
+  border-radius: 2rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+ 
 }
 
 .profile-card h3 {
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 1.5rem;
   font-size: 1.25rem;
   font-weight: 600;
@@ -128,12 +87,11 @@
 
 .info-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   padding: 0.75rem;
   background: white;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border-radius: 5rem;
 }
 
 .info-item label {
@@ -146,10 +104,15 @@
 }
 
 .games-detail h3 {
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 1.5rem;
-  font-size: 1.25rem;
+  font-size: 1.55rem;
   font-weight: 600;
+  text-shadow:
+  0 0 10px rgb(136, 239, 179),
+  0 0 20px rgb(136, 239, 179),
+  0 0 30px rgb(136, 239, 179),
+  0 0 40px rgb(136, 239, 179);
 }
 
 .games-grid {
@@ -159,42 +122,43 @@
 }
 
 .game-detail-card {
-  background: white;
+  background: #cbd7e444;
   border-radius: 1rem;
   padding: 1.5rem;
-  border: 1px solid #e5e7eb;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .game-detail-card h4 {
-  color: #1f2937;
-  margin-bottom: 1rem;
-  font-weight: 600;
+  color: #83ff8ec3;
+  margin-bottom: 2rem;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: -1px -2px 20px #000000;
 }
 
-.game-stats {
-  display: flex;
-  justify-content: space-between;
+.game-estadisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .stat {
   text-align: center;
+  
 }
 
-.stat-label {
+.labels {
   display: block;
-  color: #6b7280;
-  font-size: 0.75rem;
+  color: #f8fafc;
+  font-size:1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.25rem;
 }
 
-.stat-value {
+.values {
   display: block;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {

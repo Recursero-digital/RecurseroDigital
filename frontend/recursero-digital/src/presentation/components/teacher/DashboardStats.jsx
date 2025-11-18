@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { /* getCourseStatistics, */ MOCK_DATA } from '../../../infrastructure/adapters/api/teacherApi';
 import '../../styles/components/DashboardStats.css';
 
 const DashboardStats = ({ courseId }) => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,13 +32,7 @@ const DashboardStats = ({ courseId }) => {
                 escritura: { easy: 85, medium: 70, hard: 45 },
                 descomposicion: { easy: 90, medium: 75, hard: 50 },
                 escala: { easy: 75, medium: 55, hard: 35 }
-              },
-              weeklyProgress: [
-                { week: "Sem 40", gamesPlayed: 45, averageScore: 82 },
-                { week: "Sem 41", gamesPlayed: 52, averageScore: 85 },
-                { week: "Sem 42", gamesPlayed: 48, averageScore: 87 },
-                { week: "Sem 43", gamesPlayed: 55, averageScore: 89 }
-              ]
+              }
             }
           });
           setLoading(false);
@@ -227,46 +223,17 @@ const DashboardStats = ({ courseId }) => {
         </div>
       </div>
 
-      <div className="weekly-progress">
-        <h3>📅 Progreso Semanal</h3>
-        <div className="progress-chart">
-          {courseStats.weeklyProgress.map((week, index) => (
-            <div key={index} className="week-bar">
-              <div className="week-info">
-                <span className="week-label">{week.week}</span>
-                <span className="week-games">{week.gamesPlayed} juegos</span>
-              </div>
-              <div className="week-score-bar">
-                <div 
-                  className="week-score-fill"
-                  style={{ 
-                    width: `${week.averageScore}%`,
-                    backgroundColor: getPercentageColor(week.averageScore)
-                  }}
-                ></div>
-              </div>
-              <span className="week-score">{week.averageScore}%</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       <div className="quick-actions">
-        <h3>🚀 Acciones Rápidas</h3>
-        <div className="actions-grid">
+        
+        
           <button className="action-btn export">
             📥 Exportar Datos
           </button>
-          <button className="action-btn refresh">
-            🔄 Actualizar Estadísticas
-          </button>
-          <button className="action-btn settings">
-            ⚙️ Configurar Actividades
-          </button>
-          <button className="action-btn report">
+          <button className="action-btn report" onClick={() => navigate('/docente/reportes')}>
             📋 Generar Reporte
           </button>
-        </div>
+     
       </div>
     </div>
   );
