@@ -17,9 +17,7 @@ export default function HomeAdmin() {
     navigate('/admin/asignaciones');
   };
 
-  const handleConfigurarJuegos = () => {
-    navigate('/admin/juegos');
-  };
+ 
 
   return (
     <div className="home-admin">
