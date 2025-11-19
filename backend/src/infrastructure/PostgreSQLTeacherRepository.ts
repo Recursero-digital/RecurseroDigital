@@ -13,7 +13,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
   async findByUserName(userName: string): Promise<Teacher | null> {
     try {
       const result = await this.db.query(
-        `SELECT t.*, u.username, u.password_hash, u.role 
+        `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
          WHERE u.username = $1`,
@@ -25,7 +25,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
+      const user = new User(row.user_id, row.username, row.password_hash, row.role as UserRole);
       return new Teacher(
         row.id,
         row.name,
@@ -72,13 +72,13 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
   async getAllTeachers(): Promise<Teacher[]> {
     try {
       const result = await this.db.query(
-        `SELECT t.*, u.username, u.password_hash, u.role 
+        `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
          ORDER BY t.created_at DESC`
       );
       return result.rows.map((row: any) => {
-        const user = new User(row.username, row.username, row.password_hash, row.role);
+        const user = new User(row.user_id, row.username, row.password_hash, row.role);
         return new Teacher(
           row.id,
           row.name,
@@ -96,7 +96,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
   async findById(id: string): Promise<Teacher | null> {
     try {
       const result = await this.db.query(
-        `SELECT t.*, u.username, u.password_hash, u.role 
+        `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
          WHERE t.id = $1`,
@@ -108,7 +108,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
+      const user = new User(row.user_id, row.username, row.password_hash, row.role as UserRole);
       return new Teacher(
         row.id,
         row.name,
