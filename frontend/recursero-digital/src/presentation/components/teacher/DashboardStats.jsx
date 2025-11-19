@@ -102,9 +102,6 @@ const DashboardStats = ({ courseId }) => {
           <div className="metric-content">
             <h3>{courseStats.totalStudents}</h3>
             <p>Estudiantes totales</p>
-            <span className="metric-detail">
-              {courseStats.activeStudents} activos esta semana
-            </span>
           </div>
         </div>
 

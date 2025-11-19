@@ -21,11 +21,17 @@ export default function CursoSelector() {
     return "🔢";
   };
 
+  // Función para poner todo el nombre en mayúscula
+  const capitalizarPrimeraLetra = (texto) => {
+    if (!texto) return '';
+    return texto.toUpperCase();
+  };
+
   useEffect(() => {
     // Obtener el username del localStorage
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail) {
-      setUsername(userEmail);
+      setUsername(capitalizarPrimeraLetra(userEmail));
     }
   }, []);
 
@@ -143,7 +149,7 @@ export default function CursoSelector() {
     return (
       <div className="curso-selector-container">
         <div className="curso-selector-header">
-          <h1>Bienvenido {username ? username : 'Docente'}</h1>
+          <h1>{username ? username : 'Docente'}</h1>
           <p>Cargando tus cursos...</p>
         </div>
         <div className="loading-spinner">
@@ -157,7 +163,7 @@ export default function CursoSelector() {
     return (
       <div className="curso-selector-container">
         <div className="curso-selector-header">
-          <h1>Bienvenido {username ? username : 'Docente'}</h1>
+          <h1> {username ? username : 'Docente'}</h1>
           <p>Error al cargar los cursos</p>
         </div>
         <div className="error-message">
@@ -171,7 +177,7 @@ export default function CursoSelector() {
   return (
     <div className="curso-selector-container">
       <div className="curso-selector-header">
-        <h1>Bienvenido {username ? username : 'Docente'}</h1>
+        <h1>{username ? username : 'Docente'}</h1>
         <p>Selecciona el curso que deseas gestionar</p>
       </div>
       
