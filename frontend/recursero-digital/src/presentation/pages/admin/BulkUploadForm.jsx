@@ -86,7 +86,7 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
 
           return {
             ...student,
-            lineNumber: index + 2,
+            lineNumber: index + 1, // Numeración de estudiantes desde 1
             errors,
             isValid: errors.length === 0
           };
@@ -104,7 +104,7 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
         }
 
         setParsedData(validStudents);
-        setPreviewData(parsed.slice(0, 5)); // Mostrar primeros 5 para preview
+        setPreviewData(validStudents); // Mostrar todos los estudiantes válidos para preview
         
         if (validStudents.length === 0) {
           setError("No se encontraron estudiantes válidos en el archivo.");
@@ -185,12 +185,11 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
 
           <div className="upload-section">
             <div className="upload-instructions">
-              <h3>Instrucciones</h3>
+              <h3>Formato de archivo CSV</h3>
               <ul>
                 <li>Sube un archivo CSV con los siguientes campos: <strong>nombre, apellido, username, password, dni</strong></li>
-                <li>Máximo 100 estudiantes por carga</li>
                 <li>El DNI debe tener 7-8 dígitos</li>
-                <li>Todos los campos son obligatorios</li>
+                <li>Todos los campos son obligatorios y deben estar correctamente formateados</li>
               </ul>
               <button 
                 type="button" 
@@ -227,7 +226,7 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
 
           {previewData.length > 0 && (
             <div className="preview-section">
-              <h3>Vista Previa de Datos {parsedData.length > 5 && "(" + parsedData.length + " total)"}</h3>
+              <h3>Vista Previa de Datos ({previewData.length} estudiantes)</h3>
               <div className="preview-table-container">
                 <table className="preview-table">
                   <thead>
@@ -261,10 +260,11 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
                 </table>
               </div>
               
-              {parsedData.length > 0 && (
+              {previewData.length > 0 && (
                 <div className="upload-summary">
                   <p><strong>Estudiantes válidos:</strong> {parsedData.length}</p>
-                  <p><strong>Total con errores:</strong> {previewData.filter(s => !s.isValid).length}</p>
+                  <p><strong>Estudiantes con errores:</strong> {previewData.filter(s => !s.isValid).length}</p>
+                  <p><strong>Total procesados:</strong> {previewData.length}</p>
                 </div>
               )}
             </div>
