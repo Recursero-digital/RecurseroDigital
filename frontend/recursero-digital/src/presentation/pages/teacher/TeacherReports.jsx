@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCourseStudents } from "../../../infrastructure/adapters/api/teacherApi";
 import "../../styles/pages/teacherReports.css";
 
 export default function TeacherReports() {
   const navigate = useNavigate();
   const [cursoActual, setCursoActual] = useState(null);
+  const [alumnos, setAlumnos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   useEffect(() => {
     const cursoGuardado = localStorage.getItem('cursoSeleccionado');
@@ -16,16 +20,44 @@ export default function TeacherReports() {
       navigate('/docente');
     }
   }, [navigate]);
-  
-  // Mock data - más adelante se reemplazará por endpoint real
-  const alumnos = [
-    {
-      id: 'default-student-1',
-      nombre: 'Alumno Por Defecto',
-      apellido: 'García',
-      curso: cursoActual ? cursoActual.nombre : 'Cargando...'
+
+  // Cargar estudiantes del backend
+  useEffect(() => {
+    const cargarEstudiantes = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Usar el endpoint específico para obtener estudiantes del curso
+        const response = await getCourseStudents(cursoActual.id);
+        
+        // Mapear los datos del backend al formato esperado por la UI
+        if (response.students && Array.isArray(response.students)) {
+          const estudiantesFormateados = response.students.map(estudiante => ({
+            id: estudiante.id,
+            nombre: estudiante.firstName || estudiante.name || 'Sin nombre',
+            apellido: estudiante.lastName || estudiante.surname || estudiante.lastname || 'Sin apellido',
+            curso: cursoActual?.nombre || 'Sin curso asignado'
+          }));
+          
+          setAlumnos(estudiantesFormateados);
+        } else {
+          setAlumnos([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar estudiantes:', error);
+        setError('No se pudieron cargar los estudiantes del curso. Verifica tu conexión.');
+        setAlumnos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Solo cargar estudiantes si hay un curso seleccionado
+    if (cursoActual && cursoActual.id) {
+      cargarEstudiantes();
     }
-  ];
+  }, [cursoActual]);
 
   const handleVerReporte = (alumnoId) => {
     navigate(`/reportes/${alumnoId}`);
@@ -35,7 +67,7 @@ export default function TeacherReports() {
     navigate('/docente/dashboard');
   };
 
-  if (!cursoActual) {
+  if (!cursoActual || loading) {
     return (
       <div className="teacher-reports-container">
         <button className="reports-back-button" onClick={handleVolver}>
@@ -44,7 +76,7 @@ export default function TeacherReports() {
         <div className="teacher-reports-wrapper">
           <div className="loading-container">
             <div className="spinner"></div>
-            <p>Cargando curso...</p>
+            <p>{!cursoActual ? 'Cargando curso...' : 'Cargando estudiantes...'}</p>
           </div>
         </div>
       </div>
@@ -61,6 +93,18 @@ export default function TeacherReports() {
           <h1>Reportes de Estudiantes - {cursoActual.nombre}</h1>
           <p>Consulta el progreso y rendimiento de tus alumnos</p>
         </div>
+
+        {error && (
+          <div className="error-container">
+            <p className="error-message">{error}</p>
+            <button 
+              className="btn-reintentar" 
+              onClick={() => window.location.reload()}
+            >
+              🔄 Reintentar
+            </button>
+          </div>
+        )}
 
         <div className="alumnos-table-container">
           <table className="alumnos-table">
@@ -92,7 +136,7 @@ export default function TeacherReports() {
           </table>
         </div>
 
-        {alumnos.length === 0 && (
+        {!error && alumnos.length === 0 && (
           <div className="no-alumnos">
             <p>No hay alumnos registrados en este curso</p>
           </div>
