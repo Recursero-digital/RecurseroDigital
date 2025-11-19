@@ -90,8 +90,8 @@ export default function LoginForm() {
     <div className="login-form-container bg-space bg-space-gradient bg-stars">
       <div className="login-form-content">
         <div className="header-section">
-          <img src={Logo} alt="TecnoMente" className="imagen-logo" />
-          <h1 className="titulo">¡TecnoMente!</h1>
+          <img src={Logo} alt="Recursero Digital" className="imagen-logo" />
+          <h1 className="titulo">Recursero Digital</h1>
           <p className="subtitulo">Inicia sesión para continuar</p>
         </div>
 
