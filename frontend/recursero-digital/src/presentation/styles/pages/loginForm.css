@@ -35,6 +35,12 @@
 
 .imagen-logo {  
   max-width: 50%;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
 }
 
 .titulo {
@@ -194,6 +200,11 @@
 }
 
 .login-button.docente {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.login-button.admin {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }

@@ -50,6 +50,12 @@
   max-width: 40%; /* Mantiene el tamaño máximo */
   height: auto; /* Altura automática para mantener la proporción */
   align-items: center;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
 }
 
 .cards-container {
