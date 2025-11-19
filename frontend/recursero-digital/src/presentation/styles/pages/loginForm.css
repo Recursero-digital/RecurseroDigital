@@ -136,6 +136,47 @@
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container .form-input {
+  padding-right: 3rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+}
+
+.password-toggle-btn:hover {
+  color: #374151;
+}
+
+.password-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2;
+}
+
 .login-button {
   padding: 0.875rem 1.5rem;
   border: none;
@@ -174,7 +215,7 @@
 }
 
 .forgot-link {
-  color: #8b5cf6;
+  color: white;
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
