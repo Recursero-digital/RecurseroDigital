@@ -13,7 +13,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async findByUserName(userName: string): Promise<Student | null> {
     try {
       const result = await this.db.query(
-        `SELECT s.*, u.username, u.password_hash, u.role 
+        `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
          WHERE u.username = $1`,
@@ -25,7 +25,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
+      const user = new User(row.user_id, row.username, row.password_hash, row.role as UserRole);
       return new Student(
         row.id,
         row.name,
@@ -77,13 +77,13 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async getAllStudents(): Promise<Student[]> {
     try {
       const result = await this.db.query(
-        `SELECT s.*, u.username, u.password_hash, u.role 
+        `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
          ORDER BY s.created_at DESC`
       );
       return result.rows.map((row: any) => {
-        const user = new User(row.username, row.username, row.password_hash, row.role);
+        const user = new User(row.user_id, row.username, row.password_hash, row.role);
         return new Student(
           row.id,
           row.name,
@@ -102,7 +102,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async findById(id: string): Promise<Student | null> {
     try {
       const result = await this.db.query(
-        `SELECT s.*, u.username, u.password_hash, u.role 
+        `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
          WHERE s.id = $1`,
@@ -114,7 +114,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       }
 
       const row = result.rows[0];
-      const user = new User(row.username, row.username, row.password_hash, row.role as UserRole);
+      const user = new User(row.user_id, row.username, row.password_hash, row.role as UserRole);
       return new Student(
         row.id,
         row.name,
@@ -208,7 +208,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   async getStudentsByCourseId(courseId: string): Promise<Student[]> {
     try {
       const result = await this.db.query(
-        `SELECT s.*, u.username, u.password_hash, u.role 
+        `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
          WHERE s.course_id = $1
@@ -217,7 +217,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
       );
 
       return result.rows.map((row: any) => {
-        const user = new User(row.username, row.username, row.password_hash, row.role);
+        const user = new User(row.user_id, row.username, row.password_hash, row.role);
         return new Student(
           row.id,
           row.name,

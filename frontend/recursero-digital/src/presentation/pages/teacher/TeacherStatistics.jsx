@@ -7,11 +7,6 @@ const TeacherStatistics = () => {
 
   return (
     <div className="teacher-statistics">
-      <div className="statistics-header">
-        <h1>📊 Estadísticas del Curso</h1>
-        <p>Visualiza métricas y análisis detallados del rendimiento del curso</p>
-      </div>
-
       <div className="statistics-content">
         <DashboardStats courseId={selectedCourse} />
       </div>
