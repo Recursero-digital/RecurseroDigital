@@ -9,5 +9,6 @@ export interface GameLevelRepository {
     update(id: string, gameLevel: Partial<GameLevel>): Promise<GameLevel | null>;
     delete(id: string): Promise<boolean>;
     findAll(): Promise<GameLevel[]>;
+    getTotalActivitiesCount(gameId: string): Promise<number>;
 }
 
