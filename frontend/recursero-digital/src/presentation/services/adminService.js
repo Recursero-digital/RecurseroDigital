@@ -207,4 +207,37 @@ export const deleteTeacher = async (teacherId) => {
   return data;
 };
 
+export const bulkUploadStudents = async (studentsData) => {
+  if (studentsData.length > 100) {
+    throw new Error('No se pueden cargar más de 100 estudiantes a la vez');
+  }
+  
+  let createdCount = 0;
+  let errorCount = 0;
+  const errorDetails = [];
+
+  for (const [index, studentData] of studentsData.entries()) {
+    try {
+      await createStudent({
+        nombre: studentData.nombre,
+        apellido: studentData.apellido,
+        username: studentData.username,
+        password: studentData.password,
+        dni: studentData.dni
+      });
+      createdCount++;
+    } catch (error) {
+      errorCount++;
+      errorDetails.push(`Estudiante ${index + 1} (${studentData.username}): ${error.message}`);
+    }
+  }
+
+  return {
+    message: `Carga masiva completada: ${createdCount} estudiantes creados, ${errorCount} errores`,
+    created: createdCount,
+    errors: errorCount,
+    errorDetails: errorDetails.length > 0 ? errorDetails : undefined
+  };
+};
+
 

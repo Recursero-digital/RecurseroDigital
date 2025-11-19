@@ -4,13 +4,15 @@ import EditStudentForm from "./EditStudentForm";
 import DeleteStudentForm from "./DeleteStudentForm";
 import EditTeacherForm from "./EditTeacherForm";
 import DeleteTeacherForm from "./DeleteTeacherForm";
+import BulkUploadForm from "./BulkUploadForm";
 import "../../styles/pages/adminUsers.css";
 import AdminTeachers from "../admin/AdminTeachers";
-import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents, updateStudent, deleteStudent, updateTeacher, deleteTeacher } from "../../services/adminService";
+import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents, updateStudent, deleteStudent, updateTeacher, deleteTeacher, bulkUploadStudents } from "../../services/adminService";
 
 export default function AdminUsers() {
   const [activeTab, setActiveTab] = useState("students");
   const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [showBulkUploadForm, setShowBulkUploadForm] = useState(false);
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
   const [showDeleteStudentForm, setShowDeleteStudentForm] = useState(false);
   const [showEditTeacherForm, setShowEditTeacherForm] = useState(false);
@@ -110,8 +112,51 @@ export default function AdminUsers() {
     setShowAddUserForm(true);
   };
 
+  const handleBulkUpload = () => {
+    setShowBulkUploadForm(true);
+  };
+
+  const handleBulkUploadSubmit = async (studentsData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const result = await bulkUploadStudents(studentsData);
+      
+      // Recargar la lista de estudiantes
+      const data = await getAllStudents();
+      setStudents(
+        data.map((s) => ({
+          id: s.id,
+          name: s.name || s.firstName + " " + s.lastName,
+          firstName: s.firstName,
+          lastName: s.lastName,
+          username: s.username,
+          courseId: s.courseId || null,
+          status: "Activo",
+        }))
+      );
+      
+      setShowBulkUploadForm(false);
+      
+      // Mostrar mensaje de éxito con detalles
+      let message = result.message;
+      if (result.errorDetails && result.errorDetails.length > 0) {
+        message += "\n\nDetalles de errores:\n" + result.errorDetails.join("\n");
+      }
+      alert(message);
+      
+    } catch (err) {
+      console.error("Error en carga masiva:", err);
+      setError(err.message || "Error en la carga masiva de estudiantes");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCloseForm = () => {
     setShowAddUserForm(false);
+    setShowBulkUploadForm(false);
     setShowEditStudentForm(false);
     setShowDeleteStudentForm(false);
     setShowEditTeacherForm(false);
@@ -379,9 +424,16 @@ export default function AdminUsers() {
     <div className="admin-users">
       <div className="users-header">
         <h1>Gestión de Usuarios</h1>
-        <button className="add-user-btn" onClick={handleAddUser} disabled={loading}>
-          {loading ? "Guardando..." : "+ Agregar Usuario"}
-        </button>
+        <div className="header-actions">
+          <button className="add-user-btn" onClick={handleAddUser} disabled={loading}>
+            {loading ? "Guardando..." : "+ Agregar Usuario"}
+          </button>
+          {activeTab === "students" && (
+            <button className="bulk-upload-btn" onClick={handleBulkUpload} disabled={loading}>
+              📄 Carga Masiva
+            </button>
+          )}
+        </div>
       </div>
 
       {error && <div className="error-message-admin">{error}</div>}
@@ -501,6 +553,13 @@ export default function AdminUsers() {
           onClose={handleCloseForm}
           onConfirm={handleConfirmDeleteTeacher}
           teacher={selectedTeacher}
+        />
+      )}
+
+      {showBulkUploadForm && (
+        <BulkUploadForm
+          onClose={handleCloseForm}
+          onSubmit={handleBulkUploadSubmit}
         />
       )}
     </div>
