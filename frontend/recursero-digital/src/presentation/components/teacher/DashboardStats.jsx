@@ -102,9 +102,6 @@ const DashboardStats = ({ courseId }) => {
           <div className="metric-content">
             <h3>{courseStats.totalStudents}</h3>
             <p>Estudiantes totales</p>
-            <span className="metric-detail">
-              {courseStats.activeStudents} activos esta semana
-            </span>
           </div>
         </div>
 
@@ -113,9 +110,6 @@ const DashboardStats = ({ courseId }) => {
           <div className="metric-content">
             <h3>{courseStats.averageCourseScore}%</h3>
             <p>Promedio del curso</p>
-            <span className="metric-detail">
-              {courseStats.totalGamesPlayed} juegos completados
-            </span>
           </div>
         </div>
 
@@ -124,9 +118,6 @@ const DashboardStats = ({ courseId }) => {
           <div className="metric-content">
             <h3>{formatTime(courseStats.averageTimePerGame)}</h3>
             <p>Tiempo promedio por juego</p>
-            <span className="metric-detail">
-              Basado en {courseStats.totalGamesPlayed} sesiones
-            </span>
           </div>
         </div>
       </div>
