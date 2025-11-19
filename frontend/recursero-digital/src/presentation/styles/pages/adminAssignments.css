@@ -44,11 +44,11 @@
 }
 
 .add-assignment-btn.student-btn {
-  background: #4facfe;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .add-assignment-btn.student-btn:hover {
-  background: #3d8fd6;
+  background: linear-gradient(135deg, #5568d3 0%, #6a4190 100%);
   transform: translateY(-2px);
 }
 
@@ -75,31 +75,29 @@
 }
 
 .stat-card-assignments {
-  background: #3482672f;
+  background: linear-gradient(135deg, #667eea 0%, #a27cc9 100%);;
+  backdrop-filter: blur(20px);
   padding: 1.5rem;
   border-radius: 1rem;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 20px 15px rgba(140, 183, 168, 0.584);
   transition: transform 0.2s ease;
-}
-
-.stat-card-assignments:hover {
-  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 .stat-card-assignments h3 {
   margin: 0 0 1rem 0;
-  color: black;
+  color: rgb(255, 255, 255);
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.stat-number {
+.stat-numbers{
   font-size: 2.5rem;
   font-weight: 700;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 
 .assignments-content {

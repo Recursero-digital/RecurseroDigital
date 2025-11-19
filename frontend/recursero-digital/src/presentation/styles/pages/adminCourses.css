@@ -176,7 +176,10 @@
 .courses-summary {
   display: flex;
   justify-content: space-around;
-  background:#594a8f38;
+ background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 40%, rgba(99, 102, 241, 0.8) 60%, rgba(91, 33, 182, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+ box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -192,12 +195,12 @@
 .summary-number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: black;
+  color: rgb(255, 255, 255);
 }
 
 .summary-label {
   font-weight: 600;
-  color: #2d3748;
+  color: #ffffff;
   text-transform: uppercase;
   font-size: 0.875rem;
 }

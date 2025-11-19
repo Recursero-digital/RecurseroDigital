@@ -280,19 +280,19 @@ export default function AdminAssignments() {
       <div className="assignments-stats">
         <div className="stat-card-assignments">
           <h3>Total Asignaciones</h3>
-          <div className="stat-number">{assignments.length}</div>
+          <div className="stat-numbers">{assignments.length}</div>
         </div>
         <div className="stat-card-assignments">
           <h3>Asignaciones Activas</h3>
-          <div className="stat-number">{assignments.filter(a => a.status === 'Activa').length}</div>
+          <div className="stat-numbers">{assignments.filter(a => a.status === 'Activa').length}</div>
         </div>
         <div className="stat-card-assignments">
           <h3>Estudiantes Asignados</h3>
-          <div className="stat-number">{assignments.reduce((acc, a) => acc + a.studentsCount, 0)}</div>
+          <div className="stat-numbers">{assignments.reduce((acc, a) => acc + a.studentsCount, 0)}</div>
         </div>
         <div className="stat-card-assignments">
           <h3>Cursos Únicos</h3>
-          <div className="stat-number">{new Set(assignments.map(a => a.courseName)).size}</div>
+          <div className="stat-numbers">{new Set(assignments.map(a => a.courseName)).size}</div>
         </div>
       </div>
 
