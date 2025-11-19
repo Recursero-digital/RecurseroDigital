@@ -111,7 +111,7 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-input"
-              placeholder="Tu username"
+              placeholder="Username"
               required
             />
           </div>
@@ -124,7 +124,7 @@ export default function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-input"
-              placeholder="Tu contraseña"
+              placeholder="Contraseña"
               required
             />
           </div>
