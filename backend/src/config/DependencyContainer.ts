@@ -255,7 +255,8 @@ export class DependencyContainer {
     public get getStudentProgressUseCase(): GetStudentProgressUseCase {
         if (!this._getStudentProgressUseCase) {
             this._getStudentProgressUseCase = new GetStudentProgressUseCase(
-                this.statisticsRepository
+                this.statisticsRepository,
+                this.gameLevelRepository
             );
         }
         return this._getStudentProgressUseCase;
@@ -357,7 +358,8 @@ export class DependencyContainer {
             this._getCourseProgressByGameUseCase = new GetCourseProgressByGameUseCase(
                 this.studentRepository,
                 this.statisticsRepository,
-                this.gameLevelRepository
+                this.gameLevelRepository,
+                this.courseRepository
             );
         }
 

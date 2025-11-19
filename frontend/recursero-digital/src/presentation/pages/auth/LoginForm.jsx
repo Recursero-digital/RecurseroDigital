@@ -98,7 +98,7 @@ export default function LoginForm() {
         
         <form onSubmit={handleLogin} className="login-form">
           {error && (
-            <div className="error-message">
+            <div className="error-messages">
               {error}
             </div>
           )}
