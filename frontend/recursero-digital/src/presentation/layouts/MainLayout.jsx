@@ -19,14 +19,16 @@ export default function MainLayout({ children, userRole = "alumno" }) {
     } else if (path.includes('/estudiantes')) {
       setActiveTab("students");
     } else if (path.includes('/dashboard')) {
-      setActiveTab("dashboard");
+      setActiveTab("home");
     } else if (path.includes('/usuarios')) {
       setActiveTab("users");
     } else if (path.includes('/cursos')) {
       setActiveTab("courses");
     } else if (path.includes('/asignaciones')) {
       setActiveTab("assignments");
-    } else {
+    }else if (path.includes('/estadisticas')) {
+      setActiveTab("statistics");
+    }else {
       setActiveTab("home");
     }
   }, [location.pathname]);
