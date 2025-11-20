@@ -24,7 +24,7 @@ import {
 } from './util';
 
 const JuegoEscala = () => {
-    const { unlockLevel } = useUserProgress();
+    const { unlockLevel, getLastActivity } = useUserProgress();
     const { 
         points, 
         attempts, 
@@ -83,12 +83,28 @@ const JuegoEscala = () => {
         const newQuestions = generateQuestions(level);
         
         setCurrentLevel(level);
-        setCurrentActivity(0);
+        
+        const lastActivity = getLastActivity('escala');
+        
+        let startingActivity = 0;
+        if (lastActivity && lastActivity.level === level + 1) {
+            const lastActivityIndex = lastActivity.activity - 1;
+            
+            if (lastActivityIndex + 1 < totalQuestions) {
+                startingActivity = lastActivityIndex + 1;
+            } else {
+                startingActivity = 0;
+            }
+        } else {
+            startingActivity = 0;
+        }
+        
+        setCurrentActivity(startingActivity);
         setUserAnswers({ anterior: '', posterior: '' });
         setShowFeedback(false);
         setIsValidationError(false);
         setQuestions(newQuestions);
-        setCurrentQuestion(newQuestions[0]);
+        setCurrentQuestion(startingActivity < newQuestions.length ? newQuestions[startingActivity] : newQuestions[0]);
         setInputErrors({ anterior: false, posterior: false });
         setIsProcessing(false);
         
@@ -96,7 +112,7 @@ const JuegoEscala = () => {
         resetAttempts();
         startActivityTimer();
         setGameState(UI_STATES.GAME_STATES.PLAYING);
-    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer]);
+    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer, getLastActivity, totalQuestions]);
 
     useEffect(() => {
         if (gameState === UI_STATES.GAME_STATES.PLAYING && questions.length > 0 && currentActivity < questions.length) {
