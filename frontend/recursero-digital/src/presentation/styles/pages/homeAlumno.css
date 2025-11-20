@@ -25,12 +25,18 @@
 /* Título específico de la card de bienvenida */
 .welcome-card h1 {
   font-size: 60px;
-  background: white;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
   margin-bottom: 25px;
   text-align: center;
+  text-shadow: 
+    -2px -2px 0 #7c3aed,
+    2px -2px 0 #7c3aed,
+    -2px 2px 0 #7c3aed,
+    2px 2px 0 #7c3aed,
+    -2px 0 0 #7c3aed,
+    2px 0 0 #7c3aed,
+    0 -2px 0 #7c3aed,
+    0 2px 0 #7c3aed;
 }
 
 /* Estilos base para párrafos en welcome-card */
@@ -71,11 +77,19 @@
 /* Títulos específicos dentro de welcome-card */
 .welcome-card h2 {
   font-size: 30px;
-  color: #FDF5E6;
+  color: white;
   margin-top: 30px;
   margin-bottom: 25px;
   text-align: center;
-  text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+  text-shadow: 
+    -1.5px -1.5px 0 #7c3aed,
+    1.5px -1.5px 0 #7c3aed,
+    -1.5px 1.5px 0 #7c3aed,
+    1.5px 1.5px 0 #7c3aed,
+    -1.5px 0 0 #7c3aed,
+    1.5px 0 0 #7c3aed,
+    0 -1.5px 0 #7c3aed,
+    0 1.5px 0 #7c3aed;
 }
 
 .welcome-card h3 {
@@ -84,4 +98,13 @@
   margin-bottom: 75px;
   text-align: center;
   color: white;
+  text-shadow: 
+    -1.5px -1.5px 0 #7c3aed,
+    1.5px -1.5px 0 #7c3aed,
+    -1.5px 1.5px 0 #7c3aed,
+    1.5px 1.5px 0 #7c3aed,
+    -1.5px 0 0 #7c3aed,
+    1.5px 0 0 #7c3aed,
+    0 -1.5px 0 #7c3aed,
+    0 1.5px 0 #7c3aed;
 }

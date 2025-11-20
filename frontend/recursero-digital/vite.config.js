@@ -11,8 +11,8 @@ export default defineConfig({
             registerType: 'autoUpdate',
             includeAssets: ['vite.svg', 'robots.txt'],
             manifest: {
-                name: 'TecnoMente',
-                short_name: 'TecnoMente',
+                name: 'Recursero Digital',
+                short_name: 'Recursero Digital',
                 description: 'Plataforma educativa digital de matemáticas',
                 theme_color: '#ffffff',
                 background_color: '#ffffff',

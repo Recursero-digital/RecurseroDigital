@@ -39,14 +39,29 @@
 }
 
 .tab-button:hover {
-  border-color: rgba(139, 92, 246, 0.6);
+  border-color: rgba(128, 246, 92, 0.6);
   color: rgb(255, 255, 255);
 }
 
 .tab-button.active {
-  border-color: #8b5cf6;
+  border-color: #80f65c;
   color: white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(128, 246, 92, 0.4);
+}
+
+.tab-button:focus {
+  outline: none;
+  border-color: #80f65c;
+  box-shadow: 0 4px 15px rgba(128, 246, 92, 0.4);
+}
+
+.tab-button:active {
+  border-color: #80f65c;
+  box-shadow: 0 4px 15px rgba(128, 246, 92, 0.4);
+}
+
+.tab-button:focus:not(.active) {
+  border-color: rgba(128, 246, 92, 0.6);
 }
 
 /* Estilos específicos para navbar de docente */
@@ -73,10 +88,10 @@
 
 @keyframes pulseDocente {
   0%, 100% { 
-    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 8px 30px rgba(128, 246, 92, 0.5);
   }
   50% { 
-    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.7);
+    box-shadow: 0 12px 40px rgba(128, 246, 92, 0.7);
   }
 }
 
@@ -126,7 +141,7 @@
 .navbar.admin .tab-button.active {
   border-color: #80f65c;
   color: white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(128, 246, 92, 0.4);
 }
 
 @media (max-width: 768px) {

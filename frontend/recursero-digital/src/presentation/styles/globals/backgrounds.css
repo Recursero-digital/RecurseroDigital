@@ -43,12 +43,12 @@
     rgba(124, 58, 237, 0.8) 80%,
     rgba(91, 33, 182, 0.8) 100%
   );
-  backdrop-filter: blur(20px);
+  /* backdrop-filter: blur(20px); */
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Estrellas para componentes UI (más sutil) */
+/* Estrellas para componentes UI (más sutil)
 .bg-stars-ui::before {
   content: '';
   position: absolute;
@@ -60,7 +60,7 @@
   pointer-events: none;
   z-index: 0;
   animation: twinkle 8s ease-in-out infinite;
-}
+} */
 
 /* Gradientes para botones activos/hover usando colores del space-gradient */
 .bg-accent-hover {
