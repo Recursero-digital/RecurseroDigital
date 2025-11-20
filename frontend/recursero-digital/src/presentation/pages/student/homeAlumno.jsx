@@ -16,7 +16,7 @@ export default function HomeAlumno() {
     <div className="main">
       
       <section className="welcome-card">
-        <h1>¡ Bienvenido {userNameOrEmail} !</h1>
+        <h1>¡ Hola {userNameOrEmail} !</h1>
         <p>
           ¡ Bienvenido a Recursero Digital ! Una plataforma educativa diseñada para hacer que el aprendizaje de las
           matemáticas sea una experiencia divertida y emocionante.

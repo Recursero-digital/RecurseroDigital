@@ -11,6 +11,7 @@ export interface GameProgress {
     completed: number;
     totalTime: number;
     averageScore: number;
+    totalAttempts: number;
 }
 
 export class StudentStatisticsAggregator {
@@ -56,13 +57,13 @@ export class StudentStatisticsAggregator {
     }
 
     private calculateProgressByGame(statistics: StudentStatistics[]): Record<string, GameProgress> {
-        const gameStatsMap = new Map<string, { completed: number; totalTime: number; scores: number[] }>();
+        const gameStatsMap = new Map<string, { completed: number; totalTime: number; scores: number[]; totalAttempts: number }>();
 
         statistics.forEach(stat => {
             const gameId = this.normalizeGameId(stat.gameId);
             
             if (!gameStatsMap.has(gameId)) {
-                gameStatsMap.set(gameId, { completed: 0, totalTime: 0, scores: [] });
+                gameStatsMap.set(gameId, { completed: 0, totalTime: 0, scores: [], totalAttempts: 0 });
             }
 
             const gameStats = gameStatsMap.get(gameId)!;
@@ -75,6 +76,8 @@ export class StudentStatisticsAggregator {
                 gameStats.totalTime += stat.completionTime;
             }
 
+            gameStats.totalAttempts += stat.attempts;
+
             if (this.hasValidQuestions(stat)) {
                 const score = (stat.correctAnswers! / stat.totalQuestions!) * 100;
                 gameStats.scores.push(score);
@@ -84,7 +87,7 @@ export class StudentStatisticsAggregator {
         return this.mapToGameProgress(gameStatsMap);
     }
 
-    private mapToGameProgress(gameStatsMap: Map<string, { completed: number; totalTime: number; scores: number[] }>): Record<string, GameProgress> {
+    private mapToGameProgress(gameStatsMap: Map<string, { completed: number; totalTime: number; scores: number[]; totalAttempts: number }>): Record<string, GameProgress> {
         const progressByGame: Record<string, GameProgress> = {};
 
         gameStatsMap.forEach((stats, gameId) => {
@@ -95,7 +98,8 @@ export class StudentStatisticsAggregator {
             progressByGame[gameId] = {
                 completed: stats.completed,
                 totalTime: stats.totalTime,
-                averageScore: avgScore
+                averageScore: avgScore,
+                totalAttempts: stats.totalAttempts
             };
         });
 

@@ -74,7 +74,12 @@ const mergeProgress = (baseProgress, backendProgress) => {
     return baseProgress;
   }
 
-  const merged = { ...baseProgress };
+  
+  if (backendProgress.length === 0) {
+    return { ...DEFAULT_PROGRESS };
+  }
+
+  const merged = { ...DEFAULT_PROGRESS };
 
   backendProgress.forEach((progressItem) => {
     const progressKey = mapGameIdToProgressKey(progressItem.gameId);
@@ -83,14 +88,8 @@ const mergeProgress = (baseProgress, backendProgress) => {
     }
 
     const backendMax = progressItem.maxUnlockedLevel || 1;
-    const highestLevel = Math.max(
-      backendMax,
-      ...(Array.isArray(progressItem.statistics)
-        ? progressItem.statistics.map((stat) => stat.level || 1)
-        : [1])
-    );
-
-    merged[progressKey] = Math.max(baseProgress[progressKey] || 1, highestLevel);
+    
+    merged[progressKey] = backendMax;
   });
 
   return merged;
@@ -101,6 +100,7 @@ export const useUserProgress = () => {
   const [unlockedLevels, setUnlockedLevels] = useState(() => loadLocalProgress());
   const [loadingProgress, setLoadingProgress] = useState(false);
   const [progressError, setProgressError] = useState(null);
+  const [lastActivities, setLastActivities] = useState({});
 
   const syncWithBackend = useCallback(async () => {
     if (!studentId) {
@@ -114,16 +114,40 @@ export const useUserProgress = () => {
       const response = await apiRequest(`/statistics/student/${studentId}`);
 
       if (response.ok && response.data && Array.isArray(response.data.gameProgress)) {
-        const merged = mergeProgress(loadLocalProgress(), response.data.gameProgress);
+        const merged = mergeProgress(DEFAULT_PROGRESS, response.data.gameProgress);
         setUnlockedLevels(merged);
         localStorage.setItem(PROGRESS_KEY, JSON.stringify(merged));
+        
+        const activities = {};
+        response.data.gameProgress.forEach((progressItem) => {
+          const progressKey = mapGameIdToProgressKey(progressItem.gameId);
+          if (progressKey && Array.isArray(progressItem.statistics) && progressItem.statistics.length > 0) {
+            const completedStats = progressItem.statistics.filter(stat => stat.isCompleted);
+            if (completedStats.length > 0) {
+              const sortedStats = completedStats.sort((a, b) => {
+                if (a.level !== b.level) return b.level - a.level;
+                return b.activity - a.activity;
+              });
+              
+              const lastStat = sortedStats[0];
+              
+              activities[progressKey] = {
+                level: lastStat.level,
+                activity: lastStat.activity
+              };
+            }
+          }
+        });
+        setLastActivities(activities);
       } else {
         throw new Error('Respuesta inválida del backend.');
       }
     } catch (error) {
       console.warn('No se pudo sincronizar progreso desde el backend:', error);
       setProgressError('No se pudo obtener el progreso más reciente. Se utiliza el progreso guardado en el dispositivo.');
-      setUnlockedLevels(loadLocalProgress());
+      // Si hay error, usar valores por defecto
+      setUnlockedLevels({ ...DEFAULT_PROGRESS });
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(DEFAULT_PROGRESS));
     } finally {
       setLoadingProgress(false);
     }
@@ -152,9 +176,14 @@ export const useUserProgress = () => {
     return unlockedLevels[game] || 1;
   }, [unlockedLevels]);
 
+  const getLastActivity = useCallback((game) => {
+    return lastActivities[game] || null;
+  }, [lastActivities]);
+
   const resetProgress = useCallback(() => {
     setUnlockedLevels(DEFAULT_PROGRESS);
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(DEFAULT_PROGRESS));
+    setLastActivities({});
   }, []);
 
   return {
@@ -162,6 +191,7 @@ export const useUserProgress = () => {
     unlockLevel,
     isLevelUnlocked,
     getMaxUnlockedLevel,
+    getLastActivity,
     resetProgress,
     syncWithBackend,
     loadingProgress,

@@ -21,7 +21,7 @@ import {
 
 const JuegoOrdenamiento = () => {
   const navigate = useNavigate();
-  const { unlockLevel } = useUserProgress();
+  const { unlockLevel, getLastActivity } = useUserProgress();
   const { 
     points, 
     attempts, 
@@ -81,13 +81,30 @@ const JuegoOrdenamiento = () => {
   }, [levelRanges]);
 
   const handleStartGame = useCallback((level) => {
-    setCurrentLevel(level - 1);
-    setCurrentActivity(0);
+    const selectedLevelIndex = level - 1;
+    setCurrentLevel(selectedLevelIndex);
+    
+    const lastActivity = getLastActivity('ordenamiento');
+    
+    let startingActivity = 0;
+    if (lastActivity && lastActivity.level === level) {
+      const lastActivityIndex = lastActivity.activity - 1;
+      
+      if (lastActivityIndex + 1 < totalActivities) {
+        startingActivity = lastActivityIndex + 1;
+      } else {
+        startingActivity = 0;
+      }
+    } else {
+      startingActivity = 0;
+    }
+    
+    setCurrentActivity(startingActivity);
     resetScoring();
     setLevelResults([]);
     setShowPermanentHint(false);
     setGameState('game');
-  }, [resetScoring]);
+  }, [resetScoring, getLastActivity]);
 
   const handleActivityComplete = useCallback(() => {
     const activityScore = completeActivity(currentLevel, 'ordenamiento', currentActivity, currentLevel);
