@@ -134,7 +134,7 @@ const DashboardStats = ({ courseId }) => {
       </div>
 
 
-      <div className="quick-actions">
+      {/* <div className="quick-actions">
         
         
           <button className="action-btn export">
@@ -144,7 +144,7 @@ const DashboardStats = ({ courseId }) => {
             📋 Generar Reporte
           </button>
      
-      </div>
+      </div> */}
     </div>
   );
 };
