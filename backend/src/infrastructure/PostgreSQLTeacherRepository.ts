@@ -16,7 +16,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
         `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
-         WHERE u.username = $1`,
+         WHERE u.username = $1 AND t.enable = true`,
         [userName]
       );
 
@@ -53,14 +53,15 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
       );
 
       await this.db.query(
-        `INSERT INTO teachers (id, user_id, name, surname, email)
-         VALUES ($1, $2, $3, $4, $5)`,
+        `INSERT INTO teachers (id, user_id, name, surname, email, enable)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
         [
           teacherData.id,
           teacherData.user.id,
           teacherData.name,
           teacherData.surname,
-          teacherData.email
+          teacherData.email,
+          true // enable por defecto en true
         ]
       );
     } catch (error) {
@@ -75,6 +76,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
         `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
+         WHERE t.enable = true
          ORDER BY t.created_at DESC`
       );
       return result.rows.map((row: any) => {
@@ -99,7 +101,7 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
         `SELECT t.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM teachers t 
          JOIN users u ON t.user_id = u.id 
-         WHERE t.id = $1`,
+         WHERE t.id = $1 AND t.enable = true`,
         [id]
       );
 
@@ -155,14 +157,46 @@ export class PostgreSQLTeacherRepository implements TeacherRepository {
 
   async deleteTeacher(id: string): Promise<void> {
     try {
-      const teacher = await this.findById(id);
-      if (!teacher) {
+      // Verificar que el docente existe (incluso si está deshabilitado)
+      const result = await this.db.query(
+        `SELECT id FROM teachers WHERE id = $1`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
         throw new Error('Profesor no encontrado');
       }
 
-      await this.db.query('DELETE FROM teachers WHERE id = $1', [id]);
+      // Baja lógica: poner enable = false
+      await this.db.query(
+        `UPDATE teachers SET enable = false, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+        [id]
+      );
     } catch (error) {
-      console.error('Error al eliminar profesor:', error);
+      console.error('Error al deshabilitar profesor:', error);
+      throw error;
+    }
+  }
+
+  async enableTeacher(id: string): Promise<void> {
+    try {
+      // Verificar que el docente existe
+      const result = await this.db.query(
+        `SELECT id FROM teachers WHERE id = $1`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
+        throw new Error('Profesor no encontrado');
+      }
+
+      // Reactivar: poner enable = true
+      await this.db.query(
+        `UPDATE teachers SET enable = true, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+        [id]
+      );
+    } catch (error) {
+      console.error('Error al reactivar profesor:', error);
       throw error;
     }
   }

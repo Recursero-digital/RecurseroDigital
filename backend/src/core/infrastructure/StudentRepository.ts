@@ -6,7 +6,8 @@ export interface StudentRepository {
     getAllStudents(): Promise<Student[]>;
     findById(id: string): Promise<Student | null>;
     updateStudent(studentData: Student): Promise<void>;
-    deleteStudent(id: string): Promise<void>;
+    deleteStudent(id: string): Promise<void>; // Baja lógica: marca enable = false
+    enableStudent(id: string): Promise<void>; // Reactiva: marca enable = true
     assignCourseToStudent(studentId: string, courseId: string): Promise<void>;
     getEnrollmentDate(studentId: string): Promise<Date | null>;
     getStudentsByCourseId(courseId: string): Promise<Student[]>;

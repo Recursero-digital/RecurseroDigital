@@ -13,7 +13,10 @@ router.get('/me/courses/:courseId', protectTeacherRoute(), teacherController.get
 // PATCH /api/teacher/:teacherId
 router.patch('/:teacherId', protectAdminRoute(), teacherController.updateTeacher);
 
-// DELETE /api/teacher/:teacherId
+// DELETE /api/teacher/:teacherId (baja lógica)
 router.delete('/:teacherId', protectAdminRoute(), teacherController.deleteTeacher);
+
+// PATCH /api/teacher/:teacherId/enable (reactivar)
+router.patch('/:teacherId/enable', protectAdminRoute(), teacherController.enableTeacher);
 
 export default router;

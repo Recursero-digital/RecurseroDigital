@@ -6,6 +6,7 @@ import { StudentNotFoundError } from '../../core/models/exceptions/StudentNotFou
 import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 import { UpdateStudentUseCase } from '../../core/usecases/UpdateStudentUseCase';
 import { DeleteStudentUseCase } from '../../core/usecases/DeleteStudentUseCase';
+import { EnableStudentUseCase } from '../../core/usecases/EnableStudentUseCase';
 
 interface AddStudentRequest {
     name: string;
@@ -164,13 +165,13 @@ const deleteStudent = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const useCase = new DeleteStudentUseCase(dependencyContainer.studentRepository);
+        const useCase = dependencyContainer.deleteStudentUseCase;
         await useCase.execute({ studentId });
 
-        res.status(200).json({ message: 'Estudiante eliminado exitosamente' });
+        res.status(200).json({ message: 'Estudiante deshabilitado exitosamente' });
     } catch (error: any) {
-        if (error.message === 'El estudiante no existe') {
-            res.status(404).json({ error: error.message });
+        if (error.message === 'Estudiante no encontrado' || error.message === 'El estudiante no existe') {
+            res.status(404).json({ error: 'El estudiante no existe' });
             return;
         }
         console.error('Error en deleteStudent:', error);
@@ -178,7 +179,30 @@ const deleteStudent = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const studentController = { addStudent, getMyGames, getAllStudents, updateStudent, deleteStudent };
+const enableStudent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { studentId } = req.params as { studentId: string };
+
+        if (!studentId) {
+            res.status(400).json({ error: 'studentId es requerido' });
+            return;
+        }
+
+        const useCase = dependencyContainer.enableStudentUseCase;
+        await useCase.execute({ studentId });
+
+        res.status(200).json({ message: 'Estudiante reactivado exitosamente' });
+    } catch (error: any) {
+        if (error.message === 'Estudiante no encontrado') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en enableStudent:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+export const studentController = { addStudent, getMyGames, getAllStudents, updateStudent, deleteStudent, enableStudent };
 
 export const assignCourseToStudent = async (req: Request, res: Response): Promise<void> => {
     try {

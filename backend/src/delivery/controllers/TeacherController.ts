@@ -8,6 +8,7 @@ import { AuthenticatedRequest } from '../middleware/authMiddleWare';
 import { AddTeacherUseCase, AddTeacherRequest } from '../../core/usecases/addTeacherUseCase';
 import { UpdateTeacherUseCase } from '../../core/usecases/UpdateTeacherUseCase';
 import { DeleteTeacherUseCase } from '../../core/usecases/DeleteTeacherUseCase';
+import { EnableTeacherUseCase } from '../../core/usecases/EnableTeacherUseCase';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -265,16 +266,39 @@ const deleteTeacher = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const useCase = new DeleteTeacherUseCase(dependencyContainer.teacherRepository);
+        const useCase = dependencyContainer.deleteTeacherUseCase;
         await useCase.execute({ teacherId });
 
-        res.status(200).json({ message: 'Docente eliminado exitosamente' });
+        res.status(200).json({ message: 'Docente deshabilitado exitosamente' });
     } catch (error: any) {
-        if (error.message === 'El docente no existe') {
+        if (error.message === 'Profesor no encontrado') {
             res.status(404).json({ error: error.message });
             return;
         }
         console.error('Error en deleteTeacher:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+const enableTeacher = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { teacherId } = req.params as { teacherId: string };
+
+        if (!teacherId) {
+            res.status(400).json({ error: 'teacherId es requerido' });
+            return;
+        }
+
+        const useCase = dependencyContainer.enableTeacherUseCase;
+        await useCase.execute({ teacherId });
+
+        res.status(200).json({ message: 'Docente reactivado exitosamente' });
+    } catch (error: any) {
+        if (error.message === 'Profesor no encontrado') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en enableTeacher:', error);
         res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
     }
 };
@@ -286,5 +310,6 @@ export const teacherController = {
     getTeacherCourses,
     getMyCourseDetails,
     updateTeacher,
-    deleteTeacher
+    deleteTeacher,
+    enableTeacher
 };

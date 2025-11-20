@@ -38,8 +38,10 @@ import { GetGameLevelsUseCase } from '../core/usecases/GetGameLevelsUseCase';
 import { UpdateGameLevelUseCase } from '../core/usecases/UpdateGameLevelUseCase';
 import { UpdateStudentUseCase } from '../core/usecases/UpdateStudentUseCase';
 import { DeleteStudentUseCase } from '../core/usecases/DeleteStudentUseCase';
+import { EnableStudentUseCase } from '../core/usecases/EnableStudentUseCase';
 import { UpdateTeacherUseCase } from '../core/usecases/UpdateTeacherUseCase';
 import { DeleteTeacherUseCase } from '../core/usecases/DeleteTeacherUseCase';
+import { EnableTeacherUseCase } from '../core/usecases/EnableTeacherUseCase';
 
 
 export class DependencyContainer {
@@ -75,8 +77,10 @@ export class DependencyContainer {
     private _updateGameLevelUseCase: UpdateGameLevelUseCase | null = null;
     private _updateStudentUseCase: UpdateStudentUseCase | null = null;
     private _deleteStudentUseCase: DeleteStudentUseCase | null = null;
+    private _enableStudentUseCase: EnableStudentUseCase | null = null;
     private _updateTeacherUseCase: UpdateTeacherUseCase | null = null;
     private _deleteTeacherUseCase: DeleteTeacherUseCase | null = null;
+    private _enableTeacherUseCase: EnableTeacherUseCase | null = null;
 
 
     private constructor() {
@@ -410,6 +414,15 @@ export class DependencyContainer {
         return this._deleteStudentUseCase;
     }
 
+    public get enableStudentUseCase(): EnableStudentUseCase {
+        if (!this._enableStudentUseCase) {
+            this._enableStudentUseCase = new EnableStudentUseCase(
+                this.studentRepository
+            );
+        }
+        return this._enableStudentUseCase;
+    }
+
     public get updateTeacherUseCase(): UpdateTeacherUseCase {
         if (!this._updateTeacherUseCase) {
             this._updateTeacherUseCase = new UpdateTeacherUseCase(
@@ -430,6 +443,15 @@ export class DependencyContainer {
             );
         }
         return this._deleteTeacherUseCase;
+    }
+
+    public get enableTeacherUseCase(): EnableTeacherUseCase {
+        if (!this._enableTeacherUseCase) {
+            this._enableTeacherUseCase = new EnableTeacherUseCase(
+                this.teacherRepository
+            );
+        }
+        return this._enableTeacherUseCase;
     }
 
     public async clearAllData(): Promise<void> {

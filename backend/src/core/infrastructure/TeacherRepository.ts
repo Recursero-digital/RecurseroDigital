@@ -6,5 +6,6 @@ export interface TeacherRepository {
     getAllTeachers(): Promise<Teacher[]>;
     findById(id: string): Promise<Teacher | null>;
     updateTeacher(teacherData: Teacher): Promise<void>;
-    deleteTeacher(id: string): Promise<void>;
+    deleteTeacher(id: string): Promise<void>; // Baja lógica: marca enable = false
+    enableTeacher(id: string): Promise<void>; // Reactiva: marca enable = true
 }
