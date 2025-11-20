@@ -67,8 +67,10 @@ export const transformToOrdenamientoFormat = (levels) => {
     return levels.map(level => ({
         min: level.config.min,
         max: level.config.max,
+        numbersCount: level.config.numbersCount || 6,
         name: level.name,
-        description: level.description
+        description: level.description,
+        color: level.config.color || 'blue'
     }));
 };
 
