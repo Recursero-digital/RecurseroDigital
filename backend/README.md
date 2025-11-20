@@ -257,29 +257,11 @@ exports.down = (pgm) => {
 
 La aplicación crea automáticamente un usuario administrador al ejecutar las migraciones:
 
-- **Admin**: `admin` / `recurseroAdmin$2025`
+- **Admin**: `admin`
 
 Este es el único usuario que se crea automáticamente. Todos los demás usuarios (estudiantes, profesores, etc.) deben crearse a través de la aplicación.
 
 ##### Iniciar Sesión como Administrador
-
-Para iniciar sesión como administrador después de ejecutar las migraciones:
-
-1. **Endpoint de login**: `POST /api/login/admin`
-2. **Credenciales**:
-   - **Username**: `admin`
-   - **Password**: `recurseroAdmin$2025`
-
-Ejemplo de petición:
-
-```bash
-curl -X POST http://localhost:3000/api/login/admin \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "admin",
-    "password": "recurseroAdmin$2025"
-  }'
-```
 
 La respuesta incluirá un token JWT que puedes usar para autenticarte en los endpoints protegidos.
 
