@@ -119,16 +119,20 @@ const TeacherStudents = () => {
                         <h4>{gameNames[game]}</h4>
                         <div className="game-estadisticas">
                           <div className="stat">
-                            <span className="labels">Completados</span>
+                            <span className="labels">Actividades completadas</span>
                             <span className="values">{progress.completed}</span>
                           </div>
                           <div className="stat">
-                            <span className="labels">Promedio</span>
+                            <span className="labels">Progreso</span>
                             <span className="values">{progress.averageScore}%</span>
                           </div>
                           <div className="stat">
                             <span className="labels">Tiempo Total</span>
                             <span className="values">{Math.round(progress.totalTime / 60)}m</span>
+                          </div>
+                          <div className="stat">
+                            <span className="labels">Cantidad total de reintentos</span>
+                            <span className="values">{progress.totalAttempts || 0}</span>
                           </div>
                         </div>
                       </div>

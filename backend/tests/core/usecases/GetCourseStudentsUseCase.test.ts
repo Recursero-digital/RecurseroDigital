@@ -132,7 +132,8 @@ describe('GetCourseStudentsUseCase', () => {
             expect(result.students[0].progressByGame['ordenamiento']).toEqual({
                 completed: 0,
                 totalTime: 0,
-                averageScore: 0
+                averageScore: 0,
+                totalAttempts: 0
             });
         });
 
@@ -316,6 +317,7 @@ describe('GetCourseStudentsUseCase', () => {
             expect(studentDetails.progressByGame['escala'].completed).toBe(0);
             expect(studentDetails.progressByGame['escala'].totalTime).toBe(0);
             expect(studentDetails.progressByGame['escala'].averageScore).toBe(0);
+            expect(studentDetails.progressByGame['escala'].totalAttempts).toBe(0);
         });
     });
 });

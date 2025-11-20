@@ -18,6 +18,7 @@ interface StudentDetails {
         completed: number;
         totalTime: number;
         averageScore: number;
+        totalAttempts: number;
     }>;
 }
 
@@ -91,14 +92,14 @@ export class GetCourseStudentsUseCase {
     private async buildCompleteProgressByGame(
         studentId: string,
         courseGameIds: string[],
-        existingProgressByGame: Record<string, { completed: number; totalTime: number; averageScore: number }>
-    ): Promise<Record<string, { completed: number; totalTime: number; averageScore: number }>> {
-        const completeProgress: Record<string, { completed: number; totalTime: number; averageScore: number }> = {};
+        existingProgressByGame: Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }>
+    ): Promise<Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }>> {
+        const completeProgress: Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }> = {};
 
         for (const gameId of courseGameIds) {
             const normalizedGameId = this.normalizeGameId(gameId);
             
-            let gameProgress: { completed: number; totalTime: number; averageScore: number };
+            let gameProgress: { completed: number; totalTime: number; averageScore: number; totalAttempts: number };
             
             if (existingProgressByGame[normalizedGameId]) {
                 gameProgress = { ...existingProgressByGame[normalizedGameId] };
@@ -106,7 +107,8 @@ export class GetCourseStudentsUseCase {
                 gameProgress = {
                     completed: 0,
                     totalTime: 0,
-                    averageScore: 0
+                    averageScore: 0,
+                    totalAttempts: 0
                 };
             }
 
