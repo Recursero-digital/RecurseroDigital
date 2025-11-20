@@ -1,30 +1,50 @@
 
-export const levelData = {
-  1: [
-    [433, 374, 743, 304, 473, 307],
-    [123, 321, 213, 312, 231, 132],
-    [456, 465, 654, 564, 645, 546],
-    [742, 472, 247, 274, 724, 427],
-    [987, 798, 897, 789, 879, 978]
-  ],
-  2: [
-    [1863, 1736, 1836, 1667, 1788, 1879],
-    [3452, 2781, 4036, 3905, 2647, 4189],
-    [3468, 3486, 3648, 3684, 3846, 3864],
-    [2579, 2597, 2759, 2795, 2795, 2975],
-    [1689, 1698, 1869, 1896, 1968, 1986]
-  ],
-  3: [
-    [52784, 63291, 47305, 56812, 48976, 69143],
-    [36478, 36748, 37468, 37846, 38647, 38764],
-    [25879, 25897, 27589, 27958, 28579, 28957],
-    [41592, 63478, 54206, 72839, 48165, 69421],
-    [13569, 13596, 15369, 15639, 16359, 16935]
-  ]
-};
+/**
+ * Genera números aleatorios para una actividad basado en la configuración del nivel
+ * @param {Object|number} levelConfigOrIndex - Configuración del nivel del backend o índice del nivel
+ * @param {Array} levelRanges - Array de configuraciones de niveles (opcional)
+ * @returns {Object} - Objeto con números mezclados, originales y ordenados
+ */
+export const getNumbersForActivity = (levelConfigOrIndex, levelRanges = null) => {
+  let levelConfig;
 
-export const getNumbersForActivity = (level, activityIndex) => {
-  const numbers = levelData[level][activityIndex];
+  // Determinar si se pasó una configuración directa o un índice
+  if (typeof levelConfigOrIndex === 'number') {
+    // Se pasó un índice, buscar en levelRanges
+    const levelIndex = levelConfigOrIndex - 1; // Convertir de 1-indexed a 0-indexed
+    levelConfig = levelRanges && levelRanges[levelIndex] ? levelRanges[levelIndex] : null;
+  } else if (typeof levelConfigOrIndex === 'object' && levelConfigOrIndex !== null) {
+    // Se pasó una configuración directa
+    levelConfig = levelConfigOrIndex;
+  }
+
+  // Validar que tenemos una configuración válida
+  if (!levelConfig || (!levelConfig.min && levelConfig.min !== 0) || !levelConfig.max) {
+    console.warn('No se encontró configuración del nivel válida, usando valores por defecto:', {
+      levelConfigOrIndex,
+      levelConfig,
+      levelRanges
+    });
+    // Usar valores por defecto basados en el índice si es posible
+    const defaultConfigs = [
+      { min: 0, max: 99, numbersCount: 6 },
+      { min: 100, max: 999, numbersCount: 6 },
+      { min: 1000, max: 9999, numbersCount: 6 }
+    ];
+    const levelIndex = typeof levelConfigOrIndex === 'number' ? levelConfigOrIndex - 1 : 0;
+    levelConfig = defaultConfigs[levelIndex] || defaultConfigs[0];
+  }
+
+  const { min, max, numbersCount = 6 } = levelConfig;
+  const generatedNumbers = new Set();
+
+  // Generar números únicos aleatorios dentro del rango
+  while (generatedNumbers.size < numbersCount) {
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    generatedNumbers.add(randomNumber);
+  }
+
+  const numbers = Array.from(generatedNumbers);
   const shuffledNumbers = [...numbers].sort(() => Math.random() - 0.5);
   
   return {
@@ -58,22 +78,27 @@ export const checkOrder = (currentNumbers, originalNumbers) => {
   return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
 };
 
+/**
+ * Obtiene la configuración de un nivel (mantenido por compatibilidad)
+ * @param {number} level - Número del nivel
+ * @returns {Object} - Configuración básica del nivel
+ */
 export const getLevelConfig = (level) => {
   const configs = {
     1: { 
       name: "Nivel 1", 
-      description: "Números de 3 dígitos",
-      range: "100 - 999"
+      description: "Números del 0 al 99",
+      range: "0 - 99"
     },
     2: { 
       name: "Nivel 2", 
-      description: "Números de 4 dígitos",
-      range: "1.000 - 9.999"
+      description: "Números del 100 al 999",
+      range: "100 - 999"
     },
     3: { 
       name: "Nivel 3", 
-      description: "Números de 5 dígitos",
-      range: "10.000 - 99.999"
+      description: "Números del 1.000 al 9.999",
+      range: "1.000 - 9.999"
     }
   };
   return configs[level] || configs[1];
@@ -84,39 +109,32 @@ export const formatNumber = (num) => {
 };
 
 export const getNumbersCount = () => 6;
-export const generateNumbers = (level, levelRanges, getNumbersCountFn) => {
-
-  const levelNumber = level + 1;
-  const activityIndex = 0; 
+/**
+ * Genera números aleatorios para el juego basado en la configuración del nivel
+ * @param {number} level - Número del nivel (0-indexed)
+ * @param {Array} levelRanges - Configuraciones de niveles del backend
+ * @returns {Object} - Objeto con números generados
+ */
+export const generateNumbers = (level, levelRanges) => {
+  const levelConfig = levelRanges[level] || levelRanges[0];
   
-  if (levelData[levelNumber]) {
-    return getNumbersForActivity(levelNumber, activityIndex);
+  if (!levelConfig) {
+    console.warn('No se encontró configuración para el nivel', level);
+    return getNumbersForActivity({ min: 0, max: 99, numbersCount: 6 });
   }
 
-  const { min, max } = levelRanges[level] || levelRanges[0];
-  const currentNumbersCount = getNumbersCountFn ? getNumbersCountFn(level) : 6;
-  const generatedNumbers = new Set();
-
-  while (generatedNumbers.size < currentNumbersCount) {
-    const newNum = Math.floor(Math.random() * (max - min + 1)) + min;
-    generatedNumbers.add(newNum);
-  }
-
-  const numbersArray = Array.from(generatedNumbers);
-  const shuffledNumbers = [...numbersArray].sort(() => Math.random() - 0.5);
-  const sorted = [...numbersArray].sort((a, b) => a - b);
-
-  return {
-    shuffled: shuffledNumbers,
-    original: numbersArray,
-    sorted: sorted
-  };
+  // Usar la configuración del backend directamente
+  return getNumbersForActivity(levelConfig);
 };
 
+/**
+ * Rangos de niveles por defecto (usado como fallback)
+ * Estos valores deberían venir del backend en producción
+ */
 export const levelRanges = [
-    { min: 100, max: 999, name: "Números de 3 dígitos", description: "100 - 999" },
-    { min: 1000, max: 9999, name: "Números de 4 dígitos", description: "1.000 - 9.999" },
-    { min: 10000, max: 99999, name: "Números de 5 dígitos", description: "10.000 - 99.999" },
+    { min: 0, max: 99, name: "Números del 0 al 99", description: "0 - 99", numbersCount: 6 },
+    { min: 100, max: 999, name: "Números del 100 al 999", description: "100 - 999", numbersCount: 6 },
+    { min: 1000, max: 9999, name: "Números del 1.000 al 9.999", description: "1.000 - 9.999", numbersCount: 6 },
 ];
 
 export const totalActivities = 5;

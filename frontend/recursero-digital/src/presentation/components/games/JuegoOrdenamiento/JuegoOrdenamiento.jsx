@@ -75,10 +75,10 @@ const JuegoOrdenamiento = () => {
   }, [resetScoring]);
 
   const setupLevel = useCallback((level) => {
-    const numbersData = getNumbersForActivity(level + 1, currentActivity);
+    const numbersData = getNumbersForActivity(level + 1, levelRanges);
     setNumbers(numbersData.shuffled);
     setSortedNumbers(numbersData.original);
-  }, [currentActivity]);
+  }, [levelRanges]);
 
   const handleStartGame = useCallback((level) => {
     setCurrentLevel(level - 1);
