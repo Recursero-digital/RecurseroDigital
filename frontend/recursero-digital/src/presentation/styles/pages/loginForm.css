@@ -115,9 +115,9 @@
 
 .form-label {
   font-weight: bold;
-  color: white;
+  color: white !important;
   font-size: 0.875rem;
-  font-family: Roboto, sans-serif;
+  font-family: 'Fredoka', cursive;
 }
 
 .form-input {

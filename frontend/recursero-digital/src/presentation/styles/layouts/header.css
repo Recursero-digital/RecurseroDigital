@@ -14,7 +14,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: "Fredoka", sans-serif;
-  height: 80px;
+  height: 70px;
   padding: 0 20px;
 }
 
@@ -39,24 +39,22 @@
   font-size: 32px;
   color: white;
   margin: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   letter-spacing: 2px;
+  text-shadow: 
+    -1px -1px 0 #7c3aed,
+    1px -1px 0 #7c3aed,
+    -1px 1px 0 #7c3aed,
+    1px 1px 0 #7c3aed,
+    -1px 0 0 #7c3aed,
+    1px 0 0 #7c3aed,
+    0 -1px 0 #7c3aed,
+    0 1px 0 #7c3aed;
 }
 
 .search-and-mode {
   display: flex;
   margin-right: 20px;
   align-items: center;
-  z-index: 1;
-  position: relative;
-}
-
-
-.boton-cerrar {
-  flex-shrink: 0;
   z-index: 1;
   position: relative;
 }

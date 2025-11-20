@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FeedbackModal = ({ isSuccess, onContinue, onRetry }) => {
+const FeedbackModal = ({ isSuccess, onContinue, /*onRetry*/ }) => {
     const getRandomErrorMessage = () => {
         const messages = [
             "¡Intenta de nuevo!",
