@@ -3,6 +3,7 @@ import { StudentStatisticsRepository } from '../infrastructure/StudentStatistics
 import { GameLevelRepository } from '../infrastructure/GameLevelRepository';
 import { CourseRepository } from '../infrastructure/CourseRepository';
 import { Student } from '../models/Student';
+import { StudentProgressCalculator } from '../services/StudentProgressCalculator';
 
 export interface GetCourseProgressByGameRequest {
     courseId: string;
@@ -22,12 +23,19 @@ export interface CourseProgressByGameResponse {
 }
 
 export class GetCourseProgressByGameUseCase {
+    private progressCalculator: StudentProgressCalculator;
+
     constructor(
         private studentRepository: StudentRepository,
         private statisticsRepository: StudentStatisticsRepository,
         private gameLevelRepository: GameLevelRepository,
         private courseRepository: CourseRepository
-    ) {}
+    ) {
+        this.progressCalculator = new StudentProgressCalculator(
+            statisticsRepository,
+            gameLevelRepository
+        );
+    }
 
     async execute(request: GetCourseProgressByGameRequest): Promise<CourseProgressByGameResponse> {
         const { courseId } = request;
@@ -101,8 +109,7 @@ export class GetCourseProgressByGameUseCase {
 
         const { studentProgresses, studentsWithProgress } = await this.calculateAllStudentsProgress(
             courseStudents,
-            gameId,
-            totalActivities
+            gameId
         );
 
         const averageProgress = this.calculateAverageProgress(studentProgresses);
@@ -117,15 +124,14 @@ export class GetCourseProgressByGameUseCase {
 
     private async calculateAllStudentsProgress(
         courseStudents: Student[],
-        gameId: string,
-        totalActivities: number
+        gameId: string
     ): Promise<{ studentProgresses: number[]; studentsWithProgress: number }> {
         const studentProgresses: number[] = [];
         let studentsWithProgress = 0;
 
         for (const student of courseStudents) {
             try {
-                const progress = await this.calculateStudentProgress(student.id, gameId, totalActivities);
+                const progress = await this.calculateStudentProgress(student.id, gameId);
                 studentProgresses.push(progress);
                 
                 if (progress > 0) {
@@ -142,40 +148,10 @@ export class GetCourseProgressByGameUseCase {
 
     private async calculateStudentProgress(
         studentId: string,
-        gameId: string,
-        totalActivities: number
+        gameId: string
     ): Promise<number> {
-        const lastActivity = await this.statisticsRepository.getLastCompletedActivity(studentId, gameId);
-
-        if (!lastActivity) {
-            return 0;
-        }
-
-        const absoluteActivityNumber = await this.calculateAbsoluteActivityNumber(gameId, lastActivity);
-        const progressPercentage = (absoluteActivityNumber / totalActivities) * 100;
-
-        return Math.min(progressPercentage, 100);
-    }
-
-    private async calculateAbsoluteActivityNumber(
-        gameId: string,
-        lastActivity: { level: number; activity: number }
-    ): Promise<number> {
-        const levels = await this.gameLevelRepository.findByGameId(gameId);
-        const sortedLevels = levels.sort((a, b) => a.getLevel() - b.getLevel());
-
-        let absoluteActivityNumber = 0;
-
-        for (const level of sortedLevels) {
-            if (level.getLevel() < lastActivity.level) {
-                absoluteActivityNumber += level.getActivitiesCount();
-            } else if (level.getLevel() === lastActivity.level) {
-                absoluteActivityNumber += lastActivity.activity;
-                break;
-            }
-        }
-
-        return absoluteActivityNumber;
+        const progress = await this.progressCalculator.calculateStudentProgress(studentId, gameId);
+        return progress.percentage;
     }
 
     private calculateAverageProgress(progresses: number[]): number {

@@ -1,6 +1,7 @@
 import { StudentStatisticsRepository } from '../infrastructure/StudentStatisticsRepository';
 import { GameLevelRepository } from '../infrastructure/GameLevelRepository';
 import { StudentStatistics } from '../models/StudentStatistics';
+import { StudentProgressCalculator } from '../services/StudentProgressCalculator';
 
 export interface GetStudentProgressRequest {
     studentId: string;
@@ -24,14 +25,17 @@ export interface StudentProgressResponse {
 
 export class GetStudentProgressUseCase {
     private statisticsRepository: StudentStatisticsRepository;
-    private gameLevelRepository: GameLevelRepository;
+    private progressCalculator: StudentProgressCalculator;
 
     constructor(
         statisticsRepository: StudentStatisticsRepository,
         gameLevelRepository: GameLevelRepository
     ) {
         this.statisticsRepository = statisticsRepository;
-        this.gameLevelRepository = gameLevelRepository;
+        this.progressCalculator = new StudentProgressCalculator(
+            statisticsRepository,
+            gameLevelRepository
+        );
     }
 
     async execute(request: GetStudentProgressRequest): Promise<StudentProgressResponse> {
@@ -56,39 +60,10 @@ export class GetStudentProgressUseCase {
 
         const gameProgress = await Promise.all(
             Array.from(gameGroups.entries()).map(async ([gameId, gameStats]) => {
-                const lastCompletedActivity = await this.statisticsRepository.getLastCompletedActivity(
+                const maxUnlockedLevel = await this.progressCalculator.calculateMaxUnlockedLevel(
                     request.studentId,
                     gameId
                 );
-
-                let maxUnlockedLevel = 1;
-                
-                try {
-                    const gameLevels = await this.gameLevelRepository.findByGameId(gameId);
-                    const sortedLevels = gameLevels.sort((a, b) => a.getLevel() - b.getLevel());
-
-                    if (lastCompletedActivity && sortedLevels.length > 0) {
-                        const lastLevel = sortedLevels.find(level => level.getLevel() === lastCompletedActivity.level);
-                        
-                        if (lastLevel) {
-                            if (lastCompletedActivity.activity >= lastLevel.getActivitiesCount()) {
-                                const nextLevel = sortedLevels.find(level => level.getLevel() === lastCompletedActivity.level + 1);
-                                maxUnlockedLevel = nextLevel ? nextLevel.getLevel() : lastCompletedActivity.level + 1;
-                            } else {
-                                maxUnlockedLevel = lastCompletedActivity.level;
-                            }
-                        } else {
-                            maxUnlockedLevel = lastCompletedActivity.level;
-                        }
-                    } else if (lastCompletedActivity) {
-                        maxUnlockedLevel = lastCompletedActivity.level;
-                    }
-                } catch (error) {
-                    console.warn(`Error al obtener niveles del juego ${gameId}, usando nivel de última actividad completada:`, error);
-                    if (lastCompletedActivity) {
-                        maxUnlockedLevel = lastCompletedActivity.level;
-                    }
-                }
 
                 const totalPoints = gameStats.reduce((sum, stat) => sum + stat.points, 0);
                 const completionRate = await this.statisticsRepository.getStudentCompletionRate(
