@@ -61,7 +61,7 @@ export default function MainLayout({ children, userRole = "alumno" }) {
         onTabChange={setActiveTab}
         userRole={userRole}
       />
-      <main className="main-content bg-space bg-space-gradient bg-stars scrollbar-space">
+      <main className={`main-content ${userRole !== 'admin' ? 'bg-space bg-space-gradient bg-stars' : ''} scrollbar-space`}>
         {children}
       </main>
     </div>
