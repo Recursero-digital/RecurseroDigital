@@ -13,7 +13,7 @@ import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels, transformToDescomposicionFormat } from '../../../../hooks/useGameLevels';
 
 const JuegoDescomposicion = () => {
-    const { unlockLevel } = useUserProgress();
+    const { unlockLevel, getLastActivity } = useUserProgress();
     const { 
         points, 
         attempts, 
@@ -98,12 +98,28 @@ const JuegoDescomposicion = () => {
 
     const handleSelectLevel = useCallback((level) => {
         setCurrentLevel(level);
-        setCurrentActivity(0);
+        
+        const lastActivity = getLastActivity('descomposicion');
+        
+        let startingActivity = 0;
+        if (lastActivity && lastActivity.level === level + 1) {
+            const lastActivityIndex = lastActivity.activity - 1;
+            
+            if (lastActivityIndex + 1 < totalQuestions) {
+                startingActivity = lastActivityIndex + 1;
+            } else {
+                startingActivity = 0;
+            }
+        } else {
+            startingActivity = 0;
+        }
+        
+        setCurrentActivity(startingActivity);
         setQuestions(generateQuestions(level));
         resetScoring();
-                    resetAttempts();
+        resetAttempts();
         setGameState('playing');
-    }, [generateQuestions, resetScoring, resetAttempts]);
+    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, totalQuestions]);
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {

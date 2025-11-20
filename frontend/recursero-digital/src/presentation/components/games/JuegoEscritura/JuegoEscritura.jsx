@@ -15,7 +15,7 @@ import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels } from '../../../../hooks/useGameLevels';
 
 const JuegoEscritura = () => {
-    const { unlockLevel, getMaxUnlockedLevel } = useUserProgress();
+    const { unlockLevel, getMaxUnlockedLevel, getLastActivity } = useUserProgress();
     const { 
         points, 
         attempts, 
@@ -60,12 +60,29 @@ const JuegoEscritura = () => {
         }
     }, [gameState, currentLevel, currentActivity, startNewActivity, startActivityTimer]);
     
-    const handleStartGame = (level) => {
-        setCurrentLevel(level - 1);
-        setCurrentActivity(0);
+    const handleStartGame = useCallback((level) => {
+        const selectedLevelIndex = level - 1;
+        setCurrentLevel(selectedLevelIndex);
+        
+        const lastActivity = getLastActivity('escritura');
+        
+        let startingActivity = 0;
+        if (lastActivity && lastActivity.level === level) {
+            const lastActivityIndex = lastActivity.activity - 1;
+            
+            if (lastActivityIndex + 1 < 5) {
+                startingActivity = lastActivityIndex + 1;
+            } else {
+                startingActivity = 0;
+            }
+        } else {
+            startingActivity = 0;
+        }
+        
+        setCurrentActivity(startingActivity);
         resetScoring();
         setGameState('game');
-    };
+    }, [resetScoring, getLastActivity]);
     
     const handleDragStart = (e, number) => {
         e.dataTransfer.setData('text/plain', number.toString());
