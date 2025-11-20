@@ -197,6 +197,23 @@ export class PostgreSQLGameLevelRepository implements GameLevelRepository {
         }
     }
 
+    async getTotalActivitiesCount(gameId: string): Promise<number> {
+        try {
+            const result = await this.db.query(
+                `SELECT SUM(activities_count) as total_activities 
+                 FROM games_levels 
+                 WHERE game_id = $1`,
+                [gameId]
+            );
+
+            const total = result.rows[0]?.total_activities;
+            return total ? parseInt(total) : 0;
+        } catch (error) {
+            console.error('Error al obtener total de actividades del juego:', error);
+            throw error;
+        }
+    }
+
     private mapRowToGameLevel(row: any): GameLevel {
         return new GameLevel(
             row.id,

@@ -178,6 +178,30 @@ export class InMemoryStudentStatisticsRepository implements StudentStatisticsRep
     this.statistics = [];
   }
 
+  async getLastCompletedActivity(studentId: string, gameId: string): Promise<{ level: number; activity: number } | null> {
+    const studentStats = this.statistics.filter(stat => 
+      stat.studentId === studentId && stat.gameId === gameId
+    );
+    
+    if (studentStats.length === 0) {
+      return null;
+    }
+
+    // Ordenar por level DESC, activity DESC y tomar el primero
+    const sorted = studentStats.sort((a, b) => {
+      if (b.level !== a.level) {
+        return b.level - a.level;
+      }
+      return b.activity - a.activity;
+    });
+
+    const lastStat = sorted[0];
+    return {
+      level: lastStat.level,
+      activity: lastStat.activity
+    };
+  }
+
   getAllStatistics(): StudentStatistics[] {
     return [...this.statistics];
   }

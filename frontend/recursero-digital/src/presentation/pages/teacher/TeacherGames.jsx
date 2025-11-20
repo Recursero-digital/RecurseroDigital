@@ -131,11 +131,11 @@ const TeacherGames = () => {
   if (loading) {
     return (
       <div className="teacher-games">
-        <div className="games-header">
-          <h1>🎮 Gestión de Juegos</h1>
-          <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
-        </div>
         <div className="games-content">
+          <div className="games-headers">
+            <h1>🎮 Gestión de Juegos</h1>
+            <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+          </div>
           <div style={{ textAlign: 'center', padding: '2rem' }}>
             <p>Cargando juegos...</p>
           </div>
@@ -147,11 +147,11 @@ const TeacherGames = () => {
   if (error) {
     return (
       <div className="teacher-games">
-        <div className="games-header">
-          <h1>🎮 Gestión de Juegos</h1>
-          <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
-        </div>
         <div className="games-content">
+          <div className="games-headers">
+            <h1>🎮 Gestión de Juegos</h1>
+            <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+          </div>
           <div style={{ textAlign: 'center', padding: '2rem', color: '#ef4444' }}>
             <p>{error}</p>
             <button 
@@ -176,27 +176,29 @@ const TeacherGames = () => {
 
   return (
     <div className="teacher-games">
-      <div className="games-header">
-        <h1>🎮 Gestión de Juegos</h1>
-        <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
-      </div>
-
       <div className="games-content">
+        <div className="games-headers">
+          <h1>🎮 Gestión de Juegos</h1>
+          <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+        </div>
+
         <div className="games-overview">
           {/* Estadísticas generales */}
           <div className="overview-stats">
-            <div className="stat-card total-games">
+            <div className="stat-cards total-games">
               <div className="stat-icon">🎮</div>
-              <div className="stat-content">
+              <div className="stats-content">
+                <h2>Cantidad de Juegos</h2>
                 <h3>{games.length}</h3>
-                <p>Cantidad de Juegos</p>
+                
               </div>
             </div>
-            <div className="stat-card active-games">
-              <div className="stat-icon">✅</div>
-              <div className="stat-content">
+            <div className="stat-cards active-games">
+              <div className="stat-icon">✅</div> 
+              <div className="stats-content">
+                <h2>Juegos Activos</h2>
                 <h3>{games.filter(game => game.status === 'active').length}</h3>
-                <p>Juegos Activos</p>
+                
               </div>
             </div>
           </div>
@@ -211,39 +213,33 @@ const TeacherGames = () => {
               {games.map((game) => (
                 <div 
                   key={game.id} 
-                  className="game-card"
+                  className="game-cards"
                 >
-                  <div className="game-header">
-                    <div className="game-icon">{game.icon}</div>
-                    <div className="game-info">
-                      <h3>{game.name}</h3>
-                      <p>{game.description}</p>
-                    </div>
+                  <div className='game-status-row'>
                     <div className={`game-status ${game.status}`}>
                       {game.status === 'active' ? 'Activo' : 'Inactivo'}
                     </div>
+                    <div className={`game-difficulty ${getDifficultyColor(game.difficulty)}`}>
+                      {game.difficulty}
+                    </div>
                   </div>
-
-                  <div className="game-stats">
-                    <div className="stat-row">
-                      <div className="stat">
-                        <span className="stat-label">Dificultad</span>
-                        <span className={`stat-value difficulty-${getDifficultyColor(game.difficulty)}`}>
-                          {game.difficulty}
-                        </span>
-                      </div>
+                  <div className="game-header">
+                    <div className="game-icons">{game.icon}</div>
+                    <div className="game-info">
+                      <h3>{game.name}</h3>
+                      <p>{game.description}</p>
                     </div>
                   </div>
 
                   <div className="game-actions">
                     <button 
-                      className={`action-btn ${game.status === 'active' ? 'disable-game' : 'enable-game'}`}
+                      className={`action-btn-games ${game.status === 'active' ? 'disable-game' : 'enable-game'}`}
                       onClick={(e) => handleToggleGame(game.courseGameId, game.status === 'active', e)}
                     >
                       {game.status === 'active' ? '🚫 Deshabilitar Juego' : '✅ Habilitar Juego'}
                     </button>
                     <button 
-                      className="action-btn configure"
+                      className="action-btn-games configure"
                       onClick={(e) => handleConfigureGame(game.id, e)}
                     >
                       ⚙️ Configurar
@@ -260,3 +256,5 @@ const TeacherGames = () => {
 };
 
 export default TeacherGames;
+
+

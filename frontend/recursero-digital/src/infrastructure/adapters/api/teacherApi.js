@@ -89,12 +89,34 @@ export const getStudentDetails = async (studentId) => {
 
 export const getCourseStatistics = async (courseId) => {
   const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+  
   const response = await fetch(`${API_BASE_URL}/courses/${courseId}/statistics`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   });
+  
+  if (!response.ok) {
+    let errorData;
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      errorData = { error: response.statusText || 'Error desconocido' };
+    }
+    
+    const errorMessage = errorData.error || errorData.message || `Error al obtener estadísticas: ${response.status} ${response.statusText}`;
+    console.error('Error en getCourseStatistics:', {
+      status: response.status,
+      statusText: response.statusText,
+      errorData
+    });
+    throw new Error(errorMessage);
+  }
+  
   return await response.json();
 };
 
