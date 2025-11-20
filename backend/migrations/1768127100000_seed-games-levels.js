@@ -18,11 +18,11 @@ exports.up = (pgm) => {
     INSERT INTO games_levels (id, game_id, level, name, description, difficulty, activities_count, config) VALUES
     -- Juego de Ordenamiento
     ('level-ordenamiento-1', 'game-ordenamiento', 1, 'Nivel 1', 'Números de 3 dígitos', 'Fácil', 5, 
-      '{"min": 100, "max": 999, "color": "blue", "numbersCount": 6}'::jsonb),
+      '{"min": 0, "max": 99, "color": "blue", "numbersCount": 6}'::jsonb),
     ('level-ordenamiento-2', 'game-ordenamiento', 2, 'Nivel 2', 'Números de 4 dígitos', 'Intermedio', 5, 
-      '{"min": 1000, "max": 9999, "color": "green", "numbersCount": 6}'::jsonb),
+      '{"min": 100, "max": 999, "color": "green", "numbersCount": 6}'::jsonb),
     ('level-ordenamiento-3', 'game-ordenamiento', 3, 'Nivel 3', 'Números de 5 dígitos', 'Avanzado', 5, 
-      '{"min": 10000, "max": 99999, "color": "purple", "numbersCount": 6}'::jsonb),
+      '{"min": 1000, "max": 9999, "color": "purple", "numbersCount": 6}'::jsonb),
 
     -- Juego de Descomposición
     ('level-descomposicion-1', 'game-descomposicion', 1, 'Fácil', '0 al 99', 'Fácil', 5, 
