@@ -183,12 +183,15 @@
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 1rem;
+  border-radius: 16px;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 1.5rem;
+  padding: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease;       
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .game-header {
@@ -204,7 +207,7 @@
 
 .game-icons {
   font-size: 3rem;
-  padding-top:2rem;
+  padding-top:3rem;
   border-radius: 0.75rem;
   background: transparent;  
   display: flex;
@@ -214,6 +217,9 @@
 
 .game-info {
   flex: 1;
+  margin-top: 30px; 
+
+  
 }
 
 .game-info h3 {
@@ -356,12 +362,15 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   flex: 1;
   padding: 1rem;
-  border-radius: 0.75rem;
+  border-radius: 12px;
   color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  border: none;
+  width: 100%;
+  
 }
 
 .action-btn-games:hover {

@@ -3,7 +3,7 @@
 .home-admin {
   padding: 2rem;
   font-family: 'Fredoka', cursive;
-  background: white;
+  background: rgb(231, 237, 239);
   min-height: 100vh;
   color: #333;
 }
@@ -36,7 +36,7 @@
 }
 
 .overview-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.742);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 1rem;
@@ -86,7 +86,7 @@
 }
 
 .admin-quick-actions {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255, 255, 255);
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 3rem;
@@ -107,11 +107,11 @@
 }
 
 .action-card-admin {
- background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 20%, rgba(99, 102, 241, 0.8) 40%, rgba(139, 92, 246, 0.8) 60%, rgba(124, 58, 237, 0.8) 80%, rgba(91, 33, 182, 0.8) 100%);
+  background: linear-gradient(80deg, rgba(30, 58, 138, 0.8) 0%, rgba(59, 130, 246, 0.8) 40%, rgba(99, 102, 241, 0.8) 60%, rgba(124, 58, 237, 0.8) 100%);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
- box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
- color: rgb(12, 12, 12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  color: rgb(12, 12, 12);
   border: 1px;
   border-radius: 0.75rem;
   padding: 1.5rem;

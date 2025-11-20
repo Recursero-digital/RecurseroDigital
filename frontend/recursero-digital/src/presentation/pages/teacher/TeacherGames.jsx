@@ -113,10 +113,7 @@ const TeacherGames = () => {
     }
   };
 
-  const handleConfigureGame = (gameId, e) => {
-    e.stopPropagation();
-    console.log(`Configure game ${gameId}`);
-  };
+  
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
@@ -238,12 +235,7 @@ const TeacherGames = () => {
                     >
                       {game.status === 'active' ? '🚫 Deshabilitar Juego' : '✅ Habilitar Juego'}
                     </button>
-                    <button 
-                      className="action-btn-games configure"
-                      onClick={(e) => handleConfigureGame(game.id, e)}
-                    >
-                      ⚙️ Configurar
-                    </button>
+                    
                   </div>
                 </div>
               ))}
