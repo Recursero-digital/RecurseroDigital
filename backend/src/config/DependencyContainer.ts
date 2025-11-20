@@ -346,7 +346,9 @@ export class DependencyContainer {
         if (!this._getCourseStudentsUseCase) {
             this._getCourseStudentsUseCase = new GetCourseStudentsUseCase(
                 this.studentRepository,
-                this.statisticsRepository
+                this.statisticsRepository,
+                this.courseRepository,
+                this.gameLevelRepository
             );
         }
 

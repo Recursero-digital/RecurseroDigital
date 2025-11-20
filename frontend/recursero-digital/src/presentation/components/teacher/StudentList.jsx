@@ -85,12 +85,23 @@ const StudentList = ({ courseId, onSelectStudent }) => {
     );
   }
 
+  const calculateTotalProgress = (student) => {
+    if (!student?.progressByGame || Object.keys(student.progressByGame).length === 0) {
+      return 0;
+    }
+    const progressValues = Object.values(student.progressByGame).map(game => game.averageScore || 0);
+    const sum = progressValues.reduce((acc, val) => acc + val, 0);
+    return Math.round(sum / progressValues.length);
+  };
+
   const totalStudents = students.length;
-  const activeStudents = students.filter(student => 
-    getDaysSinceLastActivity(student.lastActivity) <= 3
-  ).length;
-  const averageScore = students.length > 0
-    ? Math.round(students.reduce((sum, student) => sum + student.averageScore, 0) / students.length)
+  const courseGeneralProgress = students.length > 0
+    ? Math.round(
+        students.reduce((sum, student) => {
+          const studentProgress = calculateTotalProgress(student);
+          return sum + studentProgress;
+        }, 0) / students.length
+      )
     : 0;
 
   return (
@@ -106,12 +117,8 @@ const StudentList = ({ courseId, onSelectStudent }) => {
           <span className="stat-label">Total</span>
         </div>
         <div className="stat-item">
-          <span className="stat-value">{activeStudents}</span>
-          <span className="stat-label">Activos</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-value">{averageScore}%</span>
-          <span className="stat-label">Promedio</span>
+          <span className="stat-value">{courseGeneralProgress}%</span>
+          <span className="stat-label">Progreso general curso</span>
         </div>
       </div>
 
@@ -149,12 +156,26 @@ const StudentList = ({ courseId, onSelectStudent }) => {
                       <span className="stat-label">Juegos</span>
                       <span className="stat-value">{student.totalGamesPlayed}</span>
                     </div>
-                    <div className="stat">
-                      <span className="stat-label">Promedio</span>
-                      <span className={`stat-value score-${scoreColor}`}>
-                        {student.averageScore}%
-                      </span>
-                    </div>
+                    {(() => {
+                      const calculateTotalProgress = () => {
+                        if (!student.progressByGame || Object.keys(student.progressByGame).length === 0) {
+                          return 0;
+                        }
+                        const progressValues = Object.values(student.progressByGame).map(game => game.averageScore || 0);
+                        const sum = progressValues.reduce((acc, val) => acc + val, 0);
+                        return Math.round(sum / progressValues.length);
+                      };
+                      const totalProgress = calculateTotalProgress();
+                      const progressColor = getScoreColor(totalProgress);
+                      return (
+                        <div className="stat">
+                          <span className="stat-label">Progreso total</span>
+                          <span className={`stat-value score-${progressColor}`}>
+                            {totalProgress}%
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -164,13 +185,14 @@ const StudentList = ({ courseId, onSelectStudent }) => {
                       ordenamiento: 'Ordenamiento',
                       escritura: 'Escritura',
                       descomposicion: 'Descomposición', 
-                      escala: 'Escala'
+                      escala: 'Escala',
+                      calculos: 'Cálculos'
                     };
 
                     return (
                       <div key={game} className="game-progress">
                         <div className="game-progress-header">
-                          <span className="game-name">{gameNames[game]}</span>
+                          <span className="game-name">{gameNames[game] || game.charAt(0).toUpperCase() + game.slice(1)}</span>
                           <span className="game-score">{progress.averageScore}%</span>
                         </div>
                         <div className="game-progress-bar">

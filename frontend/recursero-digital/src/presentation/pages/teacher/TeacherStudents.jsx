@@ -65,6 +65,15 @@ const TeacherStudents = () => {
     );
   }
 
+  const calculateTotalProgress = (student) => {
+    if (!student?.progressByGame || Object.keys(student.progressByGame).length === 0) {
+      return 0;
+    }
+    const progressValues = Object.values(student.progressByGame).map(game => game.averageScore || 0);
+    const sum = progressValues.reduce((acc, val) => acc + val, 0);
+    return Math.round(sum / progressValues.length);
+  };
+
   return (
     <div className="teacher-students">
       <div className="contenido-alumno">
@@ -97,12 +106,12 @@ const TeacherStudents = () => {
                     <span>{selectedStudent.totalGamesPlayed}</span>
                   </div>
                   <div className="info-item">
-                    <label>Promedio:</label>
-                    <span>{selectedStudent.averageScore}%</span>
+                    <label>Progreso total:</label>
+                    <span>{calculateTotalProgress(selectedStudent)}%</span>
                   </div>
                 </div>
               </div>
-              
+            
               <div className="games-detail">
                 <h3>Progreso por Juego</h3>
                 <div className="games-grid">
@@ -111,24 +120,29 @@ const TeacherStudents = () => {
                       ordenamiento: 'Ordenamiento',
                       escritura: 'Escritura',
                       descomposicion: 'Descomposición',
-                      escala: 'Escala Numérica'
+                      escala: 'Escala Numérica',
+                      calculos: 'Cálculos'
                     };
 
                     return (
                       <div key={game} className="game-detail-card">
-                        <h4>{gameNames[game]}</h4>
+                        <h4>{gameNames[game] || game.charAt(0).toUpperCase() + game.slice(1)}</h4>
                         <div className="game-estadisticas">
                           <div className="stat">
-                            <span className="labels">Completados</span>
+                            <span className="labels">Actividades completadas</span>
                             <span className="values">{progress.completed}</span>
                           </div>
                           <div className="stat">
-                            <span className="labels">Promedio</span>
+                            <span className="labels">Progreso</span>
                             <span className="values">{progress.averageScore}%</span>
                           </div>
                           <div className="stat">
                             <span className="labels">Tiempo Total</span>
                             <span className="values">{Math.round(progress.totalTime / 60)}m</span>
+                          </div>
+                          <div className="stat">
+                            <span className="labels">Cantidad total de reintentos</span>
+                            <span className="values">{progress.totalAttempts || 0}</span>
                           </div>
                         </div>
                       </div>
