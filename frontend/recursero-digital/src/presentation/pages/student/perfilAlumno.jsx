@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import "../../styles/pages/perfilAlumno.css";
 
@@ -13,6 +13,12 @@ import "../../styles/pages/perfilAlumno.css";
 export default function PerfilAlumno() {
   // TODO BACKEND: Este hook ya estará conectado al API real
   const { data: studentData, loading, error } = useStudentProfile();
+  const [selectedAvatar, setSelectedAvatar] = useState('🚀');
+
+
+  const handleAvatarChange = () => {
+    setSelectedAvatar(prevAvatar => prevAvatar === '🚀' ? '⭐' : '🚀');
+  };
 
   // TODO BACKEND: Personalizar mensajes según errores específicos del API
   if (loading) {
@@ -56,30 +62,28 @@ export default function PerfilAlumno() {
       </div>
     );
   }
+  const totalScore = Object.values(studentData.stats || {})
+  .reduce((total, game) => total + (game.highScore ?? 0), 0);
 
   return (
     <div className="perfil-container">
       <div className="perfil-header">
         <div className="avatar-section">
-          <div className="perfil-avatar emoji-avatar">
-            🚀
+          <div className="perfil-avatar emoji-avatar" onClick={handleAvatarChange} style={{ cursor: 'pointer' }}>
+            {selectedAvatar}
           </div>
+          <p style={{ fontSize: '0.8rem', color: '#ffffff', marginTop: '0.5rem', textAlign: 'center' }}>
+            Click para cambiar avatar
+          </p>
         </div>
         <div className="profile-info">
           <h1 className="profile-name">¡Hola {studentData.name}!</h1>
           <p className="profile-title">🚀 Explorador de Matemáticas 🚀</p>
           <div className="achievements">
             <div className="achievement-item">
-              🏆 <span>{studentData.totalScore}</span> puntos totales
+              🏆 <span>{totalScore}</span> puntos totales
             </div>
-            <div className="achievement-item">
-              ⭐{" "}
-              <span>
-                {studentData.stats.ordenamiento.stars +
-                  studentData.stats.escritura.stars}
-              </span>{" "}
-              estrellas ganadas
-            </div>
+
           </div>
         </div>
       </div>
@@ -88,76 +92,39 @@ export default function PerfilAlumno() {
 
       
         <div className="games-grid">
-          <div className="card-game">
-            <div className="game-icon">🔢</div>
-            <h3 className="game-title">Ordenamiento de Números</h3>
-            <div className="stars">
-              {[...Array(3)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`star ${
-                    i < studentData.stats.ordenamiento.stars ? "filled" : ""
-                  }`}
-                >
-                  ⭐
-                </span>
-              ))}
-            </div>
-            <div className="game-stats">
-              <div className="stat-row">
-                <span className="stat-emoji">🎯</span>
-                <span>
-                  Mejor puntaje: {studentData.stats.ordenamiento.highScore}
-                </span>
+          {studentData.stats && Object.entries(studentData.stats).map(([gameKey, gameStats]) => {
+            // Mapeo de información de juegos
+const gameInfo = {
+  'ordenamiento': { name: 'Ordenamiento de Números', icon: '🔢' },
+  'escritura': { name: 'Números en Palabras', icon: '✍️' },
+  'descomposicion': { name: 'Descomposición', icon: '🧮' },
+  'calculos': { name: 'Cálculos', icon: '➕' },   // ← corregido
+  'escala': { name: 'Escala', icon: '📊' }
+};
+
+            const game = gameInfo[gameKey] || { name: gameKey, icon: '🎮' };
+
+            return (
+              <div key={gameKey} className="card-game">
+                <div className="game-icon">{game.icon}</div>
+                <h3 className="game-title">{game.name}</h3>
+                <div className="game-stats">
+                  {gameStats.highScore !== undefined && (
+                    <div className="stat-row">
+                      <span className="stat-emoji">🎯</span>
+                      <span>Mejor puntaje: {gameStats.highScore}</span>
+                    </div>
+                  )}
+                  {gameStats.gamesPlayed !== undefined && (
+                    <div className="stat-row">
+                      <span className="stat-emoji">🎲</span>
+                      <span>Partidas jugadas: {gameStats.gamesPlayed}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="stat-row">
-                <span className="stat-emoji">🎲</span>
-                <span>
-                  Partidas jugadas: {studentData.stats.ordenamiento.gamesPlayed}
-                </span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-emoji">✨</span>
-                <span>
-                  Precisión: {studentData.stats.ordenamiento.accuracy}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="card-game">
-            <div className="game-icon">✍️</div>
-            <h3 className="game-title">Números en Palabras</h3>
-            <div className="stars">
-              {[...Array(3)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`star ${
-                    i < studentData.stats.escritura.stars ? "filled" : ""
-                  }`}
-                >
-                  ⭐
-                </span>
-              ))}
-            </div>
-            <div className="game-stats">
-              <div className="stat-row">
-                <span className="stat-emoji">🎯</span>
-                <span>
-                  Mejor puntaje: {studentData.stats.escritura.highScore}
-                </span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-emoji">🎲</span>
-                <span>
-                  Partidas jugadas: {studentData.stats.escritura.gamesPlayed}
-                </span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-emoji">✨</span>
-                <span>Precisión: {studentData.stats.escritura.accuracy}</span>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
