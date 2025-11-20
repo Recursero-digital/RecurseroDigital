@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardStats from '../../components/teacher/DashboardStats';
 import '../../styles/pages/teacherStatistics.css';
 
 const TeacherStatistics = () => {
-  const [selectedCourse] = useState('1');
+  const navigate = useNavigate();
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  useEffect(() => {
+    const cursoGuardado = localStorage.getItem('cursoSeleccionado');
+    if (cursoGuardado) {
+      const curso = JSON.parse(cursoGuardado);
+      setSelectedCourse(curso.id);
+    } else {
+      // Si no hay curso seleccionado, redirigir al dashboard
+      navigate('/docente');
+    }
+  }, [navigate]);
+
+  if (!selectedCourse) {
+    return <div className="loading">Cargando curso...</div>;
+  }
 
   return (
     <div className="teacher-statistics">

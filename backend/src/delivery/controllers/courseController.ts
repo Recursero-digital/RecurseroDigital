@@ -8,6 +8,7 @@ import { GetAllCourseGamesUseCase } from '../../core/usecases/GetAllCourseGamesU
 import { UpdateCourseGameStatusUseCase } from '../../core/usecases/UpdateCourseGameStatusUseCase';
 
 const container = DependencyContainer.getInstance();
+const dependencyContainer = DependencyContainer.getInstance();
 
 export const courseController = {
     getAllCourses: async (req: Request, res: Response): Promise<void> => {
@@ -233,6 +234,36 @@ export const courseController = {
             }
             console.error('Error en updateCourseGameStatus:', error);
             res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+        }
+    },
+
+    getCourseStatistics: async (req: Request, res: Response): Promise<void> => {
+        try {
+            console.log('getCourseStatistics called with params:', req.params);
+            console.log('Request URL:', req.url);
+            console.log('Request method:', req.method);
+            
+            const { courseId } = req.params as { courseId: string };
+
+            if (!courseId) {
+                console.log('courseId is missing');
+                res.status(400).json({ error: 'courseId es requerido' });
+                return;
+            }
+
+            console.log('Getting course statistics for courseId:', courseId);
+            const useCase = dependencyContainer.getCourseProgressByGameUseCase;
+            const result = await useCase.execute({ courseId });
+            console.log('Course statistics result:', result);
+
+            res.status(200).json(result);
+        } catch (error: any) {
+            console.error('Error en getCourseStatistics:', error);
+            console.error('Stack trace:', error?.stack);
+            res.status(500).json({ 
+                error: error?.message ?? 'Error interno del servidor',
+                details: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+            });
         }
     }
 };

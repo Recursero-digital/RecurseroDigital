@@ -30,6 +30,7 @@ import { AssignTeacherToCoursesUseCase } from '../core/usecases/AssignTeacherToC
 import { GetTeacherCoursesUseCase } from '../core/usecases/GetTeacherCoursesUseCase';
 import { GenerateStudentReportUseCase } from '../core/usecases/GenerateStudentReportUseCase';
 import { GetCourseStudentsUseCase } from '../core/usecases/GetCourseStudentsUseCase';
+import { GetCourseProgressByGameUseCase } from '../core/usecases/GetCourseProgressByGameUseCase';
 import { AiTextGenerator } from '../core/services/AiTextGenerator';
 import { GeminiAiTextGenerator } from '../infrastructure/GeminiAiTextGenerator';
 import { PostgreSQLGameLevelRepository } from '../infrastructure/PostgreSQLGameLevelRepository';
@@ -67,6 +68,7 @@ export class DependencyContainer {
     private _getTeacherCoursesUseCase: GetTeacherCoursesUseCase | null = null;
     private _generateStudentReportUseCase: GenerateStudentReportUseCase | null = null;
     private _getCourseStudentsUseCase: GetCourseStudentsUseCase | null = null;
+    private _getCourseProgressByGameUseCase: GetCourseProgressByGameUseCase | null = null;
     private _aiTextGenerator: AiTextGenerator | null = null;
     private _gameLevelRepository: PostgreSQLGameLevelRepository | null = null;
     private _getGameLevelsUseCase: GetGameLevelsUseCase | null = null;
@@ -253,7 +255,8 @@ export class DependencyContainer {
     public get getStudentProgressUseCase(): GetStudentProgressUseCase {
         if (!this._getStudentProgressUseCase) {
             this._getStudentProgressUseCase = new GetStudentProgressUseCase(
-                this.statisticsRepository
+                this.statisticsRepository,
+                this.gameLevelRepository
             );
         }
         return this._getStudentProgressUseCase;
@@ -348,6 +351,19 @@ export class DependencyContainer {
         }
 
         return this._getCourseStudentsUseCase;
+    }
+
+    public get getCourseProgressByGameUseCase(): GetCourseProgressByGameUseCase {
+        if (!this._getCourseProgressByGameUseCase) {
+            this._getCourseProgressByGameUseCase = new GetCourseProgressByGameUseCase(
+                this.studentRepository,
+                this.statisticsRepository,
+                this.gameLevelRepository,
+                this.courseRepository
+            );
+        }
+
+        return this._getCourseProgressByGameUseCase;
     }
 
     public get gameLevelRepository(): PostgreSQLGameLevelRepository {

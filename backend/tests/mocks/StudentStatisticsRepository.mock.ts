@@ -184,4 +184,27 @@ export class MockStudentStatisticsRepository implements StudentStatisticsReposit
   addStatistics(statistics: StudentStatistics): void {
     this.statistics.push(statistics);
   }
+
+  async getLastCompletedActivity(studentId: string, gameId: string): Promise<{ level: number; activity: number } | null> {
+    const studentStats = this.statistics.filter(stat => 
+      stat.studentId === studentId && stat.gameId === gameId && stat.isCompleted
+    );
+    
+    if (studentStats.length === 0) {
+      return null;
+    }
+
+    const sorted = studentStats.sort((a, b) => {
+      if (b.level !== a.level) {
+        return b.level - a.level;
+      }
+      return b.activity - a.activity;
+    });
+
+    const lastStat = sorted[0];
+    return {
+      level: lastStat.level,
+      activity: lastStat.activity
+    };
+  }
 }

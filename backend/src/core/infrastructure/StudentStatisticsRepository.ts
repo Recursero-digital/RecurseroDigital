@@ -22,4 +22,5 @@ export interface StudentStatisticsRepository {
         averageAccuracy: number;
         completionRate: number;
     }>;
+    getLastCompletedActivity(studentId: string, gameId: string): Promise<{ level: number; activity: number } | null>;
 }

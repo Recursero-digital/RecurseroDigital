@@ -327,6 +327,32 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
     }
   }
 
+  async getLastCompletedActivity(studentId: string, gameId: string): Promise<{ level: number; activity: number } | null> {
+    try {
+      const result = await this.db.query(
+        `SELECT level, activity 
+         FROM student_statistics 
+         WHERE student_id = $1 AND game_id = $2 
+         ORDER BY level DESC, activity DESC 
+         LIMIT 1`,
+        [studentId, gameId]
+      );
+
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      const row = result.rows[0];
+      return {
+        level: row.level,
+        activity: row.activity
+      };
+    } catch (error) {
+      console.error('Error al obtener última actividad completada:', error);
+      throw error;
+    }
+  }
+
   private mapRowToStatistics(row: any): StudentStatistics {
     return new StudentStatistics(
       row.id,
