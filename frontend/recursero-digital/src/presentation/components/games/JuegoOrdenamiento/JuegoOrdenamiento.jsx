@@ -30,6 +30,7 @@ const JuegoOrdenamiento = () => {
   } = useGameScoring();
 
   const [gameState, setGameState] = useState('start');
+  const [order, setOrder] = useState('asc'); // 'asc' or 'desc'
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
   const [numbers, setNumbers] = useState([]);
@@ -76,6 +77,7 @@ const JuegoOrdenamiento = () => {
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
     setCurrentActivity(0);
+    setOrder('asc');
     resetScoring();
     setNumbers([]);
     setSortedNumbers([]);
@@ -93,6 +95,11 @@ const JuegoOrdenamiento = () => {
     setNumbers(numbersData.shuffled);
     setSortedNumbers(numbersData.original);
   }, [levelRanges]);
+
+  const handleSelectOrder = useCallback((selectedOrder) => {
+    setOrder(selectedOrder);
+    setGameState('level-select');
+  }, []);
 
   const handleStartGame = useCallback((level) => {
     const selectedLevelIndex = level - 1;
@@ -185,13 +192,13 @@ const JuegoOrdenamiento = () => {
 
     const numbersCount = getNumbersCount(); // Always returns 6
     if (newTargetNumbers.length === numbersCount) {
-      if (checkOrder(newTargetNumbers, sortedNumbers)) {
+      if (checkOrder(newTargetNumbers, sortedNumbers, order)) {
         handleActivityComplete();
       } else {
         handleFailedAttempt();
       }
     }
-  }, [targetNumbers, sortedNumbers, handleActivityComplete, handleFailedAttempt]);
+  }, [targetNumbers, sortedNumbers, order, handleActivityComplete, handleFailedAttempt]);
 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
@@ -208,11 +215,11 @@ const JuegoOrdenamiento = () => {
       setShowPermanentHint(false);
       setTimeout(() => setupLevel(currentLevel + 1), 100);
     }
-  }, [currentLevel, setupLevel]);
+  }, [currentLevel, setupLevel, levelRanges.length]);
 
   const getHint = useCallback(() => {
-    return generateHint(numbers);
-  }, [numbers]);
+    return generateHint(numbers, order);
+  }, [numbers, order]);
 
   useEffect(() => {
     if (gameState === 'game') {
@@ -231,15 +238,16 @@ const JuegoOrdenamiento = () => {
     <div className="game-container">
       {gameState === 'start' && (
         <StartScreen 
-          onStart={() => setGameState('level-select')} 
+          onStart={handleSelectOrder} 
           onBackToGames={handleBackToGames} 
         />
       )}
       
       {gameState === 'level-select' && (
         <LevelSelectScreen 
+          order={order}
           onSelectLevel={handleStartGame} 
-          onBackToGames={handleBackToGames} 
+          onBackToStart={handleBackToStart} 
         />
       )}
       
@@ -261,6 +269,7 @@ const JuegoOrdenamiento = () => {
           generateHint={getHint}
           showPermanentHint={showPermanentHint}
           levelRanges={levelRanges}
+          order={order}
         />
       )}
 

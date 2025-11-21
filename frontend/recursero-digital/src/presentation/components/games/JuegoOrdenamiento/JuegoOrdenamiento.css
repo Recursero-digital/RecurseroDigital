@@ -11,6 +11,18 @@
 
 /* .game-instruction ahora está definido globalmente en games.css */
 
+/* Highlight text for MAYOR and MENOR in game instruction */
+.game-instruction .highlight-text {
+  color: var(--space-yellow);
+  font-weight: 900;
+  text-shadow: 
+    0 0 10px rgba(251, 191, 36, 0.8),
+    0 0 20px rgba(251, 191, 36, 0.5),
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
 .ordenamiento-game-header {
   text-align: center;
   margin-bottom: clamp(1rem, 3vh, 2rem);
