@@ -473,14 +473,7 @@ const DashboardStats = ({ courseId }) => {
         </div>
       )}
 
-      <div className="quick-actions">
-        <button className="action-btn export">
-          📥 Exportar Datos
-        </button>
-        <button className="action-btn report" onClick={() => navigate('/docente/reportes')}>
-          📋 Generar Reporte
-        </button>
-      </div>
+      
     </div>
   );
 };
