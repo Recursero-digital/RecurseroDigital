@@ -14,8 +14,11 @@ router.get('/me/games', protectRoute(UserRole.STUDENT), studentController.getMyG
 // PATCH /api/student/:studentId
 router.patch('/:studentId', protectAdminRoute(), studentController.updateStudent);
 
-// DELETE /api/student/:studentId
+// DELETE /api/student/:studentId (baja lógica)
 router.delete('/:studentId', protectAdminRoute(), studentController.deleteStudent);
+
+// PATCH /api/student/:studentId/enable (reactivar)
+router.patch('/:studentId/enable', protectAdminRoute(), studentController.enableStudent);
 
 // POST /api/student/:studentId/courses
 router.post('/:studentId/courses', protectAdminRoute(), studentExtendedController.assignCourseToStudent);

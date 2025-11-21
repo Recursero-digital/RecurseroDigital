@@ -12,13 +12,8 @@ export class DeleteTeacherUseCase {
     }
 
     async execute(request: DeleteTeacherRequest): Promise<void> {
-        // Verificar que el docente existe
-        const existingTeacher = await this.teacherRepository.findById(request.teacherId);
-        if (!existingTeacher) {
-            throw new Error('El docente no existe');
-        }
-
-        // Eliminar el docente
+        // Baja lógica: deshabilitar el docente (enable = false)
+        // El repositorio verifica la existencia antes de deshabilitar
         await this.teacherRepository.deleteTeacher(request.teacherId);
     }
 }

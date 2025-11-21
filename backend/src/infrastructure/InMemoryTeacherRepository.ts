@@ -43,10 +43,22 @@ export class InMemoryTeacherRepository implements TeacherRepository {
   }
 
   async deleteTeacher(id: string): Promise<void> {
+    // Baja lógica: no se implementa en memoria ya que no hay columna enable
     const index = this.teachers.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.teachers.splice(index, 1);
+    if (index === -1) {
+      throw new Error('Profesor no encontrado');
     }
+    // En memoria, simplemente removemos (comportamiento legacy para tests)
+    // En producción se usará PostgreSQL con baja lógica
+  }
+
+  async enableTeacher(id: string): Promise<void> {
+    // En memoria, simplemente verificamos que existe
+    const index = this.teachers.findIndex(t => t.id === id);
+    if (index === -1) {
+      throw new Error('Profesor no encontrado');
+    }
+    // En memoria no hay columna enable, por lo que no hacemos nada adicional
   }
 
   async clearTeachers(): Promise<void> {

@@ -36,8 +36,16 @@ export class MockUserRepository implements TeacherRepository {
 
   async deleteTeacher(id: string): Promise<void> {
     const index = this.teachers.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.teachers.splice(index, 1);
+    if (index === -1) {
+      throw new Error('Profesor no encontrado');
+    }
+    this.teachers.splice(index, 1);
+  }
+
+  async enableTeacher(id: string): Promise<void> {
+    const index = this.teachers.findIndex(t => t.id === id);
+    if (index === -1) {
+      throw new Error('Profesor no encontrado');
     }
   }
 

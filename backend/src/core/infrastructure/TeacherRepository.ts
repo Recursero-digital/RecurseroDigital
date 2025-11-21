@@ -6,5 +6,6 @@ export interface TeacherRepository {
     getAllTeachers(): Promise<Teacher[]>;
     findById(id: string): Promise<Teacher | null>;
     updateTeacher(teacherData: Teacher): Promise<void>;
-    deleteTeacher(id: string): Promise<void>;
+    deleteTeacher(id: string): Promise<void>; 
+    enableTeacher(id: string): Promise<void>; 
 }

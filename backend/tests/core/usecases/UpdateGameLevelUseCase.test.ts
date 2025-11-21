@@ -58,17 +58,17 @@ class MockGameLevelRepository implements GameLevelRepository {
         return Array.from(this.gameLevels.values());
     }
 
-    async getTotalActivitiesCount(gameId: string): Promise<number> {
-        const levels = await this.findByGameId(gameId);
-        return levels.reduce((total, level) => total + level.getActivitiesCount(), 0);
-    }
-
     addLevel(level: GameLevel): void {
         this.gameLevels.set(level.getId(), level);
     }
 
     clear(): void {
         this.gameLevels.clear();
+    }
+
+    async getTotalActivitiesCount(gameId: string): Promise<number> {
+        const levels = await this.findByGameId(gameId);
+        return levels.reduce((total, level) => total + level.getActivitiesCount(), 0);
     }
 }
 

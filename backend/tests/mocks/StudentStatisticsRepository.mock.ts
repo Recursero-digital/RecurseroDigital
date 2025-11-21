@@ -186,25 +186,24 @@ export class MockStudentStatisticsRepository implements StudentStatisticsReposit
   }
 
   async getLastCompletedActivity(studentId: string, gameId: string): Promise<{ level: number; activity: number } | null> {
-    const studentStats = this.statistics.filter(stat => 
-      stat.studentId === studentId && stat.gameId === gameId && stat.isCompleted
-    );
+    const studentStats = this.statistics
+      .filter(stat => 
+        stat.studentId === studentId && 
+        stat.gameId === gameId && 
+        stat.isCompleted === true
+      )
+      .sort((a, b) => {
+        if (a.level !== b.level) return b.level - a.level;
+        if ((a.activity || 0) !== (b.activity || 0)) return (b.activity || 0) - (a.activity || 0);
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
     
-    if (studentStats.length === 0) {
-      return null;
-    }
-
-    const sorted = studentStats.sort((a, b) => {
-      if (b.level !== a.level) {
-        return b.level - a.level;
-      }
-      return b.activity - a.activity;
-    });
-
-    const lastStat = sorted[0];
+    if (studentStats.length === 0) return null;
+    
+    const latest = studentStats[0];
     return {
-      level: lastStat.level,
-      activity: lastStat.activity
+      level: latest.level,
+      activity: latest.activity || 0
     };
   }
 }

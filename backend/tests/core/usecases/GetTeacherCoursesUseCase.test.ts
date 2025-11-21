@@ -40,6 +40,10 @@ class MockTeacherRepository implements TeacherRepository {
   async deleteTeacher(): Promise<void> {
     return;
   }
+
+  async enableTeacher(): Promise<void> {
+    return;
+  }
 }
 
 class MockCourseRepository implements CourseRepository {

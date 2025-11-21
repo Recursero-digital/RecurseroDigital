@@ -16,7 +16,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
-         WHERE u.username = $1`,
+         WHERE u.username = $1 AND s.enable = true`,
         [userName]
       );
 
@@ -56,15 +56,16 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
       // Luego insertar el estudiante
       await this.db.query(
-        `INSERT INTO students (id, user_id, name, lastname, dni, course_id)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+        `INSERT INTO students (id, user_id, name, lastname, dni, course_id, enable)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [
           studentData.id,
           studentData.user.id,
           studentData.name,
           studentData.lastname,
           studentData.dni,
-          studentData.courseId
+          studentData.courseId,
+          true 
         ]
       );
     } catch (error) {
@@ -74,6 +75,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
   }
 
   // Métodos adicionales útiles para administración
+  // Nota: getAllStudents retorna TODOS los estudiantes (activos e inactivos) para el admin
   async getAllStudents(): Promise<Student[]> {
     try {
       const result = await this.db.query(
@@ -105,7 +107,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
-         WHERE s.id = $1`,
+         WHERE s.id = $1 AND s.enable = true`,
         [id]
       );
 
@@ -163,14 +165,44 @@ export class PostgreSQLStudentRepository implements StudentRepository {
 
   async deleteStudent(id: string): Promise<void> {
     try {
-      const student = await this.findById(id);
-      if (!student) {
+      // Verificar que el estudiante existe (incluso si está deshabilitado)
+      const result = await this.db.query(
+        `SELECT id FROM students WHERE id = $1`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
         throw new Error('Estudiante no encontrado');
       }
 
-      await this.db.query('DELETE FROM students WHERE id = $1', [id]);
+      //poner enable = false
+      await this.db.query(
+        `UPDATE students SET enable = false, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+        [id]
+      );
     } catch (error) {
-      console.error('Error al eliminar estudiante:', error);
+      console.error('Error al deshabilitar estudiante:', error);
+      throw error;
+    }
+  }
+
+  async enableStudent(id: string): Promise<void> {
+    try {
+      const result = await this.db.query(
+        `SELECT id FROM students WHERE id = $1`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
+        throw new Error('Estudiante no encontrado');
+      }
+
+      await this.db.query(
+        `UPDATE students SET enable = true, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+        [id]
+      );
+    } catch (error) {
+      console.error('Error al reactivar estudiante:', error);
       throw error;
     }
   }
@@ -211,7 +243,7 @@ export class PostgreSQLStudentRepository implements StudentRepository {
         `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
          FROM students s 
          JOIN users u ON s.user_id = u.id 
-         WHERE s.course_id = $1
+         WHERE s.course_id = $1 AND s.enable = true
          ORDER BY s.created_at DESC`,
         [courseId]
       );
