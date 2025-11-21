@@ -1,5 +1,4 @@
-
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}`; // URL base del backend
+import { API_BASE_URL } from '../../config/api';
 
 export const getTeacherProfile = async () => {
   const token = localStorage.getItem('token');

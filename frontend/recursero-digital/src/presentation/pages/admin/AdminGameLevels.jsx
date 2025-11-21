@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/pages/adminGameLevels.css';
+import { API_BASE_URL } from '../../../infrastructure/config/api';
 
 const GAME_NAMES = {
     'game-ordenamiento': 'Ordenamiento',
@@ -22,7 +23,7 @@ export default function AdminGameLevels() {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('http://localhost:3000/api/games/all-with-levels');
+                const response = await fetch(`${API_BASE_URL}/games/all-with-levels`);
                 
                 if (!response.ok) {
                     throw new Error('Error al cargar juegos');
@@ -69,7 +70,7 @@ export default function AdminGameLevels() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/api/games/levels/${levelId}`, {
+            const response = await fetch(`${API_BASE_URL}/games/levels/${levelId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -90,7 +91,7 @@ export default function AdminGameLevels() {
             }
 
             const loadGames = async () => {
-                const response = await fetch('http://localhost:3000/api/games/all-with-levels');
+                const response = await fetch(`${API_BASE_URL}/games/all-with-levels`);
                 const data = await response.json();
                 setGames(data.games || []);
             };

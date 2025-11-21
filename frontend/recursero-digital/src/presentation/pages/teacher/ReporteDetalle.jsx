@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/pages/reporteDetalle.css";
+import { API_BASE_URL } from "../../../infrastructure/config/api";
 
 export default function ReporteDetalle() {
   const { studentId } = useParams();
@@ -20,7 +21,7 @@ export default function ReporteDetalle() {
       // Obtener token del localStorage
       const token = localStorage.getItem('token');
       
-      const response = await fetch(`http://localhost:3000/api/statistics/student/${studentId}/report`, {
+      const response = await fetch(`${API_BASE_URL}/statistics/student/${studentId}/report`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../infrastructure/config/api';
 
 export const useGameLevels = (gameId, onlyActive = true) => {
     const [levels, setLevels] = useState([]);
@@ -17,7 +18,7 @@ export const useGameLevels = (gameId, onlyActive = true) => {
                 setError(null);
 
                 const fullGameId = gameId.startsWith('game-') ? gameId : `game-${gameId}`;
-                const url = `http://localhost:3000/api/games/${fullGameId}/levels${onlyActive ? '?onlyActive=true' : ''}`;
+                const url = `${API_BASE_URL}/games/${fullGameId}/levels${onlyActive ? '?onlyActive=true' : ''}`;
                 const response = await fetch(url);
 
                 if (!response.ok) {
@@ -84,7 +85,7 @@ export const transformToEscrituraFormat = (levels) => {
 export const fetchGameLevel = async (gameId, levelNumber) => {
     try {
         const fullGameId = gameId.startsWith('game-') ? gameId : `game-${gameId}`;
-        const response = await fetch(`http://localhost:3000/api/games/${fullGameId}/levels/${levelNumber}`);
+        const response = await fetch(`${API_BASE_URL}/games/${fullGameId}/levels/${levelNumber}`);
 
         if (!response.ok) {
             throw new Error(`Error al obtener nivel: ${response.statusText}`);
