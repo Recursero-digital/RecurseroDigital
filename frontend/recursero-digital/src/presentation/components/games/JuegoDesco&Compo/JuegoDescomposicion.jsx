@@ -33,11 +33,18 @@ const JuegoDescomposicion = () => {
     const [showHint, setShowHint] = useState(false);
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [questions, setQuestions] = useState([]);
-    const [totalQuestions] = useState(5);
     const [isAnswered, setIsAnswered] = useState(false);
 
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('descomposicion', true);
     const levels = useMemo(() => transformToDescomposicionFormat(backendLevels), [backendLevels]);
+    
+    // Obtener totalQuestions del nivel actual desde el backend
+    const totalQuestions = useMemo(() => {
+        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+            return backendLevels[currentLevel]?.activitiesCount || 5;
+        }
+        return 5; // Fallback por defecto
+    }, [backendLevels, currentLevel]);
 
     useEffect(() => {
         AOS.init();
@@ -64,10 +71,10 @@ const JuegoDescomposicion = () => {
         return decomposition;
     }, []);
 
-    const generateQuestions = useCallback((level) => {
+    const generateQuestions = useCallback((level, questionsCount) => {
         const newQuestions = [];
         
-        for (let i = 0; i < totalQuestions; i++) {
+        for (let i = 0; i < questionsCount; i++) {
             const gameType = Math.random() > 0.5 ? 'decomposition' : 'composition';
             const number = generateNumber(level);
             const decomposition = decomposeNumber(number);
@@ -90,7 +97,7 @@ const JuegoDescomposicion = () => {
         }
         
         return newQuestions;
-    }, [generateNumber, decomposeNumber, totalQuestions]);
+    }, [generateNumber, decomposeNumber]);
 
     const handleStartGame = useCallback(() => {
         setGameState('levelSelect');
@@ -115,11 +122,12 @@ const JuegoDescomposicion = () => {
         }
         
         setCurrentActivity(startingActivity);
-        setQuestions(generateQuestions(level));
+        const questionsCount = backendLevels[level]?.activitiesCount || 5;
+        setQuestions(generateQuestions(level, questionsCount));
         resetScoring();
         resetAttempts();
         setGameState('playing');
-    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, totalQuestions]);
+    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, backendLevels]);
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {
@@ -174,7 +182,7 @@ const JuegoDescomposicion = () => {
         
         if (currentActivity + 1 >= totalQuestions) {
             const percentage = Math.round((points / (totalQuestions * 50 * (currentLevel + 1))) * 100);
-            if (percentage >= 60 && currentLevel < 2) {
+            if (percentage >= 60 && currentLevel < levels.length - 1) {
                 unlockLevel('descomposicion', currentLevel + 2);
             }
             setShowCongrats(true);
@@ -187,12 +195,12 @@ const JuegoDescomposicion = () => {
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
-        if (currentLevel < 2) {
+        if (currentLevel < levels.length - 1) {
             handleSelectLevel(currentLevel + 1);
         } else {
             setGameState('levelSelect');
         }
-    }, [currentLevel, handleSelectLevel]);
+    }, [currentLevel, handleSelectLevel, levels.length]);
 
     const handleBackToLevels = useCallback(() => {
         setShowCongrats(false);
@@ -252,7 +260,7 @@ const JuegoDescomposicion = () => {
                 <CongratsModal
                     level={currentLevel + 1}
                     points={points}
-                    hasNextLevel={currentLevel < 2}
+                    hasNextLevel={currentLevel < levels.length - 1}
                     onNextLevel={handleNextLevel}
                     onBackToLevels={handleBackToLevels}
                 />

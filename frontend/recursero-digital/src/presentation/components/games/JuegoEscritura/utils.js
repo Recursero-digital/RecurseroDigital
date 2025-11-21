@@ -1,53 +1,16 @@
-const numberWords = {
-
-    1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 6: "seis", 7: "siete", 8: "ocho", 9: "nueve",
-    10: "diez", 11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince", 16: "dieciseis",
-    17: "diecisiete", 18: "dieciocho", 19: "diecinueve", 20: "veinte", 21: "veintiuno", 22: "veintidos",
-    23: "veintitres", 24: "veinticuatro", 25: "veinticinco", 26: "veintiseis", 27: "veintisiete",
-    28: "veintiocho", 29: "veintinueve", 30: "treinta",
-    31: "treinta y uno", 32: "treinta y dos", 35: "treinta y cinco", 37: "treinta y siete", 39: "treinta y nueve",
-    40: "cuarenta", 42: "cuarenta y dos", 45: "cuarenta y cinco", 48: "cuarenta y ocho",
-    50: "cincuenta", 53: "cincuenta y tres", 56: "cincuenta y seis", 58: "cincuenta y nueve",
-    60: "sesenta", 62: "sesenta y dos", 65: "sesenta y cinco", 67: "sesenta y siete", 69: "sesenta y nueve",
-    70: "setenta", 73: "setenta y tres", 76: "setenta y seis", 78: "setenta y ocho",
-    80: "ochenta", 81: "ochenta y uno", 84: "ochenta y cuatro", 87: "ochenta y siete", 89: "ochenta y nueve",
-    90: "noventa", 92: "noventa y dos", 95: "noventa y cinco", 97: "noventa y siete", 99: "noventa y nueve",
-    100: "cien", 101: "ciento uno", 105: "ciento cinco", 108: "ciento ocho", 112: "ciento doce",
-    115: "ciento quince", 118: "ciento dieciocho", 123: "ciento veintitres", 126: "ciento veintiseis",
-    130: "ciento treinta", 135: "ciento treinta y cinco", 140: "ciento cuarenta", 145: "ciento cuarenta y cinco",
-    150: "ciento cincuenta", 155: "ciento cincuenta y cinco", 160: "ciento sesenta", 165: "ciento sesenta y cinco",
-    170: "ciento setenta", 175: "ciento setenta y cinco", 180: "ciento ochenta", 185: "ciento ochenta y cinco",
-    190: "ciento noventa", 195: "ciento noventa y cinco", 199: "ciento noventa y nueve",
-    200: "doscientos", 205: "doscientos cinco", 210: "doscientos diez", 215: "doscientos quince",
-    220: "doscientos veinte", 225: "doscientos veinticinco", 230: "doscientos treinta", 235: "doscientos treinta y cinco",
-    240: "doscientos cuarenta", 245: "doscientos cuarenta y cinco", 250: "doscientos cincuenta", 255: "doscientos cincuenta y cinco",
-    260: "doscientos sesenta", 265: "doscientos sesenta y cinco", 270: "doscientos setenta", 275: "doscientos setenta y cinco",
-    280: "doscientos ochenta", 285: "doscientos ochenta y cinco", 290: "doscientos noventa", 295: "doscientos noventa y cinco",
-    299: "doscientos noventa y nueve",
-    300: "trescientos", 305: "trescientos cinco", 310: "trescientos diez", 320: "trescientos veinte",
-    330: "trescientos treinta", 340: "trescientos cuarenta", 350: "trescientos cincuenta", 360: "trescientos sesenta",
-    370: "trescientos setenta", 380: "trescientos ochenta", 390: "trescientos noventa", 399: "trescientos noventa y nueve",
-    400: "cuatrocientos", 405: "cuatrocientos cinco", 420: "cuatrocientos veinte", 430: "cuatrocientos treinta",
-    440: "cuatrocientos cuarenta", 450: "cuatrocientos cincuenta", 460: "cuatrocientos sesenta",
-    470: "cuatrocientos setenta", 480: "cuatrocientos ochenta", 490: "cuatrocientos noventa", 499: "cuatrocientos noventa y nueve",
-    500: "quinientos", 510: "quinientos diez", 520: "quinientos veinte", 530: "quinientos treinta",
-    540: "quinientos cuarenta", 550: "quinientos cincuenta", 560: "quinientos sesenta",
-    570: "quinientos setenta", 580: "quinientos ochenta", 590: "quinientos noventa", 599: "quinientos noventa y nueve",
-    600: "seiscientos", 610: "seiscientos diez", 620: "seiscientos veinte", 630: "seiscientos treinta",
-    640: "seiscientos cuarenta", 650: "seiscientos cincuenta", 660: "seiscientos sesenta",
-    670: "seiscientos setenta", 680: "seiscientos ochenta", 690: "seiscientos noventa", 699: "seiscientos noventa y nueve",
-    700: "setecientos", 710: "setecientos diez", 720: "setecientos veinte", 730: "setecientos treinta",
-    740: "setecientos cuarenta", 750: "setecientos cincuenta", 760: "setecientos sesenta",
-    770: "setecientos setenta", 780: "setecientos ochenta", 790: "setecientos noventa", 799: "setecientos noventa y nueve",
-    800: "ochocientos", 810: "ochocientos diez", 820: "ochocientos veinte", 830: "ochocientos treinta",
-    840: "ochocientos cuarenta", 850: "ochocientos cincuenta", 860: "ochocientos sesenta",
-    870: "ochocientos setenta", 880: "ochocientos ochenta", 890: "ochocientos noventa", 899: "ochocientos noventa y nueve",
-    900: "novecientos", 910: "novecientos diez", 920: "novecientos veinte", 930: "novecientos treinta",
-    940: "novecientos cuarenta", 950: "novecientos cincuenta", 960: "novecientos sesenta",
-    970: "novecientos setenta", 980: "novecientos ochenta", 990: "novecientos noventa", 999: "novecientos noventa y nueve",
-    1000: "mil"
+const basicNumbers = {
+    0: "cero", 1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 
+    6: "seis", 7: "siete", 8: "ocho", 9: "nueve", 10: "diez",
+    11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince",
+    16: "dieciseis", 17: "diecisiete", 18: "dieciocho", 19: "diecinueve",
+    20: "veinte", 21: "veintiuno", 22: "veintidos", 23: "veintitres",
+    24: "veinticuatro", 25: "veinticinco", 26: "veintiseis", 27: "veintisiete",
+    28: "veintiocho", 29: "veintinueve", 30: "treinta", 40: "cuarenta",
+    50: "cincuenta", 60: "sesenta", 70: "setenta", 80: "ochenta", 90: "noventa",
+    100: "cien", 200: "doscientos", 300: "trescientos", 400: "cuatrocientos",
+    500: "quinientos", 600: "seiscientos", 700: "setecientos", 800: "ochocientos",
+    900: "novecientos", 1000: "mil"
 };
-
 
 export const levelRanges = [
     { min: 1, max: 50 },
@@ -55,41 +18,67 @@ export const levelRanges = [
     { min: 201, max: 500 }
 ];
 
-
 export function numberToWords(num) {
-  
-    if (num in numberWords) {
-        return numberWords[num];
-    }
+    if (num === 0) return "cero";
+    if (num < 0) return "menos " + numberToWords(-num);
     
+    if (basicNumbers[num]) {
+        return basicNumbers[num];
+    }
     
     if (num >= 31 && num <= 99) {
         const tens = Math.floor(num / 10) * 10;
         const ones = num % 10;
-        return `${numberWords[tens]} y ${numberWords[ones]}`;
+        if (ones === 0) {
+            return basicNumbers[tens];
+        }
+        if (ones === 1) {
+            return basicNumbers[tens] + " y uno";
+        }
+        return basicNumbers[tens] + " y " + basicNumbers[ones];
     }
     
-  
     if (num >= 101 && num <= 999) {
         const hundreds = Math.floor(num / 100) * 100;
         const remainder = num % 100;
         
-        if (remainder === 0) {
-            return numberWords[hundreds];
+        let hundredsWord;
+        if (hundreds === 100) {
+            hundredsWord = "ciento";
+        } else {
+            hundredsWord = basicNumbers[hundreds];
         }
         
-        let hundredsWord = hundreds === 100 ? 'ciento' : numberWords[hundreds];
-        let remainderWord = numberToWords(remainder);
+        if (remainder === 0) {
+            return hundredsWord;
+        }
         
-        return `${hundredsWord} ${remainderWord}`;
+        return hundredsWord + " " + numberToWords(remainder);
     }
     
-
-    if (num > 1000) {
-        return num.toString();
+    if (num >= 1000) {
+        const thousands = Math.floor(num / 1000);
+        const remainder = num % 1000;
+        
+        let thousandsWord;
+        if (thousands === 1) {
+            thousandsWord = "mil";
+        } else {
+            thousandsWord = numberToWords(thousands) + " mil";
+        }
+        
+        if (remainder === 0) {
+            return thousandsWord;
+        }
+        
+        if (remainder < 100) {
+            return thousandsWord + " " + numberToWords(remainder);
+        }
+        
+        return thousandsWord + " " + numberToWords(remainder);
     }
     
-    return "";
+    return num.toString();
 }
 
 export function normalizeText(text) {
@@ -119,25 +108,37 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-export function generateDragDropActivity(level) {
-    const range = levelRanges[level];
-    if (!range) return { numbers: [], wordPairs: [] };
+
+export function generateDragDropActivity(level, levelConfig = null, activitiesCount = 5) {
+    const range = levelConfig || levelRanges[level];
+    if (!range || !range.min || !range.max) {
+        console.warn('No se encontró configuración válida para el nivel', level);
+        return { numbers: [], wordPairs: [] };
+    }
     
     const baseNumbers = [];
     const usedNumbers = new Set();
+    const maxAttempts = 100;
     
-    while (baseNumbers.length < 5) {
+    let attempts = 0;
+    while (baseNumbers.length < activitiesCount && attempts < maxAttempts) {
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        attempts++;
 
         if (!usedNumbers.has(randomNumber)) {
-            baseNumbers.push(randomNumber);
-            usedNumbers.add(randomNumber);
+            const word = numberToWords(randomNumber);
+            if (word && word !== randomNumber.toString()) {
+                baseNumbers.push(randomNumber);
+                usedNumbers.add(randomNumber);
+            }
         }
     }
 
     const distractorNumbers = [];
-    while (distractorNumbers.length < 3) {
+    attempts = 0;
+    while (distractorNumbers.length < 3 && attempts < maxAttempts) {
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        attempts++;
 
         if (!usedNumbers.has(randomNumber)) {
             distractorNumbers.push(randomNumber);
@@ -163,64 +164,36 @@ export function validateNumberWordPair(number, word) {
     return normalizeText(word) === normalizeText(correctWord);
 }
 
-export function generateHintExample(level, usedNumbers) {
-    // Ejemplos educativos específicos por nivel con explicaciones
-    const levelExamples = {
-        0: { // Nivel 1 (1-50): Números básicos
-            examples: [
-                { number: 15, word: "quince" },
-                { number: 23, word: "veintitres" },
-                { number: 37, word: "treinta y siete" },
-                { number: 42, word: "cuarenta y dos" }
-            ]
-        },
-        1: { // Nivel 2 (51-200): Números intermedios  
-            examples: [
-                { number: 78, word: "setenta y ocho" },
-                { number: 100, word: "cien" },
-                { number: 156, word: "ciento cincuenta y seis" },
-                { number: 189, word: "ciento ochenta y nueve" }
-            ]
-        },
-        2: { // Nivel 3 (201-500): Números avanzados
-            examples: [
-                { number: 234, word: "doscientos treinta y cuatro" },
-                { number: 367, word: "trescientos sesenta y siete" },
-                { number: 445, word: "cuatrocientos cuarenta y cinco" },
-                { number: 489, word: "cuatrocientos ochenta y nueve" }
-            ]
-        }
-    };
 
-    const currentLevelExamples = levelExamples[level] || levelExamples[0];
+export function generateHintExample(level, usedNumbers, levelConfig = null) {
+    const range = levelConfig || levelRanges[level];
     
-    // Buscar un ejemplo que no esté en usedNumbers
-    for (const example of currentLevelExamples.examples) {
-        if (!usedNumbers.includes(example.number)) {
-            return example;
-        }
+    if (!range || !range.min || !range.max) {
+        return { 
+            number: 25, 
+            word: "veinticinco"
+        };
     }
     
-    // Si todos los ejemplos están en uso, generar uno aleatorio del rango
-    const range = levelRanges[level];
-    if (range) {
-        let attempts = 0;
-        while (attempts < 30) {
-            const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-            
-            if (!usedNumbers.includes(randomNumber) && numberToWords(randomNumber)) {
-                return {
-                    number: randomNumber,
-                    word: numberToWords(randomNumber)
-                };
-            }
-            attempts++;
+    const usedNumbersArray = Array.isArray(usedNumbers) ? usedNumbers : Array.from(usedNumbers);
+    let attempts = 0;
+    const maxAttempts = 50;
+    
+    while (attempts < maxAttempts) {
+        const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        const word = numberToWords(randomNumber);
+        
+        if (!usedNumbersArray.includes(randomNumber) && word && word !== randomNumber.toString()) {
+            return {
+                number: randomNumber,
+                word: word
+            };
         }
+        attempts++;
     }
     
-    // Fallback final
     return { 
-        number: 25, 
-        word: "veinticinco"
+        number: Math.max(range.min, 25), 
+        word: numberToWords(Math.max(range.min, 25))
     };
 }

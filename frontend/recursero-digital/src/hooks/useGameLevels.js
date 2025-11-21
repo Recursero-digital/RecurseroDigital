@@ -48,7 +48,8 @@ export const transformToDescomposicionFormat = (levels) => {
         range: level.config.range || `${level.config.min} al ${level.config.max}`,
         min: level.config.min,
         max: level.config.max,
-        color: level.config.color
+        color: level.config.color,
+        activitiesCount: level.activitiesCount
     }));
 };
 
@@ -60,7 +61,8 @@ export const transformToEscalaFormat = (levels) => {
         min: level.config.min,
         max: level.config.max,
         color: level.config.color,
-        description: level.description
+        description: level.description,
+        activitiesCount: level.activitiesCount
     }));
 };
 
@@ -71,14 +73,19 @@ export const transformToOrdenamientoFormat = (levels) => {
         numbersCount: level.config.numbersCount || 6,
         name: level.name,
         description: level.description,
-        color: level.config.color || 'blue'
+        color: level.config.color || 'blue',
+        activitiesCount: level.activitiesCount
     }));
 };
 
 export const transformToEscrituraFormat = (levels) => {
     return levels.map(level => ({
-        min: level.config.min,
-        max: level.config.max
+        name: level.name,
+        difficulty: level.difficulty,
+        min: level.config?.min || 1,
+        max: level.config?.max || 50,
+        range: level.config?.range || `${level.config?.min || 1} - ${level.config?.max || 50}`,
+        color: level.config?.color
     }));
 };
 

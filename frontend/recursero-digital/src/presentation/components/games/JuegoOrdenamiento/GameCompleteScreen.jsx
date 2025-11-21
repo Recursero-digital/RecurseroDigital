@@ -3,6 +3,8 @@ import GameHeader from './GameHeader';
 
 const GameCompleteScreen = ({
   points,
+  currentLevel,
+  totalActivities,
   onBackToGames,
   onBackToLevels,
   onPlayAgain
@@ -11,9 +13,9 @@ const GameCompleteScreen = ({
     <div className="game-content">
       <header className="game-header">
         <GameHeader
-          currentLevel={2}
-          currentActivity={0}
-          totalActivities={5}
+          currentLevel={currentLevel + 1}
+          currentActivity={totalActivities}
+          totalActivities={totalActivities}
           attempts={0}
           points={points}
           onBackToGames={onBackToGames}

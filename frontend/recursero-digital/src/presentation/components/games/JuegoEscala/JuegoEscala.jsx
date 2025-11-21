@@ -49,10 +49,17 @@ const JuegoEscala = () => {
     const [inputErrors, setInputErrors] = useState({ anterior: false, posterior: false });
     const [errorNotification, setErrorNotification] = useState('');
     const [isProcessing, setIsProcessing] = useState(false); // Prevenir doble envío
-    const [totalQuestions] = useState(GAME_CONFIG.TOTAL_QUESTIONS);
 
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escala', true);
     const levels = useMemo(() => transformToEscalaFormat(backendLevels), [backendLevels]);
+    
+    // Obtener totalQuestions del nivel actual desde el backend
+    const totalQuestions = useMemo(() => {
+        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+            return backendLevels[currentLevel]?.activitiesCount || GAME_CONFIG.TOTAL_QUESTIONS;
+        }
+        return GAME_CONFIG.TOTAL_QUESTIONS; // Fallback por defecto
+    }, [backendLevels, currentLevel]);
     
     useEffect(() => {
         AOS.init();
@@ -63,24 +70,25 @@ const JuegoEscala = () => {
         return Math.floor(Math.random() * (levelConfig.max - levelConfig.min + 1)) + levelConfig.min;
     }, [levels]);
 
-    const generateQuestions = useCallback((level) => {
+    const generateQuestions = useCallback((level, questionsCount) => {
         const newQuestions = [];
         const levelConfig = levels[level];
         
         // TODAS las preguntas serán de tipo "Anterior y Posterior"
-        for (let i = 0; i < totalQuestions; i++) {
+        for (let i = 0; i < questionsCount; i++) {
             newQuestions.push(createAnteriorPosteriorQuestion(levelConfig));
         }
         
         return newQuestions;
-    }, [levels, totalQuestions]);
+    }, [levels]);
 
     const handleStartGame = useCallback(() => {
         setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
     }, []);
 
     const handleSelectLevel = useCallback((level) => {
-        const newQuestions = generateQuestions(level);
+        const questionsCount = backendLevels[level]?.activitiesCount || GAME_CONFIG.TOTAL_QUESTIONS;
+        const newQuestions = generateQuestions(level, questionsCount);
         
         setCurrentLevel(level);
         
@@ -90,7 +98,7 @@ const JuegoEscala = () => {
         if (lastActivity && lastActivity.level === level + 1) {
             const lastActivityIndex = lastActivity.activity - 1;
             
-            if (lastActivityIndex + 1 < totalQuestions) {
+            if (lastActivityIndex + 1 < questionsCount) {
                 startingActivity = lastActivityIndex + 1;
             } else {
                 startingActivity = 0;
@@ -112,7 +120,7 @@ const JuegoEscala = () => {
         resetAttempts();
         startActivityTimer();
         setGameState(UI_STATES.GAME_STATES.PLAYING);
-    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer, getLastActivity, totalQuestions]);
+    }, [generateQuestions, resetScoring, resetAttempts, startActivityTimer, getLastActivity, backendLevels]);
 
     useEffect(() => {
         if (gameState === UI_STATES.GAME_STATES.PLAYING && questions.length > 0 && currentActivity < questions.length) {
@@ -209,7 +217,7 @@ const JuegoEscala = () => {
         
         if (currentActivity + 1 >= totalQuestions) {
             const levelPassed = isLevelPassed(points, totalQuestions, currentLevel);
-            if (levelPassed && currentLevel < GAME_CONFIG.MAX_LEVELS - 1) {
+            if (levelPassed && currentLevel < levels.length - 1) {
                 unlockLevel('escala', currentLevel + 2);
             }
             setShowCongrats(true);
@@ -229,12 +237,12 @@ const JuegoEscala = () => {
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
-        if (currentLevel < GAME_CONFIG.MAX_LEVELS - 1) {
+        if (currentLevel < levels.length - 1) {
             handleSelectLevel(currentLevel + 1);
         } else {
             setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
         }
-    }, [currentLevel, handleSelectLevel]);
+    }, [currentLevel, handleSelectLevel, levels.length]);
 
     const handleBackToLevels = useCallback(() => {
         setShowCongrats(false);
@@ -312,7 +320,7 @@ const JuegoEscala = () => {
                     totalQuestions={totalQuestions * GAME_CONFIG.BASE_SCORE * (currentLevel + 1)}
                     levelName={levels[currentLevel].name}
                     levelPassed={isLevelPassed(points, totalQuestions, currentLevel)}
-                    nextLevelUnlocked={currentLevel < GAME_CONFIG.MAX_LEVELS - 1}
+                    nextLevelUnlocked={currentLevel < levels.length - 1}
                     onPlayAgain={handlePlayAgain}
                     onBackToLevels={handleBackToLevels}
                 />

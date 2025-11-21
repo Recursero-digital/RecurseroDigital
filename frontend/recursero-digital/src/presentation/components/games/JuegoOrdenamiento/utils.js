@@ -108,6 +108,8 @@ export const formatNumber = (num) => {
   return num.toLocaleString('es-AR');
 };
 
+// getNumbersCount ahora se calcula dinámicamente desde el nivel en el componente
+// Esta función se mantiene por compatibilidad pero ya no se usa
 export const getNumbersCount = () => 6;
 /**
  * Genera números aleatorios para el juego basado en la configuración del nivel
@@ -137,4 +139,6 @@ export const levelRanges = [
     { min: 1000, max: 9999, name: "Números del 1.000 al 9.999", description: "1.000 - 9.999", numbersCount: 6 },
 ];
 
+// totalActivities ahora se obtiene dinámicamente desde level.activitiesCount en el componente
+// Esta constante se mantiene por compatibilidad pero ya no se usa
 export const totalActivities = 5;
