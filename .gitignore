@@ -4,6 +4,7 @@
 /backend/dist
 /backend/.idea
 /backend/.vscode/
+/frontend/recursero-digital/dev-dist
 # Ignorar package-lock.json
 package-lock.json
 

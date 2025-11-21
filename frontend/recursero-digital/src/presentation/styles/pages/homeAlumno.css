@@ -54,7 +54,7 @@
   background: linear-gradient(135deg, #4CAF50, #8BC34A);
   color: #FDF5E6;
   border: none;
-  padding: 7px 14px;
+  padding: 14px 14px;
   border-radius: 12px;
   font-family: "Fredoka", cursive;
   font-weight: 600;
@@ -62,6 +62,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
+  display: block;
+  margin: 20px auto 0 auto;
 }
 
 .jugar-button:hover {
@@ -94,8 +96,6 @@
 
 .welcome-card h3 {
   font-size: 24px;
-  margin-top: 50px;
-  margin-bottom: 75px;
   text-align: center;
   color: white;
   text-shadow: 
