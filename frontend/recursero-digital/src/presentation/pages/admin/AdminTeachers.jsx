@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import '../../styles/pages/adminTeachers.css';
 
-export default function AdminTeachers({ teachers = [], onEdit, onDelete }) {
+export default function AdminTeachers({ teachers = [], onEdit, onToggleStatus }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filtrar docentes según búsqueda
@@ -73,10 +73,10 @@ export default function AdminTeachers({ teachers = [], onEdit, onDelete }) {
                     Editar
                   </button>
                   <button 
-                    className="delete-boton" 
-                    onClick={() => onDelete && onDelete(teacher)}
+                    className={teacher.enable === false ? "activate-boton" : "delete-boton"} 
+                    onClick={() => onToggleStatus && onToggleStatus(teacher)}
                   >
-                    Eliminar
+                    {teacher.enable === false ? "Activar" : "Desactivar"}
                   </button>
                 </div>
               </div>

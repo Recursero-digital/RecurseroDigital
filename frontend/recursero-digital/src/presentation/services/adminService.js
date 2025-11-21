@@ -177,7 +177,19 @@ export const deleteStudent = async (studentId) => {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || 'Error al eliminar estudiante');
+    throw new Error(data.error || 'Error al deshabilitar estudiante');
+  }
+  return data;
+};
+
+export const enableStudent = async (studentId) => {
+  const response = await fetch(`${API_BASE_URL}/student/${studentId}/enable`, {
+    method: 'PATCH',
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al reactivar estudiante');
   }
   return data;
 };
@@ -202,7 +214,19 @@ export const deleteTeacher = async (teacherId) => {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || 'Error al eliminar docente');
+    throw new Error(data.error || 'Error al deshabilitar docente');
+  }
+  return data;
+};
+
+export const enableTeacher = async (teacherId) => {
+  const response = await fetch(`${API_BASE_URL}/teacher/${teacherId}/enable`, {
+    method: 'PATCH',
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Error al reactivar docente');
   }
   return data;
 };
