@@ -26,9 +26,11 @@ export default function MainLayout({ children, userRole = "alumno" }) {
       setActiveTab("courses");
     } else if (path.includes('/asignaciones')) {
       setActiveTab("assignments");
-    }else if (path.includes('/estadisticas')) {
+    } else if (path.includes('/config-juegos')) {
+      setActiveTab("games");
+    } else if (path.includes('/estadisticas')) {
       setActiveTab("statistics");
-    }else {
+    } else {
       setActiveTab("home");
     }
   }, [location.pathname]);
@@ -47,7 +49,8 @@ export default function MainLayout({ children, userRole = "alumno" }) {
         { id: "home", label: "🏠 Inicio", path: "/admin" },
         { id: "courses", label: "📚 Cursos", path: "/admin/cursos" },
         { id: "users", label: "👥 Usuarios", path: "/admin/usuarios" },
-        { id: "assignments", label: "📋 Asignaciones", path: "/admin/asignaciones" }
+        { id: "assignments", label: "📋 Asignaciones", path: "/admin/asignaciones" },
+        { id: "games", label: "🎮 Configuración Juegos", path: "/admin/config-juegos" }
       ];
 
   return (

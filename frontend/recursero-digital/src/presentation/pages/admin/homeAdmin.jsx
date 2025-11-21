@@ -17,6 +17,10 @@ export default function HomeAdmin() {
     navigate('/admin/asignaciones');
   };
 
+  const handleConfigJuegos = () => {
+    navigate('/admin/config-juegos');
+  };
+
  
 
   return (
@@ -52,6 +56,14 @@ export default function HomeAdmin() {
             <p>Administra asignaciones activas</p>
           </div>
         </div>
+
+        <div className="overview-card">
+          <div className="card-icon">🎮</div>
+          <div className="card-content">
+            <h3>Configuración Juegos</h3>
+            <p>Gestiona niveles y configuraciones de juegos</p>
+          </div>
+        </div>
       </div>
 
       <div className="admin-quick-actions">
@@ -68,6 +80,10 @@ export default function HomeAdmin() {
           <button className="action-card-admin" onClick={handleNuevaAsignacion}>
             <span className="action-icon">🔗</span>
             <span className="action-text">Nueva Asignación</span>
+          </button>
+          <button className="action-card-admin" onClick={handleConfigJuegos}>
+            <span className="action-icon">🎯</span>
+            <span className="action-text">Configuración Juegos</span>
           </button>
         </div>
       </div>

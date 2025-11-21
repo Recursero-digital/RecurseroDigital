@@ -10,6 +10,7 @@ import AdminCourses from "./presentation/pages/admin/AdminCourses";
 import AdminTeachers from "./presentation/pages/admin/AdminTeachers";
 import AdminAssignments from "./presentation/pages/admin/AdminAssignments";
 import AdminGameLevels from "./presentation/pages/admin/AdminGameLevels";
+import AdminGameConfig from "./presentation/pages/admin/AdminGameConfig";
 import DocenteDashboard from "./presentation/pages/teacher/DocenteDashboard";
 import TeacherStudents from "./presentation/pages/teacher/TeacherStudents";
 import TeacherGames from "./presentation/pages/teacher/TeacherGames";
@@ -280,6 +281,14 @@ function App() {
             element={
               <MainLayout userRole="admin">
                 <AdminAssignments />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/admin/config-juegos"
+            element={
+              <MainLayout userRole="admin">
+                <AdminGameConfig />
               </MainLayout>
             }
           />
