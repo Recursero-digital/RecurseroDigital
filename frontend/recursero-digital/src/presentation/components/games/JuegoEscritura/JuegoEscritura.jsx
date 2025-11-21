@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../../../styles/globals/games.css';
 import './JuegoEscritura.css';
-import { generateDragDropActivity, validateNumberWordPair, levelRanges as defaultLevelRanges } from './utils'; 
+import { generateDragDropActivity, validateNumberWordPair } from './utils';
+import { transformToEscrituraFormat } from '../../../../hooks/useGameLevels'; 
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -37,28 +38,58 @@ const JuegoEscritura = () => {
     const [usedNumbers, setUsedNumbers] = useState(new Set());
     const [feedback, setFeedback] = useState({ title: '', text: '', isCorrect: false });
     const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const lastGeneratedActivity = useRef({ level: -1, activity: -1 });
     
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escritura', true);
+    const levels = useMemo(() => transformToEscrituraFormat(backendLevels), [backendLevels]);
     
     useEffect(() => { 
         AOS.init(); 
     }, []);
     
     const startNewActivity = useCallback(() => {
-        const activityData = generateDragDropActivity(currentLevel);
+        if (backendLevels.length === 0 || currentLevel < 0 || currentLevel >= backendLevels.length) {
+            return;
+        }
+        
+        const levelConfig = {
+            min: backendLevels[currentLevel]?.config?.min || 1,
+            max: backendLevels[currentLevel]?.config?.max || 50
+        };
+        const activitiesCount = backendLevels[currentLevel]?.activitiesCount || 5;
+        
+        const activityData = generateDragDropActivity(currentLevel, levelConfig, activitiesCount);
         setNumbers(activityData.numbers);
         setWordPairs(activityData.wordPairs);
         setDragAnswers({});
         setUsedNumbers(new Set());
         resetAttempts();
-    }, [currentLevel]);
+    }, [currentLevel, backendLevels, resetAttempts]);
     
     useEffect(() => {
-        if (gameState === 'game') {
-            startNewActivity();
-            startActivityTimer();
+        if (gameState === 'game' && backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+            const activityKey = `${currentLevel}-${currentActivity}`;
+            const lastKey = `${lastGeneratedActivity.current.level}-${lastGeneratedActivity.current.activity}`;
+            
+            if (activityKey !== lastKey) {
+                const levelConfig = {
+                    min: backendLevels[currentLevel]?.config?.min || 1,
+                    max: backendLevels[currentLevel]?.config?.max || 50
+                };
+                const activitiesCount = backendLevels[currentLevel]?.activitiesCount || 5;
+                
+                const activityData = generateDragDropActivity(currentLevel, levelConfig, activitiesCount);
+                setNumbers(activityData.numbers);
+                setWordPairs(activityData.wordPairs);
+                setDragAnswers({});
+                setUsedNumbers(new Set());
+                resetAttempts();
+                startActivityTimer();
+                
+                lastGeneratedActivity.current = { level: currentLevel, activity: currentActivity };
+            }
         }
-    }, [gameState, currentLevel, currentActivity, startNewActivity, startActivityTimer]);
+    }, [gameState, currentActivity, currentLevel, backendLevels, resetAttempts, startActivityTimer]);
     
     const handleStartGame = useCallback((level) => {
         const selectedLevelIndex = level - 1;
@@ -67,10 +98,12 @@ const JuegoEscritura = () => {
         const lastActivity = getLastActivity('escritura');
         
         let startingActivity = 0;
+        const levelActivities = backendLevels[selectedLevelIndex]?.activitiesCount || 5;
+        
         if (lastActivity && lastActivity.level === level) {
             const lastActivityIndex = lastActivity.activity - 1;
             
-            if (lastActivityIndex + 1 < 5) {
+            if (lastActivityIndex + 1 < levelActivities) {
                 startingActivity = lastActivityIndex + 1;
             } else {
                 startingActivity = 0;
@@ -82,7 +115,7 @@ const JuegoEscritura = () => {
         setCurrentActivity(startingActivity);
         resetScoring();
         setGameState('game');
-    }, [resetScoring, getLastActivity]);
+    }, [resetScoring, getLastActivity, backendLevels]);
     
     const handleDragStart = (e, number) => {
         e.dataTransfer.setData('text/plain', number.toString());
@@ -152,7 +185,8 @@ const JuegoEscritura = () => {
         if (allCorrect) {
             const activityScore = await completeActivity(currentLevel, 'escritura', currentActivity, currentLevel);
             
-            if (currentActivity < 4) {
+            const levelActivities = backendLevels[currentLevel]?.activitiesCount || 5;
+            if (currentActivity < levelActivities - 1) {
                 setFeedback({ 
                     title: '✅ ¡Perfecto!', 
                     text: `¡Excelente! Todas las respuestas son correctas. Ganaste ${activityScore} puntos. Avanza a la siguiente actividad.`, 
@@ -201,9 +235,9 @@ const JuegoEscritura = () => {
         setGameState('game');
     };
 
-    const handleCloseErrorPopup = () => {
+    const handleCloseErrorPopup = useCallback(() => {
         setShowErrorPopup(false);
-    };
+    }, []);
 
     if (levelsLoading) {
         return <div className="game-container"><div>Cargando niveles...</div></div>;
@@ -213,7 +247,7 @@ const JuegoEscritura = () => {
         <div className="game-container">
             {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
             
-            {gameState === 'level-select' && <LevelSelectScreen onSelectLevel={handleStartGame} />}
+            {gameState === 'level-select' && <LevelSelectScreen levels={levels} onSelectLevel={handleStartGame} />}
             
             {gameState === 'game' && <GameScreen
                 level={currentLevel + 1}

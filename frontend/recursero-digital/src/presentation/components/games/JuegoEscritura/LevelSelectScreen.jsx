@@ -1,19 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { levelRanges } from './utils';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 
-const LevelSelectScreen = ({ onSelectLevel }) => {
+const LevelSelectScreen = ({ levels, onSelectLevel }) => {
     const navigate = useNavigate();
     const { isLevelUnlocked } = useUserProgress();
-    
-    const levels = [
-        { difficulty: "Fácil", color: "level-1" },
-        { difficulty: "Intermedio", color: "level-2" },
-        { difficulty: "Avanzado", color: "level-3" },
-        { difficulty: "Experto", color: "level-4" },
-        { difficulty: "Maestro", color: "level-5" }
-    ];
+
+    if (!levels || levels.length === 0) {
+        return (
+            <div className="level-select-screen">
+                <div className="level-select-content">
+                    <p>No hay niveles disponibles</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="level-select-screen">
@@ -34,10 +35,11 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
                     <p className="level-select-subtitle">Selecciona la dificultad que prefieras</p>
                     
                     <div className="level-grid">
-                        {levelRanges.map((range, index) => {
+                        {levels.map((level, index) => {
                             const levelNumber = index + 1;
                             const isUnlocked = isLevelUnlocked('escritura', levelNumber);
                             const isLocked = !isUnlocked;
+                            const range = level.range || `${level.min} - ${level.max}`;
                             
                             return (
                                 <button 
@@ -50,10 +52,10 @@ const LevelSelectScreen = ({ onSelectLevel }) => {
                                         <div className="level-number">
                                             {isLocked ? '🔒' : '📝'} Nivel {levelNumber}
                                         </div>
-                                        <div className="level-difficulty">{levels[index].difficulty}</div>
+                                        <div className="level-difficulty">{level.difficulty || level.name || 'Nivel'}</div>
                                     </div>
                                     <div className="level-info">
-                                        <div className="level-range">Números {range.min} - {range.max}</div>
+                                        <div className="level-range">Números {range}</div>
                                         {isLocked && (
                                             <div className="locked-message">
                                                 Completa el nivel {levelNumber - 1} primero

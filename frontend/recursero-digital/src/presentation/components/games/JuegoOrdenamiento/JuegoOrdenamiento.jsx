@@ -14,9 +14,7 @@ import { useGameLevels, transformToOrdenamientoFormat } from '../../../../hooks/
 import { 
   getNumbersForActivity,
   checkOrder, 
-  generateHint, 
-  totalActivities, 
-  getNumbersCount 
+  generateHint
 } from './utils';
 
 const JuegoOrdenamiento = () => {
@@ -47,6 +45,22 @@ const JuegoOrdenamiento = () => {
 
   const { levels: backendLevels, loading: levelsLoading } = useGameLevels('ordenamiento', true);
   const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
+  
+  // Obtener totalActivities del nivel actual desde el backend
+  const totalActivities = useMemo(() => {
+    if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+      return backendLevels[currentLevel]?.activitiesCount || 5;
+    }
+    return 5; // Fallback por defecto
+  }, [backendLevels, currentLevel]);
+  
+  // Obtener numbersCount del nivel actual desde el backend
+  const getNumbersCount = useCallback(() => {
+    if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+      return backendLevels[currentLevel]?.config?.numbersCount || 6;
+    }
+    return 6; // Fallback por defecto
+  }, [backendLevels, currentLevel]);
 
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
@@ -90,7 +104,8 @@ const JuegoOrdenamiento = () => {
     if (lastActivity && lastActivity.level === level) {
       const lastActivityIndex = lastActivity.activity - 1;
       
-      if (lastActivityIndex + 1 < totalActivities) {
+      const levelActivities = backendLevels[selectedLevelIndex]?.activitiesCount || 5;
+      if (lastActivityIndex + 1 < levelActivities) {
         startingActivity = lastActivityIndex + 1;
       } else {
         startingActivity = 0;
@@ -104,7 +119,7 @@ const JuegoOrdenamiento = () => {
     setLevelResults([]);
     setShowPermanentHint(false);
     setGameState('game');
-  }, [resetScoring, getLastActivity]);
+  }, [resetScoring, getLastActivity, backendLevels]);
 
   const handleActivityComplete = useCallback(() => {
     const activityScore = completeActivity(currentLevel, 'ordenamiento', currentActivity, currentLevel);
@@ -136,7 +151,8 @@ const JuegoOrdenamiento = () => {
 
   const handleContinueAfterSuccess = useCallback(() => {
     setShowFeedback(false);
-    if (currentActivity + 1 < totalActivities) {
+    const levelActivities = backendLevels[currentLevel]?.activitiesCount || 5;
+    if (currentActivity + 1 < levelActivities) {
       setCurrentActivity(currentActivity + 1);
       setupLevel(currentLevel); 
       setTargetNumbers([]);
@@ -145,19 +161,23 @@ const JuegoOrdenamiento = () => {
     } else {  
       unlockLevel('ordenamiento', currentLevel + 2);
       
-      if (currentLevel === 0) {
-        setCurrentLevel(1);
-        setCurrentActivity(0);
-        setLevelResults([]);
-        setShowPermanentHint(false);
-        setTimeout(() => setupLevel(1), 100);
-      } else if (currentLevel === 2) {
-        setShowGameComplete(true);
+      if (currentLevel < levelRanges.length - 1) {
+        if (currentLevel === 0 && levelRanges.length > 1) {
+          setCurrentLevel(1);
+          setCurrentActivity(0);
+          setLevelResults([]);
+          setShowPermanentHint(false);
+          setTimeout(() => setupLevel(1), 100);
+        } else if (currentLevel === levelRanges.length - 1) {
+          setShowGameComplete(true);
+        } else {
+          setShowLevelUp(true);
+        }
       } else {
-        setShowLevelUp(true);
+        setShowGameComplete(true);
       }
     }
-  }, [currentActivity, currentLevel, setupLevel, unlockLevel]);
+  }, [currentActivity, currentLevel, setupLevel, unlockLevel, backendLevels, levelRanges.length]);
 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];
@@ -247,6 +267,8 @@ const JuegoOrdenamiento = () => {
       {gameState === 'game' && showGameComplete && (
         <GameCompleteScreen
           points={points}
+          currentLevel={currentLevel}
+          totalActivities={totalActivities}
           onBackToGames={handleBackToGames}
           onBackToLevels={handleBackToLevels}
           onPlayAgain={handleBackToStart}

@@ -9,7 +9,7 @@ const ErrorPopup = ({ show, onClose }) => {
 
             return () => clearTimeout(timer);
         }
-    }, [show, onClose]);
+    }, [show]);
 
     if (!show) return null;
 
