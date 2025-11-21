@@ -154,6 +154,18 @@ const JuegoEscritura = () => {
         }
     };
     
+    const handleNextLevel = useCallback(() => {
+        if (currentLevel >= backendLevels.length - 1) {
+            setGameState('level-select');
+        } else {
+            const nextLevel = currentLevel + 1;
+            setCurrentLevel(nextLevel);
+            setCurrentActivity(0);
+            resetScoring();
+            setGameState('game');
+        }
+    }, [currentLevel, backendLevels.length, resetScoring]);
+
     const handleCheckAnswer = async () => {
         const allAnswersProvided = wordPairs.every((_, index) => dragAnswers[index] !== undefined);
         
@@ -268,7 +280,12 @@ const JuegoEscritura = () => {
             
             {gameState === 'feedback' && <FeedbackModal feedback={feedback} onContinue={handleContinue} />}
             
-            {gameState === 'congrats' && <CongratsModal level={currentLevel + 1} points={points} onNextLevel={() => setGameState('level-select')} />}
+            {gameState === 'congrats' && <CongratsModal 
+                level={currentLevel + 1} 
+                points={points} 
+                onNextLevel={handleNextLevel}
+                onBackToLevels={() => setGameState('level-select')}
+            />}
             
             <ErrorPopup show={showErrorPopup} onClose={handleCloseErrorPopup} />
 

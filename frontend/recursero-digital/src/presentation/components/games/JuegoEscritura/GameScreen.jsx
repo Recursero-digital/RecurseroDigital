@@ -99,15 +99,16 @@ const GameScreen = ({
                 <div className="words-section">
                     <div className="escritura-words-container">
                         {wordPairs.map((wordPair, index) => (
-                            <div key={`word-${index}`} className="escritura-word-pair">
-                                <div 
-                                    className={`drop-zone ${dragAnswers[index] ? 'filled' : 'empty'}`}
-                                    onDragOver={onDragOver}
-                                    onDrop={(e) => onDrop(e, index)}
-                                    onClick={() => dragAnswers[index] && onRemoveNumber(index)}
-                                    title={dragAnswers[index] ? "Hacé clic para quitar" : "Arrastra un número aquí"}
-                                >
-                                    {dragAnswers[index] ? dragAnswers[index] : ''}
+                            <div 
+                                key={`word-${index}`} 
+                                className={`escritura-word-pair drop-zone ${dragAnswers[index] ? 'filled' : 'empty'}`}
+                                onDragOver={onDragOver}
+                                onDrop={(e) => onDrop(e, index)}
+                                onClick={() => dragAnswers[index] && onRemoveNumber(index)}
+                                title={dragAnswers[index] ? "Hacé clic para quitar" : "Arrastra un número aquí"}
+                            >
+                                <div className="escritura-number-display">
+                                    {dragAnswers[index] || '?'}
                                 </div>
                                 <div className="escritura-word-text">{wordPair.word}</div>
                             </div>
