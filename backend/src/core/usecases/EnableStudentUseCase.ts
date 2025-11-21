@@ -1,18 +1,18 @@
 import { StudentRepository } from '../infrastructure/StudentRepository';
 
-export interface DeleteStudentRequest {
+export interface EnableStudentRequest {
     studentId: string;
 }
 
-export class DeleteStudentUseCase {
+export class EnableStudentUseCase {
     private studentRepository: StudentRepository;
 
     constructor(studentRepository: StudentRepository) {
         this.studentRepository = studentRepository;
     }
 
-    async execute(request: DeleteStudentRequest): Promise<void> {
-        await this.studentRepository.deleteStudent(request.studentId);
+    async execute(request: EnableStudentRequest): Promise<void> {
+        // Reactivar el estudiante (enable = true)
+        await this.studentRepository.enableStudent(request.studentId);
     }
 }
-

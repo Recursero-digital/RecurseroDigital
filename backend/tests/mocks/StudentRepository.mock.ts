@@ -103,8 +103,16 @@ export class MockStudentRepository implements StudentRepository {
 
   async deleteStudent(id: string): Promise<void> {
     const index = this.students.findIndex(s => s.id === id);
-    if (index !== -1) {
-      this.students.splice(index, 1);
+    if (index === -1) {
+      throw new Error('Estudiante no encontrado');
+    }
+    this.students.splice(index, 1);
+  }
+
+  async enableStudent(id: string): Promise<void> {
+    const index = this.students.findIndex(s => s.id === id);
+    if (index === -1) {
+      throw new Error('Estudiante no encontrado');
     }
   }
 

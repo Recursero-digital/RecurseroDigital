@@ -6,6 +6,7 @@ import { StudentNotFoundError } from '../../core/models/exceptions/StudentNotFou
 import { StudentInvalidRequestError } from '../../core/models/exceptions/StudentInvalidRequestError';
 import { UpdateStudentUseCase } from '../../core/usecases/UpdateStudentUseCase';
 import { DeleteStudentUseCase } from '../../core/usecases/DeleteStudentUseCase';
+import { EnableStudentUseCase } from '../../core/usecases/EnableStudentUseCase';
 
 interface AddStudentRequest {
     name: string;
@@ -54,16 +55,25 @@ const addStudent = async (req: Request<{}, AddStudentResponse, AddStudentRequest
 
 const getAllStudents = async (req: Request, res: Response): Promise<void> => {
     try {
-        const students = await dependencyContainer.studentRepository.getAllStudents();
+        // Usar DatabaseConnection para obtener todos los estudiantes con enable
+        const db = (dependencyContainer.studentRepository as any).db;
+        const result = await db.query(
+            `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
+             FROM students s 
+             JOIN users u ON s.user_id = u.id 
+             ORDER BY s.created_at DESC`
+        );
+        
         res.status(200).json({
-            students: students.map(student => ({
-                id: student.id,
-                name: `${student.name} ${student.lastname}`,
-                firstName: student.name,
-                lastName: student.lastname,
-                username: student.user.username,
-                dni: student.dni,
-                courseId: student.courseId || null
+            students: result.rows.map((row: any) => ({
+                id: row.id,
+                name: `${row.name} ${row.lastname}`,
+                firstName: row.name,
+                lastName: row.lastname,
+                username: row.username,
+                dni: row.dni,
+                courseId: row.course_id || null,
+                enable: row.enable ?? true
             }))
         });
     } catch (error) {
@@ -164,13 +174,13 @@ const deleteStudent = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const useCase = new DeleteStudentUseCase(dependencyContainer.studentRepository);
+        const useCase = dependencyContainer.deleteStudentUseCase;
         await useCase.execute({ studentId });
 
-        res.status(200).json({ message: 'Estudiante eliminado exitosamente' });
+        res.status(200).json({ message: 'Estudiante deshabilitado exitosamente' });
     } catch (error: any) {
-        if (error.message === 'El estudiante no existe') {
-            res.status(404).json({ error: error.message });
+        if (error.message === 'Estudiante no encontrado' || error.message === 'El estudiante no existe') {
+            res.status(404).json({ error: 'El estudiante no existe' });
             return;
         }
         console.error('Error en deleteStudent:', error);
@@ -178,7 +188,30 @@ const deleteStudent = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const studentController = { addStudent, getMyGames, getAllStudents, updateStudent, deleteStudent };
+const enableStudent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { studentId } = req.params as { studentId: string };
+
+        if (!studentId) {
+            res.status(400).json({ error: 'studentId es requerido' });
+            return;
+        }
+
+        const useCase = dependencyContainer.enableStudentUseCase;
+        await useCase.execute({ studentId });
+
+        res.status(200).json({ message: 'Estudiante reactivado exitosamente' });
+    } catch (error: any) {
+        if (error.message === 'Estudiante no encontrado') {
+            res.status(404).json({ error: error.message });
+            return;
+        }
+        console.error('Error en enableStudent:', error);
+        res.status(500).json({ error: error?.message ?? 'Error interno del servidor' });
+    }
+};
+
+export const studentController = { addStudent, getMyGames, getAllStudents, updateStudent, deleteStudent, enableStudent };
 
 export const assignCourseToStudent = async (req: Request, res: Response): Promise<void> => {
     try {

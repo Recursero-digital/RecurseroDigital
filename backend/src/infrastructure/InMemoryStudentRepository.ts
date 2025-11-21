@@ -113,9 +113,19 @@ export class InMemoryStudentRepository implements StudentRepository {
 
   async deleteStudent(id: string): Promise<void> {
     const index = this.students.findIndex(s => s.id === id);
-    if (index !== -1) {
-      this.students.splice(index, 1);
+    if (index === -1) {
+      throw new Error('Estudiante no encontrado');
     }
+
+  }
+
+  async enableStudent(id: string): Promise<void> {
+    // En memoria, simplemente verificamos que existe
+    const index = this.students.findIndex(s => s.id === id);
+    if (index === -1) {
+      throw new Error('Estudiante no encontrado');
+    }
+    // En memoria no hay columna enable, por lo que no hacemos nada adicional
   }
 
   async clearStudents(): Promise<void> {
