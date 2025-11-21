@@ -73,23 +73,20 @@ const JuegoCalculos = () => {
       totalAttempts
     });
 
-    // Complete activity for scoring system and unlock next level if won
-    if (isWin) {
-      const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
-      
-      completeActivity(
-        levelNumber - 1,           
-        'calculos',                
-        0,                         
-        levelNumber                
-      );
-      
-      // Unlock next level if available - usando gameId específico por operación
-      if (levelNumber < 3) {
-        // Crear gameId específico para cada operación: 'calculos-suma', 'calculos-resta', 'calculos-multiplicacion'
-        const gameId = `calculos-${selectedOperation}`;
-        unlockLevel(gameId, levelNumber + 1);
-      }
+    const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
+    
+    // Siempre completa la actividad y desbloquea el siguiente nivel
+    completeActivity(
+      levelNumber - 1,           
+      'calculos',                
+      0,                         
+      levelNumber                
+    );
+    
+    // Siempre desbloquea el siguiente nivel si está disponible
+    if (levelNumber < 3) {
+      const gameId = `calculos-${selectedOperation}`;
+      unlockLevel(gameId, levelNumber + 1);
     }
 
     setGameState('gameComplete');

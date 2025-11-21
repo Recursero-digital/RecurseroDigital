@@ -1,9 +1,10 @@
 import React from 'react';
 import { useUserProgress } from '../../../hooks/useUserProgress';
-import { getLevelConfig } from './utils';
+import { getLevelConfig, getOrderConfig } from './utils';
 
-const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
+const LevelSelectScreen = ({ order, onSelectLevel, onBackToStart }) => {
     const { isLevelUnlocked } = useUserProgress();
+    const orderInfo = getOrderConfig(order);
     
     const levels = [
         { 
@@ -32,16 +33,16 @@ const LevelSelectScreen = ({ onSelectLevel, onBackToGames }) => {
                     <div className="buttons-group">
                         <button 
                             className="btn-back-to-levels"
-                            onClick={onBackToGames}
-                            title="Volver a juegos"
+                            onClick={onBackToStart}
+                            title="Volver a selección de orden"
                         >
-                            ← Juegos
+                            ← Orden
                         </button>
                     </div>
                 </div>
                 <div className="level-select-content">
-                    <h1 className="level-select-title">Selecciona un Nivel</h1>
-                    <p className="level-select-subtitle">Ordená los números de menor a mayor en cada actividad</p>
+                    <h1 className="level-select-title">{orderInfo.icon} {orderInfo.name}</h1>
+                    <p className="level-select-subtitle">{orderInfo.description}</p>
                     <div className="level-grid">
                         {levels.map(level => {
                     const isUnlocked = isLevelUnlocked('ordenamiento', level.number);

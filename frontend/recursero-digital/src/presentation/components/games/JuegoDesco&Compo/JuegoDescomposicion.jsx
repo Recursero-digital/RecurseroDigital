@@ -37,7 +37,7 @@ const JuegoDescomposicion = () => {
 
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('descomposicion', true);
     const levels = useMemo(() => transformToDescomposicionFormat(backendLevels), [backendLevels]);
-    
+
     // Obtener totalQuestions del nivel actual desde el backend
     const totalQuestions = useMemo(() => {
         if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
@@ -181,8 +181,8 @@ const JuegoDescomposicion = () => {
         setShowFeedback(false);
         
         if (currentActivity + 1 >= totalQuestions) {
-            const percentage = Math.round((points / (totalQuestions * 50 * (currentLevel + 1))) * 100);
-            if (percentage >= 60 && currentLevel < levels.length - 1) {
+            // Siempre desbloquea el siguiente nivel al completar todas las actividades
+            if (currentLevel < levels.length - 1) {
                 unlockLevel('descomposicion', currentLevel + 2);
             }
             setShowCongrats(true);

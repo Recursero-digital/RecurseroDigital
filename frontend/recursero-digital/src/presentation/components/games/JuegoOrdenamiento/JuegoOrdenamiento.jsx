@@ -30,6 +30,7 @@ const JuegoOrdenamiento = () => {
   } = useGameScoring();
 
   const [gameState, setGameState] = useState('start');
+  const [order, setOrder] = useState('asc'); // 'asc' or 'desc'
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentActivity, setCurrentActivity] = useState(0);
   const [numbers, setNumbers] = useState([]);
@@ -45,7 +46,7 @@ const JuegoOrdenamiento = () => {
 
   const { levels: backendLevels, loading: levelsLoading } = useGameLevels('ordenamiento', true);
   const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
-  
+
   // Obtener totalActivities del nivel actual desde el backend
   const totalActivities = useMemo(() => {
     if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
@@ -53,7 +54,7 @@ const JuegoOrdenamiento = () => {
     }
     return 5; // Fallback por defecto
   }, [backendLevels, currentLevel]);
-  
+
   // Obtener numbersCount del nivel actual desde el backend
   const getNumbersCount = useCallback(() => {
     if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
@@ -76,6 +77,7 @@ const JuegoOrdenamiento = () => {
   const resetGame = useCallback(() => {
     setCurrentLevel(0);
     setCurrentActivity(0);
+    setOrder('asc');
     resetScoring();
     setNumbers([]);
     setSortedNumbers([]);
@@ -93,6 +95,11 @@ const JuegoOrdenamiento = () => {
     setNumbers(numbersData.shuffled);
     setSortedNumbers(numbersData.original);
   }, [levelRanges]);
+
+  const handleSelectOrder = useCallback((selectedOrder) => {
+    setOrder(selectedOrder);
+    setGameState('level-select');
+  }, []);
 
   const handleStartGame = useCallback((level) => {
     const selectedLevelIndex = level - 1;
@@ -159,6 +166,7 @@ const JuegoOrdenamiento = () => {
       setShowPermanentHint(true);
       startActivityTimer();
     } else {  
+      // Siempre desbloquea el siguiente nivel al completar todas las actividades
       unlockLevel('ordenamiento', currentLevel + 2);
       
       if (currentLevel < levelRanges.length - 1) {
@@ -185,13 +193,13 @@ const JuegoOrdenamiento = () => {
 
     const numbersCount = getNumbersCount(); // Always returns 6
     if (newTargetNumbers.length === numbersCount) {
-      if (checkOrder(newTargetNumbers, sortedNumbers)) {
+      if (checkOrder(newTargetNumbers, sortedNumbers, order)) {
         handleActivityComplete();
       } else {
         handleFailedAttempt();
       }
     }
-  }, [targetNumbers, sortedNumbers, handleActivityComplete, handleFailedAttempt]);
+  }, [targetNumbers, sortedNumbers, order, handleActivityComplete, handleFailedAttempt]);
 
   const handleRemove = useCallback((numberToRemove) => {
     setTargetNumbers(prev => prev.filter(num => num !== numberToRemove));
@@ -200,28 +208,31 @@ const JuegoOrdenamiento = () => {
   const handleNextLevel = useCallback(() => {
     setShowLevelUp(false);
     if (currentLevel >= levelRanges.length - 1) {
-      setShowGameComplete(true);
+      setGameState('level-select');
     } else {
-      setCurrentLevel(prev => prev + 1);
+      const nextLevel = currentLevel + 1;
+      setCurrentLevel(nextLevel);
       setCurrentActivity(0);
       setLevelResults([]);
       setShowPermanentHint(false);
-      setTimeout(() => setupLevel(currentLevel + 1), 100);
+      resetScoring();
+      setGameState('game');
+      setTimeout(() => setupLevel(nextLevel), 100);
     }
-  }, [currentLevel, setupLevel]);
+  }, [currentLevel, setupLevel, levelRanges.length, resetScoring]);
 
   const getHint = useCallback(() => {
-    return generateHint(numbers);
-  }, [numbers]);
+    return generateHint(numbers, order);
+  }, [numbers, order]);
 
   useEffect(() => {
-    if (gameState === 'game') {
+    if (gameState === 'game' && !showLevelUp) {
       setupLevel(currentLevel);
       setTargetNumbers([]);
       setShowPermanentHint(true);
       startActivityTimer();
     }
-  }, [gameState, currentLevel, setupLevel, startActivityTimer]);
+  }, [gameState, currentLevel, setupLevel, startActivityTimer, showLevelUp]);
 
   if (levelsLoading) {
     return <div className="game-container"><div>Cargando niveles...</div></div>;
@@ -231,15 +242,16 @@ const JuegoOrdenamiento = () => {
     <div className="game-container">
       {gameState === 'start' && (
         <StartScreen 
-          onStart={() => setGameState('level-select')} 
+          onStart={handleSelectOrder} 
           onBackToGames={handleBackToGames} 
         />
       )}
       
       {gameState === 'level-select' && (
         <LevelSelectScreen 
+          order={order}
           onSelectLevel={handleStartGame} 
-          onBackToGames={handleBackToGames} 
+          onBackToStart={handleBackToStart} 
         />
       )}
       
@@ -261,6 +273,7 @@ const JuegoOrdenamiento = () => {
           generateHint={getHint}
           showPermanentHint={showPermanentHint}
           levelRanges={levelRanges}
+          order={order}
         />
       )}
 
@@ -275,23 +288,25 @@ const JuegoOrdenamiento = () => {
         />
       )}
 
-      {showLevelUp && !showGameComplete && (
-        <CongratsModal
-          level={currentLevel + 1}
-          results={levelResults}
-          totalScore={points}
-          onNextLevel={handleNextLevel}
-          onBackToLevels={handleBackToLevels}
-        />
-      )}
-
-      {showFeedback && (
+      {showFeedback && !showLevelUp && (
         <FeedbackModal
           isSuccess={feedbackSuccess}
           onContinue={feedbackSuccess ? handleContinueAfterSuccess : () => setShowFeedback(false)}
           onRetry={() => {
             setShowFeedback(false);
             setTargetNumbers([]);
+          }}
+        />
+      )}
+
+      {showLevelUp && (
+        <CongratsModal
+          level={currentLevel + 1}
+          points={points}
+          onNextLevel={handleNextLevel}
+          onBackToLevels={() => {
+            setShowLevelUp(false);
+            setGameState('level-select');
           }}
         />
       )}

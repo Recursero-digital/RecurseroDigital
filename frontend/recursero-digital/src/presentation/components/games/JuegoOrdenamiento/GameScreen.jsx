@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameHeader from './GameHeader';
+import { getOrderInstruction } from './utils';
 
 const GameScreen = ({ 
   currentLevel, 
@@ -15,7 +16,8 @@ const GameScreen = ({
   onBackToLevels,
   onBackToGames,
   generateHint,
-  showPermanentHint
+  showPermanentHint,
+  order
 }) => {
 
   const [shouldAnimateHint, setShouldAnimateHint] = useState(false);
@@ -31,10 +33,6 @@ const GameScreen = ({
     }
     previousShowHint.current = showPermanentHint;
   }, [showPermanentHint]);
-
-  const getOrderInstruction = useCallback(() => {
-    return "📈 ORDENA DE MENOR A MAYOR 📈";
-  }, []);
 
   const NumberBox = React.memo(({ number, isInTarget = false, onDrop, onRemove }) => {
     const handleDragStart = (e) => {
@@ -151,13 +149,20 @@ const GameScreen = ({
         />
         <h1 className="game-title">🎯 Ordenamiento Numérico</h1>
         <p className="game-instruction">
-          {getOrderInstruction()}
+          {(() => {
+            const instruction = getOrderInstruction(order);
+            return (
+              <span>
+                {instruction.icon} {instruction.text} <span className="highlight-text">{instruction.highlight1}</span> {instruction.middle} <span className="highlight-text">{instruction.highlight2}</span> {instruction.endIcon}
+              </span>
+            );
+          })()}
         </p>
       </header>
 
       <div className="ordenamiento-progress-container">
         <div 
-          className="progress-bar"
+          className="ordenamiento-progress-bar"
           data-progress={progressPercentage}
           style={{'--progress-width': `${progressPercentage}%`}}
         />
