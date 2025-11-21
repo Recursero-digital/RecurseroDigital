@@ -162,7 +162,7 @@ const GameScreen = ({
 
       <div className="ordenamiento-progress-container">
         <div 
-          className="progress-bar"
+          className="ordenamiento-progress-bar"
           data-progress={progressPercentage}
           style={{'--progress-width': `${progressPercentage}%`}}
         />

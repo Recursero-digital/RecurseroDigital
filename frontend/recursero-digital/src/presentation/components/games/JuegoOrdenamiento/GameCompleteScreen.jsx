@@ -26,7 +26,7 @@ const GameCompleteScreen = ({
 
       <div className="progress-container">
         <div 
-          className="progress-bar"
+          className="ordenamiento-progress-bar"
           data-progress="100"
           style={{'--progress-width': '100%'}}
         />
