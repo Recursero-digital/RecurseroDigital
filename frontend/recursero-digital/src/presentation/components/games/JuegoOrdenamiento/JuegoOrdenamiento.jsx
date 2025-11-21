@@ -46,7 +46,7 @@ const JuegoOrdenamiento = () => {
 
   const { levels: backendLevels, loading: levelsLoading } = useGameLevels('ordenamiento', true);
   const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
-  
+
   // Obtener totalActivities del nivel actual desde el backend
   const totalActivities = useMemo(() => {
     if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
@@ -54,7 +54,7 @@ const JuegoOrdenamiento = () => {
     }
     return 5; // Fallback por defecto
   }, [backendLevels, currentLevel]);
-  
+
   // Obtener numbersCount del nivel actual desde el backend
   const getNumbersCount = useCallback(() => {
     if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
@@ -166,6 +166,7 @@ const JuegoOrdenamiento = () => {
       setShowPermanentHint(true);
       startActivityTimer();
     } else {  
+      // Siempre desbloquea el siguiente nivel al completar todas las actividades
       unlockLevel('ordenamiento', currentLevel + 2);
       
       if (currentLevel < levelRanges.length - 1) {
@@ -207,28 +208,31 @@ const JuegoOrdenamiento = () => {
   const handleNextLevel = useCallback(() => {
     setShowLevelUp(false);
     if (currentLevel >= levelRanges.length - 1) {
-      setShowGameComplete(true);
+      setGameState('level-select');
     } else {
-      setCurrentLevel(prev => prev + 1);
+      const nextLevel = currentLevel + 1;
+      setCurrentLevel(nextLevel);
       setCurrentActivity(0);
       setLevelResults([]);
       setShowPermanentHint(false);
-      setTimeout(() => setupLevel(currentLevel + 1), 100);
+      resetScoring();
+      setGameState('game');
+      setTimeout(() => setupLevel(nextLevel), 100);
     }
-  }, [currentLevel, setupLevel, levelRanges.length]);
+  }, [currentLevel, setupLevel, levelRanges.length, resetScoring]);
 
   const getHint = useCallback(() => {
     return generateHint(numbers, order);
   }, [numbers, order]);
 
   useEffect(() => {
-    if (gameState === 'game') {
+    if (gameState === 'game' && !showLevelUp) {
       setupLevel(currentLevel);
       setTargetNumbers([]);
       setShowPermanentHint(true);
       startActivityTimer();
     }
-  }, [gameState, currentLevel, setupLevel, startActivityTimer]);
+  }, [gameState, currentLevel, setupLevel, startActivityTimer, showLevelUp]);
 
   if (levelsLoading) {
     return <div className="game-container"><div>Cargando niveles...</div></div>;
@@ -284,23 +288,25 @@ const JuegoOrdenamiento = () => {
         />
       )}
 
-      {showLevelUp && !showGameComplete && (
-        <CongratsModal
-          level={currentLevel + 1}
-          results={levelResults}
-          totalScore={points}
-          onNextLevel={handleNextLevel}
-          onBackToLevels={handleBackToLevels}
-        />
-      )}
-
-      {showFeedback && (
+      {showFeedback && !showLevelUp && (
         <FeedbackModal
           isSuccess={feedbackSuccess}
           onContinue={feedbackSuccess ? handleContinueAfterSuccess : () => setShowFeedback(false)}
           onRetry={() => {
             setShowFeedback(false);
             setTargetNumbers([]);
+          }}
+        />
+      )}
+
+      {showLevelUp && (
+        <CongratsModal
+          level={currentLevel + 1}
+          points={points}
+          onNextLevel={handleNextLevel}
+          onBackToLevels={() => {
+            setShowLevelUp(false);
+            setGameState('level-select');
           }}
         />
       )}

@@ -60,7 +60,7 @@ const JuegoEscala = () => {
         }
         return GAME_CONFIG.TOTAL_QUESTIONS; // Fallback por defecto
     }, [backendLevels, currentLevel]);
-    
+
     useEffect(() => {
         AOS.init();
     }, []);
@@ -216,8 +216,8 @@ const JuegoEscala = () => {
         setIsProcessing(false); // Reset processing state
         
         if (currentActivity + 1 >= totalQuestions) {
-            const levelPassed = isLevelPassed(points, totalQuestions, currentLevel);
-            if (levelPassed && currentLevel < levels.length - 1) {
+            // Siempre desbloquea el siguiente nivel al completar todas las actividades
+            if (currentLevel < levels.length - 1) {
                 unlockLevel('escala', currentLevel + 2);
             }
             setShowCongrats(true);
