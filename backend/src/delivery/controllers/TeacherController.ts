@@ -1,14 +1,11 @@
 import { Request, Response } from 'express';
 import { DependencyContainer } from '../../config/DependencyContainer';
-import { AssignTeacherToCoursesUseCase, AssignTeacherToCoursesRequest } from '../../core/usecases/AssignTeacherToCourseUseCase';
+import { AssignTeacherToCoursesRequest } from '../../core/usecases/AssignTeacherToCourseUseCase';
 import { TeacherNotFoundError } from '../../core/models/exceptions/TeacherNotFoundError';
 import { TeacherInvalidRequestError } from '../../core/models/exceptions/TeacherInvalidRequestError';
 import { TeacherAlreadyExistsError } from '../../core/models/exceptions/TeacherAlreadyExistsError';
 import { AuthenticatedRequest } from '../middleware/authMiddleWare';
-import { AddTeacherUseCase, AddTeacherRequest } from '../../core/usecases/addTeacherUseCase';
-import { UpdateTeacherUseCase } from '../../core/usecases/UpdateTeacherUseCase';
-import { DeleteTeacherUseCase } from '../../core/usecases/DeleteTeacherUseCase';
-import { EnableTeacherUseCase } from '../../core/usecases/EnableTeacherUseCase';
+import { AddTeacherRequest } from '../../core/usecases/addTeacherUseCase';
 
 interface AssignTeacherResponse {
     message?: string;
@@ -163,13 +160,45 @@ const getMyCourseDetails = async (req: Request, res: Response): Promise<void> =>
             return;
         }
 
+        const container = DependencyContainer.getInstance();
+
+        const course = await container.courseRepository.findById(courseId);
+        if (!course) {
+            res.status(404).json({ error: 'Curso no encontrado' });
+            return;
+        }
+
+        const studentsResponse = await container.getCourseStudentsUseCase.execute({ courseId });
+        const totalEstudiantes = studentsResponse.students.length;
+
+        const enabledGames = await container.courseRepository.getEnabledGamesByCourseId(courseId);
+        const juegosActivos = enabledGames.length;
+
+        const calculateTotalProgress = (student: any): number => {
+            if (!student?.progressByGame || Object.keys(student.progressByGame).length === 0) {
+                return 0;
+            }
+            const progressValues = Object.values(student.progressByGame).map((game: any) => game.averageScore || 0);
+            const sum = progressValues.reduce((acc: number, val: number) => acc + val, 0);
+            return Math.round(sum / progressValues.length);
+        };
+
+        let progresoPromedio = 0;
+        if (studentsResponse.students.length > 0) {
+            const totalProgress = studentsResponse.students.reduce((sum, student) => {
+                const studentProgress = calculateTotalProgress(student);
+                return sum + studentProgress;
+            }, 0);
+            progresoPromedio = Math.round(totalProgress / studentsResponse.students.length);
+        }
+
         const courseDetails = {
             id: courseId,
-            name: "3º A",
+            name: course.name,
             statistics: {
-                totalEstudiantes: 25,
-                juegosActivos: 6,
-                progresoPromedio: 78
+                totalEstudiantes,
+                juegosActivos,
+                progresoPromedio
             }
         };
         
