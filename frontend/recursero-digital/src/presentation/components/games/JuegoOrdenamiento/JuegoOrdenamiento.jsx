@@ -168,24 +168,10 @@ const JuegoOrdenamiento = () => {
     } else {  
       // Siempre desbloquea el siguiente nivel al completar todas las actividades
       unlockLevel('ordenamiento', currentLevel + 2);
-      
-      if (currentLevel < levelRanges.length - 1) {
-        if (currentLevel === 0 && levelRanges.length > 1) {
-          setCurrentLevel(1);
-          setCurrentActivity(0);
-          setLevelResults([]);
-          setShowPermanentHint(false);
-          setTimeout(() => setupLevel(1), 100);
-        } else if (currentLevel === levelRanges.length - 1) {
-          setShowGameComplete(true);
-        } else {
-          setShowLevelUp(true);
-        }
-      } else {
-        setShowGameComplete(true);
-      }
+      // Siempre muestra CongratsModal y el usuario elige manualmente el siguiente nivel
+      setShowLevelUp(true);
     }
-  }, [currentActivity, currentLevel, setupLevel, unlockLevel, backendLevels, levelRanges.length]);
+  }, [currentActivity, currentLevel, setupLevel, unlockLevel, backendLevels, startActivityTimer]);
 
   const handleDrop = useCallback((draggedNumber) => {
     const newTargetNumbers = [...targetNumbers, draggedNumber];

@@ -225,7 +225,7 @@ const JuegoEscala = () => {
             setCurrentActivity(prev => prev + 1);
             startActivityTimer();
         }
-    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel]);
+    }, [currentActivity, totalQuestions, currentLevel, unlockLevel, startActivityTimer]);
 
     const handleCloseFeedback = useCallback(() => {
         setShowFeedback(false);

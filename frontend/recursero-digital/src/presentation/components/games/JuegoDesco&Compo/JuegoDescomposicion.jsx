@@ -191,7 +191,7 @@ const JuegoDescomposicion = () => {
             resetAttempts();
             startActivityTimer();
         }
-    }, [currentActivity, totalQuestions, points, currentLevel, unlockLevel, resetAttempts, startActivityTimer]);
+    }, [currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer]);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
