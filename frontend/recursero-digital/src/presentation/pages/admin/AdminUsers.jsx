@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
 import AddUserForm from "./AddUserForm";
 import EditStudentForm from "./EditStudentForm";
-import DeleteStudentForm from "./DeleteStudentForm";
 import EditTeacherForm from "./EditTeacherForm";
-import DeleteTeacherForm from "./DeleteTeacherForm";
 import BulkUploadForm from "./BulkUploadForm";
 import "../../styles/pages/adminUsers.css";
 import AdminTeachers from "../admin/AdminTeachers";
-import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents, updateStudent, deleteStudent, updateTeacher, deleteTeacher, bulkUploadStudents } from "../../services/adminService";
+import { createStudent, getAllStudents, createTeacher, getAllTeachers, getAllCourses, getCourseStudents, updateStudent, deleteStudent, enableStudent, updateTeacher, deleteTeacher, enableTeacher, bulkUploadStudents } from "../../services/adminService";
 
 export default function AdminUsers() {
   const [activeTab, setActiveTab] = useState("students");
   const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showBulkUploadForm, setShowBulkUploadForm] = useState(false);
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
-  const [showDeleteStudentForm, setShowDeleteStudentForm] = useState(false);
   const [showEditTeacherForm, setShowEditTeacherForm] = useState(false);
-  const [showDeleteTeacherForm, setShowDeleteTeacherForm] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [students, setStudents] = useState([]);
@@ -52,7 +48,8 @@ export default function AdminUsers() {
               lastName: s.lastName,
               username: s.username,
               courseId: s.courseId || null,
-              status: "Activo",
+              enable: s.enable !== undefined ? s.enable : true,
+              status: s.enable !== false ? "Activo" : "Inactivo",
             }))
           );
         } else if (activeTab === "teachers") {
@@ -89,7 +86,8 @@ export default function AdminUsers() {
                 surname: teacher.surname,
                 username: teacher.username,
                 email: teacher.email,
-                status: "Activo",
+                enable: teacher.enable !== undefined ? teacher.enable : true,
+                status: teacher.enable !== false ? "Activo" : "Inactivo",
                 courses: teacherCourses,
                 students: Array.from(allStudents).map(id => ({ id })) // Array de IDs únicos
               };
@@ -133,7 +131,8 @@ export default function AdminUsers() {
           lastName: s.lastName,
           username: s.username,
           courseId: s.courseId || null,
-          status: "Activo",
+          enable: s.enable !== undefined ? s.enable : true,
+          status: s.enable !== false ? "Activo" : "Inactivo",
         }))
       );
       
@@ -158,9 +157,7 @@ export default function AdminUsers() {
     setShowAddUserForm(false);
     setShowBulkUploadForm(false);
     setShowEditStudentForm(false);
-    setShowDeleteStudentForm(false);
     setShowEditTeacherForm(false);
-    setShowDeleteTeacherForm(false);
     setSelectedStudent(null);
     setSelectedTeacher(null);
   };
@@ -170,9 +167,39 @@ export default function AdminUsers() {
     setShowEditStudentForm(true);
   };
 
-  const handleDeleteStudent = (student) => {
-    setSelectedStudent(student);
-    setShowDeleteStudentForm(true);
+  const handleToggleStudentStatus = async (student) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      if (student.enable === false) {
+        // Si está inactivo, activarlo
+        await enableStudent(student.id);
+      } else {
+        // Si está activo, desactivarlo
+        await deleteStudent(student.id);
+      }
+      
+      // Recargar estudiantes
+      const data = await getAllStudents();
+      setStudents(
+        data.map((s) => ({
+          id: s.id,
+          name: s.name || `${s.firstName} ${s.lastName}`,
+          firstName: s.firstName,
+          lastName: s.lastName,
+          username: s.username,
+          courseId: s.courseId || null,
+          enable: s.enable !== undefined ? s.enable : true,
+          status: s.enable !== false ? "Activo" : "Inactivo",
+        }))
+      );
+    } catch (err) {
+      console.error("Error al cambiar estado del estudiante:", err);
+      setError(err.message || "Error al cambiar estado del estudiante");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEditTeacher = (teacher) => {
@@ -180,9 +207,64 @@ export default function AdminUsers() {
     setShowEditTeacherForm(true);
   };
 
-  const handleDeleteTeacher = (teacher) => {
-    setSelectedTeacher(teacher);
-    setShowDeleteTeacherForm(true);
+  const handleToggleTeacherStatus = async (teacher) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      if (teacher.enable === false) {
+        // Si está inactivo, activarlo
+        await enableTeacher(teacher.id);
+      } else {
+        // Si está activo, desactivarlo
+        await deleteTeacher(teacher.id);
+      }
+      
+      // Recargar docentes
+      const [teachersData, coursesData] = await Promise.all([
+        getAllTeachers(),
+        getAllCourses()
+      ]);
+      
+      const teachersWithDetails = await Promise.all(
+        teachersData.map(async (teacher) => {
+          const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
+          const allStudents = new Set();
+          
+          for (const course of teacherCourses) {
+            try {
+              const courseStudents = await getCourseStudents(course.id);
+              if (Array.isArray(courseStudents)) {
+                courseStudents.forEach(student => allStudents.add(student.id));
+              }
+            } catch (err) {
+              console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
+            }
+          }
+          
+          return {
+            id: teacher.id,
+            name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
+            firstName: teacher.firstName || teacher.name,
+            lastName: teacher.lastName || teacher.surname,
+            surname: teacher.surname,
+            username: teacher.username,
+            email: teacher.email,
+            enable: teacher.enable !== undefined ? teacher.enable : true,
+            status: teacher.enable !== false ? "Activo" : "Inactivo",
+            courses: teacherCourses,
+            students: Array.from(allStudents).map(id => ({ id }))
+          };
+        })
+      );
+      
+      setTeachers(teachersWithDetails);
+    } catch (err) {
+      console.error("Error al cambiar estado del docente:", err);
+      setError(err.message || "Error al cambiar estado del docente");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUpdateStudent = async (studentData) => {
@@ -201,7 +283,8 @@ export default function AdminUsers() {
           lastName: s.lastName,
           username: s.username,
           courseId: s.courseId || null,
-          status: "Activo",
+          enable: s.enable !== undefined ? s.enable : true,
+          status: s.enable !== false ? "Activo" : "Inactivo",
         }))
       );
       
@@ -209,35 +292,6 @@ export default function AdminUsers() {
     } catch (err) {
       console.error("Error al actualizar estudiante:", err);
       setError(err.message || "Error al actualizar estudiante");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleConfirmDeleteStudent = async (student) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await deleteStudent(student.id);
-      
-      // Recargar estudiantes
-      const data = await getAllStudents();
-      setStudents(
-        data.map((s) => ({
-          id: s.id,
-          name: s.name || `${s.firstName} ${s.lastName}`,
-          firstName: s.firstName,
-          lastName: s.lastName,
-          username: s.username,
-          courseId: s.courseId || null,
-          status: "Activo",
-        }))
-      );
-      
-      handleCloseForm();
-    } catch (err) {
-      console.error("Error al eliminar estudiante:", err);
-      setError(err.message || "Error al eliminar estudiante");
     } finally {
       setLoading(false);
     }
@@ -276,7 +330,8 @@ export default function AdminUsers() {
             name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
             username: teacher.username,
             email: teacher.email,
-            status: "Activo",
+            enable: teacher.enable !== undefined ? teacher.enable : true,
+            status: teacher.enable !== false ? "Activo" : "Inactivo",
             courses: teacherCourses,
             students: Array.from(allStudents).map(id => ({ id }))
           };
@@ -288,56 +343,6 @@ export default function AdminUsers() {
     } catch (err) {
       console.error("Error al actualizar docente:", err);
       setError(err.message || "Error al actualizar docente");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleConfirmDeleteTeacher = async (teacher) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await deleteTeacher(teacher.id);
-      
-      // Recargar docentes
-      const [teachersData, coursesData] = await Promise.all([
-        getAllTeachers(),
-        getAllCourses()
-      ]);
-      
-      const teachersWithDetails = await Promise.all(
-        teachersData.map(async (teacher) => {
-          const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
-          const allStudents = new Set();
-          
-          for (const course of teacherCourses) {
-            try {
-              const courseStudents = await getCourseStudents(course.id);
-              if (Array.isArray(courseStudents)) {
-                courseStudents.forEach(student => allStudents.add(student.id));
-              }
-            } catch (err) {
-              console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
-            }
-          }
-          
-          return {
-            id: teacher.id,
-            name: teacher.fullName || `${teacher.name} ${teacher.surname}`,
-            username: teacher.username,
-            email: teacher.email,
-            status: "Activo",
-            courses: teacherCourses,
-            students: Array.from(allStudents).map(id => ({ id }))
-          };
-        })
-      );
-      
-      setTeachers(teachersWithDetails);
-      handleCloseForm();
-    } catch (err) {
-      console.error("Error al eliminar docente:", err);
-      setError(err.message || "Error al eliminar docente");
     } finally {
       setLoading(false);
     }
@@ -359,8 +364,9 @@ export default function AdminUsers() {
             firstName: s.firstName,
             lastName: s.lastName,
             username: s.username,
-            courseId: s.courseId || null,
-            status: "Activo",
+          courseId: s.courseId || null,
+          enable: s.enable !== undefined ? s.enable : true,
+          status: s.enable !== false ? "Activo" : "Inactivo",
           }))
         );
       } else if (activeTab === "teachers") {
@@ -401,7 +407,8 @@ export default function AdminUsers() {
               surname: teacher.surname,
               username: teacher.username,
               email: teacher.email,
-              status: "Activo",
+              enable: teacher.enable !== undefined ? teacher.enable : true,
+              status: teacher.enable !== false ? "Activo" : "Inactivo",
               courses: teacherCourses,
               students: Array.from(allStudents).map(id => ({ id }))
             };
@@ -486,11 +493,11 @@ export default function AdminUsers() {
                       Editar
                     </button>
                     <button 
-                      className="delete-botn" 
-                      onClick={() => handleDeleteStudent(student)}
+                      className={student.enable === false ? "activate-botn" : "delete-botn"} 
+                      onClick={() => handleToggleStudentStatus(student)}
                       disabled={loading}
                     >
-                      Eliminar
+                      {student.enable === false ? "Activar" : "Desactivar"}
                     </button>
                   </td>
                 </tr>
@@ -504,7 +511,7 @@ export default function AdminUsers() {
         <AdminTeachers 
           teachers={teachers} 
           onEdit={handleEditTeacher}
-          onDelete={handleDeleteTeacher}
+          onToggleStatus={handleToggleTeacherStatus}
         />
       )}
 
@@ -531,28 +538,12 @@ export default function AdminUsers() {
         />
       )}
 
-      {showDeleteStudentForm && selectedStudent && (
-        <DeleteStudentForm
-          onClose={handleCloseForm}
-          onConfirm={handleConfirmDeleteStudent}
-          student={selectedStudent}
-        />
-      )}
-
       {showEditTeacherForm && selectedTeacher && (
         <EditTeacherForm
           onClose={handleCloseForm}
           onSubmit={handleUpdateTeacher}
           teacher={selectedTeacher}
           courses={courses}
-        />
-      )}
-
-      {showDeleteTeacherForm && selectedTeacher && (
-        <DeleteTeacherForm
-          onClose={handleCloseForm}
-          onConfirm={handleConfirmDeleteTeacher}
-          teacher={selectedTeacher}
         />
       )}
 
