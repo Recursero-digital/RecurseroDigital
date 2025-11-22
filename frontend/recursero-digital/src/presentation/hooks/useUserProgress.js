@@ -82,6 +82,61 @@ const mergeProgress = (baseProgress, backendProgress) => {
   const merged = { ...DEFAULT_PROGRESS };
 
   backendProgress.forEach((progressItem) => {
+    if (progressItem.gameId === 'game-calculos') {
+      const statistics = progressItem.statistics || [];
+      
+      const operationProgress = {
+        'calculos-suma': 1,
+        'calculos-resta': 1,
+        'calculos-multiplicacion': 1
+      };
+      
+      const mapBackendLevelToOperation = (backendLevel) => {
+        if (backendLevel >= 1 && backendLevel <= 3) {
+          return { operation: 'calculos-suma', localLevel: backendLevel };
+        } else if (backendLevel >= 4 && backendLevel <= 6) {
+          return { operation: 'calculos-resta', localLevel: backendLevel - 3 };
+        } else if (backendLevel >= 7 && backendLevel <= 9) {
+          return { operation: 'calculos-multiplicacion', localLevel: backendLevel - 6 };
+        }
+        return null;
+      };
+      
+      statistics.forEach((stat) => {
+        if (!stat.isCompleted) {
+          return;
+        }
+        
+        const backendLevel = stat.level;
+        const levelInfo = mapBackendLevelToOperation(backendLevel);
+        
+        if (levelInfo) {
+          const { operation, localLevel } = levelInfo;
+          
+          if (localLevel > operationProgress[operation]) {
+            operationProgress[operation] = localLevel;
+          }
+          
+          if (stat.maxUnlockedLevel) {
+            const nextLevelInfo = mapBackendLevelToOperation(stat.maxUnlockedLevel);
+            
+            if (nextLevelInfo && nextLevelInfo.operation === operation) {
+              if (nextLevelInfo.localLevel > operationProgress[operation]) {
+                operationProgress[operation] = nextLevelInfo.localLevel;
+              }
+            }
+          }
+        }
+      });
+      
+      merged['calculos-suma'] = operationProgress['calculos-suma'];
+      merged['calculos-resta'] = operationProgress['calculos-resta'];
+      merged['calculos-multiplicacion'] = operationProgress['calculos-multiplicacion'];
+      
+      return;
+    }
+    
+    // Para otros juegos, usar la lógica original
     const progressKey = mapGameIdToProgressKey(progressItem.gameId);
     if (!progressKey) {
       return;
