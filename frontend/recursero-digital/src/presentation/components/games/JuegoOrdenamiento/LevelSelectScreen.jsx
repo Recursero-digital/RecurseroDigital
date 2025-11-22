@@ -1,31 +1,26 @@
 import React from 'react';
 import { useUserProgress } from '../../../hooks/useUserProgress';
-import { getLevelConfig, getOrderConfig } from './utils';
+import { getOrderConfig, formatNumber } from './utils';
 
-const LevelSelectScreen = ({ order, onSelectLevel, onBackToStart }) => {
+const LevelSelectScreen = ({ order, onSelectLevel, onBackToStart, backendLevels = [] }) => {
     const { isLevelUnlocked } = useUserProgress();
     const orderInfo = getOrderConfig(order);
     
-    const levels = [
-        { 
-          number: 1, 
-          ...getLevelConfig(1),
-          difficulty: "Fácil", 
-          color: "level-1" 
-        },
-        { 
-          number: 2, 
-          ...getLevelConfig(2),
-          difficulty: "Intermedio", 
-          color: "level-2" 
-        },
-        { 
-          number: 3, 
-          ...getLevelConfig(3),
-          difficulty: "Avanzado", 
-          color: "level-3" 
-        }
-    ];
+    
+    const formatRange = (min, max) => {
+        return `${formatNumber(min)} - ${formatNumber(max)}`;
+    };
+    
+    
+    const levels = backendLevels.map((level) => ({
+        number: level.level,
+        name: level.name,
+        range: formatRange(level.config.min, level.config.max),
+        difficulty: level.difficulty,
+        color: `level-${level.level}`,
+        min: level.config.min,
+        max: level.config.max
+    }));
 
     return (
         <div className="level-select-screen">
