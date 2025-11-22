@@ -5,6 +5,7 @@ import { generateHintExample } from './utils';
 const GameScreen = ({ 
     level, 
     activity, 
+    totalActivities = 5,
     points,
     attempts,
     numbers, 
@@ -54,7 +55,7 @@ const GameScreen = ({
                         <div className="status-item">
                             <div className="status-icon">📝</div>
                             <div className="status-label">Actividad</div>
-                            <div className="status-value">{activity}/5</div>
+                            <div className="status-value">{activity}/{totalActivities}</div>
                         </div>
                         <div className="status-item">
                             <div className="status-icon">⭐</div>

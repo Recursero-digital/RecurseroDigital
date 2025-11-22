@@ -6,6 +6,7 @@ const GameScreen = ({
   currentLevel, 
   currentActivity, 
   totalActivities,
+  completedActivities = 0,
   attempts,
   points,
   numbers,
@@ -17,7 +18,8 @@ const GameScreen = ({
   onBackToGames,
   generateHint,
   showPermanentHint,
-  order
+  order,
+  totalLevels
 }) => {
 
   const [shouldAnimateHint, setShouldAnimateHint] = useState(false);
@@ -133,7 +135,9 @@ const GameScreen = ({
   ));
 
   const availableNumbers = numbers.filter(num => !targetNumbers.includes(num));
-  const progressPercentage = currentLevel === 0 ? 0 : currentLevel === 1 ? 33 : 66;
+  const progressPercentage = totalActivities > 0
+    ? Math.round((completedActivities / totalActivities) * 100)
+    : 0;
 
   return (
     <div className="game-content">

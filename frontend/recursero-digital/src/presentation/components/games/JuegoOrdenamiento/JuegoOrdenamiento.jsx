@@ -229,7 +229,8 @@ const JuegoOrdenamiento = () => {
       {gameState === 'start' && (
         <StartScreen 
           onStart={handleSelectOrder} 
-          onBackToGames={handleBackToGames} 
+          onBackToGames={handleBackToGames}
+          totalLevels={backendLevels.length}
         />
       )}
       
@@ -237,7 +238,8 @@ const JuegoOrdenamiento = () => {
         <LevelSelectScreen 
           order={order}
           onSelectLevel={handleStartGame} 
-          onBackToStart={handleBackToStart} 
+          onBackToStart={handleBackToStart}
+          backendLevels={backendLevels}
         />
       )}
       
@@ -246,6 +248,7 @@ const JuegoOrdenamiento = () => {
           currentLevel={currentLevel}
           currentActivity={currentActivity}
           totalActivities={totalActivities}
+          completedActivities={levelResults.length}
           attempts={attempts}
           points={points}
           numbers={numbers}
@@ -260,6 +263,7 @@ const JuegoOrdenamiento = () => {
           showPermanentHint={showPermanentHint}
           levelRanges={levelRanges}
           order={order}
+          totalLevels={backendLevels.length}
         />
       )}
 
@@ -294,6 +298,7 @@ const JuegoOrdenamiento = () => {
             setShowLevelUp(false);
             setGameState('level-select');
           }}
+          totalLevels={backendLevels.length}
         />
       )}
     </div>

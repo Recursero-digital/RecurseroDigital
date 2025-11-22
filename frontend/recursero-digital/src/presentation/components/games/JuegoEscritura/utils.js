@@ -119,9 +119,10 @@ export function generateDragDropActivity(level, levelConfig = null, activitiesCo
     const baseNumbers = [];
     const usedNumbers = new Set();
     const maxAttempts = 100;
+    const numberOfOptions = 5; // Siempre 5 opciones independientemente de activitiesCount
     
     let attempts = 0;
-    while (baseNumbers.length < activitiesCount && attempts < maxAttempts) {
+    while (baseNumbers.length < numberOfOptions && attempts < maxAttempts) {
         const randomNumber = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
         attempts++;
 
