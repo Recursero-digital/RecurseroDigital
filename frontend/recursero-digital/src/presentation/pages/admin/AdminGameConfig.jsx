@@ -517,7 +517,7 @@ export default function AdminGameConfig() {
                         onClick={handleBackToGames}
                         className="btn-back"
                         style={{
-                            background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                            background: 'rgba(81, 55, 173, 0.788)',
                             color: 'white',
                             border: 'none'
                         }}
@@ -537,7 +537,7 @@ export default function AdminGameConfig() {
                         className="btn-back"
                         style={{
                             marginTop: '1rem',
-                            background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                            background: 'rgba(81, 55, 173, 0.788)',
                             color: 'white',
                             border: 'none'
                         }}
