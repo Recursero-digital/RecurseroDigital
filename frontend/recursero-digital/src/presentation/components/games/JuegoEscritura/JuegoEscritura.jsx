@@ -43,6 +43,14 @@ const JuegoEscritura = () => {
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escritura', true);
     const levels = useMemo(() => transformToEscrituraFormat(backendLevels), [backendLevels]);
     
+    
+    const totalActivities = useMemo(() => {
+        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
+            return backendLevels[currentLevel]?.activitiesCount || 5;
+        }
+        return 5; // Fallback por defecto
+    }, [backendLevels, currentLevel]);
+    
     useEffect(() => { 
         AOS.init(); 
     }, []);
@@ -56,9 +64,8 @@ const JuegoEscritura = () => {
             min: backendLevels[currentLevel]?.config?.min || 1,
             max: backendLevels[currentLevel]?.config?.max || 50
         };
-        const activitiesCount = backendLevels[currentLevel]?.activitiesCount || 5;
         
-        const activityData = generateDragDropActivity(currentLevel, levelConfig, activitiesCount);
+        const activityData = generateDragDropActivity(currentLevel, levelConfig);
         setNumbers(activityData.numbers);
         setWordPairs(activityData.wordPairs);
         setDragAnswers({});
@@ -76,9 +83,8 @@ const JuegoEscritura = () => {
                     min: backendLevels[currentLevel]?.config?.min || 1,
                     max: backendLevels[currentLevel]?.config?.max || 50
                 };
-                const activitiesCount = backendLevels[currentLevel]?.activitiesCount || 5;
                 
-                const activityData = generateDragDropActivity(currentLevel, levelConfig, activitiesCount);
+                const activityData = generateDragDropActivity(currentLevel, levelConfig);
                 setNumbers(activityData.numbers);
                 setWordPairs(activityData.wordPairs);
                 setDragAnswers({});
@@ -264,6 +270,7 @@ const JuegoEscritura = () => {
             {gameState === 'game' && <GameScreen
                 level={currentLevel + 1}
                 activity={currentActivity + 1}
+                totalActivities={totalActivities}
                 points={points}
                 attempts={attempts}
                 numbers={numbers}
