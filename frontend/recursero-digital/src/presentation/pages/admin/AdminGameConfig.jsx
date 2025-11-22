@@ -499,9 +499,7 @@ export default function AdminGameConfig() {
                                             <span className="game-stat-label">Actividades</span>
                                         </div>
                                     </div>
-                                    <div className="game-card-footer">
-                                        <p>Click para ver niveles</p>
-                                    </div>
+                     
                                 </div>
                             );
                         })}
@@ -514,6 +512,19 @@ export default function AdminGameConfig() {
     return (
         <div className="admin-game-levels">
             <div className="page-header">
+                <div className="page-header-top">
+                    <button 
+                        onClick={handleBackToGames}
+                        className="btn-back"
+                        style={{
+                            background: 'rgba(81, 55, 173, 0.788)',
+                            color: 'white',
+                            border: 'none'
+                        }}
+                    >
+                        ← Volver a juegos
+                    </button>
+                </div>
                 <h1>{getGameDisplayName(selectedGame.gameId)}</h1>
                 <p>Gestiona los niveles y configuraciones</p>
             </div>
@@ -521,6 +532,18 @@ export default function AdminGameConfig() {
             {levels.length === 0 ? (
                 <div className="no-levels">
                     <p>No hay niveles configurados para este juego</p>
+                    <button 
+                        onClick={handleBackToGames}
+                        className="btn-back"
+                        style={{
+                            marginTop: '1rem',
+                            background: 'rgba(81, 55, 173, 0.788)',
+                            color: 'white',
+                            border: 'none'
+                        }}
+                    >
+                        ← Volver a juegos
+                    </button>
                 </div>
             ) : (
                 <div className="levels-table-container">
