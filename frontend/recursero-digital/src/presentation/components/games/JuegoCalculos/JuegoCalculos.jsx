@@ -75,15 +75,22 @@ const JuegoCalculos = () => {
 
     const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
     
-    // Siempre completa la actividad y desbloquea el siguiente nivel
+    const operationOffset = {
+      'suma': 0,           
+      'resta': 3,           
+      'multiplicacion': 6  
+    };
+    
+    const backendLevel = levelNumber + operationOffset[selectedOperation];
+    const backendLevelIndex = backendLevel - 1;
+    
     completeActivity(
-      levelNumber - 1,           
+      backendLevelIndex,  
       'calculos',                
       0,                         
-      levelNumber                
+      backendLevel        
     );
     
-    // Siempre desbloquea el siguiente nivel si está disponible
     if (levelNumber < 3) {
       const gameId = `calculos-${selectedOperation}`;
       unlockLevel(gameId, levelNumber + 1);
