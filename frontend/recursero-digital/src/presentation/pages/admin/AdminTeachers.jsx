@@ -47,9 +47,6 @@ export default function AdminTeachers({ teachers = [], onEdit, onToggleStatus })
               <div key={teacher.id} className="teacher-card">
                 <div className="teacher-header">
                   <h3>{teacher.name}</h3>
-                  <span className={`teacher-status ${teacher.status.toLowerCase()}`}>
-                    {teacher.status}
-                  </span>
                 </div>
                 <div className="teacher-info">
                   <p><strong>Email:</strong> {teacher.email}</p>

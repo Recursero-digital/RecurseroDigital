@@ -168,7 +168,7 @@
   color: #742a2a;
 }
 
-.edit-botn, .delete-botn {
+.edit-botn, .delete-botn, .activate-botn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 0.25rem;
@@ -185,12 +185,12 @@
   color: #ffffff;
 }
 
-.delete-botn {
+.delete-botn, .activate-botn {
   background: #594a8f8a;
   color: white;
 }
 
-.edit-botn:hover, .delete-botn:hover {
+.edit-botn:hover, .delete-botn:hover, .activate-botn:hover {
   transform: translateY(-1px);
 }
 
