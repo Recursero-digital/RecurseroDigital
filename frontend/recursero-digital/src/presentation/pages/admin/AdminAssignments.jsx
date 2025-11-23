@@ -283,6 +283,10 @@ export default function AdminAssignments() {
           <div className="stat-numbers">{assignments.length}</div>
         </div>
         <div className="stat-card-assignments">
+          <h3>Asignaciones Activas</h3>
+          <div className="stat-numbers">{assignments.filter(a => a.status === 'Activa').length}</div>
+        </div>
+        <div className="stat-card-assignments">
           <h3>Estudiantes Asignados</h3>
           <div className="stat-numbers">{assignments.reduce((acc, a) => acc + a.studentsCount, 0)}</div>
         </div>

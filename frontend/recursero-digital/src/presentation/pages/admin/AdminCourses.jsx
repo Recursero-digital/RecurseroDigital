@@ -252,6 +252,10 @@ export default function AdminCourses() {
           <span className="summary-label">Total Cursos</span>
         </div>
         <div className="summary-item">
+          <span className="summary-number">{courses.filter(c => c.status === 'Activo').length}</span>
+          <span className="summary-label">Cursos Activos</span>
+        </div>
+        <div className="summary-item">
           <span className="summary-number">{courses.reduce((acc, c) => acc + c.students, 0)}</span>
           <span className="summary-label">Total Estudiantes</span>
         </div>

@@ -5,44 +5,23 @@ import '../../styles/pages/homeAdmin.css';
 export default function HomeAdmin() {
   const navigate = useNavigate();
 
-  const adminCards = [
-    {
-      title: "Usuarios",
-      description: "Gestiona estudiantes y docentes",
-      icon: "👥",
-      href: "/admin/usuarios",
-      gradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1))",
-      iconColor: "#2563eb",
-      borderColor: "rgba(59, 130, 246, 0.3)",
-    },
-    {
-      title: "Cursos",
-      description: "Administra cursos del sistema",
-      icon: "📚",
-      href: "/admin/cursos",
-      gradient: "linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1))",
-      iconColor: "#9333ea",
-      borderColor: "rgba(168, 85, 247, 0.3)",
-    },
-    {
-      title: "Asignaciones",
-      description: "Administra asignaciones activas",
-      icon: "📋",
-      href: "/admin/asignaciones",
-      gradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1))",
-      iconColor: "#059669",
-      borderColor: "rgba(16, 185, 129, 0.3)",
-    },
-    {
-      title: "Configuración Juegos",
-      description: "Gestiona niveles y configuraciones de juegos",
-      icon: "🎮",
-      href: "/admin/config-juegos",
-      gradient: "linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1))",
-      iconColor: "#ea580c",
-      borderColor: "rgba(249, 115, 22, 0.3)",
-    },
-  ];
+  const handleAgregarUsuario = () => {
+    navigate('/admin/usuarios');
+  };
+
+  const handleCrearCurso = () => {
+    navigate('/admin/cursos');
+  };
+
+  const handleNuevaAsignacion = () => {
+    navigate('/admin/asignaciones');
+  };
+
+  const handleConfigJuegos = () => {
+    navigate('/admin/config-juegos');
+  };
+
+ 
 
   return (
     <div className="home-admin">
@@ -51,57 +30,64 @@ export default function HomeAdmin() {
         <p>Panel de control principal del sistema</p>
       </div>
 
-      <div className="admin-cards-grid">
-        {adminCards.map((card) => (
-          <div
-            key={card.title}
-            className="admin-card-modern"
-            onClick={() => navigate(card.href)}
-          >
-            {/* Gradient Background on Hover */}
-            <div
-              className="card-gradient-bg"
-              style={{ background: card.gradient }}
-            />
-
-            {/* Content */}
-            <div className="card-content-modern">
-              {/* Icon Container */}
-              <div
-                className="card-icon-container"
-                style={{
-                  background: card.gradient,
-                  borderColor: card.borderColor
-                }}
-              >
-                <span className="card-icon-modern">{card.icon}</span>
-              </div>
-
-              {/* Text Content */}
-              <h3 className="card-title-modern">{card.title}</h3>
-              <p className="card-description-modern">{card.description}</p>
-
-              {/* Hover Arrow */}
-              <div className="card-action">
-                <span>Gestionar</span>
-                <svg
-                  className="card-arrow"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Decorative Corner */}
-            <div className="card-decorative-corner">
-              <span>{card.icon}</span>
-            </div>
+      <div className="admin-overview">
+        <div className="overview-card">
+          <div className="card-icon"> 👥</div>
+          <div className="card-content">
+            <h3> Usuarios</h3>
+            <p>Gestiona estudiantes y docentes</p>
           </div>
-        ))}
+        </div>
+
+        <div className="overview-card">
+          <div className="card-icon">📚</div>
+          <div className="card-content">
+            <h3>Cursos</h3>
+            <p>Administra cursos del sistema</p>
+          </div>
+        </div>
+
+
+
+        <div className="overview-card">
+          <div className="card-icon">📋</div>
+          <div className="card-content">
+            <h3>Asignaciones</h3>
+            <p>Administra asignaciones activas</p>
+          </div>
+        </div>
+
+        <div className="overview-card">
+          <div className="card-icon">🎮</div>
+          <div className="card-content">
+            <h3>Configuración Juegos</h3>
+            <p>Gestiona niveles y configuraciones de juegos</p>
+          </div>
+        </div>
       </div>
+
+      <div className="admin-quick-actions">
+        <h2>Acciones Rápidas</h2>
+        <div className="actions-grid">
+          <button className="action-card-admin" onClick={handleAgregarUsuario}> 
+            <span className="action-icon">➕</span>
+            <span className="action-text">Agregar Usuario</span>
+          </button>
+          <button className="action-card-admin" onClick={handleCrearCurso}>
+            <span className="action-icon">📖</span>
+            <span className="action-text">Crear Curso</span>
+          </button>
+          <button className="action-card-admin" onClick={handleNuevaAsignacion}>
+            <span className="action-icon">🔗</span>
+            <span className="action-text">Nueva Asignación</span>
+          </button>
+          <button className="action-card-admin" onClick={handleConfigJuegos}>
+            <span className="action-icon">🎯</span>
+            <span className="action-text">Configuración Juegos</span>
+          </button>
+        </div>
+      </div>
+
 
     </div>
   );
