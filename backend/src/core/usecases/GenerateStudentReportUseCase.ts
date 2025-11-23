@@ -3,6 +3,9 @@ import { StudentStatisticsRepository } from '../infrastructure/StudentStatistics
 import { StudentStatistics } from '../models/StudentStatistics';
 import { StudentNotFoundError } from '../models/exceptions/StudentNotFoundError';
 import { AiTextGenerator } from '../services/AiTextGenerator';
+import { StudentStatisticsAggregator } from '../services/StudentStatisticsAggregator';
+import { GameLevelRepository } from '../infrastructure/GameLevelRepository';
+import { StudentProgressCalculator } from '../services/StudentProgressCalculator';
 
 export interface GenerateStudentReportRequest {
     studentId: string;
@@ -32,15 +35,23 @@ export class GenerateStudentReportUseCase {
     private readonly studentRepository: StudentRepository;
     private readonly statisticsRepository: StudentStatisticsRepository;
     private readonly aiTextGenerator: AiTextGenerator;
+    private readonly statisticsAggregator: StudentStatisticsAggregator;
+    private readonly progressCalculator: StudentProgressCalculator;
 
     constructor(
         studentRepository: StudentRepository,
         statisticsRepository: StudentStatisticsRepository,
-        aiTextGenerator: AiTextGenerator
+        aiTextGenerator: AiTextGenerator,
+        gameLevelRepository: GameLevelRepository
     ) {
         this.studentRepository = studentRepository;
         this.statisticsRepository = statisticsRepository;
         this.aiTextGenerator = aiTextGenerator;
+        this.statisticsAggregator = new StudentStatisticsAggregator();
+        this.progressCalculator = new StudentProgressCalculator(
+            statisticsRepository,
+            gameLevelRepository
+        );
     }
 
     async execute(request: GenerateStudentReportRequest): Promise<GenerateStudentReportResponse> {
@@ -67,11 +78,21 @@ export class GenerateStudentReportUseCase {
             };
         }
 
+        const aggregatedStats = this.statisticsAggregator.aggregate(statistics);
         const aggregates = this.aggregateStatistics(statistics, windowStart);
+        
+        const progressByGameWithPercentage = await this.calculateProgressWithPercentage(
+            request.studentId,
+            aggregatedStats.progressByGame
+        );
+        
         const prompt = this.buildPrompt({
+            studentName: student.name,
+            studentLastname: student.lastname,
             recentDays,
             stats: statistics,
             aggregates,
+            progressByGame: progressByGameWithPercentage,
             windowStart,
             now
         });
@@ -126,61 +147,106 @@ export class GenerateStudentReportUseCase {
     }
 
     private buildPrompt(params: {
+        studentName: string;
+        studentLastname: string;
         recentDays: number;
         stats: StudentStatistics[];
         aggregates: GameAggregate[];
+        progressByGame: Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }>;
         windowStart: Date;
         now: Date;
     }): string {
-        const { recentDays, stats, aggregates, windowStart, now } = params;
+        const { studentName, studentLastname, recentDays, stats, aggregates, progressByGame, windowStart, now } = params;
+
+        const gameNames: Record<string, string> = {
+            'ordenamiento': 'Ordenamiento',
+            'escritura': 'Escritura',
+            'descomposicion': 'Descomposición',
+            'escala': 'Escala Numérica',
+            'calculos': 'Cálculos'
+        };
+
+        const perGameDetails = Object.entries(progressByGame).map(([gameId, progress]) => {
+            const gameName = gameNames[gameId] || gameId;
+            const timeMinutes = Math.round(progress.totalTime / 60);
+            const progressPercentage = progress.averageScore;
+            
+            return `- ${gameName}:
+  * Actividades completadas: ${progress.completed}
+  * Tiempo total invertido: ${timeMinutes} minutos
+  * Progreso: ${progressPercentage}%
+  * Total de reintentos: ${progress.totalAttempts}`;
+        }).join('\n');
 
         const totalPoints = stats.reduce((sum, stat) => sum + stat.points, 0);
         const completedLevels = stats.filter((stat) => stat.isCompleted).length;
-        const averageAccuracy = (stats.reduce((sum, stat) => sum + stat.getAccuracy(), 0) / stats.length) * 100;
+        const averageAccuracy = stats.length > 0 ? (stats.reduce((sum, stat) => sum + stat.getAccuracy(), 0) / stats.length) * 100 : 0;
         const totalAttempts = stats.reduce((sum, stat) => sum + stat.attempts, 0);
-        const lastActivity = stats.reduce(
+        const lastActivity = stats.length > 0 ? stats.reduce(
             (latest, current) => (current.createdAt > latest ? current.createdAt : latest),
             stats[0].createdAt
-        );
-        const recentStats = stats.filter((stat) => stat.createdAt >= windowStart);
-        const recentPoints = recentStats.reduce((sum, stat) => sum + stat.points, 0);
-        const recentAccuracy = recentStats.length > 0
-            ? (recentStats.reduce((sum, stat) => sum + stat.getAccuracy(), 0) / recentStats.length) * 100
-            : 0;
+        ) : null;
 
-        const perGameLines = aggregates.map((game) => {
-            const lastActivityDate = game.lastActivity ? this.formatDate(game.lastActivity) : 'Sin registros';
-            return `Juego ${game.gameId}: sesiones=${game.totalSessions}, puntos=${game.totalPoints}, ` +
-                `nivel_máximo=${game.maxUnlockedLevel}, precisión_promedio=${game.averageAccuracy.toFixed(1)}%, ` +
-                `tasa_finalización=${game.completionRate.toFixed(1)}%, ` +
-                `sesiones_recientes=${game.recentSessions}, puntos_recientes=${game.recentPoints}, ` +
-                `última_actividad=${lastActivityDate}`;
-        }).join('\n');
+        return `Eres un tutor pedagógico especializado en matemática para nivel primario que redacta reportes pedagógicos detallados en español.
 
-        return `Eres un tutor pedagógico que redacta reportes en español claro y breve.
-Contexto: datos estadísticos de un estudiante de juegos en clase.
-Registros analizados: ${stats.length}
-Total de puntos acumulados: ${totalPoints}
-Promedio general de precisión: ${averageAccuracy.toFixed(1)}%
-Intentos totales: ${totalAttempts}
-Niveles completados: ${completedLevels}
-Última actividad registrada: ${this.formatDate(lastActivity)}
+ESTADÍSTICAS POR JUEGO:
 
-Resumen por juego:
-${perGameLines}
+${perGameDetails}
 
-Rendimiento de los últimos ${recentDays} días (desde ${this.formatDate(windowStart)} hasta ${this.formatDate(now)}):
-- Sesiones registradas: ${recentStats.length}
-- Puntos obtenidos: ${recentPoints}
-- Precisión promedio reciente: ${recentAccuracy.toFixed(1)}%
+MÉTRICAS GENERALES:
+- Total de actividades completadas: ${completedLevels}
+- Puntos totales acumulados: ${totalPoints}
+- Precisión promedio: ${averageAccuracy.toFixed(1)}%
+- Total de reintentos: ${totalAttempts}
+- Última actividad: ${lastActivity ? this.formatDate(lastActivity) : 'Sin registros'}
 
-Objetivo: genera un informe de máximo 4 párrafos que incluya
-1) visión general del progreso del estudiante,
-2) tendencias de los últimos días,
-3) fortalezas detectadas,
-4) sugerencias concretas de mejora para los próximos días.
-Es para un docente. Devolve unicamente una respuesta pura en texto, dado que soy una api y necesito retornar un string. 
-Por favor, retorna la respuesta sin estilo, ni emojis, ni negrita. Solo texto sin formato para procesar tu respuesta dentro de un string.`;
+INSTRUCCIONES PARA EL REPORTE:
+
+Genera un reporte pedagógico estructurado en el siguiente formato EXACTO:
+
+1. **Resumen General del Estudiante**
+   Inicia con "Resumen General del Estudiante" y proporciona una visión general del desempeño en 2-3 oraciones, destacando fortalezas y áreas de mejora principales. Usa referencias genéricas como "el estudiante" o "el alumno", nunca uses nombres propios.
+
+2. **🌟 Puntos Fuertes**
+   Lista los juegos donde el estudiante tiene mejor desempeño (alto progreso, pocos reintentos, tiempo eficiente). Para cada juego menciona el progreso porcentual y destaca qué lo hace destacable. Usa referencias genéricas como "el estudiante".
+
+3. **⚠️ A Reforzar**
+   Lista los juegos donde el estudiante tiene dificultades (bajo progreso, muchos reintentos, o combinaciones que indiquen falta de comprensión). Para cada juego explica específicamente qué indicadores muestran la dificultad y por qué es preocupante. Usa referencias genéricas como "el estudiante".
+
+4. **💡 Recomendación**
+   Proporciona una recomendación pedagógica concreta y accionable (máximo 2-3 oraciones) sobre cómo el docente puede ayudar al estudiante a mejorar.
+
+IMPORTANTE:
+- Usa el formato exacto con los títulos: "Resumen General del Estudiante", "🌟 Puntos Fuertes", "⚠️ A Reforzar", "💡 Recomendación"
+- Incluye emojis tal como se indican en los títulos
+- NO uses nombres propios ni información que pueda identificar al estudiante. Usa siempre referencias genéricas como "el estudiante", "el alumno" o "este estudiante"
+- Sé específico con porcentajes, cantidades de actividades y reintentos
+- Interpreta los datos: si hay muchos reintentos con bajo progreso, sugiere que está adivinando. Si hay poco tiempo con alto progreso, destaca la eficiencia.
+- El reporte debe ser profesional pero accesible para docentes
+- Máximo 1 párrafo por sección, excepto el resumen que puede tener 2-3 oraciones`;
+    }
+
+    private async calculateProgressWithPercentage(
+        studentId: string,
+        progressByGame: Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }>
+    ): Promise<Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }>> {
+        const updatedProgress: Record<string, { completed: number; totalTime: number; averageScore: number; totalAttempts: number }> = {};
+        
+        for (const [gameId, progress] of Object.entries(progressByGame)) {
+            const fullGameId = gameId.startsWith('game-') ? gameId : `game-${gameId}`;
+            const progressData = await this.progressCalculator.calculateStudentProgress(studentId, fullGameId);
+            
+            updatedProgress[gameId] = {
+                ...progress,
+                averageScore: Math.round(progressData.percentage)
+            };
+        }
+        
+        return updatedProgress;
+    }
+
+    private normalizeGameId(gameId: string): string {
+        return gameId.startsWith('game-') ? gameId.replace('game-', '') : gameId;
     }
 
     private formatDate(date: Date): string {
