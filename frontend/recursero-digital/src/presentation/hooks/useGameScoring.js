@@ -88,7 +88,7 @@ const useGameScoring = () => {
           activity,
           points: points + activityScore, // Puntos totales después de sumar esta actividad
           activityScore,
-          attempts,
+          attempts: additionalData.attempts !== undefined ? additionalData.attempts : attempts,
           maxUnlockedLevel,
           startTime: activityStartTime, // Tiempo de inicio
           endTime: endTime, // Tiempo de finalización
