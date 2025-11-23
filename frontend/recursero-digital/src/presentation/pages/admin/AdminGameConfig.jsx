@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowDownUp, Puzzle, Ruler, PenLine, Calculator, ArrowRight, ChevronLeft } from 'lucide-react';
 import '../../../styles/pages/adminGameLevels.css';
 import { API_BASE_URL } from '../../../infrastructure/config/api';
 
@@ -11,12 +11,40 @@ const GAME_NAMES = {
     'game-calculos': 'Cálculos'
 };
 
-const GAME_ICONS = {
-    'game-ordenamiento': '🔢',
-    'game-descomposicion': '🧩',
-    'game-escala': '📏',
-    'game-escritura': '✍️',
-    'game-calculos': '➕'
+const GAME_ICON_COMPONENTS = {
+    'game-ordenamiento': ArrowDownUp,
+    'game-descomposicion': Puzzle,
+    'game-escala': Ruler,
+    'game-escritura': PenLine,
+    'game-calculos': Calculator
+};
+
+const GAME_COLORS = {
+    'game-ordenamiento': {
+        bg: 'from-blue-500/10 to-blue-600/10',
+        icon: 'text-blue-600',
+        iconBg: 'bg-blue-100'
+    },
+    'game-descomposicion': {
+        bg: 'from-purple-500/10 to-purple-600/10',
+        icon: 'text-purple-600',
+        iconBg: 'bg-purple-100'
+    },
+    'game-escala': {
+        bg: 'from-green-500/10 to-green-600/10',
+        icon: 'text-green-600',
+        iconBg: 'bg-green-100'
+    },
+    'game-escritura': {
+        bg: 'from-orange-500/10 to-orange-600/10',
+        icon: 'text-orange-600',
+        iconBg: 'bg-orange-100'
+    },
+    'game-calculos': {
+        bg: 'from-pink-500/10 to-pink-600/10',
+        icon: 'text-pink-600',
+        iconBg: 'bg-pink-100'
+    }
 };
 
 const DIFFICULTY_OPTIONS = ['Fácil', 'Medio', 'Difícil'];
@@ -286,12 +314,12 @@ function ConfigEditor({ gameId, config, onChange }) {
                         value={JSON.stringify(localConfig, null, 2)}
                         onChange={(e) => {
                             try {
-                                const parsed = JSON.parse(e.target.value);
-                                setLocalConfig(parsed);
-                                onChange(parsed);
-                            } catch (err) {
-                                // Invalid JSON, don't update
-                            }
+                const parsed = JSON.parse(e.target.value);
+                setLocalConfig(parsed);
+                onChange(parsed);
+              } catch {
+                // Invalid JSON, don't update
+              }
                         }}
                         className="config-json"
                         rows="4"
@@ -302,7 +330,6 @@ function ConfigEditor({ gameId, config, onChange }) {
 }
 
 export default function AdminGameConfig() {
-    const navigate = useNavigate();
     const [games, setGames] = useState([]);
     const [selectedGame, setSelectedGame] = useState(null);
     const [levels, setLevels] = useState([]);
@@ -474,32 +501,54 @@ export default function AdminGameConfig() {
                         <p>No hay juegos configurados</p>
                     </div>
                 ) : (
-                    <div className="games-grid">
+                    <div className="games-grid-modern">
                         {games.map((game) => {
                             const totalActivities = game.levels?.reduce((sum, level) => sum + (level.activitiesCount || 0), 0) || 0;
+                            const IconComponent = GAME_ICON_COMPONENTS[game.gameId];
+                            const colors = GAME_COLORS[game.gameId] || {
+                                bg: 'from-gray-500/10 to-gray-600/10',
+                                icon: 'text-gray-600',
+                                iconBg: 'bg-gray-100'
+                            };
+
                             return (
-                                <div 
-                                    key={game.gameId} 
-                                    className="game-card clickable"
+                                <div
+                                    key={game.gameId}
                                     onClick={() => handleSelectGame(game)}
+                                    className="game-card-v0"
                                 >
-                                    <div className="game-card-header">
-                                        <h2>
-                                            <span className="game-icon">{GAME_ICONS[game.gameId] || '🎮'}</span>
-                                            {getGameDisplayName(game.gameId)}
-                                        </h2>
-                                    </div>
-                                    <div className="game-info">
-                                        <div className="game-stat-item">
-                                            <span className="game-stat-number">{game.totalLevels}</span>
-                                            <span className="game-stat-label">Niveles</span>
+                                    <div className={`game-card-gradient ${colors.bg}`} />
+
+                                    <div className="game-card-content">
+                                        <div className="game-card-header-v0">
+                                            <div className="game-icon-wrapper-v0">
+                                                <div className={`game-icon-bg ${colors.iconBg}`}>
+                                                    {IconComponent && <IconComponent className={`game-icon-svg ${colors.icon}`} />}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h3 className="game-title-v0">
+                                                    {getGameDisplayName(game.gameId)}
+                                                </h3>
+                                            </div>
                                         </div>
-                                        <div className="game-stat-item">
-                                            <span className="game-stat-number">{totalActivities}</span>
-                                            <span className="game-stat-label">Actividades</span>
+
+                                        <div className="game-stats-v0">
+                                            <div className="game-stat-col">
+                                                <span className="stat-number-v0">{game.totalLevels}</span>
+                                                <span className="stat-label-v0">Niveles</span>
+                                            </div>
+                                            <div className="game-stat-col">
+                                                <span className="stat-number-v0">{totalActivities}</span>
+                                                <span className="stat-label-v0">Actividades</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="game-action-v0">
+                                            <span>Gestionar</span>
+                                            <ArrowRight className="arrow-icon-v0" />
                                         </div>
                                     </div>
-                     
                                 </div>
                             );
                         })}
@@ -515,14 +564,10 @@ export default function AdminGameConfig() {
                 <div className="page-header-top">
                     <button 
                         onClick={handleBackToGames}
-                        className="btn-back"
-                        style={{
-                            background: 'rgba(81, 55, 173, 0.788)',
-                            color: 'white',
-                            border: 'none'
-                        }}
+                        className="btn-back-v0"
                     >
-                        ← Volver a juegos
+                        <ChevronLeft className="w-4 h-4" />
+                        Volver a juegos
                     </button>
                 </div>
                 <h1>{getGameDisplayName(selectedGame.gameId)}</h1>
@@ -534,15 +579,11 @@ export default function AdminGameConfig() {
                     <p>No hay niveles configurados para este juego</p>
                     <button 
                         onClick={handleBackToGames}
-                        className="btn-back"
-                        style={{
-                            marginTop: '1rem',
-                            background: 'rgba(81, 55, 173, 0.788)',
-                            color: 'white',
-                            border: 'none'
-                        }}
+                        className="btn-back-v0"
+                        style={{ marginTop: '1rem' }}
                     >
-                        ← Volver a juegos
+                        <ChevronLeft className="w-4 h-4" />
+                        Volver a juegos
                     </button>
                 </div>
             ) : (
