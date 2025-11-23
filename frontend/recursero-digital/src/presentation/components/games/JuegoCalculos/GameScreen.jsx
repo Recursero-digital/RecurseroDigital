@@ -17,7 +17,8 @@ const GameScreen = ({
   onGameComplete, 
   onBackToLevelSelect,
   onUpdateScore,
-  onUpdateAttempts 
+  onUpdateAttempts,
+  onActivityComplete
 }) => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -27,7 +28,7 @@ const GameScreen = ({
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [feedbackType, setFeedbackType] = useState(''); // 'success' or 'error'
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
-  const [attempts, setAttempts] = useState(1); // Attempts for current question
+  const [attempts, setAttempts] = useState(0); // Attempts for current question
   const [totalAttempts, setTotalAttempts] = useState(0); // Total attempts for the entire game
   const [correctAnswers, setCorrectAnswers] = useState(0);
   
@@ -45,7 +46,7 @@ const GameScreen = ({
     setFeedbackMessage('');
     setFeedbackType('');
     setIsAnswerSubmitted(false);
-    setAttempts(1);
+    setAttempts(0);
     setTotalAttempts(0);
     setCorrectAnswers(0);
   }, [operation, level]);
@@ -65,68 +66,61 @@ const GameScreen = ({
     const isCorrect = validateAnswer(userAnswerNum, currentQuestion.respuesta);
     
     setIsAnswerSubmitted(true);
-    // Increment total attempts every time a user submits an answer
-    setTotalAttempts(prev => prev + 1);
-    onUpdateAttempts();
 
     if (isCorrect) {
-      // Correct answer
       const pointsEarned = calculatePoints();
       setScore(prev => prev + pointsEarned);
-      setCorrectAnswers(prev => prev + 1);
+      const newCorrectAnswers = correctAnswers + 1;
+      setCorrectAnswers(newCorrectAnswers);
       onUpdateScore(pointsEarned);
+      
+      if (onActivityComplete) {
+        onActivityComplete(currentQuestionIndex, attempts, 1, 1);
+      }
       
       setFeedbackMessage(`${getRandomEncouragement()} +${pointsEarned} puntos`);
       setFeedbackType('success');
       setShowFeedback(true);
 
-      // Move to next question after delay
       setTimeout(() => {
         if (isLastQuestion) {
-          // Final score and result calculation
-          const finalCorrectAnswers = correctAnswers + 1;
           const finalScore = score + pointsEarned;
-          const isWin = finalCorrectAnswers >= Math.ceil(questions.length * 0.6); // Need 60% or more to win
-          onGameComplete(isWin, finalScore, finalCorrectAnswers, questions.length, totalAttempts);
+          const isWin = newCorrectAnswers >= Math.ceil(questions.length * 0.6);
+          onGameComplete(isWin, finalScore, newCorrectAnswers, questions.length, totalAttempts);
         } else {
           nextQuestion();
         }
       }, 1500);
     } else {
-      // Wrong answer
-      setFeedbackMessage(`${getRandomMotivation()} La respuesta correcta era ${formatNumber(currentQuestion.respuesta)}`);
+      setAttempts(prev => prev + 1);
+      setTotalAttempts(prev => prev + 1);
+      onUpdateAttempts();
+      
+      setFeedbackMessage(getRandomMotivation());
       setFeedbackType('error');
       setShowFeedback(true);
-      setAttempts(prev => prev + 1);
 
-      // Continue to next question after showing feedback
       setTimeout(() => {
-        if (isLastQuestion) {
-          // Final result calculation
-          const isWin = correctAnswers >= Math.ceil(questions.length * 0.6); // Need 60% or more to win
-          onGameComplete(isWin, score, correctAnswers, questions.length, totalAttempts);
-        } else {
-          nextQuestion();
-        }
+        setUserAnswer('');
+        setIsAnswerSubmitted(false);
+        setShowFeedback(false);
       }, 2000);
     }
   };
 
-  // Calculate points based on level and attempts
   const calculatePoints = () => {
     const levelNumber = parseInt(level.replace('nivel', ''));
     const baseScore = 50 * levelNumber;
-    const penalty = (attempts - 1) * 10;
+    const penalty = attempts * 10;
     return Math.max(10, baseScore - penalty);
   };
 
-  // Move to next question
   const nextQuestion = () => {
     setCurrentQuestionIndex(prev => prev + 1);
     setUserAnswer('');
     setShowFeedback(false);
     setIsAnswerSubmitted(false);
-    setAttempts(1);
+    setAttempts(0);
   };
 
   // Handle Enter key press
@@ -190,7 +184,7 @@ const GameScreen = ({
             <div className="status-item">
               <div className="status-icon">🎯</div>
               <div className="status-label">Intentos</div>
-              <div className="status-value">{totalAttempts}</div>
+              <div className="status-value">{attempts}</div>
             </div>
           </div>
         </div>

@@ -52,6 +52,31 @@ const JuegoCalculos = () => {
     startActivityTimer();
   }, [resetScoring, startActivityTimer]);
 
+  const handleActivityComplete = useCallback((activityIndex, attempts, correctAnswers, totalQuestions) => {
+    const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
+    
+    const operationOffset = {
+      'suma': 0,           
+      'resta': 3,           
+      'multiplicacion': 6  
+    };
+    
+    const backendLevel = levelNumber + operationOffset[selectedOperation];
+    const backendLevelIndex = backendLevel - 1;
+    
+    completeActivity(
+      backendLevelIndex,  
+      'calculos',                
+      activityIndex,                 
+      backendLevel,
+      {
+        correctAnswers,
+        totalQuestions,
+        attempts: attempts
+      }
+    );
+  }, [selectedLevel, selectedOperation, completeActivity]);
+
   const handleBackToStart = useCallback(() => {
     setSelectedOperation(null);
     setSelectedLevel(null);
@@ -81,19 +106,6 @@ const JuegoCalculos = () => {
       'multiplicacion': 6  
     };
     
-    const backendLevel = levelNumber + operationOffset[selectedOperation];
-    const backendLevelIndex = backendLevel - 1;
-    
-    completeActivity(
-      backendLevelIndex,  
-      'calculos',                
-      0,                         
-      backendLevel,
-      {
-        correctAnswers,
-        totalQuestions
-      }
-    );
     
     if (levelNumber < 3) {
       const gameId = `calculos-${selectedOperation}`;
@@ -156,6 +168,7 @@ const JuegoCalculos = () => {
             onBackToLevelSelect={handleBackToLevelSelect}
             onUpdateScore={handleUpdateScore}
             onUpdateAttempts={handleUpdateAttempts}
+            onActivityComplete={handleActivityComplete}
           />
         );
 
