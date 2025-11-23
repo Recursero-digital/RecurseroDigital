@@ -41,16 +41,20 @@ export default function AdminUsers() {
         if (activeTab === "students") {
           const data = await getAllStudents();
           setStudents(
-            data.map((s) => ({
-              id: s.id,
-              name: s.name || `${s.firstName} ${s.lastName}`,
-              firstName: s.firstName,
-              lastName: s.lastName,
-              username: s.username,
-              courseId: s.courseId || null,
-              enable: s.enable !== undefined ? s.enable : true,
-              status: s.enable !== false ? "Activo" : "Inactivo",
-            }))
+            data.map((s) => {
+              const course = coursesData.find(c => c.id === s.courseId);
+              return {
+                id: s.id,
+                name: s.name || `${s.firstName} ${s.lastName}`,
+                firstName: s.firstName,
+                lastName: s.lastName,
+                username: s.username,
+                courseId: s.courseId || null,
+                courseName: course ? course.name : 'Sin curso',
+                enable: s.enable !== undefined ? s.enable : true,
+                status: s.enable !== false ? "Activo" : "Inactivo",
+              };
+            })
           );
         } else if (activeTab === "teachers") {
           const [teachersData, coursesData] = await Promise.all([
@@ -124,16 +128,20 @@ export default function AdminUsers() {
       // Recargar la lista de estudiantes
       const data = await getAllStudents();
       setStudents(
-        data.map((s) => ({
-          id: s.id,
-          name: s.name || s.firstName + " " + s.lastName,
-          firstName: s.firstName,
-          lastName: s.lastName,
-          username: s.username,
-          courseId: s.courseId || null,
-          enable: s.enable !== undefined ? s.enable : true,
-          status: s.enable !== false ? "Activo" : "Inactivo",
-        }))
+        data.map((s) => {
+          const course = courses.find(c => c.id === s.courseId);
+          return {
+            id: s.id,
+            name: s.name || s.firstName + " " + s.lastName,
+            firstName: s.firstName,
+            lastName: s.lastName,
+            username: s.username,
+            courseId: s.courseId || null,
+            courseName: course ? course.name : 'Sin curso',
+            enable: s.enable !== undefined ? s.enable : true,
+            status: s.enable !== false ? "Activo" : "Inactivo",
+          };
+        })
       );
       
       setShowBulkUploadForm(false);
@@ -184,16 +192,20 @@ export default function AdminUsers() {
       // Recargar estudiantes
       const data = await getAllStudents();
       setStudents(
-        data.map((s) => ({
-          id: s.id,
-          name: s.name || `${s.firstName} ${s.lastName}`,
-          firstName: s.firstName,
-          lastName: s.lastName,
-          username: s.username,
-          courseId: s.courseId || null,
-          enable: s.enable !== undefined ? s.enable : true,
-          status: s.enable !== false ? "Activo" : "Inactivo",
-        }))
+        data.map((s) => {
+          const course = courses.find(c => c.id === s.courseId);
+          return {
+            id: s.id,
+            name: s.name || `${s.firstName} ${s.lastName}`,
+            firstName: s.firstName,
+            lastName: s.lastName,
+            username: s.username,
+            courseId: s.courseId || null,
+            courseName: course ? course.name : 'Sin curso',
+            enable: s.enable !== undefined ? s.enable : true,
+            status: s.enable !== false ? "Activo" : "Inactivo",
+          };
+        })
       );
     } catch (err) {
       console.error("Error al cambiar estado del estudiante:", err);
@@ -277,16 +289,20 @@ export default function AdminUsers() {
       // Recargar estudiantes
       const data = await getAllStudents();
       setStudents(
-        data.map((s) => ({
-          id: s.id,
-          name: s.name || `${s.firstName} ${s.lastName}`,
-          firstName: s.firstName,
-          lastName: s.lastName,
-          username: s.username,
-          courseId: s.courseId || null,
-          enable: s.enable !== undefined ? s.enable : true,
-          status: s.enable !== false ? "Activo" : "Inactivo",
-        }))
+        data.map((s) => {
+          const course = courses.find(c => c.id === s.courseId);
+          return {
+            id: s.id,
+            name: s.name || `${s.firstName} ${s.lastName}`,
+            firstName: s.firstName,
+            lastName: s.lastName,
+            username: s.username,
+            courseId: s.courseId || null,
+            courseName: course ? course.name : 'Sin curso',
+            enable: s.enable !== undefined ? s.enable : true,
+            status: s.enable !== false ? "Activo" : "Inactivo",
+          };
+        })
       );
       
       handleCloseForm();
@@ -362,16 +378,20 @@ export default function AdminUsers() {
         // Recargar la lista desde el backend
         const data = await getAllStudents();
         setStudents(
-          data.map((s) => ({
-            id: s.id,
-            name: s.name || `${s.firstName} ${s.lastName}`,
-            firstName: s.firstName,
-            lastName: s.lastName,
-            username: s.username,
-          courseId: s.courseId || null,
-          enable: s.enable !== undefined ? s.enable : true,
-          status: s.enable !== false ? "Activo" : "Inactivo",
-          }))
+          data.map((s) => {
+            const course = courses.find(c => c.id === s.courseId);
+            return {
+              id: s.id,
+              name: s.name || `${s.firstName} ${s.lastName}`,
+              firstName: s.firstName,
+              lastName: s.lastName,
+              username: s.username,
+              courseId: s.courseId || null,
+              courseName: course ? course.name : 'Sin curso',
+              enable: s.enable !== undefined ? s.enable : true,
+              status: s.enable !== false ? "Activo" : "Inactivo",
+            };
+          })
         );
       } else if (activeTab === "teachers") {
         await createTeacher({
@@ -476,7 +496,7 @@ export default function AdminUsers() {
               <tr>
                 <th>Nombre</th>
                 <th>Username</th>
-                <th>Estado</th>
+                <th>Curso</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -485,13 +505,7 @@ export default function AdminUsers() {
                 <tr key={student.id}>
                   <td>{student.name}</td>
                   <td>{student.username}</td>
-                  <td>
-                    <span
-                      className={`status ${student.status.toLowerCase()}`}
-                    >
-                      {student.status}
-                    </span>
-                  </td>
+                  <td>{student.courseName || 'Sin curso'}</td>
                   <td>
                     <button 
                       className="edit-botn" 

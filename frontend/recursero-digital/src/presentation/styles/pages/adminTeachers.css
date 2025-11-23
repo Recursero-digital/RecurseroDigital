@@ -181,7 +181,7 @@
   gap: 0.5rem;
 }
 
-.view-boton, .edit-boton, .courses-boton, .delete-boton {
+.view-boton, .edit-boton, .courses-boton, .delete-boton, .activate-boton {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 0.5rem;
@@ -207,12 +207,12 @@
   color: #2d3748;
 }
 
-.delete-boton {
+.delete-boton, .activate-boton {
   background: #594a8f8a ;
   color: white;
 }
 
-.view-btn:hover, .edit-btn:hover, .courses-btn:hover, .delete-btn:hover {
+.view-btn:hover, .edit-btn:hover, .courses-btn:hover, .delete-btn:hover, .activate-boton:hover {
   transform: translateY(-1px);
 }
 

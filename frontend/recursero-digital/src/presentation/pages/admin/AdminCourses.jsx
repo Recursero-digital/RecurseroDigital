@@ -218,9 +218,6 @@ export default function AdminCourses() {
           <div key={course.id} className="course-card">
             <div className="course-header">
               <h3>{course.name}</h3>
-              <span className={`course-status ${course.status.toLowerCase()}`}>
-                {course.status}
-              </span>
             </div>
             <div className="course-info">
               <p><strong>Docente:</strong> {course.teacher}</p>
