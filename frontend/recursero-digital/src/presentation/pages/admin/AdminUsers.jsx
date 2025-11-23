@@ -160,6 +160,7 @@ export default function AdminUsers() {
     setShowEditTeacherForm(false);
     setSelectedStudent(null);
     setSelectedTeacher(null);
+    setFormError(null);
   };
 
   const handleEditStudent = (student) => {
@@ -348,10 +349,13 @@ export default function AdminUsers() {
     }
   };
 
+  const [formError, setFormError] = useState(null);
+
   const handleUserSubmit = async (userData) => {
     try {
       setLoading(true);
       setError(null);
+      setFormError(null);
 
       if (activeTab === "students") {
         await createStudent(userData);
@@ -418,10 +422,14 @@ export default function AdminUsers() {
         setTeachers(teachersWithDetails);
       }
 
+      setFormError(null);
       setShowAddUserForm(false);
     } catch (err) {
       console.error("Error al crear usuario:", err);
-      setError(err.message || "Error al crear usuario");
+      const errorMessage = err.message || "Error al crear usuario";
+      setFormError(errorMessage);
+      // No cerramos el formulario si hay error
+      throw err; // Re-lanzar el error para que el formulario lo maneje
     } finally {
       setLoading(false);
     }
@@ -526,6 +534,7 @@ export default function AdminUsers() {
               ? "docente"
               : "administrador"
           }
+          error={formError}
         />
       )}
 

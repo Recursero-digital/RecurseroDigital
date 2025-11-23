@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/pages/addUserForm.css";
 import "../../styles/pages/addUserForm.css";
 
@@ -6,6 +6,7 @@ export default function AddUserForm({
   onClose,
   onSubmit,
   userType = "student",
+  error: externalError = null,
 }) {
   const [formData, setFormData] = useState({
     nombre: "",
@@ -18,8 +19,38 @@ export default function AddUserForm({
 
   const [errors, setErrors] = useState({});
 
-  // Determinar si es estudiante
   const isStudent = userType === "estudiante" || userType === "student";
+
+  useEffect(() => {
+    if (externalError) {
+    
+      if (externalError.includes("nombre de usuario ya existe") || 
+          externalError.includes("El nombre de usuario ya existe") ||
+          (externalError.includes("username") && externalError.includes("ya existe")) ||
+          externalError.includes("Ya existe el usuario con ese username")) {
+        setErrors(prev => ({
+          ...prev,
+          username: "Ya existe el usuario con ese username"
+        }));
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          general: externalError
+        }));
+      }
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        if (prev.username === "Ya existe el usuario con ese username") {
+          delete newErrors.username;
+        }
+        if (prev.general) {
+          delete newErrors.general;
+        }
+        return newErrors;
+      });
+    }
+  }, [externalError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,10 +60,18 @@ export default function AddUserForm({
     }));
 
     // Limpiar error cuando el usuario empiece a escribir
-    if (errors[name]) {
+    // PERO mantener el error de username duplicado hasta que se intente enviar de nuevo
+    if (errors[name] && !(name === 'username' && errors[name] === "Ya existe el usuario con ese username")) {
       setErrors((prev) => ({
         ...prev,
         [name]: "",
+      }));
+    }
+    // Si el usuario cambia el username, limpiar el error de duplicado
+    if (name === 'username' && errors.username === "Ya existe el usuario con ese username") {
+      setErrors((prev) => ({
+        ...prev,
+        username: "",
       }));
     }
   };
@@ -78,7 +117,7 @@ export default function AddUserForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
@@ -99,18 +138,25 @@ export default function AddUserForm({
         userData.email = formData.email;
       }
 
-      onSubmit(userData);
-
-      // Limpiar formulario
-      setFormData({
-        nombre: "",
-        apellido: "",
-        username: "",
-        password: "",
-        dni: "",
-        email: "",
-      });
-      onClose();
+      // onSubmit puede lanzar un error, no cerramos el formulario aquí
+      // El componente padre manejará el cierre solo si es exitoso
+      try {
+        await onSubmit(userData);
+        // Solo limpiar y cerrar si no hay error
+        setFormData({
+          nombre: "",
+          apellido: "",
+          username: "",
+          password: "",
+          dni: "",
+          email: "",
+        });
+        setErrors({});
+        onClose();
+      } catch (error) {
+        // El error será manejado por el componente padre y pasado como prop
+        // No cerramos el formulario si hay error
+      }
     }
   };
 
@@ -125,6 +171,18 @@ export default function AddUserForm({
         </div>
 
         <form onSubmit={handleSubmit} className="user-form">
+          {errors.general && (
+            <div className="error-message-general" style={{ 
+              color: '#e74c3c', 
+              marginBottom: '1rem', 
+              padding: '0.75rem', 
+              backgroundColor: '#fee', 
+              borderRadius: '4px',
+              border: '1px solid #e74c3c'
+            }}>
+              {errors.general}
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="nombre">Nombre *</label>
             <input
