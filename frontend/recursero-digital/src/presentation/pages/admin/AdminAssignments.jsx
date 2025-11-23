@@ -35,7 +35,11 @@ export default function AdminAssignments() {
         
         setCourses(coursesData);
         setTeachers(teachersData);
-        setStudents(studentsData);
+        // Filtrar solo estudiantes activos (enable !== false)
+        const activeStudents = studentsData.filter(student => 
+          student.enable !== false
+        );
+        setStudents(activeStudents);
         
         // Construir asignaciones desde los cursos
         const assignmentsData = await Promise.all(
