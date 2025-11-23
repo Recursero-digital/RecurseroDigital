@@ -66,27 +66,7 @@ export default function HomeAdmin() {
         </div>
       </div>
 
-      <div className="admin-quick-actions">
-        <h2>Acciones Rápidas</h2>
-        <div className="actions-grid">
-          <button className="action-card-admin" onClick={handleAgregarUsuario}> 
-            <span className="action-icon">➕</span>
-            <span className="action-text">Agregar Usuario</span>
-          </button>
-          <button className="action-card-admin" onClick={handleCrearCurso}>
-            <span className="action-icon">📖</span>
-            <span className="action-text">Crear Curso</span>
-          </button>
-          <button className="action-card-admin" onClick={handleNuevaAsignacion}>
-            <span className="action-icon">🔗</span>
-            <span className="action-text">Nueva Asignación</span>
-          </button>
-          <button className="action-card-admin" onClick={handleConfigJuegos}>
-            <span className="action-icon">🎯</span>
-            <span className="action-text">Configuración Juegos</span>
-          </button>
-        </div>
-      </div>
+
 
 
     </div>
