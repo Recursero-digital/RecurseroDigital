@@ -62,7 +62,7 @@ const GameScreen = ({
     return (
         <div className="game-container">
             <div className="game-content escala-game-content">
-                <header className="desco-game-header">
+                <header className="escala-game-header">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
