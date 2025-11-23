@@ -23,6 +23,10 @@ const JuegoDescomposicion = () => {
         completeActivity,
         startActivityTimer
     } = useGameScoring();
+
+    // ESTADO NUEVO: Para guardar el modo de juego seleccionado
+    const [gameMode, setGameMode] = useState(null); // 'decomposition' o 'composition'
+    
     const [gameState, setGameState] = useState('start');
     const [currentLevel, setCurrentLevel] = useState(0);
     const [currentActivity, setCurrentActivity] = useState(0);
@@ -38,12 +42,11 @@ const JuegoDescomposicion = () => {
     const { levels: backendLevels, loading: levelsLoading } = useGameLevels('descomposicion', true);
     const levels = useMemo(() => transformToDescomposicionFormat(backendLevels), [backendLevels]);
 
-    // Obtener totalQuestions del nivel actual desde el backend
     const totalQuestions = useMemo(() => {
         if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
             return backendLevels[currentLevel]?.activitiesCount || 5;
         }
-        return 5; // Fallback por defecto
+        return 5;
     }, [backendLevels, currentLevel]);
 
     useEffect(() => {
@@ -71,15 +74,18 @@ const JuegoDescomposicion = () => {
         return decomposition;
     }, []);
 
+    // MODIFICADO: Ahora usa gameMode en lugar de Math.random()
     const generateQuestions = useCallback((level, questionsCount) => {
         const newQuestions = [];
         
         for (let i = 0; i < questionsCount; i++) {
-            const gameType = Math.random() > 0.5 ? 'decomposition' : 'composition';
+            // Usamos el modo seleccionado. Si por alguna razón es null, fallback a random.
+            const typeToUse = gameMode || (Math.random() > 0.5 ? 'decomposition' : 'composition');
+            
             const number = generateNumber(level);
             const decomposition = decomposeNumber(number);
             
-            if (gameType === 'decomposition') {
+            if (typeToUse === 'decomposition') {
                 newQuestions.push({
                     type: 'decomposition',
                     number: number,
@@ -97,11 +103,31 @@ const JuegoDescomposicion = () => {
         }
         
         return newQuestions;
-    }, [generateNumber, decomposeNumber]);
+    }, [generateNumber, decomposeNumber, gameMode]); // Agregada dependencia gameMode
 
-    const handleStartGame = useCallback(() => {
+    // MODIFICADO: Recibe el modo desde StartScreen
+    const handleStartGame = useCallback((selectedMode) => {
+        setGameMode(selectedMode);
         setGameState('levelSelect');
     }, []);
+
+    // MODIFICADO: Resetea el modo y el juego
+    // const handleBackToStart = useCallback(() => {
+    //     setGameMode(null);
+    //     setGameState('start');
+    // }, []);
+
+    const handleBackToStart = useCallback(() => {
+        resetGame();
+        setGameState('start');
+      }, []);
+    
+      const resetGame = useCallback(() => {
+        setCurrentLevel(0);
+        setCurrentActivity(0);
+        resetScoring();
+        setShowFeedback(false);
+      }, [resetScoring]);
 
     const handleSelectLevel = useCallback((level) => {
         setCurrentLevel(level);
@@ -127,7 +153,7 @@ const JuegoDescomposicion = () => {
         resetScoring();
         resetAttempts();
         setGameState('playing');
-    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, backendLevels]);
+    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, backendLevels, totalQuestions]); // Agregado totalQuestions
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {
@@ -147,6 +173,7 @@ const JuegoDescomposicion = () => {
         if (currentQuestion.type === 'decomposition') {
             const userParts = userAnswer.split('+').map(part => parseInt(part.trim())).filter(n => !isNaN(n));
             const correctParts = currentQuestion.correctAnswer;
+            // Ordenamos ambos arrays para comparar sin importar el orden de entrada
             isCorrect = JSON.stringify(userParts.sort((a, b) => a - b)) === 
                        JSON.stringify(correctParts.sort((a, b) => a - b));
         } else {
@@ -181,7 +208,6 @@ const JuegoDescomposicion = () => {
         setShowFeedback(false);
         
         if (currentActivity + 1 >= totalQuestions) {
-            // Siempre desbloquea el siguiente nivel al completar todas las actividades
             if (currentLevel < levels.length - 1) {
                 unlockLevel('descomposicion', currentLevel + 2);
             }
@@ -191,7 +217,7 @@ const JuegoDescomposicion = () => {
             resetAttempts();
             startActivityTimer();
         }
-    }, [currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer]);
+    }, [currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer, levels.length]);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
@@ -229,6 +255,7 @@ const JuegoDescomposicion = () => {
                 <LevelSelectScreen 
                     levels={levels}
                     onSelectLevel={handleSelectLevel}
+                    onBackToStart={handleBackToStart}
                 />
             )}
             
@@ -279,5 +306,6 @@ const JuegoDescomposicion = () => {
         </div>
     );
 };
+
 
 export default JuegoDescomposicion;

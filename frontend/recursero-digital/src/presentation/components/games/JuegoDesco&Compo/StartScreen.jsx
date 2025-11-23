@@ -6,7 +6,6 @@ const StartScreen = ({ onStart }) => {
 
     return (
         <div className="game-container">
-            {/* Usar estructura global de start-screen */}
             <div className="start-screen">
                 <div className="header-controls">
                     <button 
@@ -20,31 +19,30 @@ const StartScreen = ({ onStart }) => {
 
                 <h1>🔢 NumeroMágico ✨</h1>
                 <p>¡Descubre el misterio de los números!</p>
+                <p className="start-subtitle">¿Qué quieres practicar hoy?</p>
 
                 <div className="start-features">
-                    <div className="feature-item">
-                        <span className="feature-icon">🧩</span>
-                        <span className="feature-text">Descomposición: Separa en unidades, decenas, centenas</span>
-                    </div>
-                    
-                    <div className="feature-item">
-                        <span className="feature-icon">🔧</span>
-                        <span className="feature-text">Composición: Junta las partes del número</span>
-                    </div>
-                    
-                    <div className="feature-item">
-                        <span className="feature-icon">🎯</span>
-                        <span className="feature-text">Aprende valor posicional</span>
-                    </div>
-                </div>
+                    <div className="compoydesco-game-modes-container">
+                        <button 
+                            onClick={() => onStart('decomposition')} 
+                            className="compoydesco-mode-card"
+                        >
+                            <div className="mode-icon">🧩</div>
+                            <h3 className="mode-title">Descomposición</h3>
+                            <p className="mode-desc">Separa en unidades, decenas y centenas</p>
+                            <span className="btn-mode-action">Jugar ➜</span>
+                        </button>
 
-                <div className="button-group">
-                    <button 
-                        onClick={onStart} 
-                        className="btn btn-start"
-                    >
-                        🚀 COMENZAR AVENTURA
-                    </button>
+                        <button 
+                            onClick={() => onStart('composition')} 
+                            className="compoydesco-mode-card"
+                        >
+                            <div className="mode-icon">🔧</div>
+                            <h3 className="mode-title">Composición</h3>
+                            <p className="mode-desc">Junta las partes para formar el número</p>
+                            <span className="btn-mode-action">Jugar ➜</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

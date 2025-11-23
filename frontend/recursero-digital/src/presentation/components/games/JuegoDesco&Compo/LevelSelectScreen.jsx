@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 
-const LevelSelectScreen = ({ levels, onSelectLevel }) => {
-    const navigate = useNavigate();
+const LevelSelectScreen = ({ levels, onSelectLevel, onBackToStart }) => {
+    // const navigate = useNavigate();
     const { isLevelUnlocked } = useUserProgress();
 
     return (
@@ -13,10 +13,10 @@ const LevelSelectScreen = ({ levels, onSelectLevel }) => {
                     <div className="buttons-group">
                         <button 
                             className="btn-back-to-levels"
-                            onClick={() => navigate('/alumno/juegos')}
-                            title="Volver a juegos"
+                            onClick={onBackToStart}
+                            title="Volver a modos"
                         >
-                            ← Juegos
+                            ← Modos
                         </button>
                     </div>
                 </div>
