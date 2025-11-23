@@ -69,7 +69,11 @@ export class StudentStatisticsAggregator {
             const gameStats = gameStatsMap.get(gameId)!;
             
             if (stat.isCompleted) {
-                gameStats.completed++;
+                if (gameId === 'calculos' && stat.totalQuestions !== undefined && stat.totalQuestions > 0) {
+                    gameStats.completed += stat.totalQuestions;
+                } else {
+                    gameStats.completed++;
+                }
             }
 
             if (stat.completionTime) {

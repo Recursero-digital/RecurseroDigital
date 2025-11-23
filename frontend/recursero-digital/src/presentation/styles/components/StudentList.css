@@ -332,6 +332,11 @@
   background: linear-gradient(90deg, #8b5cf6, #7c3aed);
 }
 
+.name-games.calculos {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  min-width: 2px;
+}
+
 .game-details {
   display: flex;
   justify-content: space-between;

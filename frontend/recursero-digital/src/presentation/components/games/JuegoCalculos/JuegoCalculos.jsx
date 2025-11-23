@@ -88,7 +88,11 @@ const JuegoCalculos = () => {
       backendLevelIndex,  
       'calculos',                
       0,                         
-      backendLevel        
+      backendLevel,
+      {
+        correctAnswers,
+        totalQuestions
+      }
     );
     
     if (levelNumber < 3) {
