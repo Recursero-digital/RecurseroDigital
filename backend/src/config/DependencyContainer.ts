@@ -339,7 +339,8 @@ export class DependencyContainer {
             this._generateStudentReportUseCase = new GenerateStudentReportUseCase(
                 this.studentRepository,
                 this.statisticsRepository,
-                this.aiTextGenerator
+                this.aiTextGenerator,
+                this.gameLevelRepository
             );
         }
 

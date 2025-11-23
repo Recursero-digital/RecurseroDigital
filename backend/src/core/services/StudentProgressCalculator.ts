@@ -32,30 +32,40 @@ export class StudentProgressCalculator {
             };
         }
 
-        const totalActivities = await this.gameLevelRepository.getTotalActivitiesCount(gameId);
+        try {
+            const totalActivities = await this.gameLevelRepository.getTotalActivitiesCount(gameId);
 
-        if (totalActivities === 0) {
+            if (totalActivities === 0) {
+                return {
+                    percentage: 0,
+                    absoluteActivityNumber: 0,
+                    totalActivities: 0,
+                    lastActivity
+                };
+            }
+
+            const absoluteActivityNumber = await this.calculateAbsoluteActivityNumber(
+                gameId,
+                lastActivity
+            );
+
+            const percentage = (absoluteActivityNumber / totalActivities) * 100;
+
+            return {
+                percentage: Math.min(percentage, 100),
+                absoluteActivityNumber,
+                totalActivities,
+                lastActivity
+            };
+        } catch (error) {
+            console.warn(`Error al calcular progreso para juego ${gameId}, usando progreso por defecto:`, error);
             return {
                 percentage: 0,
-                absoluteActivityNumber: 0,
+                absoluteActivityNumber: lastActivity.activity,
                 totalActivities: 0,
                 lastActivity
             };
         }
-
-        const absoluteActivityNumber = await this.calculateAbsoluteActivityNumber(
-            gameId,
-            lastActivity
-        );
-
-        const percentage = (absoluteActivityNumber / totalActivities) * 100;
-
-        return {
-            percentage: Math.min(percentage, 100),
-            absoluteActivityNumber,
-            totalActivities,
-            lastActivity
-        };
     }
 
     async calculateAbsoluteActivityNumber(
