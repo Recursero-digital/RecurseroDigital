@@ -2,11 +2,11 @@
 
 .admin-game-levels {
     padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
+    margin: 0;
     background: rgb(231, 237, 239);
     min-height: 100vh;
     font-family: "Fredoka", cursive;
+    width: 100%;
 }
 
 .page-header {
