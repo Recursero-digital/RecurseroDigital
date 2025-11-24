@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import '../../../styles/globals/games.css';
 import './JuegoDescomposicion.css';
+
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -11,6 +13,8 @@ import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels, transformToDescomposicionFormat } from '../../../../hooks/useGameLevels';
+import { GAME_IDS, PROGRESS_KEYS } from '../../../../constants/games';
+import { getTotalActivitiesForLevel } from '../../../../utils/gameLevels';
 
 const JuegoDescomposicion = () => {
     const { unlockLevel, getLastActivity } = useUserProgress();
@@ -39,14 +43,12 @@ const JuegoDescomposicion = () => {
     const [questions, setQuestions] = useState([]);
     const [isAnswered, setIsAnswered] = useState(false);
 
-    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('descomposicion', true);
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.DESCOMPOSICION, true);
+
     const levels = useMemo(() => transformToDescomposicionFormat(backendLevels), [backendLevels]);
 
     const totalQuestions = useMemo(() => {
-        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
-            return backendLevels[currentLevel]?.activitiesCount || 5;
-        }
-        return 5;
+        return getTotalActivitiesForLevel(backendLevels, currentLevel, 5);
     }, [backendLevels, currentLevel]);
 
     useEffect(() => {
@@ -172,7 +174,8 @@ const JuegoDescomposicion = () => {
 
         if (isCorrect) {
             const activityScore = 50 * (currentLevel + 1);
-            completeActivity(currentLevel, 'descomposicion', currentActivity, currentLevel);
+            completeActivity(currentLevel, GAME_IDS.DESCOMPOSICION, currentActivity, currentLevel);
+
             setIsAnswered(true);
             setFeedback({
                 title: '¡Correcto!',
@@ -198,7 +201,7 @@ const JuegoDescomposicion = () => {
         if (feedback.isCorrect) {
             if (currentActivity + 1 >= totalQuestions) {
                 if (currentLevel < levels.length - 1) {
-                    unlockLevel('descomposicion', currentLevel + 2);
+                    unlockLevel(PROGRESS_KEYS.DESCOMPOSICION, currentLevel + 2);
                 }
                 setShowCongrats(true);
             } else {
@@ -234,11 +237,16 @@ const JuegoDescomposicion = () => {
     }, []);
 
     if (levelsLoading) {
-        return <div className="game-container"><div>Cargando niveles...</div></div>;
+        return (
+            <div className="game-wrapper bg-space-gradient">
+                <div>Cargando niveles...</div>
+            </div>
+        );
     }
 
     return (
-        <div className="game-container">
+        <div className="game-wrapper bg-space-gradient">
+
             {gameState === 'start' && (
                 <StartScreen onStart={handleStartGame} />
             )}
