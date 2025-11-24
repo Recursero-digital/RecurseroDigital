@@ -1117,3 +1117,13 @@
     width: 100%;
     padding: clamp(1rem, 2vh, 2rem);
 }
+
+.escala-game-header {
+  text-align: center;
+  padding-top: 6%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(120px, 25vh, 200px);
+}
