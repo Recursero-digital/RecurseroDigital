@@ -25,13 +25,13 @@
 
 .ordenamiento-game-header {
   text-align: center;
-  margin-bottom: clamp(1rem, 3vh, 2rem);
-  padding-top: clamp(40px, 8vh, 60px);
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+  padding-top: clamp(50px, 10vh, 80px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: clamp(120px, 25vh, 200px);
+  min-height: auto;
 }
 
 /* Progress Bar */
