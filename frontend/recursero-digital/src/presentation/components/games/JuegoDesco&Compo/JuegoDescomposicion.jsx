@@ -111,12 +111,6 @@ const JuegoDescomposicion = () => {
         setGameState('levelSelect');
     }, []);
 
-    // MODIFICADO: Resetea el modo y el juego
-    // const handleBackToStart = useCallback(() => {
-    //     setGameMode(null);
-    //     setGameState('start');
-    // }, []);
-
     const handleBackToStart = useCallback(() => {
         resetGame();
         setGameState('start');
@@ -131,29 +125,25 @@ const JuegoDescomposicion = () => {
 
     const handleSelectLevel = useCallback((level) => {
         setCurrentLevel(level);
-        
-        const lastActivity = getLastActivity('descomposicion');
-        
-        let startingActivity = 0;
-        if (lastActivity && lastActivity.level === level + 1) {
-            const lastActivityIndex = lastActivity.activity - 1;
-            
-            if (lastActivityIndex + 1 < totalQuestions) {
-                startingActivity = lastActivityIndex + 1;
-            } else {
-                startingActivity = 0;
-            }
-        } else {
-            startingActivity = 0;
-        }
-        
+
+        // --- CAMBIO: Forzamos siempre el inicio desde 0 (primera actividad) ---
+        const startingActivity = 0; 
+        // Al poner 0 aquí, ignoramos lo que diga el backend sobre "actividad guardada"
+        // para que el usuario siempre empiece el nivel desde el principio al seleccionarlo.
+
         setCurrentActivity(startingActivity);
+        
+        // Aquí usamos backendLevels para saber cuántas preguntas tiene este nivel
         const questionsCount = backendLevels[level]?.activitiesCount || 5;
+        
         setQuestions(generateQuestions(level, questionsCount));
         resetScoring();
         resetAttempts();
         setGameState('playing');
-    }, [generateQuestions, resetScoring, resetAttempts, getLastActivity, backendLevels, totalQuestions]); // Agregado totalQuestions
+        
+    }, [generateQuestions, resetScoring, resetAttempts, backendLevels]); 
+    // Nota: Quité totalQuestions y getLastActivity DE AQUÍ (del array de dependencias [])
+    // porque ya no se usan DENTRO de esta función específica, pero siguen existiendo fuera.
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {

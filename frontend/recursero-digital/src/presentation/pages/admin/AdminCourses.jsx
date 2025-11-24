@@ -218,9 +218,6 @@ export default function AdminCourses() {
           <div key={course.id} className="course-card">
             <div className="course-header">
               <h3>{course.name}</h3>
-              <span className={`course-status ${course.status.toLowerCase()}`}>
-                {course.status}
-              </span>
             </div>
             <div className="course-info">
               <p><strong>Docente:</strong> {course.teacher}</p>
@@ -250,10 +247,6 @@ export default function AdminCourses() {
         <div className="summary-item">
           <span className="summary-number">{courses.length}</span>
           <span className="summary-label">Total Cursos</span>
-        </div>
-        <div className="summary-item">
-          <span className="summary-number">{courses.filter(c => c.status === 'Activo').length}</span>
-          <span className="summary-label">Cursos Activos</span>
         </div>
         <div className="summary-item">
           <span className="summary-number">{courses.reduce((acc, c) => acc + c.students, 0)}</span>

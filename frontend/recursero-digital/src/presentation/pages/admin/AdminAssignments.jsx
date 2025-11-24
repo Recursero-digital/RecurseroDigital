@@ -35,7 +35,11 @@ export default function AdminAssignments() {
         
         setCourses(coursesData);
         setTeachers(teachersData);
-        setStudents(studentsData);
+        // Filtrar solo estudiantes activos (enable !== false)
+        const activeStudents = studentsData.filter(student => 
+          student.enable !== false
+        );
+        setStudents(activeStudents);
         
         // Construir asignaciones desde los cursos
         const assignmentsData = await Promise.all(
@@ -281,10 +285,6 @@ export default function AdminAssignments() {
         <div className="stat-card-assignments">
           <h3>Total Asignaciones</h3>
           <div className="stat-numbers">{assignments.length}</div>
-        </div>
-        <div className="stat-card-assignments">
-          <h3>Asignaciones Activas</h3>
-          <div className="stat-numbers">{assignments.filter(a => a.status === 'Activa').length}</div>
         </div>
         <div className="stat-card-assignments">
           <h3>Estudiantes Asignados</h3>
