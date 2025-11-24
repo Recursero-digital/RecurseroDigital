@@ -100,17 +100,6 @@
   border-color: rgba(251, 191, 36, 0.6);
   color: rgb(255, 255, 255);
 }
-.buttongame:after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 20px;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(30deg);
-  transition: all 0.5s;
-}
 
 .textgame h2 {
   font-size: 28px;
