@@ -3,80 +3,60 @@ import { useNavigate } from 'react-router-dom';
 
 const CongratsModal = ({ 
     score, 
-    totalQuestions, 
+    totalQuestions, // Esto es el puntaje máximo posible, no la cantidad de preguntas
     levelName, 
-    levelPassed, 
     nextLevelUnlocked, 
     onPlayAgain,
     onBackToLevels 
 }) => {
     const navigate = useNavigate();
-    const percentage = Math.round((score / totalQuestions) * 100);
-
-    const getPerformanceMessage = () => {
-        if (percentage >= 90) return { emoji: '🌟', message: '¡Increíble! Eres un maestro de los números' };
-        if (percentage >= 80) return { emoji: '⭐', message: '¡Excelente trabajo! Muy bien hecho' };
-        if (percentage >= 60) return { emoji: '👏', message: '¡Buen trabajo! Has completado el nivel' };
-        return { emoji: '💪', message: '¡Sigue practicando! Puedes mejorar' };
-    };
-
-    const performance = getPerformanceMessage();
+    
+    // Calculamos si fue perfecto (puntuación máxima) para dar un mensaje especial
+    const isPerfect = score === totalQuestions;
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="modal-content congrats">
                 <div className="congrats-header">
                     <div className="congrats-icon">
-                        {performance.emoji}
+                        {isPerfect ? '🌟' : '🎉'}
                     </div>
                     
                     <h2 className="congrats-title">
-                        {levelPassed ? '¡Nivel Completado!' : '¡Nivel Terminado!'}
+                        ¡Nivel Completado!
                     </h2>
                     
                     <p className="congrats-subtitle">
-                        {performance.message}
+                        {isPerfect ? '¡Puntaje Perfecto! Eres increíble.' : '¡Has terminado todas las secuencias!'}
                     </p>
                 </div>
 
                 <div className="score-summary">
-                    <div className="score-circle">
-                        <div className="score-percentage">
-                            {percentage}%
-                        </div>
-                        <div className="score-fraction">
-                            {score}/{totalQuestions}
-                        </div>
-                    </div>
+                    {/* Eliminamos el círculo de porcentaje */}
                     
                     <div className="level-info">
                         <h3>
                             🌊 {levelName} 🌊
                         </h3>
                         
-                        {levelPassed && (
-                            <div className="level-passed-info">
-                                <p className="level-passed-text">
-                                    ✅ ¡Nivel superado con {percentage}%!
-                                </p>
-                                {nextLevelUnlocked && (
-                                    <p className="level-unlocked-text">
-                                        🎉 ¡Nuevo nivel desbloqueado!
-                                    </p>
-                                )}
+                        <div className="level-passed-info">
+                            <p className="level-passed-text" style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
+                                Puntos Obtenidos
+                            </p>
+                            <div className="score-display-large" style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e3a8a' }}>
+                                {score} / {totalQuestions}
                             </div>
-                        )}
-                        
-                        {!levelPassed && (
-                            <div className="level-failed-info">
-                                <p className="level-failed-text">
-                                    📚 Necesitas 60% para pasar el nivel
+                            
+                            {nextLevelUnlocked ? (
+                                <p className="level-unlocked-text">
+                                    🔓 ¡Siguiente nivel desbloqueado!
                                 </p>
-                                <p className="level-retry-text">
-                                    ¡Sigue practicando y lo lograrás!
+                            ) : (
+                                <p className="level-unlocked-text">
+                                    🏆 ¡Juego completado!
                                 </p>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
 
