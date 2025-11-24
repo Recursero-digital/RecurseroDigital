@@ -43,11 +43,11 @@ const FeedbackModal = ({ feedback, onContinue }) => {
                 
                 <div className="desco-feedback-button-container">
                     <button 
-                        ref={buttonRef} // Asignamos la referencia aquí
+                        ref={buttonRef}
                         onClick={onContinue} 
                         className="btn btn-check desco-feedback-button"
                     >
-                        {feedback.isCorrect ? '🚀 Continuar' : '📚 Siguiente'}
+                        {feedback.isCorrect ? '🚀 Continuar' : '🔄 Reintentar'}
                     </button>
                 </div>
             </div>

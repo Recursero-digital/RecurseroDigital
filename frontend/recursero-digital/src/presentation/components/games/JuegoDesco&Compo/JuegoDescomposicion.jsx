@@ -165,7 +165,7 @@ const JuegoDescomposicion = () => {
             const correctParts = currentQuestion.correctAnswer;
             // Ordenamos ambos arrays para comparar sin importar el orden de entrada
             isCorrect = JSON.stringify(userParts.sort((a, b) => a - b)) === 
-                       JSON.stringify(correctParts.sort((a, b) => a - b));
+                    JSON.stringify(correctParts.sort((a, b) => a - b));
         } else {
             isCorrect = parseInt(userAnswer) === currentQuestion.correctAnswer;
         }
@@ -180,34 +180,36 @@ const JuegoDescomposicion = () => {
                 isCorrect: true
             });
         } else {
+            // Solo mostramos el feedback sin marcar como respondida
             setFeedback({
                 title: '¡Incorrecto!',
-                text: `La respuesta correcta era: ${
-                    currentQuestion.type === 'decomposition' 
-                        ? currentQuestion.correctAnswer.join(' + ')
-                        : currentQuestion.correctAnswer
-                }`,
+                text: `¡Inténtalo de nuevo! Revisa tu respuesta y vuelve a intentarlo.`,
                 isCorrect: false
             });
         }
 
-        setShowFeedback(true);
+    setShowFeedback(true);
     }, [currentQuestion, userAnswer, incrementAttempts, currentLevel, attempts, completeActivity, isAnswered]);
 
     const handleContinue = useCallback(() => {
-        setShowFeedback(false);
-        
-        if (currentActivity + 1 >= totalQuestions) {
-            if (currentLevel < levels.length - 1) {
-                unlockLevel('descomposicion', currentLevel + 2);
+    setShowFeedback(false);
+    
+        // Solo avanzar si la respuesta fue correcta
+        if (feedback.isCorrect) {
+            if (currentActivity + 1 >= totalQuestions) {
+                if (currentLevel < levels.length - 1) {
+                    unlockLevel('descomposicion', currentLevel + 2);
+                }
+                setShowCongrats(true);
+            } else {
+                setCurrentActivity(prev => prev + 1);
+                resetAttempts();
+                startActivityTimer();
             }
-            setShowCongrats(true);
-        } else {
-            setCurrentActivity(prev => prev + 1);
-            resetAttempts();
-            startActivityTimer();
         }
-    }, [currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer, levels.length]);
+    // Si fue incorrecta, solo cerramos el modal y el usuario puede reintentar
+    // No limpiamos userAnswer para que pueda corregir su respuesta
+    }, [feedback.isCorrect, currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer, levels.length]);
 
     const handleNextLevel = useCallback(() => {
         setShowCongrats(false);
