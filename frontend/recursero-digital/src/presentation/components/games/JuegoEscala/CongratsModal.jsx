@@ -69,7 +69,7 @@ const CongratsModal = ({
                     </button>
                     
                     <button 
-                        className="btn-back-to-levels btn-main-gradient bg-space-gradient"
+                        className="btn-play-again btn-main-gradient bg-space-gradient"
                         onClick={onBackToLevels}
                     >
                         📋 Elegir nivel
@@ -77,7 +77,7 @@ const CongratsModal = ({
                     
                     <button 
                         className="btn-back-to-games btn-main-gradient bg-space-gradient"
-                        onClick={() => navigate('/alumno')}
+                        onClick={() => navigate('/alumno/juegos')}
                     >
                         🎮 Otros juegos
                     </button>
