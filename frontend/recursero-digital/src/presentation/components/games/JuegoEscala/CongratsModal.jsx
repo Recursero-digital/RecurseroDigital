@@ -77,7 +77,7 @@ const CongratsModal = ({
                     
                     <button 
                         className="btn-back-to-games btn-main-gradient bg-space-gradient"
-                        onClick={() => navigate('/alumno')}
+                        onClick={() => navigate('/alumno/juegos')}
                     >
                         🎮 Otros juegos
                     </button>
