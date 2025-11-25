@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './JuegoEscala.css';
+
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -11,6 +12,9 @@ import HintModal from '../../shared/HintModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels, transformToEscalaFormat } from '../../../../hooks/useGameLevels';
+import { GAME_IDS, PROGRESS_KEYS } from '../../../../constants/games';
+import { getTotalActivitiesForLevel } from '../../../../utils/gameLevels';
+
 import { 
     GAME_CONFIG, 
     MESSAGES, 
@@ -48,14 +52,12 @@ const JuegoEscala = () => {
     const [errorNotification, setErrorNotification] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escala', true);
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.ESCALA, true);
+    
     const levels = useMemo(() => transformToEscalaFormat(backendLevels), [backendLevels]);
     
     const totalQuestions = useMemo(() => {
-        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
-            return backendLevels[currentLevel]?.activitiesCount || GAME_CONFIG.TOTAL_QUESTIONS;
-        }
-        return GAME_CONFIG.TOTAL_QUESTIONS;
+        return getTotalActivitiesForLevel(backendLevels, currentLevel, GAME_CONFIG.TOTAL_QUESTIONS);
     }, [backendLevels, currentLevel]);
 
     useEffect(() => {
@@ -77,7 +79,7 @@ const JuegoEscala = () => {
 
     // FIX: Agregado parámetro forceReset para reiniciar desde actividad 0 explícitamente
     const handleSelectLevel = useCallback((level, forceReset = false) => {
-        const questionsCount = backendLevels[level]?.activitiesCount || GAME_CONFIG.TOTAL_QUESTIONS;
+        const questionsCount = getTotalActivitiesForLevel(backendLevels, level, GAME_CONFIG.TOTAL_QUESTIONS);
         const newQuestions = generateQuestions(level, questionsCount);
         
         setCurrentLevel(level);
@@ -86,7 +88,8 @@ const JuegoEscala = () => {
         
         // Si NO es un reset forzado, buscamos dónde se quedó el usuario
         if (!forceReset) {
-            const lastActivity = getLastActivity('escala');
+            const lastActivity = getLastActivity(PROGRESS_KEYS.ESCALA);
+
             if (lastActivity && lastActivity.level === level + 1) {
                 const lastActivityIndex = lastActivity.activity - 1;
                 if (lastActivityIndex + 1 < questionsCount) {
@@ -150,7 +153,7 @@ const JuegoEscala = () => {
                 const activityScore = calculateActivityScore(currentLevel, currentAttempts);
                 completeActivity(
                     currentLevel, 
-                    'escala', 
+                    GAME_IDS.ESCALA, 
                     currentActivity, 
                     currentLevel
                 );
@@ -196,7 +199,8 @@ const JuegoEscala = () => {
         
         if (currentActivity + 1 >= totalQuestions) {
             if (currentLevel < levels.length - 1) {
-                unlockLevel('escala', currentLevel + 2);
+                unlockLevel(PROGRESS_KEYS.ESCALA, currentLevel + 2);
+
             }
             setShowCongrats(true);
         } else {

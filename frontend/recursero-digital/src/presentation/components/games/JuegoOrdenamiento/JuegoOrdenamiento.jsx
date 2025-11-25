@@ -2,12 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../../../styles/globals/games.css";
 import "./JuegoOrdenamiento.css";
-import StartScreen from './StartScreen';
-import LevelSelectScreen from './LevelSelectScreen';
-import GameScreen from './GameScreen';
-import GameCompleteScreen from './GameCompleteScreen';
-import CongratsModal from './CongratsModal';
-import FeedbackModal from './FeedbackModal';
+import { GAME_IDS, PROGRESS_KEYS } from '../../../../constants/games';
+import { getTotalActivitiesForLevel } from '../../../../utils/gameLevels';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels, transformToOrdenamientoFormat } from '../../../../hooks/useGameLevels';
@@ -16,6 +12,13 @@ import {
   checkOrder, 
   generateHint
 } from './utils';
+
+import StartScreen from './StartScreen';
+import LevelSelectScreen from './LevelSelectScreen';
+import GameScreen from './GameScreen';
+import GameCompleteScreen from './GameCompleteScreen';
+import CongratsModal from './CongratsModal';
+import FeedbackModal from './FeedbackModal';
 
 const JuegoOrdenamiento = () => {
   const navigate = useNavigate();
@@ -44,15 +47,12 @@ const JuegoOrdenamiento = () => {
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
   const [showPermanentHint, setShowPermanentHint] = useState(false);
 
-  const { levels: backendLevels, loading: levelsLoading } = useGameLevels('ordenamiento', true);
+  const { levels: backendLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.ORDENAMIENTO, true);
   const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
 
   // Obtener totalActivities del nivel actual desde el backend
   const totalActivities = useMemo(() => {
-    if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
-      return backendLevels[currentLevel]?.activitiesCount || 5;
-    }
-    return 5; // Fallback por defecto
+    return getTotalActivitiesForLevel(backendLevels, currentLevel, 5);
   }, [backendLevels, currentLevel]);
 
   // Obtener numbersCount del nivel actual desde el backend
@@ -105,7 +105,7 @@ const JuegoOrdenamiento = () => {
     const selectedLevelIndex = level - 1;
     setCurrentLevel(selectedLevelIndex);
     
-    const lastActivity = getLastActivity('ordenamiento');
+    const lastActivity = getLastActivity(PROGRESS_KEYS.ORDENAMIENTO);
     
     let startingActivity = 0;
     if (lastActivity && lastActivity.level === level) {
@@ -129,7 +129,7 @@ const JuegoOrdenamiento = () => {
   }, [resetScoring, getLastActivity, backendLevels]);
 
   const handleActivityComplete = useCallback(() => {
-    const activityScore = completeActivity(currentLevel, 'ordenamiento', currentActivity, currentLevel);
+    const activityScore = completeActivity(currentLevel, GAME_IDS.ORDENAMIENTO, currentActivity, currentLevel);
     const newActivity = currentActivity + 1;
     
     const result = {
@@ -167,7 +167,7 @@ const JuegoOrdenamiento = () => {
       startActivityTimer();
     } else {  
       // Siempre desbloquea el siguiente nivel al completar todas las actividades
-      unlockLevel('ordenamiento', currentLevel + 2);
+      unlockLevel(PROGRESS_KEYS.ORDENAMIENTO, currentLevel + 2);
       // Siempre muestra CongratsModal y el usuario elige manualmente el siguiente nivel
       setShowLevelUp(true);
     }
@@ -221,11 +221,16 @@ const JuegoOrdenamiento = () => {
   }, [gameState, currentLevel, setupLevel, startActivityTimer, showLevelUp]);
 
   if (levelsLoading) {
-    return <div className="game-container"><div>Cargando niveles...</div></div>;
+    return (
+      <div className="game-wrapper bg-space-gradient">
+        <div>Cargando niveles...</div>
+      </div>
+    );
   }
 
   return (
-    <div className="game-container">
+    <div className="game-wrapper bg-space-gradient">
+
       {gameState === 'start' && (
         <StartScreen 
           onStart={handleSelectOrder} 

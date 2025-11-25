@@ -17,7 +17,8 @@ const orderConfig = {
 
 const StartScreen = ({ onStart, onBackToGames }) => {
     return (
-        <div className="start-screen">
+        <div className="game-container">
+            <div className="start-screen">
                 <div className="header-controls">
                     <div className="buttons-group">
                         <button 
@@ -72,6 +73,7 @@ const StartScreen = ({ onStart, onBackToGames }) => {
                     </div>
             </div>
         </div>
+    </div>
     );
 };
 

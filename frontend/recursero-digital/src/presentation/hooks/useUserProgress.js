@@ -1,16 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apiRequest } from '../../infrastructure/config/api';
+import { GAME_IDS, PROGRESS_KEYS } from '../../constants/games';
 
 const PROGRESS_KEY = 'userGameProgress';
 
 const DEFAULT_PROGRESS = {
-  ordenamiento: 1,
-  escritura: 1,
-  descomposicion: 1,
-  escala: 1,
-  'calculos-suma': 1,
-  'calculos-resta': 1,
-  'calculos-multiplicacion': 1
+  [PROGRESS_KEYS.ORDENAMIENTO]: 1,
+  [PROGRESS_KEYS.ESCRITURA]: 1,
+  [PROGRESS_KEYS.DESCOMPOSICION]: 1,
+  [PROGRESS_KEYS.ESCALA]: 1,
+  [PROGRESS_KEYS.CALCULOS_SUMA]: 1,
+  [PROGRESS_KEYS.CALCULOS_RESTA]: 1,
+  [PROGRESS_KEYS.CALCULOS_MULTIPLICACION]: 1
 };
 
 const loadLocalProgress = () => {
@@ -55,15 +56,15 @@ const mapGameIdToProgressKey = (gameId) => {
     return null;
   }
 
-  if (gameId.startsWith('game-calculos')) {
+  if (gameId.startsWith(GAME_IDS.CALCULOS)) {
     return `calculos-${gameId.split('-')[2] || 'suma'}`;
   }
 
   const map = {
-    'game-ordenamiento': 'ordenamiento',
-    'game-escritura': 'escritura',
-    'game-descomposicion': 'descomposicion',
-    'game-escala': 'escala'
+    [GAME_IDS.ORDENAMIENTO]: PROGRESS_KEYS.ORDENAMIENTO,
+    [GAME_IDS.ESCRITURA]: PROGRESS_KEYS.ESCRITURA,
+    [GAME_IDS.DESCOMPOSICION]: PROGRESS_KEYS.DESCOMPOSICION,
+    [GAME_IDS.ESCALA]: PROGRESS_KEYS.ESCALA
   };
 
   return map[gameId] || null;

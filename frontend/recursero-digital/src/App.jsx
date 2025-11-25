@@ -35,16 +35,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login-form" element={<LoginForm />} />
-        <Route path="/alumno/juegos/descomposicion" element={<JuegoDescomposicion />} />
-        <Route path="/alumno/juegos/escala" element={<JuegoEscala />} />
-        <Route 
-          path="/alumno/juegos/calculos" 
-          element={
-            <MainLayout userRole="alumno">
-              <JuegoCalculos />
-            </MainLayout>
-          } 
-        />
+        
         <Route
           path="/alumno/perfil"
           element={
@@ -113,41 +104,31 @@ function App() {
           <Route
             path="/alumno/juegos/ordenamiento"
             element={
-              <MainLayout userRole="alumno">
-                <JuegoOrdenamiento />
-              </MainLayout>
+              <JuegoOrdenamiento />
             }
           />
           <Route
             path="/alumno/juegos/escritura"
             element={
-              <MainLayout userRole="alumno">
-                <JuegoEscritura />
-              </MainLayout>
+              <JuegoEscritura />
             }
           />
           <Route
             path="/alumno/juegos/descomposicion"
             element={
-              <MainLayout userRole="alumno">
-                <JuegoDescomposicion />
-              </MainLayout>
+              <JuegoDescomposicion />
             }
           />
           <Route
             path="/alumno/juegos/escala"
             element={
-              <MainLayout userRole="alumno">
-                <JuegoEscala />
-              </MainLayout>
+              <JuegoEscala />
             }
           />
           <Route 
             path="/alumno/juegos/calculos" 
             element={
-              <MainLayout userRole="alumno">
-                <JuegoCalculos />
-              </MainLayout>
+              <JuegoCalculos />
             } 
           />
           <Route

@@ -2,8 +2,8 @@
 /* ESTILOS ESPECÍFICOS PARA JUEGO DE CÁLCULOS                         */
 /* =================================================================== */
 
-/* Contenedor principal del juego */
-.game-container {
+/* Contenedor principal específico de Cálculos */
+.calculos-root {
   height: 100vh;
   width: 100vw;
   background: var(--main-gradient);
@@ -30,7 +30,6 @@
   z-index: 10;
   justify-content: flex-start;
   overflow-y: auto;
-  border: 4px solid var(--space-yellow);
   border-radius: 25px;
   box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
 }

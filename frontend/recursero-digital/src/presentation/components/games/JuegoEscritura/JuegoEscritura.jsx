@@ -5,6 +5,8 @@ import '../../../styles/globals/games.css';
 import './JuegoEscritura.css';
 import { generateDragDropActivity, validateNumberWordPair } from './utils';
 import { transformToEscrituraFormat } from '../../../../hooks/useGameLevels'; 
+import { GAME_IDS, PROGRESS_KEYS } from '../../../../constants/games';
+import { getTotalActivitiesForLevel } from '../../../../utils/gameLevels';
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -40,15 +42,12 @@ const JuegoEscritura = () => {
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const lastGeneratedActivity = useRef({ level: -1, activity: -1 });
     
-    const { levels: backendLevels, loading: levelsLoading } = useGameLevels('escritura', true);
+    const { levels: backendLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.ESCRITURA, true);
     const levels = useMemo(() => transformToEscrituraFormat(backendLevels), [backendLevels]);
     
     
     const totalActivities = useMemo(() => {
-        if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
-            return backendLevels[currentLevel]?.activitiesCount || 5;
-        }
-        return 5; // Fallback por defecto
+        return getTotalActivitiesForLevel(backendLevels, currentLevel, 5);
     }, [backendLevels, currentLevel]);
     
     useEffect(() => { 
@@ -101,7 +100,7 @@ const JuegoEscritura = () => {
         const selectedLevelIndex = level - 1;
         setCurrentLevel(selectedLevelIndex);
         
-        const lastActivity = getLastActivity('escritura');
+        const lastActivity = getLastActivity(PROGRESS_KEYS.ESCRITURA);
         
         let startingActivity = 0;
         const levelActivities = backendLevels[selectedLevelIndex]?.activitiesCount || 5;
@@ -201,7 +200,7 @@ const JuegoEscritura = () => {
         const allCorrect = correctCount === wordPairs.length;
 
         if (allCorrect) {
-            const activityScore = await completeActivity(currentLevel, 'escritura', currentActivity, currentLevel);
+            const activityScore = await completeActivity(currentLevel, GAME_IDS.ESCRITURA, currentActivity, currentLevel);
             
             const levelActivities = backendLevels[currentLevel]?.activitiesCount || 5;
             if (currentActivity < levelActivities - 1) {
@@ -212,7 +211,7 @@ const JuegoEscritura = () => {
                 });
                 setGameState('feedback');
             } else {
-                unlockLevel('escritura', currentLevel + 2);
+                unlockLevel(PROGRESS_KEYS.ESCRITURA, currentLevel + 2);
                 setGameState('congrats');
             }
         } else {
@@ -258,11 +257,15 @@ const JuegoEscritura = () => {
     }, []);
 
     if (levelsLoading) {
-        return <div className="game-container"><div>Cargando niveles...</div></div>;
+        return (
+            <div className="game-wrapper bg-space-gradient">
+                <div>Cargando niveles...</div>
+            </div>
+        );
     }
 
     return (
-        <div className="game-container">
+        <div className="game-wrapper bg-space-gradient">
             {gameState === 'start' && <StartScreen onStart={() => setGameState('level-select')} />}
             
             {gameState === 'level-select' && <LevelSelectScreen levels={levels} onSelectLevel={handleStartGame} />}

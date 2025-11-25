@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "../../../styles/globals/games.css";
 import "./JuegoCalculos.css";
+
 import StartScreen from './StartScreen';
 import LevelSelectScreen from './LevelSelectScreen';
 import GameScreen from './GameScreen';
@@ -8,6 +10,7 @@ import CongratsModal from './CongratsModal';
 import { useUserProgress } from '../../../hooks/useUserProgress';
 import useGameScoring from '../../../hooks/useGameScoring';
 import { useGameLevels } from '../../../../hooks/useGameLevels';
+import { GAME_IDS, PROGRESS_KEYS } from '../../../../constants/games';
 
 const JuegoCalculos = () => {
   const navigate = useNavigate();
@@ -34,7 +37,7 @@ const JuegoCalculos = () => {
     totalQuestions: 0
   });
 
-  const { levels: allLevels, loading: levelsLoading } = useGameLevels('calculos', true);
+  const { levels: allLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.CALCULOS, true);
 
   const handleBackToGames = useCallback(() => {
     navigate('/alumno/juegos', { replace: true });
@@ -54,19 +57,19 @@ const JuegoCalculos = () => {
 
   const handleActivityComplete = useCallback((activityIndex, attempts, correctAnswers, totalQuestions) => {
     const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
-    
+
     const operationOffset = {
-      'suma': 0,           
-      'resta': 3,           
-      'multiplicacion': 6  
+      suma: 0,
+      resta: 3,
+      multiplicacion: 6
     };
-    
+
     const backendLevel = levelNumber + operationOffset[selectedOperation];
     const backendLevelIndex = backendLevel - 1;
     
     completeActivity(
       backendLevelIndex,  
-      'calculos',                
+      GAME_IDS.CALCULOS,                
       activityIndex,                 
       backendLevel,
       {
@@ -75,6 +78,9 @@ const JuegoCalculos = () => {
         attempts: attempts
       }
     );
+    // Importante: no cambiar aquí el estado del juego ni desbloquear niveles.
+    // El flujo de fin de nivel y desbloqueo se maneja en handleGameComplete
+    // cuando se han jugado todas las actividades del nivel.
   }, [selectedLevel, selectedOperation, completeActivity]);
 
   const handleBackToStart = useCallback(() => {
@@ -137,7 +143,11 @@ const JuegoCalculos = () => {
   }, [incrementAttempts]);
 
   if (levelsLoading) {
-    return <div className="game-container"><div>Cargando niveles...</div></div>;
+    return (
+      <div className="game-wrapper bg-space-gradient">
+        <div>Cargando niveles...</div>
+      </div>
+    );
   }
 
   const renderCurrentScreen = () => {
@@ -212,7 +222,7 @@ const JuegoCalculos = () => {
   };
 
   return (
-    <div className="game-container">
+    <div className="game-wrapper bg-space-gradient">
       {renderCurrentScreen()}
     </div>
   );
