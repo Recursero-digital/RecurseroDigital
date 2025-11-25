@@ -353,6 +353,25 @@ export class PostgreSQLStudentStatisticsRepository implements StudentStatisticsR
     }
   }
 
+  async getDistinctCompletedActivities(studentId: string, gameId: string): Promise<number> {
+    try {
+      const result = await this.db.query(
+        `SELECT COUNT(*) as distinct_count
+         FROM (
+           SELECT DISTINCT level, activity
+           FROM student_statistics 
+           WHERE student_id = $1 AND game_id = $2 AND is_completed = true
+         ) as distinct_activities`,
+        [studentId, gameId]
+      );
+
+      return parseInt(result.rows[0]?.distinct_count) || 0;
+    } catch (error) {
+      console.error('Error al obtener actividades distintas completadas:', error);
+      throw error;
+    }
+  }
+
   private mapRowToStatistics(row: any): StudentStatistics {
     return new StudentStatistics(
       row.id,
