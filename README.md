@@ -20,10 +20,10 @@ Ofrecer a las y los docentes reportes detallados sobre el desempeño del grupo y
 ## 🚀 Tecnologías utilizadas
 
 - **Backend**
-  - 🟢 Node.js  
+  - 🟢 Typescript  
   - ⚡ Express.js  
   - 🔒 Seguridad: bcrypt.js y JWT  
-  - 🗄️ Base de datos: SQL Server Management 19  
+  - 🗄️ Base de datos: PostgreSql  
 
 - **Frontend**
   - ⚛️ React.js  
@@ -49,13 +49,28 @@ Ofrecer a las y los docentes reportes detallados sobre el desempeño del grupo y
    git clone <url-del-repositorio>
    cd RecurseroDigital
    ```
-
-2. **Ejecutar con Docker Compose**
+   
+2. **Instalar dependencias**
+   ```bash
+   cd backend
+   npm install
+   cd ..
+   cd front-end/recursero-digital
+   npm install
+   cd ..
+   ```
+   
+3. **build del proyecto**
+   ```bash
+   npm run build
+   ```
+   
+4. **Buildear y Ejecutar con Docker Compose**
    ```bash
    docker-compose up --build
    ```
 
-3. **Acceder a la aplicación**
+5. **Acceder a la aplicación**
    - **Frontend**: http://localhost:5173
    - **Backend**: http://localhost:3000
 
@@ -78,6 +93,4 @@ docker-compose up --build backend
 Para más detalles sobre la configuración de Docker, consulta el archivo [DOCKER.md](./DOCKER.md).
 
 ---
-## 🛠️ Instalación manual (Desarrollo)
 
-Si prefieres ejecutar el proyecto sin Docker:
