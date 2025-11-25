@@ -156,7 +156,18 @@ migrations/
 ├── 1760231342955_create-courses-table.js
 ├── 1760231343955_add-foreign-keys.js
 ├── 1760231344955_create-games-tables.js
-└── 1760231345955_seed-games.js
+├── 1760231345955_seed-games.js
+├── 1760285490000_create-statistics-table.js
+├── 1760669818385_update-games-data.js
+├── 1763481836885_seed-admin-user.js
+├── 1768124100000_remove-session-columns.js
+├── 1768124800000_add-calculos-game.js
+├── 1768125400000_add-escala-game.js
+├── 1768126500000_update-game-images.js
+├── 1768127000000_create-games-levels-table.js
+├── 1768127100000_seed-games-levels.js
+├── 1768133200000_update-ordenamiento-pedagogical-ranges.js
+└── 1768134000000_add-enable-column-students-teachers.js
 ```
 
 #### Cómo Funciona
@@ -209,49 +220,103 @@ exports.down = (pgm) => {
 
 #### Esquema de Base de Datos
 
-**Tabla `users`** (Padre)
+**Tabla `users`** (Tabla base para autenticación)
 - `id` VARCHAR(255) PK
-- `username` VARCHAR(255) UNIQUE
-- `password_hash` VARCHAR(255)
-- `role` VARCHAR(50)
+- `username` VARCHAR(255) UNIQUE NOT NULL
+- `password_hash` VARCHAR(255) NOT NULL
+- `role` VARCHAR(50) NOT NULL (STUDENT, TEACHER, ADMIN)
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
 **Tabla `students`** (con FK a `users`)
 - `id` VARCHAR(255) PK
-- `user_id` VARCHAR(255) → FK a `users(id)`
-- `name`, `lastname`, `dni`
-- `course_id` → FK a `courses(id)`
+- `user_id` VARCHAR(255) NOT NULL → FK a `users(id)`
+- `name` VARCHAR(255) NOT NULL
+- `lastname` VARCHAR(255) NOT NULL
+- `dni` VARCHAR(20) UNIQUE NOT NULL
+- `course_id` VARCHAR(255) → FK a `courses(id)` (nullable)
+- `enable` BOOLEAN NOT NULL DEFAULT true
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
 **Tabla `teachers`** (con FK a `users`)
 - `id` VARCHAR(255) PK
-- `user_id` VARCHAR(255) → FK a `users(id)`
-- `name`, `surname`, `email`
+- `user_id` VARCHAR(255) NOT NULL → FK a `users(id)`
+- `name` VARCHAR(255) NOT NULL
+- `surname` VARCHAR(255) NOT NULL
+- `email` VARCHAR(255) UNIQUE NOT NULL
+- `enable` BOOLEAN NOT NULL DEFAULT true
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
 **Tabla `admins`** (con FK a `users`)
 - `id` VARCHAR(255) PK
-- `user_id` VARCHAR(255) → FK a `users(id)`
-- `nivel_acceso`, `permisos`
+- `user_id` VARCHAR(255) NOT NULL → FK a `users(id)`
+- `nivel_acceso` VARCHAR(50)
+- `permisos` TEXT
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
 **Tabla `courses`** (con FK a `teachers`)
 - `id` VARCHAR(255) PK
-- `name` VARCHAR(255) UNIQUE
-- `teacher_id` → FK a `teachers(id)`
+- `name` VARCHAR(255) UNIQUE NOT NULL
+- `teacher_id` VARCHAR(255) → FK a `teachers(id)` (nullable)
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
 **Tabla `games`**
 - `id` VARCHAR(255) PK
-- `name` VARCHAR(255) UNIQUE
+- `name` VARCHAR(255) UNIQUE NOT NULL
 - `description` TEXT
 - `image_url` VARCHAR(500)
-- `route` VARCHAR(255)
-- `difficulty_level` INTEGER
-- `is_active` BOOLEAN
+- `route` VARCHAR(255) NOT NULL
+- `difficulty_level` INTEGER DEFAULT 1
+- `is_active` BOOLEAN NOT NULL DEFAULT true
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 
-**Tabla `courses_games`**
+**Tabla `courses_games`** (Tabla de relación muchos a muchos)
 - `id` VARCHAR(255) PK
-- `course_id` → FK a `courses(id)`
-- `game_id` → FK a `games(id)`
-- `is_enabled` BOOLEAN
-- `order_index` INTEGER
+- `course_id` VARCHAR(255) NOT NULL → FK a `courses(id)`
+- `game_id` VARCHAR(255) NOT NULL → FK a `games(id)`
+- `is_enabled` BOOLEAN NOT NULL DEFAULT true
+- `order_index` INTEGER DEFAULT 0
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
 - UNIQUE(`course_id`, `game_id`)
+
+**Tabla `games_levels`** (Configuración de niveles por juego)
+- `id` VARCHAR(255) PK
+- `game_id` VARCHAR(255) NOT NULL → FK a `games(id)`
+- `level` INTEGER NOT NULL
+- `name` VARCHAR(255) NOT NULL
+- `description` TEXT
+- `difficulty` VARCHAR(50)
+- `activities_count` INTEGER NOT NULL DEFAULT 5
+- `config` JSONB NOT NULL DEFAULT '{}'
+- `is_active` BOOLEAN NOT NULL DEFAULT true
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
+- UNIQUE(`game_id`, `level`)
+
+**Tabla `student_statistics`** (Estadísticas de juego de estudiantes)
+- `id` VARCHAR(255) PK
+- `student_id` VARCHAR(255) NOT NULL → FK a `students(id)` ON DELETE CASCADE
+- `game_id` VARCHAR(255) NOT NULL → FK a `games(id)` ON DELETE CASCADE
+- `level` INTEGER NOT NULL DEFAULT 1
+- `activity` INTEGER NOT NULL DEFAULT 1
+- `points` INTEGER NOT NULL DEFAULT 0
+- `total_points` INTEGER NOT NULL DEFAULT 0 (acumulado del juego)
+- `attempts` INTEGER NOT NULL DEFAULT 0
+- `correct_answers` INTEGER DEFAULT 0
+- `total_questions` INTEGER DEFAULT 0
+- `completion_time` INTEGER (en segundos)
+- `is_completed` BOOLEAN NOT NULL DEFAULT false
+- `max_unlocked_level` INTEGER NOT NULL DEFAULT 1
+- `created_at` TIMESTAMP NOT NULL
+- `updated_at` TIMESTAMP NOT NULL
+- UNIQUE(`student_id`, `game_id`, `level`, `activity`)
+- Índices: `student_id`, `game_id`, (`student_id`, `game_id`), (`student_id`, `game_id`, `level`), `created_at`
 
 #### Datos por Defecto (Seeds)
 
@@ -276,6 +341,8 @@ docker-compose down -v
 # Levantar de nuevo (ejecutará migraciones automáticamente)
 docker-compose up -d
 ```
+
+> **Nota**: Para información sobre despliegue en producción usando Docker Compose, consulta la sección [🚀 Despliegue en Producción](../README.md#-despliegue-en-producción) en el README principal del proyecto.
 
 ## 🔍 Verificación de Tipos
 
