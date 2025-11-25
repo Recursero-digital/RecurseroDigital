@@ -131,7 +131,7 @@ const TeacherGames = () => {
         <div className="games-content">
           <div className="games-headers">
             <h1>🎮 Gestión de Juegos</h1>
-            <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+            <p>Habilitar o deshabilitar juegos para tus cursos</p>
           </div>
           <div style={{ textAlign: 'center', padding: '2rem' }}>
             <p>Cargando juegos...</p>
@@ -147,7 +147,7 @@ const TeacherGames = () => {
         <div className="games-content">
           <div className="games-headers">
             <h1>🎮 Gestión de Juegos</h1>
-            <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+            <p>Habilitar o deshabilitar juegos para tus cursos</p>
           </div>
           <div style={{ textAlign: 'center', padding: '2rem', color: '#ef4444' }}>
             <p>{error}</p>
@@ -176,7 +176,7 @@ const TeacherGames = () => {
       <div className="games-content">
         <div className="games-headers">
           <h1>🎮 Gestión de Juegos</h1>
-          <p>Supervisa el progreso y configura las actividades de aprendizaje</p>
+          <p>Habilitar o deshabilitar juegos para tus cursos</p>
         </div>
 
         <div className="games-overview">
