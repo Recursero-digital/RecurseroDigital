@@ -145,7 +145,7 @@ const StudentList = ({ courseId, onSelectStudent }) => {
                     <h3 className="student-name">{student.name} {student.lastname}</h3>
                     <p className="student-username">@{student.userName}</p>
                     <p className="enrollment-date">
-                      Inscrito: {formatDate(student.enrollmentDate)}
+                      Inscripto: {formatDate(student.enrollmentDate)}
                     </p>
                   </div>
                 </div>
