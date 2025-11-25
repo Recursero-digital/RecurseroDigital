@@ -206,4 +206,21 @@ export class MockStudentStatisticsRepository implements StudentStatisticsReposit
       activity: latest.activity || 0
     };
   }
+
+  async getDistinctCompletedActivities(studentId: string, gameId: string): Promise<number> {
+    const completedStats = this.statistics.filter(stat => 
+      stat.studentId === studentId && 
+      stat.gameId === gameId && 
+      stat.isCompleted === true
+    );
+    
+    // Usar Set para contar actividades distintas (level, activity)
+    const distinctActivities = new Set<string>();
+    completedStats.forEach(stat => {
+      const key = `${stat.level}-${stat.activity}`;
+      distinctActivities.add(key);
+    });
+    
+    return distinctActivities.size;
+  }
 }

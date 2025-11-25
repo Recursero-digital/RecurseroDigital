@@ -18,6 +18,13 @@ export class StudentProgressCalculator {
         studentId: string,
         gameId: string
     ): Promise<StudentProgress> {
+        const normalizedGameId = this.normalizeGameId(gameId);
+        const isCalculosGame = normalizedGameId === 'calculos';
+
+        if (isCalculosGame) {
+            return this.calculateCalculosProgress(studentId, gameId);
+        }
+
         const lastActivity = await this.statisticsRepository.getLastCompletedActivity(
             studentId,
             gameId
@@ -66,6 +73,59 @@ export class StudentProgressCalculator {
                 lastActivity
             };
         }
+    }
+
+    private async calculateCalculosProgress(
+        studentId: string,
+        gameId: string
+    ): Promise<StudentProgress> {
+        try {
+            const totalActivities = await this.gameLevelRepository.getTotalActivitiesCount(gameId);
+
+            if (totalActivities === 0) {
+                return {
+                    percentage: 0,
+                    absoluteActivityNumber: 0,
+                    totalActivities: 0,
+                    lastActivity: null
+                };
+            }
+
+            const distinctCompletedActivities = await this.statisticsRepository.getDistinctCompletedActivities(
+                studentId,
+                gameId
+            );
+
+            const percentage = (distinctCompletedActivities / totalActivities) * 100;
+
+            const lastActivity = await this.statisticsRepository.getLastCompletedActivity(
+                studentId,
+                gameId
+            );
+
+            return {
+                percentage: Math.min(percentage, 100),
+                absoluteActivityNumber: distinctCompletedActivities,
+                totalActivities,
+                lastActivity
+            };
+        } catch (error) {
+            console.warn(`Error al calcular progreso para juego de cálculos ${gameId}:`, error);
+            const lastActivity = await this.statisticsRepository.getLastCompletedActivity(
+                studentId,
+                gameId
+            );
+            return {
+                percentage: 0,
+                absoluteActivityNumber: 0,
+                totalActivities: 0,
+                lastActivity
+            };
+        }
+    }
+
+    private normalizeGameId(gameId: string): string {
+        return gameId.startsWith('game-') ? gameId.replace('game-', '') : gameId;
     }
 
     async calculateAbsoluteActivityNumber(
