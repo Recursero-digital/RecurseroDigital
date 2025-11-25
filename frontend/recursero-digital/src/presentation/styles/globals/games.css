@@ -80,9 +80,12 @@
 .game-wrapper {
   font-family: var(--font-game);
   min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Contenedor de escena del juego */
@@ -94,6 +97,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
 }
 
 /* Efecto de brillo espacial */

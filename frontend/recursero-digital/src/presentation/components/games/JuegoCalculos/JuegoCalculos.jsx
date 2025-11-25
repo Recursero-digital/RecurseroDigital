@@ -78,14 +78,10 @@ const JuegoCalculos = () => {
         attempts: attempts
       }
     );
-
-    if (levelNumber < 3) {
-      const progressKey = `calculos-${selectedOperation}`;
-      unlockLevel(progressKey, levelNumber + 1);
-    }
-
-    setGameState('gameComplete');
-  }, [selectedLevel, selectedOperation, completeActivity, unlockLevel]);
+    // Importante: no cambiar aquí el estado del juego ni desbloquear niveles.
+    // El flujo de fin de nivel y desbloqueo se maneja en handleGameComplete
+    // cuando se han jugado todas las actividades del nivel.
+  }, [selectedLevel, selectedOperation, completeActivity]);
 
   const handleBackToStart = useCallback(() => {
     setSelectedOperation(null);
