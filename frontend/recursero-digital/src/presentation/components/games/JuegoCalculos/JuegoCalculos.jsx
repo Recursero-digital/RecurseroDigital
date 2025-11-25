@@ -149,11 +149,7 @@ const JuegoCalculos = () => {
   if (levelsLoading) {
     return (
       <div className="game-wrapper bg-space-gradient">
-        <div className="calculos-root">
-          <div className="juego-calculos-content">
-            <div>Cargando niveles...</div>
-          </div>
-        </div>
+        <div>Cargando niveles...</div>
       </div>
     );
   }
@@ -231,11 +227,7 @@ const JuegoCalculos = () => {
 
   return (
     <div className="game-wrapper bg-space-gradient">
-      <div className="calculos-root">
-        <div className="juego-calculos-content">
-          {renderCurrentScreen()}
-        </div>
-      </div>
+      {renderCurrentScreen()}
     </div>
   );
 };

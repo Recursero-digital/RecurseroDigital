@@ -179,7 +179,7 @@
 .start-screen p {
   color: white;
   font-size: clamp(1rem, 2.5vw, 1.5rem);
-  margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  /* margin-bottom: clamp(1.5rem, 4vh, 3rem); */
   font-weight: 500;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
