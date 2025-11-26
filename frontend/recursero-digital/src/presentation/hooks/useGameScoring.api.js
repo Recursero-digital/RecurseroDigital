@@ -62,6 +62,12 @@ const useGameScoringAPI = () => {
       completionTime = Math.round((end - start) / 1000); // en segundos
     }
     
+
+    const isCalculosGame = gameId === 'game-calculos';
+    const calculatedMaxUnlockedLevel = maxUnlockedLevel !== null && maxUnlockedLevel !== undefined 
+      ? (isCalculosGame ? maxUnlockedLevel : maxUnlockedLevel + 1)
+      : (level + 2);
+    
     const preparedData = {
       studentId: userId,
       gameId: gameId,
@@ -71,9 +77,7 @@ const useGameScoringAPI = () => {
       attempts,
       completionTime: completionTime,
       isCompleted: completed,
-      maxUnlockedLevel: maxUnlockedLevel !== null && maxUnlockedLevel !== undefined 
-        ? maxUnlockedLevel + 1 
-        : (level + 2)
+      maxUnlockedLevel: calculatedMaxUnlockedLevel
     };
 
     if (correctAnswers !== undefined) {

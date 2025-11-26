@@ -55,7 +55,7 @@ const JuegoCalculos = () => {
     startActivityTimer();
   }, [resetScoring, startActivityTimer]);
 
-  const handleActivityComplete = useCallback((activityIndex, attempts, correctAnswers, totalQuestions) => {
+  const handleActivityComplete = useCallback((activityIndex, attempts, correctAnswers, totalQuestions, isLastActivity = false) => {
     const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
 
     const operationOffset = {
@@ -67,11 +67,17 @@ const JuegoCalculos = () => {
     const backendLevel = levelNumber + operationOffset[selectedOperation];
     const backendLevelIndex = backendLevel - 1;
     
+    let maxUnlockedLevel = backendLevel;
+    if (isLastActivity && levelNumber < 3) {
+      const nextLevelNumber = levelNumber + 1;
+      maxUnlockedLevel = nextLevelNumber + operationOffset[selectedOperation];
+    }
+    
     completeActivity(
       backendLevelIndex,  
       GAME_IDS.CALCULOS,                
       activityIndex,                 
-      backendLevel,
+      maxUnlockedLevel,
       {
         correctAnswers,
         totalQuestions,
@@ -179,6 +185,7 @@ const JuegoCalculos = () => {
             onUpdateScore={handleUpdateScore}
             onUpdateAttempts={handleUpdateAttempts}
             onActivityComplete={handleActivityComplete}
+            onStartActivityTimer={startActivityTimer}
           />
         );
 
