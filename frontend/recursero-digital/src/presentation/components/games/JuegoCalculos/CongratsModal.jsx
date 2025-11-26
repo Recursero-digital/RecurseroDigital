@@ -69,10 +69,6 @@ const CongratsModal = ({
               <span className="stat-label">Intentos totales</span>
               <span className="stat-value">{totalAttempts || 0}</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">Precisión</span>
-              <span className="stat-value">{performancePercentage}%</span>
-            </div>
           </div>
           
           <p className={`performance-message ${getPerformanceColor()}`}>
