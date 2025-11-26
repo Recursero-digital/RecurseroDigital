@@ -7,7 +7,6 @@ import {
   getLevelName,
   getRandomEncouragement,
   getRandomMotivation,
-  formatNumber,
   getLevelNumber
 } from './utils';
 
@@ -75,7 +74,8 @@ const GameScreen = ({
       onUpdateScore(pointsEarned);
       
       if (onActivityComplete) {
-        onActivityComplete(currentQuestionIndex, attempts, 1, 1);
+        const isLastActivity = isLastQuestion;
+        onActivityComplete(currentQuestionIndex, attempts, 1, 1, isLastActivity);
       }
       
       setFeedbackMessage(`${getRandomEncouragement()} +${pointsEarned} puntos`);
@@ -129,9 +129,6 @@ const GameScreen = ({
       handleSubmitAnswer();
     }
   };
-
-  // Progress percentage
-  const progressPercentage = ((currentQuestionIndex + (isAnswerSubmitted && feedbackType === 'success' ? 1 : 0)) / questions.length) * 100;
 
   if (!currentQuestion) {
     return (
