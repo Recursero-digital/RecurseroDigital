@@ -185,6 +185,7 @@ const JuegoCalculos = () => {
             onUpdateScore={handleUpdateScore}
             onUpdateAttempts={handleUpdateAttempts}
             onActivityComplete={handleActivityComplete}
+            onStartActivityTimer={startActivityTimer}
           />
         );
 

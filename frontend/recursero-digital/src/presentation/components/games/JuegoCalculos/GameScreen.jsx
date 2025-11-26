@@ -17,7 +17,8 @@ const GameScreen = ({
   onBackToLevelSelect,
   onUpdateScore,
   onUpdateAttempts,
-  onActivityComplete
+  onActivityComplete,
+  onStartActivityTimer
 }) => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -55,7 +56,10 @@ const GameScreen = ({
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [currentQuestionIndex]);
+    if (currentQuestionIndex > 0 && onStartActivityTimer) {
+      onStartActivityTimer();
+    }
+  }, [currentQuestionIndex, onStartActivityTimer]);
 
   // Handle answer submission
   const handleSubmitAnswer = () => {
