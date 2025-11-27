@@ -87,8 +87,22 @@ export default function LoginForm() {
     }
   };
 
+  const handleGoBack = () => {
+    navigate("/");
+  };
+
   return (
     <div className="login-form-container bg-space bg-space-gradient bg-stars">
+      <button 
+        onClick={handleGoBack}
+        className="back-button"
+        title="Volver a selección de rol"
+        aria-label="Volver a selección de rol"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
       <div className="login-form-content">
         <div className="header-section">
           <img src={Logo} alt="Recursero Digital" className="imagen-logo" />
