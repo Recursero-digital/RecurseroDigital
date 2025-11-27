@@ -183,6 +183,38 @@
   transform: scale(1.1);
 }
 
+/* Botón de volver */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  padding: 10px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .role-selection-content {
