@@ -6,7 +6,6 @@ export class InMemoryAdminRepository implements AdminRepository {
   private admins: Admin[] = [];
 
   constructor() {
-    // Usuario de prueba: admin con password Recursero2025!
     const adminUser = new User(
       '2',
       'julian',

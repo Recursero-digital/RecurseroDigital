@@ -28,19 +28,16 @@ export class UpdateCourseUseCase {
             throw new Error('El nombre del curso debe tener al menos 2 caracteres');
         }
 
-        // Verificar que el curso existe
         const existingCourse = await this.courseRepository.findById(request.courseId);
         if (!existingCourse) {
             throw new Error('El curso no existe');
         }
 
-        // Verificar que no existe otro curso con el mismo nombre (excepto el actual)
         const courseWithSameName = await this.courseRepository.findByCourseName(request.name.trim());
         if (courseWithSameName && courseWithSameName.id !== request.courseId) {
             throw new Error('Ya existe un curso con ese nombre');
         }
 
-        // Actualizar el curso
         const updatedCourse = new Course(
             existingCourse.id,
             request.name.trim(),

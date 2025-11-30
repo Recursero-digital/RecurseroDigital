@@ -125,7 +125,6 @@ export class InMemoryStudentRepository implements StudentRepository {
     if (index === -1) {
       throw new Error('Estudiante no encontrado');
     }
-    // En memoria no hay columna enable, por lo que no hacemos nada adicional
   }
 
   async clearStudents(): Promise<void> {

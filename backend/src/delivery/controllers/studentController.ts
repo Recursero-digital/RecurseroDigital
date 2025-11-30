@@ -55,7 +55,6 @@ const addStudent = async (req: Request<{}, AddStudentResponse, AddStudentRequest
 
 const getAllStudents = async (req: Request, res: Response): Promise<void> => {
     try {
-        // Usar DatabaseConnection para obtener todos los estudiantes con enable
         const db = (dependencyContainer.studentRepository as any).db;
         const result = await db.query(
             `SELECT s.*, u.id as user_id, u.username, u.password_hash, u.role 
