@@ -9,7 +9,6 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
   const [previewData, setPreviewData] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Campos requeridos para estudiantes
   const requiredFields = ["nombre", "apellido", "username", "password", "dni"];
 
   const handleFileChange = (e) => {
@@ -44,11 +43,9 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
           return;
         }
 
-        // Parsear encabezados
         const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
         
-        // Verificar que todos los campos requeridos estén presentes
-        const missingFields = requiredFields.filter(field => 
+        const missingFields = requiredFields.filter(field =>
           !headers.includes(field.toLowerCase())
         );
         
@@ -57,7 +54,6 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
           return;
         }
 
-        // Parsear datos
         const dataLines = lines.slice(1);
         
         if (dataLines.length > 100) {
@@ -73,7 +69,6 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
             student[header] = values[i] || '';
           });
 
-          // Validaciones básicas
           const errors = [];
           if (!student.nombre) errors.push('nombre requerido');
           if (!student.apellido) errors.push('apellido requerido');
@@ -86,7 +81,7 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
 
           return {
             ...student,
-            lineNumber: index + 1, // Numeración de estudiantes desde 1
+            lineNumber: index + 1,
             errors,
             isValid: errors.length === 0
           };
@@ -104,7 +99,7 @@ export default function BulkUploadForm({ onClose, onSubmit }) {
         }
 
         setParsedData(validStudents);
-        setPreviewData(validStudents); // Mostrar todos los estudiantes válidos para preview
+        setPreviewData(validStudents);
         
         if (validStudents.length === 0) {
           setError("No se encontraron estudiantes válidos en el archivo.");

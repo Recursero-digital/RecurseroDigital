@@ -53,13 +53,11 @@ export class UpdateStudentUseCase {
             throw new Error('El username es requerido');
         }
 
-        // Verificar que el estudiante existe
         const existingStudent = await this.studentRepository.findById(request.studentId);
         if (!existingStudent) {
             throw new Error('El estudiante no existe');
         }
 
-        // Verificar que el username no esté en uso por otro usuario
         const studentWithUsername = await this.studentRepository.findByUserName(request.username.trim());
         if (studentWithUsername && studentWithUsername.id !== request.studentId) {
             throw new Error('El username ya está en uso por otro estudiante');
@@ -75,7 +73,6 @@ export class UpdateStudentUseCase {
             throw new Error('El username ya está en uso por un administrador');
         }
 
-        // Actualizar la contraseña si se proporciona
         let passwordHash = existingStudent.user.passwordHash;
         if (request.password && request.password.trim() !== '') {
             if (request.password.trim().length < 6) {
@@ -84,7 +81,6 @@ export class UpdateStudentUseCase {
             passwordHash = await this.passwordEncoder.encode(request.password.trim());
         }
 
-        // Actualizar el estudiante (el repositorio actualiza también el usuario)
         const updatedUser = new User(
             existingStudent.user.id,
             request.username.trim(),

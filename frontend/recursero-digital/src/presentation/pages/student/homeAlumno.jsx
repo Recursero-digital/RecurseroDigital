@@ -6,7 +6,6 @@ import "../../styles/pages/homeAlumno.css";
 export default function HomeAlumno() {
   const navigate = useNavigate();
   
-  // TODO BACKEND: Hook compartido - ya estará preparado para API real
   const userNameOrEmail = useUser();
 
   const handleJugarClick = () => {

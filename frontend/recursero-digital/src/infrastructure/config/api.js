@@ -1,7 +1,5 @@
-// Configuración de la API
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
-// Endpoints de autenticación
 export const AUTH_ENDPOINTS = {
   LOGIN_STUDENT: '/login/student',
   LOGIN_TEACHER: '/login/teacher',
@@ -9,7 +7,6 @@ export const AUTH_ENDPOINTS = {
   LOGOUT: '/logout'
 };
 
-// Función helper para hacer peticiones a la API
 export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
   
@@ -19,7 +16,6 @@ export const apiRequest = async (endpoint, options = {}) => {
     },
   };
 
-  // Agregar token de autorización si existe
   const token = localStorage.getItem('token');
   if (token) {
     defaultOptions.headers.Authorization = `Bearer ${token}`;
@@ -38,11 +34,9 @@ export const apiRequest = async (endpoint, options = {}) => {
   try {
     const response = await fetch(url, config);
     
-    // Verificar si la respuesta es JSON válido
     let data;
     const contentType = response.headers.get('content-type');
     
-    // Clonar la respuesta para poder leerla múltiples veces si es necesario
     const responseClone = response.clone();
     
     if (contentType && contentType.includes('application/json')) {

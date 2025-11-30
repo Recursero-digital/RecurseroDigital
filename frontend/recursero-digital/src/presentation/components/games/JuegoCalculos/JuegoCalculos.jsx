@@ -84,9 +84,7 @@ const JuegoCalculos = () => {
         attempts: attempts
       }
     );
-    // Importante: no cambiar aquí el estado del juego ni desbloquear niveles.
-    // El flujo de fin de nivel y desbloqueo se maneja en handleGameComplete
-    // cuando se han jugado todas las actividades del nivel.
+
   }, [selectedLevel, selectedOperation, completeActivity]);
 
   const handleBackToStart = useCallback(() => {

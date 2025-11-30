@@ -69,13 +69,11 @@ export class UpdateTeacherUseCase {
             throw new Error('La contraseña debe tener al menos 6 caracteres');
         }
 
-        // Verificar que el docente existe
         const existingTeacher = await this.teacherRepository.findById(request.teacherId);
         if (!existingTeacher) {
             throw new Error('El docente no existe');
         }
 
-        // Verificar que el username no esté en uso por otro usuario
         const studentWithUsername = await this.studentRepository.findByUserName(request.username.trim());
         if (studentWithUsername) {
             throw new Error('El username ya está en uso por un estudiante');
@@ -91,7 +89,6 @@ export class UpdateTeacherUseCase {
             throw new Error('El username ya está en uso por un administrador');
         }
 
-        // Verificar que todos los cursos existen
         for (const courseId of request.courseIds) {
             const course = await this.courseRepository.findById(courseId);
             if (!course) {
@@ -99,13 +96,11 @@ export class UpdateTeacherUseCase {
             }
         }
 
-        // Actualizar la contraseña si se proporciona
         let passwordHash = existingTeacher.user.passwordHash;
         if (request.password && request.password.trim() !== '') {
             passwordHash = await this.passwordEncoder.encode(request.password.trim());
         }
 
-        // Actualizar el docente (el repositorio actualiza también el usuario)
         const updatedUser = new User(
             existingTeacher.user.id,
             request.username.trim(),
@@ -123,19 +118,14 @@ export class UpdateTeacherUseCase {
 
         await this.teacherRepository.updateTeacher(updatedTeacher);
 
-        // Asignar cursos al docente
-        // Obtener cursos actuales del docente
         const currentCourses = await this.courseRepository.getCoursesByTeacherId(request.teacherId);
         const currentCourseIds = currentCourses.map(c => c.id);
         
-        // Desasignar cursos que ya no están en la lista
         const coursesToUnassign = currentCourseIds.filter(id => !request.courseIds.includes(id));
         for (const courseId of coursesToUnassign) {
-            // Usar cadena vacía para desasignar (la base de datos debería aceptar null)
             await this.courseRepository.assignTeacherToCourse('', courseId);
         }
         
-        // Asignar nuevos cursos (los que no estaban asignados antes)
         const coursesToAssign = request.courseIds.filter(id => !currentCourseIds.includes(id));
         for (const courseId of coursesToAssign) {
             await this.courseRepository.assignTeacherToCourse(request.teacherId, courseId);

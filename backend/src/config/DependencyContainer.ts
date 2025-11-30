@@ -500,12 +500,6 @@ export class DependencyContainer {
         const student = new Student('1', 'Nicolás', 'García', '12345678', null, studentUser);
         await (testContainer.studentRepository as InMemoryStudentRepository).addStudent(student);
 
-        // await (testContainer.courseRepository as InMemoryCourseRepository).addCourse({
-        //     id: '1',
-        //     name: 'A',
-        //     teacher_id: '$2b$10$pxoWnWCOR5f5tWmjLemzSuyeDzx3R8NFv4n80.F.Onh7hYKWMFYni', // abcd1234
-        //     students: 'docente'
-        // });
     }
 
 }

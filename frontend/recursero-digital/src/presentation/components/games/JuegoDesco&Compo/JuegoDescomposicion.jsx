@@ -28,7 +28,6 @@ const JuegoDescomposicion = () => {
         startActivityTimer
     } = useGameScoring();
 
-    // ESTADO NUEVO: Para guardar el modo de juego seleccionado
     const [gameMode, setGameMode] = useState(null); // 'decomposition' o 'composition'
     
     const [gameState, setGameState] = useState('start');
@@ -76,12 +75,10 @@ const JuegoDescomposicion = () => {
         return decomposition;
     }, []);
 
-    // MODIFICADO: Ahora usa gameMode en lugar de Math.random()
     const generateQuestions = useCallback((level, questionsCount) => {
         const newQuestions = [];
         
         for (let i = 0; i < questionsCount; i++) {
-            // Usamos el modo seleccionado. Si por alguna razón es null, fallback a random.
             const typeToUse = gameMode || (Math.random() > 0.5 ? 'decomposition' : 'composition');
             
             const number = generateNumber(level);
@@ -107,7 +104,6 @@ const JuegoDescomposicion = () => {
         return newQuestions;
     }, [generateNumber, decomposeNumber, gameMode]); // Agregada dependencia gameMode
 
-    // MODIFICADO: Recibe el modo desde StartScreen
     const handleStartGame = useCallback((selectedMode) => {
         setGameMode(selectedMode);
         setGameState('levelSelect');
@@ -128,11 +124,7 @@ const JuegoDescomposicion = () => {
     const handleSelectLevel = useCallback((level) => {
         setCurrentLevel(level);
 
-        // --- CAMBIO: Forzamos siempre el inicio desde 0 (primera actividad) ---
-        const startingActivity = 0; 
-        // Al poner 0 aquí, ignoramos lo que diga el backend sobre "actividad guardada"
-        // para que el usuario siempre empiece el nivel desde el principio al seleccionarlo.
-
+        const startingActivity = 0;
         setCurrentActivity(startingActivity);
         
         // Aquí usamos backendLevels para saber cuántas preguntas tiene este nivel
@@ -143,9 +135,7 @@ const JuegoDescomposicion = () => {
         resetAttempts();
         setGameState('playing');
         
-    }, [generateQuestions, resetScoring, resetAttempts, backendLevels]); 
-    // Nota: Quité totalQuestions y getLastActivity DE AQUÍ (del array de dependencias [])
-    // porque ya no se usan DENTRO de esta función específica, pero siguen existiendo fuera.
+    }, [generateQuestions, resetScoring, resetAttempts, backendLevels]);
 
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0) {
@@ -165,8 +155,7 @@ const JuegoDescomposicion = () => {
         if (currentQuestion.type === 'decomposition') {
             const userParts = userAnswer.split('+').map(part => parseInt(part.trim())).filter(n => !isNaN(n));
             const correctParts = currentQuestion.correctAnswer;
-            // Ordenamos ambos arrays para comparar sin importar el orden de entrada
-            isCorrect = JSON.stringify(userParts.sort((a, b) => a - b)) === 
+            isCorrect = JSON.stringify(userParts.sort((a, b) => a - b)) ===
                     JSON.stringify(correctParts.sort((a, b) => a - b));
         } else {
             isCorrect = parseInt(userAnswer) === currentQuestion.correctAnswer;
@@ -183,7 +172,6 @@ const JuegoDescomposicion = () => {
                 isCorrect: true
             });
         } else {
-            // Solo mostramos el feedback sin marcar como respondida
             setFeedback({
                 title: '¡Incorrecto!',
                 text: `¡Inténtalo de nuevo! Revisa tu respuesta y vuelve a intentarlo.`,
@@ -197,7 +185,6 @@ const JuegoDescomposicion = () => {
     const handleContinue = useCallback(() => {
     setShowFeedback(false);
     
-        // Solo avanzar si la respuesta fue correcta
         if (feedback.isCorrect) {
             if (currentActivity + 1 >= totalQuestions) {
                 if (currentLevel < levels.length - 1) {
@@ -210,8 +197,8 @@ const JuegoDescomposicion = () => {
                 startActivityTimer();
             }
         }
-    // Si fue incorrecta, solo cerramos el modal y el usuario puede reintentar
-    // No limpiamos userAnswer para que pueda corregir su respuesta
+
+
     }, [feedback.isCorrect, currentActivity, totalQuestions, currentLevel, unlockLevel, resetAttempts, startActivityTimer, levels.length]);
 
     const handleNextLevel = useCallback(() => {

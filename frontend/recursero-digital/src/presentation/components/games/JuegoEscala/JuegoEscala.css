@@ -1,24 +1,4 @@
-/*
- * JuegoEscala Styles - OPTIMIZADO
- * 
- * ✅ OPTIMIZACIONES REALIZADAS:
- * - Usa estilos globales de games.css
- * - Variables CSS centralizadas en games.css
- * - Gradientes unificados con backgrounds.css
- * - Botones estandarizados con games.css
- * - Contenedores .game-scene y .paper-note globales
- * 
- * 📋 CLASES GLOBALES USADAS (definidas en globals/games.css):
- * - Variables: --space-*, --gradient-*, --font-game, --shadow-*
- * - .game-wrapper, .game-scene, .game-container
- * - .btn-start, .btn-check, .btn-hint
- * - .btn-back-to-levels, .btn-back-to-dashboard
- * - .game-title, .game-instruction
- * - .paper-note, .question-title, .answer-input
- * - .game-hud
- * 
- * 🎯 Solo incluye estilos ESPECÍFICOS de JuegoEscala
- */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@300;400;500;600;700&display=swap');
 
@@ -34,15 +14,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Remover estilos duplicados - .game-wrapper y .game-scene ahora están en globals/games.css */
-
-/* .header-controls removido - ahora está en globals/games.css */
-
-/* Estilos específicos para JuegoEscala */
-/* Los estilos comunes están en globals/games.css */
-
-/* Sobrescribir botones back para este juego específico */
 
 .game-hud {
     position: absolute;
@@ -119,7 +90,6 @@
     box-shadow: 0 clamp(2.8px, 0.6vh, 4px) clamp(8.4px, 1.8vh, 12px) rgba(0, 0, 0, 0.15);
 }
 
-/* Usar clase global bg-space-gradient desde backgrounds.css */
 .number-box.filled {
     color: white;
     border: clamp(2.1px, 0.45vh, 3px) solid #1e3a8a;
@@ -251,9 +221,7 @@
     box-shadow: var(--shadow-medium);
 }
 
-/* Los botones .btn-start, .btn-check y .btn-hint ahora usan los estilos globales de games.css */
 
-/* Sobrescribir solo si necesitamos estilos específicos para este juego */
 .btn-start {
     background: var(--main-gradient);
 }
@@ -266,7 +234,6 @@
     background: var(--gradient-warning);
 }
 
-/* Extender la clase global .level-grid con características específicas para JuegoEscala */
 .level-grid {
     grid-template-columns: repeat(auto-fit, minmax(clamp(196px, 42vw, 280px), 1fr));
     max-width: clamp(840px, 180vw, 1200px);
@@ -274,7 +241,6 @@
     padding: 0 clamp(1.2rem, 3vh, 2rem);
 }
 
-/* Estilos específicos para JuegoEscala - usa .level-operation dentro de .level-info */
 .level-btn .level-operation {
     font-size: clamp(0.63rem, 1.26vw, 0.9rem);
     font-weight: 600;
@@ -515,7 +481,6 @@
     flex-wrap: wrap;
 }
 
-/* Usar clase global bg-space-gradient desde backgrounds.css para botones */
 .btn-main-gradient {
     color: white;
     border: clamp(2.1px, 0.45vh, 3px) solid #1e3a8a;
@@ -540,7 +505,6 @@
     transition: all 0.3s ease;
 }
 
-/* CongratsModal specific styles */
 .congrats-header {
     text-align: center;
     margin-bottom: clamp(1.2rem, 3vh, 2rem);
@@ -1038,13 +1002,6 @@
     box-shadow: 0 clamp(4.2px, 0.9vh, 6px) clamp(14px, 3vh, 20px) rgba(16, 185, 129, 0.4);
 }
 
-/* StartScreen - ahora usa estilos globales de games.css */
-/* Las clases .start-screen, .start-features, .feature-item están en globals/games.css */
-
-/* LevelSelectScreen - ahora usa estilos globales */
-/* Las clases .level-select-screen, .level-select-content, .level-btn están en globals/games.css */
-
-/* Level card animation delay */
 .error-notification {
     position: fixed;
     top: clamp(14px, 3vh, 20px);
@@ -1078,8 +1035,6 @@
     background: #d97706;
 }
 
-/* Level card animation delay */
-/* Animaciones y estilos específicos se mantienen en este archivo */
 
 /* Contenedores específicos de JuegoEscala */
 .escala-game-content {

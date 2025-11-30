@@ -26,7 +26,6 @@ export default function AdminAssignments() {
         setLoading(true);
         setError(null);
         
-        // Cargar cursos, docentes y estudiantes
         const [coursesData, teachersData, studentsData] = await Promise.all([
           getAllCourses(),
           getAllTeachers(),
@@ -35,16 +34,13 @@ export default function AdminAssignments() {
         
         setCourses(coursesData);
         setTeachers(teachersData);
-        // Filtrar solo estudiantes activos (enable !== false)
-        const activeStudents = studentsData.filter(student => 
+        const activeStudents = studentsData.filter(student =>
           student.enable !== false
         );
         setStudents(activeStudents);
         
-        // Construir asignaciones desde los cursos
         const assignmentsData = await Promise.all(
           coursesData.map(async (course) => {
-            // Obtener estudiantes del curso
             let studentsCount = 0;
             try {
               const courseStudents = await getCourseStudents(course.id);
@@ -53,9 +49,7 @@ export default function AdminAssignments() {
               console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
             }
             
-            // Buscar docente del curso
             const teacher = teachersData.find(t => {
-              // Buscar el docente por el teacherId del curso
               return course.teacherId && t.id === course.teacherId;
             });
             
@@ -120,7 +114,6 @@ export default function AdminAssignments() {
         courseId: selectedCourse
       });
       
-      // Recargar datos
       const [coursesData, teachersData] = await Promise.all([
         getAllCourses(),
         getAllTeachers()
@@ -129,7 +122,6 @@ export default function AdminAssignments() {
       setCourses(coursesData);
       setTeachers(teachersData);
       
-      // Reconstruir asignaciones
       const assignmentsData = await Promise.all(
         coursesData.map(async (course) => {
           let studentsCount = 0;
@@ -179,7 +171,6 @@ export default function AdminAssignments() {
         courseIds: selectedCourses
       });
       
-      // Recargar datos
       const [coursesData, teachersData] = await Promise.all([
         getAllCourses(),
         getAllTeachers()
@@ -188,7 +179,6 @@ export default function AdminAssignments() {
       setCourses(coursesData);
       setTeachers(teachersData);
       
-      // Reconstruir asignaciones
       const assignmentsData = await Promise.all(
         coursesData.map(async (course) => {
           let studentsCount = 0;
@@ -239,7 +229,6 @@ export default function AdminAssignments() {
       setError(null);
       setSelectedCourseForStudents(assignment);
       
-      // Obtener estudiantes del curso
       const students = await getCourseStudents(assignment.courseId);
       setCourseStudents(Array.isArray(students) ? students : []);
       setShowCourseStudentsModal(true);

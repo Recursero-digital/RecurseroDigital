@@ -1,41 +1,4 @@
-/* =================================================================== */
-/* ESTILOS GLOBALES PARA JUEGOS - RECURSERO DIGITAL                   */
-/* =================================================================== */
-/* 
- * Este archivo contiene todos los estilos compartidos por los 5 juegos:
- * - JuegoEscritura
- * - JuegoOrdenamiento
- * - JuegoDescomposicion (NumeroMágico)
- * - JuegoEscala (Anterior y Posterior)
- * - JuegoCalculos
- * 
- * TEMA UNIFICADO: Espacial 🌌
- * - Gradiente principal: Azul → Índigo → Púrpura
- * - Tipografía: Fredoka (sans-serif)
- * - Colores consistentes en todos los juegos
- * 
- * ÍNDICE:
- * 1. Variables CSS
- * 2. Contenedores Principales
- * 3. Layouts de Pantallas
- *    - Start Screen
- *    - Level Select Screen
- * 4. Componentes de UI
- *    - Botones
- *    - Inputs
- *    - Modales
- *    - Header Controls
- *    - Game Status
- * 5. Elementos de Juego
- *    - Paper Note
- *    - Hints
- *    - Game HUD
- * 6. Animaciones
- */
 
-/* ================================================================
-   1. VARIABLES CSS
-   ================================================================ */
 
 :root {
   /* Colores del tema espacial */
@@ -72,9 +35,7 @@
   --hint-gradient: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
 }
 
-/* ================================================================
-   2. CONTENEDORES PRINCIPALES
-   ================================================================ */
+
 
 /* Wrapper principal del juego */
 .game-wrapper {
@@ -134,13 +95,7 @@
   box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
 }
 
-/* ================================================================
-   3. LAYOUTS DE PANTALLAS
-   ================================================================ */
 
-/* ----------------------------------------------------------------
-   3.1 START SCREEN
-   ---------------------------------------------------------------- */
 
 .start-screen {
   position: relative;
@@ -224,9 +179,6 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* ----------------------------------------------------------------
-   3.2 LEVEL SELECT SCREEN
-   ---------------------------------------------------------------- */
 
 .level-select-screen {
   position: relative;
@@ -380,13 +332,6 @@
   opacity: 0.7;
 }
 
-/* ================================================================
-   4. COMPONENTES DE UI
-   ================================================================ */
-
-/* ----------------------------------------------------------------
-   4.1 BOTONES
-   ---------------------------------------------------------------- */
 
 /* Botones principales de juego */
 .btn-start,
@@ -429,26 +374,7 @@
   transform: none;
 }
 
-/* Botones de navegación */
-/* .btn-back-to-levels,
-.btn-back-to-dashboard {
-  background: var(--button-gradient);
-  color: white;
-  border: 2px solid var(--space-yellow);
-  padding: 8px 16px;
-  border-radius: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-}
 
-.btn-back-to-levels:hover,
-.btn-back-to-dashboard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
-} */
 
 .btn-back-to-levels,
 .btn-back-to-dashboard {
@@ -472,9 +398,7 @@
     color: white;
 }
 
-/* ----------------------------------------------------------------
-   4.2 INPUTS Y FORMULARIOS
-   ---------------------------------------------------------------- */
+
 
 .answer-input {
   width: 100%;
@@ -502,9 +426,7 @@
   font-style: italic;
 }
 
-/* ----------------------------------------------------------------
-   4.3 MODALES
-   ---------------------------------------------------------------- */
+
 
 .modal-overlay {
   position: fixed;
@@ -567,9 +489,7 @@
   color: #92400e;
 }
 
-/* ----------------------------------------------------------------
-   4.4 HEADER CONTROLS
-   ---------------------------------------------------------------- */
+
 
 .header-controls {
   position: absolute;
@@ -589,9 +509,7 @@
   height: min-content;
 }
 
-/* ----------------------------------------------------------------
-   4.5 GAME STATUS
-   ---------------------------------------------------------------- */
+
 
 .header-controls .game-status {
   width: 25%;
@@ -641,9 +559,7 @@
   white-space: nowrap;
 }
 
-/* ----------------------------------------------------------------
-   4.6 TEXTOS Y TÍTULOS
-   ---------------------------------------------------------------- */
+
 
 .game-title {
   color: var(--space-yellow);
@@ -673,13 +589,7 @@
   width: fit-content;
 }
 
-/* ================================================================
-   5. ELEMENTOS DE JUEGO
-   ================================================================ */
 
-/* ----------------------------------------------------------------
-   5.1 PAPER NOTE - TARJETA DE PREGUNTA
-   ---------------------------------------------------------------- */
 
 .paper-note {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
@@ -713,9 +623,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ----------------------------------------------------------------
-   5.2 HINTS - AYUDA PERMANENTE
-   ---------------------------------------------------------------- */
+
 
 .permanent-hint {
   width: 50%;
@@ -801,9 +709,7 @@
   font-weight: 700;
 }
 
-/* ----------------------------------------------------------------
-   5.3 GAME HUD
-   ---------------------------------------------------------------- */
+
 
 .game-hud {
   position: absolute;
@@ -825,9 +731,7 @@
   font-weight: 700;
 }
 
-/* ================================================================
-   6. ANIMACIONES
-   ================================================================ */
+
 
 @keyframes fadeIn {
   from {
@@ -849,9 +753,6 @@
   }
 }
 
-/* ----------------------------------------------------------------
-   BOTONES GENERALES
-   ---------------------------------------------------------------- */
 
 .btn {
   background: var(--button-gradient);

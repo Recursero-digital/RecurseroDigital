@@ -12,7 +12,6 @@ export class EnableStudentUseCase {
     }
 
     async execute(request: EnableStudentRequest): Promise<void> {
-        // Reactivar el estudiante (enable = true)
         await this.studentRepository.enableStudent(request.studentId);
     }
 }

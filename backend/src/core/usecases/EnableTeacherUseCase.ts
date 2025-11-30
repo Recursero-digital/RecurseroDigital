@@ -12,7 +12,6 @@ export class EnableTeacherUseCase {
     }
 
     async execute(request: EnableTeacherRequest): Promise<void> {
-        // Reactivar el docente
         await this.teacherRepository.enableTeacher(request.teacherId);
     }
 }

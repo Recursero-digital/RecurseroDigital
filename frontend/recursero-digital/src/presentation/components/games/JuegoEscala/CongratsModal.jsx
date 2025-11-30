@@ -11,7 +11,6 @@ const CongratsModal = ({
 }) => {
     const navigate = useNavigate();
     
-    // Calculamos si fue perfecto (puntuación máxima) para dar un mensaje especial
     const isPerfect = score === totalQuestions;
 
     return (

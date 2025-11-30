@@ -1,6 +1,5 @@
 import { Game } from './Game';
 
-//TO-DO: VER CON TIN
 export class CourseGame {
     id: string;
     courseId: string;

@@ -1,31 +1,20 @@
 
-/**
- * Genera números aleatorios para una actividad basado en la configuración del nivel
- * @param {Object|number} levelConfigOrIndex - Configuración del nivel del backend o índice del nivel
- * @param {Array} levelRanges - Array de configuraciones de niveles (opcional)
- * @returns {Object} - Objeto con números mezclados, originales y ordenados
- */
 export const getNumbersForActivity = (levelConfigOrIndex, levelRanges = null) => {
   let levelConfig;
 
-  // Determinar si se pasó una configuración directa o un índice
   if (typeof levelConfigOrIndex === 'number') {
-    // Se pasó un índice, buscar en levelRanges
-    const levelIndex = levelConfigOrIndex - 1; // Convertir de 1-indexed a 0-indexed
+    const levelIndex = levelConfigOrIndex - 1;
     levelConfig = levelRanges && levelRanges[levelIndex] ? levelRanges[levelIndex] : null;
   } else if (typeof levelConfigOrIndex === 'object' && levelConfigOrIndex !== null) {
-    // Se pasó una configuración directa
     levelConfig = levelConfigOrIndex;
   }
 
-  // Validar que tenemos una configuración válida
   if (!levelConfig || (!levelConfig.min && levelConfig.min !== 0) || !levelConfig.max) {
     console.warn('No se encontró configuración del nivel válida, usando valores por defecto:', {
       levelConfigOrIndex,
       levelConfig,
       levelRanges
     });
-    // Usar valores por defecto basados en el índice si es posible
     const defaultConfigs = [
       { min: 0, max: 99, numbersCount: 6 },
       { min: 100, max: 999, numbersCount: 6 },
@@ -38,7 +27,6 @@ export const getNumbersForActivity = (levelConfigOrIndex, levelRanges = null) =>
   const { min, max, numbersCount = 6 } = levelConfig;
   const generatedNumbers = new Set();
 
-  // Generar números únicos aleatorios dentro del rango
   while (generatedNumbers.size < numbersCount) {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     generatedNumbers.add(randomNumber);
@@ -120,11 +108,7 @@ export const checkOrder = (currentNumbers, originalNumbers, order = 'asc') => {
   return JSON.stringify(currentNumbers) === JSON.stringify(correctOrder);
 };
 
-/**
- * Obtiene la configuración de un nivel (mantenido por compatibilidad)
- * @param {number} level - Número del nivel
- * @returns {Object} - Configuración básica del nivel
- */
+
 export const getLevelConfig = (level) => {
   const configs = {
     1: { 
@@ -150,15 +134,9 @@ export const formatNumber = (num) => {
   return num.toLocaleString('es-AR');
 };
 
-// getNumbersCount ahora se calcula dinámicamente desde el nivel en el componente
-// Esta función se mantiene por compatibilidad pero ya no se usa
+
 export const getNumbersCount = () => 6;
-/**
- * Genera números aleatorios para el juego basado en la configuración del nivel
- * @param {number} level - Número del nivel (0-indexed)
- * @param {Array} levelRanges - Configuraciones de niveles del backend
- * @returns {Object} - Objeto con números generados
- */
+
 export const generateNumbers = (level, levelRanges) => {
   const levelConfig = levelRanges[level] || levelRanges[0];
   
@@ -167,20 +145,14 @@ export const generateNumbers = (level, levelRanges) => {
     return getNumbersForActivity({ min: 0, max: 99, numbersCount: 6 });
   }
 
-  // Usar la configuración del backend directamente
   return getNumbersForActivity(levelConfig);
 };
 
-/**
- * Rangos de niveles por defecto (usado como fallback)
- * Estos valores deberían venir del backend en producción
- */
+
 export const levelRanges = [
     { min: 0, max: 99, name: "Números del 0 al 99", description: "0 - 99", numbersCount: 6 },
     { min: 100, max: 999, name: "Números del 100 al 999", description: "100 - 999", numbersCount: 6 },
     { min: 1000, max: 9999, name: "Números del 1.000 al 9.999", description: "1.000 - 9.999", numbersCount: 6 },
 ];
 
-// totalActivities ahora se obtiene dinámicamente desde level.activitiesCount en el componente
-// Esta constante se mantiene por compatibilidad pero ya no se usa
 export const totalActivities = 5;

@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import { apiRequest } from '../../infrastructure/config/api';
 
-/**
- * Hook para manejar el envío de datos de scoring a la base de datos
- */
+
 const useGameScoringAPI = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  /**
-   * Extrae el userId del token JWT almacenado
-   */
+
   const getUserIdFromToken = () => {
     try {
       const token = localStorage.getItem('token');
@@ -35,9 +31,6 @@ const useGameScoringAPI = () => {
     return gameIdMap[gameType] || gameType;
   };
 
-  /**
-   * Prepara los datos de scoring para enviar a la base de datos
-   */
   const prepareGameScoreData = ({
     gameType,
     level,
@@ -90,9 +83,7 @@ const useGameScoringAPI = () => {
     return preparedData;
   };
 
-  /**
-   * Envía los datos de scoring a la base de datos
-   */
+
   const submitGameScore = async (scoreData) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -122,9 +113,6 @@ const useGameScoringAPI = () => {
     }
   };
 
-  /**
-   * Envía el progreso del usuario (niveles desbloqueados)
-   */
   const submitUserProgress = async (game, unlockedLevel) => {
     setIsSubmitting(true);
     setSubmitError(null);

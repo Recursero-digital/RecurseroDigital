@@ -8,15 +8,6 @@ export class InMemoryCourseRepository implements CourseRepository {
   private courseGames: { [courseId: string]: Set<string> } = {};
 
   constructor() {
-    // Curso de prueba:
-    // this.courses = [
-    //   {
-    //       id: '1',
-    //       name: 'A',
-    //       teacher_id: '$2b$10$pxoWnWCOR5f5tWmjlemzSuye0zX3R8BNFv4n80.F.0nh7hYKWMFYni', // Hash de 'abcd1234'
-    //       students: ['1']
-    //   }
-    // ];
   }
 
   async findByCourseName(courseName: string): Promise<Course | null> {

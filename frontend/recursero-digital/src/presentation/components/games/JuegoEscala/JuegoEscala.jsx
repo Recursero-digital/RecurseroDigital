@@ -77,7 +77,6 @@ const JuegoEscala = () => {
         setGameState(UI_STATES.GAME_STATES.LEVEL_SELECT);
     }, []);
 
-    // FIX: Agregado parámetro forceReset para reiniciar desde actividad 0 explícitamente
     const handleSelectLevel = useCallback((level, forceReset = false) => {
         const questionsCount = getTotalActivitiesForLevel(backendLevels, level, GAME_CONFIG.TOTAL_QUESTIONS);
         const newQuestions = generateQuestions(level, questionsCount);
@@ -86,7 +85,6 @@ const JuegoEscala = () => {
         
         let startingActivity = 0;
         
-        // Si NO es un reset forzado, buscamos dónde se quedó el usuario
         if (!forceReset) {
             const lastActivity = getLastActivity(PROGRESS_KEYS.ESCALA);
 
@@ -97,8 +95,7 @@ const JuegoEscala = () => {
                 }
             }
         } 
-        // Si forceReset es true, startingActivity se mantiene en 0
-        
+
         setCurrentActivity(startingActivity);
         setUserAnswers({ anterior: '', posterior: '' });
         setShowFeedback(false);
@@ -162,7 +159,7 @@ const JuegoEscala = () => {
                 
                 setFeedback({
                     title: `🎉 ${randomMessage}`,
-                    text: `¡Correcto! Sumas ${activityScore} puntos.`, // Feedback simple de puntos
+                    text: `¡Correcto! Sumas ${activityScore} puntos.`,
                     isCorrect: true
                 });
             } catch (error) {
@@ -185,7 +182,6 @@ const JuegoEscala = () => {
                 text: `${progressiveHint}. Inténtalo de nuevo.`,
                 isCorrect: false
             });
-            // NOTA: No llamamos a completeActivity, por lo que no avanza
         }
 
         setShowFeedback(true);
@@ -232,7 +228,6 @@ const JuegoEscala = () => {
 
     const handlePlayAgain = useCallback(() => {
         setShowCongrats(false);
-        // FIX: Pasamos true para forzar el reinicio desde la actividad 1
         handleSelectLevel(currentLevel, true);
     }, [currentLevel, handleSelectLevel]);
 
@@ -299,7 +294,6 @@ const JuegoEscala = () => {
             {showCongrats && (
                 <CongratsModal
                     score={points}
-                    // Calculamos el puntaje máximo posible para mostrarlo (Total * BaseScore del nivel)
                     totalQuestions={totalQuestions * GAME_CONFIG.BASE_SCORE * (currentLevel + 1)}
                     levelName={levels[currentLevel].name}
                     nextLevelUnlocked={currentLevel < levels.length - 1}
