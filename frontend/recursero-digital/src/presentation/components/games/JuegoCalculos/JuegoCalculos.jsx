@@ -16,8 +16,6 @@ const JuegoCalculos = () => {
   const navigate = useNavigate();
   const { unlockLevel } = useUserProgress();
   const { 
-    points, 
-    attempts, 
     incrementAttempts, 
     resetScoring, 
     completeActivity,
@@ -110,20 +108,13 @@ const JuegoCalculos = () => {
 
     const levelNumber = parseInt(selectedLevel.replace('nivel', ''));
     
-    const operationOffset = {
-      'suma': 0,           
-      'resta': 3,           
-      'multiplicacion': 6  
-    };
-    
-    
     if (levelNumber < 3) {
       const gameId = `calculos-${selectedOperation}`;
       unlockLevel(gameId, levelNumber + 1);
     }
 
     setGameState('gameComplete');
-  }, [selectedLevel, selectedOperation, completeActivity, unlockLevel]);
+  }, [selectedLevel, selectedOperation, unlockLevel]);
 
   const handlePlayAgain = useCallback(() => {
     setGameState('playing');
@@ -178,6 +169,7 @@ const JuegoCalculos = () => {
           <GameScreen 
             operation={selectedOperation}
             level={selectedLevel}
+            allLevels={allLevels}
             onGameComplete={handleGameComplete}
             onBackToLevelSelect={handleBackToLevelSelect}
             onUpdateScore={handleUpdateScore}
@@ -194,6 +186,7 @@ const JuegoCalculos = () => {
             <GameScreen 
               operation={selectedOperation}
               level={selectedLevel}
+              allLevels={allLevels}
               onGameComplete={handleGameComplete}
               onBackToLevelSelect={handleBackToLevelSelect}
               onUpdateScore={handleUpdateScore}

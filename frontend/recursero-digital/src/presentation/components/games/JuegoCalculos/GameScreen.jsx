@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   getQuestionsForLevel, 
@@ -13,6 +13,7 @@ import {
 const GameScreen = ({ 
   operation, 
   level, 
+  allLevels = [],
   onGameComplete, 
   onBackToLevelSelect,
   onUpdateScore,
@@ -33,7 +34,28 @@ const GameScreen = ({
   const [correctAnswers, setCorrectAnswers] = useState(0);
   
   const inputRef = useRef(null);
-  const questions = getQuestionsForLevel(operation, level);
+  
+  const backendLevelConfig = useMemo(() => {
+    if (!allLevels || allLevels.length === 0) return null;
+    
+    const levelNumber = parseInt(level.replace('nivel', ''));
+    const operationOffset = {
+      suma: 0,
+      resta: 3,
+      multiplicacion: 6
+    };
+    
+    const backendLevelNumber = levelNumber + operationOffset[operation];
+    return allLevels.find(l => l.level === backendLevelNumber);
+  }, [allLevels, operation, level]);
+  
+  // Generar preguntas usando la configuración del backend
+  const questions = useMemo(() => {
+    if (!backendLevelConfig) return [];
+    const levelNumber = parseInt(level.replace('nivel', ''));
+    return getQuestionsForLevel(operation, levelNumber, backendLevelConfig);
+  }, [operation, level, backendLevelConfig]);
+  
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
@@ -48,7 +70,7 @@ const GameScreen = ({
     setAttempts(0);
     setTotalAttempts(0);
     setCorrectAnswers(0);
-  }, [operation, level]);
+  }, [operation, level, questions]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -130,7 +152,15 @@ const GameScreen = ({
     }
   };
 
-  if (!currentQuestion) {
+  if (!backendLevelConfig) {
+    return (
+      <div className="text-center text-white">
+        <p>Cargando configuración del nivel...</p>
+      </div>
+    );
+  }
+
+  if (!currentQuestion || questions.length === 0) {
     return (
       <div className="text-center text-white">
         <p>Error: No se encontraron preguntas para este nivel.</p>
