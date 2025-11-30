@@ -280,6 +280,24 @@ function ConfigEditor({ gameId, config, onChange }) {
                                 className="config-input"
                             />
                         </div>
+                        <div className="config-field">
+                            <label>Mínimo Resultado:</label>
+                            <input
+                                type="number"
+                                value={localConfig.minResult || ''}
+                                onChange={(e) => handleChange('minResult', parseInt(e.target.value) || 0)}
+                                className="config-input"
+                            />
+                        </div>
+                        <div className="config-field">
+                            <label>Máximo Resultado:</label>
+                            <input
+                                type="number"
+                                value={localConfig.maxResult || ''}
+                                onChange={(e) => handleChange('maxResult', parseInt(e.target.value) || 0)}
+                                className="config-input"
+                            />
+                        </div>
                         {localConfig.operation !== undefined && (
                             <div className="config-field">
                                 <label>Operación:</label>
@@ -288,7 +306,39 @@ function ConfigEditor({ gameId, config, onChange }) {
                                     value={localConfig.operation || ''}
                                     onChange={(e) => handleChange('operation', e.target.value)}
                                     className="config-input"
-                                    placeholder="suma, resta, etc"
+                                    placeholder="suma, resta, multiplicacion"
+                                />
+                            </div>
+                        )}
+                        {localConfig.hasUnknown !== undefined && (
+                            <div className="config-field">
+                                <label>Con incógnita:</label>
+                                <input
+                                    type="checkbox"
+                                    checked={localConfig.hasUnknown || false}
+                                    onChange={(e) => handleChange('hasUnknown', e.target.checked)}
+                                    className="config-input"
+                                />
+                            </div>
+                        )}
+                        {localConfig.multiplier && (
+                            <div className="config-field">
+                                <label>Multiplicadores (JSON array):</label>
+                                <input
+                                    type="text"
+                                    value={Array.isArray(localConfig.multiplier) ? JSON.stringify(localConfig.multiplier) : localConfig.multiplier}
+                                    onChange={(e) => {
+                                        try {
+                                            const parsed = JSON.parse(e.target.value);
+                                            if (Array.isArray(parsed)) {
+                                                handleChange('multiplier', parsed);
+                                            }
+                                        } catch {
+                                            handleChange('multiplier', e.target.value);
+                                        }
+                                    }}
+                                    className="config-input"
+                                    placeholder='[10, 100, 1000]'
                                 />
                             </div>
                         )}
@@ -299,6 +349,17 @@ function ConfigEditor({ gameId, config, onChange }) {
                                     type="text"
                                     value={localConfig.color || ''}
                                     onChange={(e) => handleChange('color', e.target.value)}
+                                    className="config-input"
+                                />
+                            </div>
+                        )}
+                        {localConfig.icon && (
+                            <div className="config-field">
+                                <label>Icono:</label>
+                                <input
+                                    type="text"
+                                    value={localConfig.icon || ''}
+                                    onChange={(e) => handleChange('icon', e.target.value)}
                                     className="config-input"
                                 />
                             </div>

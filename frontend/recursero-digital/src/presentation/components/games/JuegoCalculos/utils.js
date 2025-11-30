@@ -1,73 +1,139 @@
 
-export const gameData = {
-    suma: {
-        nivel1: [
-            { pregunta: "30 + 30 =", respuesta: 60 },
-            { pregunta: "20 + 32 =", respuesta: 52 },
-            { pregunta: "50 + 16 =", respuesta: 66 },
-            { pregunta: "10 + 27 =", respuesta: 37 },
-            { pregunta: "30 + 48 =", respuesta: 78 }
-        ],
-        nivel2: [
-            { pregunta: "248 + 330 =", respuesta: 578 },
-            { pregunta: "560 + 240 =", respuesta: 800 },
-            { pregunta: "385 + 215 =", respuesta: 600 },
-            { pregunta: "120 + 180 =", respuesta: 300 },
-            { pregunta: "235 + 160 =", respuesta: 395 }
-        ],
-        nivel3: [
-            { pregunta: "1.000 + 2.000 =", respuesta: 3000 },
-            { pregunta: "1.250 + 3.500 =", respuesta: 4750 },
-            { pregunta: "4.300 + 2.400 =", respuesta: 6700 },
-            { pregunta: "2.800 + 3.200 =", respuesta: 6000 },
-            { pregunta: "8.625 + 1.240 =", respuesta: 9865 }
-        ]
-    },
-    resta: {
-        nivel1: [
-            { pregunta: "48 − 20 =", respuesta: 28 },
-            { pregunta: "63 − 31 =", respuesta: 32 },
-            { pregunta: "72 − 40 =", respuesta: 32 },
-            { pregunta: "56 − 29 =", respuesta: 27 },
-            { pregunta: "94 − 52 =", respuesta: 42 }
-        ],
-        nivel2: [
-            { pregunta: "320 − 110 =", respuesta: 210 },
-            { pregunta: "450 − 200 =", respuesta: 250 },
-            { pregunta: "580 − 330 =", respuesta: 250 },
-            { pregunta: "720 − 400 =", respuesta: 320 },
-            { pregunta: "690 − 250 =", respuesta: 440 }
-        ],
-        nivel3: [
-            { pregunta: "3.200 − 1.100 =", respuesta: 2100 },
-            { pregunta: "4.500 − 2.300 =", respuesta: 2200 },
-            { pregunta: "5.800 − 3.600 =", respuesta: 2200 },
-            { pregunta: "5.800 − 3.600 =", respuesta: 2200 },
-            { pregunta: "6.400 − 2.200 =", respuesta: 4200 }
-        ]
-    },
-    multiplicacion: {
-        nivel1: [
-            { pregunta: "2 x 4 =", respuesta: 8 },
-            { pregunta: "3 x 7 =", respuesta: 21 },
-            { pregunta: "4 x 6 =", respuesta: 24 },
-            { pregunta: "5 x 8 =", respuesta: 40 },
-            { pregunta: "6 x 3 =", respuesta: 18 }
-        ],
-        nivel2: [
-            { pregunta: "9 x ___ = 81", respuesta: 9 },
-            { pregunta: "4 x ___ = 40", respuesta: 10 },
-            { pregunta: "7 x ___ = 49", respuesta: 7 },
-            { pregunta: "8 x ___ = 16", respuesta: 2 },
-            { pregunta: "3 x ___ = 9", respuesta: 3 }
-        ],
-        nivel3: [
-            { pregunta: "11 x 10 =", respuesta: 110 },
-            { pregunta: "33 x 100 =", respuesta: 3300 },
-            { pregunta: "653 x 10 =", respuesta: 6530 },
-            { pregunta: "11 x 1.000 =", respuesta: 11000 },
-            { pregunta: "35 x 100 =", respuesta: 3500 }
-        ]
+export const formatNumber = (num) => {
+    return num.toLocaleString('es-ES');
+};
+
+const generateSumQuestion = (config) => {
+    const { min = 10, max = 50, minResult = 20, maxResult = 100 } = config;
+    
+    const num1 = Math.floor(Math.random() * (max - min + 1)) + min;
+    const num2 = Math.floor(Math.random() * (max - min + 1)) + min;
+    
+    const respuesta = num1 + num2;
+    
+    if (respuesta < minResult || respuesta > maxResult) {
+        const targetResult = Math.floor(Math.random() * (maxResult - minResult + 1)) + minResult;
+        const adjustedNum1 = Math.floor(Math.random() * (targetResult - min + 1)) + min;
+        const adjustedNum2 = targetResult - adjustedNum1;
+        
+        if (adjustedNum2 >= min && adjustedNum2 <= max) {
+            return {
+                pregunta: `${formatNumber(adjustedNum1)} + ${formatNumber(adjustedNum2)} =`,
+                respuesta: targetResult
+            };
+        }
+    }
+    
+    return {
+        pregunta: `${formatNumber(num1)} + ${formatNumber(num2)} =`,
+        respuesta: respuesta
+    };
+};
+
+const generateSubtractQuestion = (config) => {
+    const { min = 20, max = 100, minResult = 10, maxResult = 50 } = config;
+    
+    // Para resta, el minuendo debe ser mayor que el sustraendo
+    // Asegurar que el resultado esté en el rango esperado y que ambos números sean positivos
+    
+    // Primero, asegurar que el targetResult pueda caber en el rango
+    // El targetResult máximo posible es max - min (diferencia entre max y min)
+    const maxPossibleResult = max - min;
+    const adjustedMaxResult = Math.min(maxResult, maxPossibleResult);
+    const adjustedMinResult = Math.min(minResult, adjustedMaxResult);
+    
+    // Generar el resultado objetivo dentro del rango ajustado
+    const targetResult = Math.floor(Math.random() * (adjustedMaxResult - adjustedMinResult + 1)) + adjustedMinResult;
+    
+    // Calcular el rango válido para el sustraendo
+    // El minuendo = sustraendo + targetResult debe estar entre min y max
+    // Por lo tanto: min <= sustraendo + targetResult <= max
+    // Esto implica: sustraendo <= (max - targetResult) y sustraendo >= min
+    const maxSustraendo = max - targetResult;
+    const minSustraendo = min;
+    
+    // Validar que haya un rango válido
+    if (maxSustraendo < minSustraendo) {
+        // Si no hay espacio, usar el rango completo y ajustar el resultado
+        const sustraendo = Math.floor(Math.random() * (max - min + 1)) + min;
+        const minuendo = Math.min(max, sustraendo + Math.min(targetResult, max - sustraendo));
+        const finalResult = minuendo - sustraendo;
+        
+        return {
+            pregunta: `${formatNumber(minuendo)} − ${formatNumber(sustraendo)} =`,
+            respuesta: finalResult
+        };
+    }
+    
+    // Generar sustraendo dentro del rango válido
+    const sustraendo = Math.floor(Math.random() * (maxSustraendo - minSustraendo + 1)) + minSustraendo;
+    const minuendo = sustraendo + targetResult;
+    
+    // Validación final: asegurar que ambos números estén en el rango y sean positivos
+    if (minuendo > max || minuendo < min || sustraendo < min || sustraendo > max || sustraendo <= 0 || minuendo <= 0) {
+        // Ajustar usando límites seguros
+        const safeMinuendo = Math.min(max, Math.max(min, minuendo));
+        const safeSustraendo = Math.max(min, Math.min(max, safeMinuendo - targetResult));
+        
+        // Asegurar que el sustraendo sea positivo y menor que el minuendo
+        if (safeSustraendo > 0 && safeSustraendo < safeMinuendo) {
+            const finalResult = safeMinuendo - safeSustraendo;
+            return {
+                pregunta: `${formatNumber(safeMinuendo)} − ${formatNumber(safeSustraendo)} =`,
+                respuesta: finalResult
+            };
+        }
+    }
+    
+    // Asegurar que ambos números sean positivos
+    if (sustraendo <= 0 || minuendo <= 0 || sustraendo >= minuendo) {
+        // Regenerar con valores seguros
+        const safeSustraendo = Math.max(1, Math.floor(Math.random() * (max - min + 1)) + min);
+        const safeMinuendo = Math.min(max, safeSustraendo + Math.min(targetResult, max - safeSustraendo));
+        const safeResult = safeMinuendo - safeSustraendo;
+        
+        return {
+            pregunta: `${formatNumber(safeMinuendo)} − ${formatNumber(safeSustraendo)} =`,
+            respuesta: safeResult
+        };
+    }
+    
+    return {
+        pregunta: `${formatNumber(minuendo)} − ${formatNumber(sustraendo)} =`,
+        respuesta: targetResult
+    };
+};
+
+const generateMultiplyQuestion = (config) => {
+    const { min = 2, max = 10, hasUnknown = false, multiplier = null } = config;
+    
+    if (multiplier && Array.isArray(multiplier)) {
+        const base = Math.floor(Math.random() * (max - min + 1)) + min;
+        const mult = multiplier[Math.floor(Math.random() * multiplier.length)];
+        const respuesta = base * mult;
+        
+        return {
+            pregunta: `${formatNumber(base)} x ${formatNumber(mult)} =`,
+            respuesta: respuesta
+        };
+    } else if (hasUnknown) {
+        const factor1 = Math.floor(Math.random() * (max - min + 1)) + min;
+        const factor2 = Math.floor(Math.random() * (max - min + 1)) + min;
+        const resultado = factor1 * factor2;
+        
+        return {
+            pregunta: `${formatNumber(factor1)} x ___ = ${formatNumber(resultado)}`,
+            respuesta: factor2
+        };
+    } else {
+        const factor1 = Math.floor(Math.random() * (max - min + 1)) + min;
+        const factor2 = Math.floor(Math.random() * (max - min + 1)) + min;
+        const respuesta = factor1 * factor2;
+        
+        return {
+            pregunta: `${formatNumber(factor1)} x ${formatNumber(factor2)} =`,
+            respuesta: respuesta
+        };
     }
 };
 
@@ -119,12 +185,42 @@ export const levelConfig = [
 ];
 
 
-export const getTotalActivities = (operation, level) => {
-    return gameData[operation]?.[level]?.length || 0;
+export const getTotalActivities = (levelConfig) => {
+    return levelConfig?.activitiesCount || 5;
 };
 
-export const getQuestionsForLevel = (operation, level) => {
-    return gameData[operation]?.[level] || [];
+export const getQuestionsForLevel = (operation, levelNumber, levelConfig) => {
+    if (!levelConfig || !levelConfig.config) {
+        console.warn('No se encontró configuración del nivel, usando valores por defecto');
+        return [];
+    }
+    
+    const config = levelConfig.config;
+    const activitiesCount = levelConfig.activitiesCount || 5;
+    const questions = [];
+    
+    for (let i = 0; i < activitiesCount; i++) {
+        let question;
+        
+        switch (operation) {
+            case 'suma':
+                question = generateSumQuestion(config);
+                break;
+            case 'resta':
+                question = generateSubtractQuestion(config);
+                break;
+            case 'multiplicacion':
+                question = generateMultiplyQuestion(config);
+                break;
+            default:
+                console.warn(`Operación desconocida: ${operation}`);
+                return [];
+        }
+        
+        questions.push(question);
+    }
+    
+    return questions;
 };
 
 
@@ -191,8 +287,4 @@ export const getNextLevel = (currentLevel) => {
 
 export const isLastLevel = (level) => {
     return level === 'nivel3';
-};
-
-export const formatNumber = (num) => {
-    return num.toLocaleString('es-ES');
 };
