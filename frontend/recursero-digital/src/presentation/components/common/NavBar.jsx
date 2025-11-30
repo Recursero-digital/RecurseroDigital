@@ -9,8 +9,7 @@ export function NavBar({ tabs, activeTab, onTabChange, userRole}) {
     navigate(tab.path);
   };
 
-  // Determinar qué clases usar según el rol
-  const navbarClasses = userRole === "docente" 
+  const navbarClasses = userRole === "docente"
     ? `navbar ${userRole} bg-space-docente bg-stars-docente`
     : userRole=== "alumno" ? `navbar ${userRole} bg-space-ui bg-stars-ui`
     : `navbar ${userRole} bg-space-admin bg-stars-admin`;

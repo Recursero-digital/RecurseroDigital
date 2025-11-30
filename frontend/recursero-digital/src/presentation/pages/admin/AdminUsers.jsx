@@ -22,7 +22,6 @@ export default function AdminUsers() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Verificar que el usuario esté logueado
     const token = localStorage.getItem('token');
     if (!token) {
       setError("No estás autenticado. Por favor, inicia sesión como administrador.");
@@ -34,7 +33,6 @@ export default function AdminUsers() {
         setLoading(true);
         setError(null);
         
-        // Cargar cursos siempre para los formularios
         const coursesData = await getAllCourses();
         setCourses(coursesData);
         
@@ -62,14 +60,11 @@ export default function AdminUsers() {
             getAllCourses()
           ]);
           
-          // Para cada docente, obtener sus cursos y estudiantes
           const teachersWithDetails = await Promise.all(
             teachersData.map(async (teacher) => {
-              // Filtrar cursos asignados a este docente
               const teacherCourses = coursesData.filter(course => course.teacherId === teacher.id);
               
-              // Obtener estudiantes de todos los cursos del docente
-              const allStudents = new Set(); // Usar Set para evitar duplicados
+              const allStudents = new Set();
               
               for (const course of teacherCourses) {
                 try {
@@ -125,7 +120,6 @@ export default function AdminUsers() {
       
       const result = await bulkUploadStudents(studentsData);
       
-      // Recargar la lista de estudiantes
       const data = await getAllStudents();
       setStudents(
         data.map((s) => {
@@ -146,7 +140,6 @@ export default function AdminUsers() {
       
       setShowBulkUploadForm(false);
       
-      // Mostrar mensaje de éxito con detalles
       let message = result.message;
       if (result.errorDetails && result.errorDetails.length > 0) {
         message += "\n\nDetalles de errores:\n" + result.errorDetails.join("\n");
@@ -182,14 +175,11 @@ export default function AdminUsers() {
       setError(null);
       
       if (student.enable === false) {
-        // Si está inactivo, activarlo
         await enableStudent(student.id);
       } else {
-        // Si está activo, desactivarlo
         await deleteStudent(student.id);
       }
       
-      // Recargar estudiantes
       const data = await getAllStudents();
       setStudents(
         data.map((s) => {
@@ -226,14 +216,11 @@ export default function AdminUsers() {
       setError(null);
       
       if (teacher.enable === false) {
-        // Si está inactivo, activarlo
         await enableTeacher(teacher.id);
       } else {
-        // Si está activo, desactivarlo
         await deleteTeacher(teacher.id);
       }
       
-      // Recargar docentes
       const [teachersData, coursesData] = await Promise.all([
         getAllTeachers(),
         getAllCourses()
@@ -286,7 +273,6 @@ export default function AdminUsers() {
       setError(null);
       await updateStudent(studentData);
       
-      // Recargar estudiantes
       const data = await getAllStudents();
       setStudents(
         data.map((s) => {
@@ -320,7 +306,6 @@ export default function AdminUsers() {
       setError(null);
       await updateTeacher(teacherData);
       
-      // Recargar docentes
       const [teachersData, coursesData] = await Promise.all([
         getAllTeachers(),
         getAllCourses()
@@ -375,7 +360,6 @@ export default function AdminUsers() {
 
       if (activeTab === "students") {
         await createStudent(userData);
-        // Recargar la lista desde el backend
         const data = await getAllStudents();
         setStudents(
           data.map((s) => {
@@ -401,7 +385,6 @@ export default function AdminUsers() {
           username: userData.username,
           password: userData.password,
         });
-        // Recargar la lista desde el backend con cursos y estudiantes
         const [teachersData, coursesData] = await Promise.all([
           getAllTeachers(),
           getAllCourses()
@@ -448,8 +431,7 @@ export default function AdminUsers() {
       console.error("Error al crear usuario:", err);
       const errorMessage = err.message || "Error al crear usuario";
       setFormError(errorMessage);
-      // No cerramos el formulario si hay error
-      throw err; // Re-lanzar el error para que el formulario lo maneje
+      throw err;
     } finally {
       setLoading(false);
     }

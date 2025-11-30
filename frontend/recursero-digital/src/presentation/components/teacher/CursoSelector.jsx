@@ -14,21 +14,18 @@ export default function CursoSelector() {
   const [error, setError] = useState(null);
   const [username, setUsername] = useState('');
 
-  // Colores predefinidos para los cursos
   const coloresDisponibles = ["#7c3aed", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#84cc16"];
 
   const obtenerIcono = () => {
     return "🔢";
   };
 
-  // Función para poner todo el nombre en mayúscula
   const capitalizarPrimeraLetra = (texto) => {
     if (!texto) return '';
     return texto.toUpperCase();
   };
 
   useEffect(() => {
-    // Obtener el username del localStorage
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail) {
       setUsername(capitalizarPrimeraLetra(userEmail));
@@ -40,12 +37,10 @@ export default function CursoSelector() {
       try {
         setLoading(true);
         
-        // Verificar si hay token de autenticación
         const token = localStorage.getItem('token');
         
         if (!token) {
           console.warn('No hay token de autenticación, usando datos mock temporales');
-          // Datos mock temporales mientras se resuelve la autenticación
           const cursosMock = [
             {
               id: 1,
@@ -75,7 +70,7 @@ export default function CursoSelector() {
         
         if (response.courses && response.courses.length > 0) {
           const cursosConEstilo = response.courses.map((curso, index) => ({
-            id: curso.id.toString(), // Mantener el ID como string para preservar UUIDs o IDs no numéricos
+            id: curso.id.toString(),
             nombre: curso.name,
             icono: obtenerIcono(),
             color: coloresDisponibles[index % coloresDisponibles.length]
@@ -83,7 +78,6 @@ export default function CursoSelector() {
           
           setCursos(cursosConEstilo);
         } else {
-          // Si la API no devuelve cursos, usar mock temporal
           console.warn('La API no devolvió cursos, usando datos mock temporales');
           const cursosMock = [
             {
@@ -107,7 +101,6 @@ export default function CursoSelector() {
       } catch (error) {
         console.error('Error al cargar cursos:', error);
         
-        // En caso de error, usar datos mock
         console.warn('Error en API, usando datos mock temporales');
         const cursosMock = [
           {
@@ -125,23 +118,21 @@ export default function CursoSelector() {
         }));
         
         setCursos(cursosConEstilo);
-        setError(null); // Limpiar error ya que estamos usando mock
+        setError(null);
         setLoading(false);
       }
     };
 
     cargarCursos();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   console.log('CursoSelector renderizado con cursos:', cursos);
 
   const handleCursoSelect = (curso) => {
     console.log('Curso seleccionado:', curso);
     setCursoSeleccionado(curso);
-    // Guardar curso seleccionado en localStorage
     localStorage.setItem('cursoSeleccionado', JSON.stringify(curso));
     console.log('Curso guardado en localStorage:', localStorage.getItem('cursoSeleccionado'));
-    // Navegar a la página principal del docente con navbar inmediatamente
     navigate('/docente/dashboard');
   };
 

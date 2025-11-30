@@ -15,7 +15,6 @@ export default function EditTeacherForm({ onClose, onSubmit, teacher, courses = 
 
   useEffect(() => {
     if (teacher) {
-      // Separar nombre y apellido si viene como string completo
       const nameParts = teacher.name ? teacher.name.split(' ') : ['', ''];
       const firstName = teacher.firstName || nameParts[0] || '';
       const lastName = teacher.lastName || teacher.surname || (nameParts.length > 1 ? nameParts.slice(1).join(' ') : '') || '';

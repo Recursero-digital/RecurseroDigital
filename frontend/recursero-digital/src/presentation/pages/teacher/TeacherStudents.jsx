@@ -15,7 +15,6 @@ const TeacherStudents = () => {
     if (cursoGuardado) {
       try {
         const curso = JSON.parse(cursoGuardado);
-        // El ID ya debería ser un string, pero nos aseguramos
         if (curso && curso.id) {
           setSelectedCourse(curso.id.toString());
           setLoading(false);
@@ -28,7 +27,6 @@ const TeacherStudents = () => {
         navigate('/docente');
       }
     } else {
-      // Si no hay curso seleccionado, redirigir al selector
       navigate('/docente');
     }
   }, [navigate]);

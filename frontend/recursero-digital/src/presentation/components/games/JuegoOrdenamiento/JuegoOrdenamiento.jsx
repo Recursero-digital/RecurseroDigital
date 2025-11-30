@@ -50,17 +50,15 @@ const JuegoOrdenamiento = () => {
   const { levels: backendLevels, loading: levelsLoading } = useGameLevels(GAME_IDS.ORDENAMIENTO, true);
   const levelRanges = useMemo(() => transformToOrdenamientoFormat(backendLevels), [backendLevels]);
 
-  // Obtener totalActivities del nivel actual desde el backend
   const totalActivities = useMemo(() => {
     return getTotalActivitiesForLevel(backendLevels, currentLevel, 5);
   }, [backendLevels, currentLevel]);
 
-  // Obtener numbersCount del nivel actual desde el backend
   const getNumbersCount = useCallback(() => {
     if (backendLevels.length > 0 && currentLevel >= 0 && currentLevel < backendLevels.length) {
       return backendLevels[currentLevel]?.config?.numbersCount || 6;
     }
-    return 6; // Fallback por defecto
+    return 6;
   }, [backendLevels, currentLevel]);
 
   const handleBackToGames = useCallback(() => {
@@ -166,9 +164,7 @@ const JuegoOrdenamiento = () => {
       setShowPermanentHint(true);
       startActivityTimer();
     } else {  
-      // Siempre desbloquea el siguiente nivel al completar todas las actividades
       unlockLevel(PROGRESS_KEYS.ORDENAMIENTO, currentLevel + 2);
-      // Siempre muestra CongratsModal y el usuario elige manualmente el siguiente nivel
       setShowLevelUp(true);
     }
   }, [currentActivity, currentLevel, setupLevel, unlockLevel, backendLevels, startActivityTimer]);

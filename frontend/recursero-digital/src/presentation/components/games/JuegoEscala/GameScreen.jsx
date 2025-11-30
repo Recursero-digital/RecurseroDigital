@@ -21,10 +21,8 @@ const GameScreen = ({
     const navigate = useNavigate();
 
     const handleInputChange = (field, value) => {
-        // No permitir cambios mientras se procesa
         if (isProcessing) return;
 
-        // Validación en tiempo real
         const isValid = isValidNumber(value);
         setInputErrors(prev => ({
             ...prev,
@@ -40,18 +38,14 @@ const GameScreen = ({
     };
 
     const handleKeyDown = (e, field) => {
-        // No permitir navegación mientras se procesa
         if (isProcessing) return;
 
-        // Navegación por teclado
         if (e.key === 'Enter') {
             e.preventDefault();
             if (field === 'anterior') {
-                // Mover al input posterior
                 const posteriorInput = document.querySelector('input[aria-label="Número posterior en la secuencia"]');
                 if (posteriorInput) posteriorInput.focus();
             } else if (field === 'posterior') {
-                // Verificar respuesta si ambos campos están llenos y no hay errores
                 if (userAnswers.anterior && userAnswers.posterior && !inputErrors?.anterior && !inputErrors?.posterior) {
                     onCheckAnswer();
                 }
@@ -112,7 +106,6 @@ const GameScreen = ({
             </header>
 
             <div className="game-play-area escala-game-play-area">
-                {/* Secuencia visual con inputs integrados */}
                 <div className="escala-question-card">
                     <div className="escala-sequence-visual">
                         {/* Números anteriores para contexto */}

@@ -21,8 +21,7 @@ const GameScreen = ({
 }) => {
     const navigate = useNavigate();
     
-    // Generar ejemplo para la pista que NO esté en el ejercicio actual
-    const allUsedNumbers = [...numbers]; // Todos los números del ejercicio actual
+    const allUsedNumbers = [...numbers];
     const hintExample = generateHintExample(level - 1, allUsedNumbers);
     
     return (

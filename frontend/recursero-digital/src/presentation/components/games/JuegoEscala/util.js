@@ -48,20 +48,13 @@ export const MESSAGES = {
     }
 };
 
-// ===== FUNCIONES UTILITARIAS =====
 
-/**
- * Calcula el puntaje: Base - (Intentos Fallidos * Penalidad)
- * FIX: Se resta 1 a los intentos totales para no penalizar el intento correcto.
- */
 export const calculateActivityScore = (level, attempts = 0) => {
     // Nivel 0 (Juego 1) = 50 * 1 = 50
     // Nivel 1 (Juego 2) = 50 * 2 = 100
     // Nivel 2 (Juego 3) = 50 * 3 = 150
     const baseScore = GAME_CONFIG.BASE_SCORE * (level + 1);
-    
-    // Si attempts es 1 (acierto a la primera), failedAttempts es 0 -> penalización 0.
-    // Si attempts es 2 (falló una vez), failedAttempts es 1 -> penalización 5.
+
     const failedAttempts = Math.max(0, attempts - 1);
     const penalty = failedAttempts * GAME_CONFIG.PENALTY_PER_ATTEMPT;
     
@@ -82,7 +75,6 @@ export const isAnswerCorrect = (answer, expected) => {
     return !isNaN(parsed) && parsed === expected;
 };
 
-// Calculo de porcentaje (solo visual, no lógico)
 export const calculatePercentage = (points, totalQuestions, level) => {
     const maxPossiblePoints = totalQuestions * GAME_CONFIG.BASE_SCORE * (level + 1);
     return Math.round((points / maxPossiblePoints) * 100);
@@ -114,10 +106,6 @@ export const createAnteriorPosteriorQuestion = (levelConfig) => {
     };
 };
 
-/**
- * Determina si un nivel ha sido aprobado.
- * Siempre retorna true porque el flujo ahora bloquea el avance si hay error.
- */
 export const isLevelPassed = () => {
     return true; 
 };

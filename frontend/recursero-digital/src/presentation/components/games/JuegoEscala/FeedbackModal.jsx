@@ -19,7 +19,6 @@ const FeedbackModal = ({ feedback, onNext, onClose, isLastQuestion, isValidation
                 </p>
                 
                 <div className="feedback-actions">
-                    {/* Botón para cerrar (validaciones y respuestas incorrectas) */}
                     {(isValidationError || !isCorrect) && (
                         <button 
                             className="btn-close btn-main-gradient bg-space-gradient"

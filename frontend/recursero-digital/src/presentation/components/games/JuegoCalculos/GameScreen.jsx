@@ -37,7 +37,6 @@ const GameScreen = ({
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
-  // Reset game state when operation or level changes
   useEffect(() => {
     setCurrentQuestionIndex(0);
     setUserAnswer('');
@@ -51,7 +50,6 @@ const GameScreen = ({
     setCorrectAnswers(0);
   }, [operation, level]);
 
-  // Focus input on mount and after each question
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -61,7 +59,6 @@ const GameScreen = ({
     }
   }, [currentQuestionIndex, onStartActivityTimer]);
 
-  // Handle answer submission
   const handleSubmitAnswer = () => {
     if (userAnswer.trim() === '' || isAnswerSubmitted) return;
 
@@ -127,7 +124,6 @@ const GameScreen = ({
     setAttempts(0);
   };
 
-  // Handle Enter key press
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !isAnswerSubmitted) {
       handleSubmitAnswer();

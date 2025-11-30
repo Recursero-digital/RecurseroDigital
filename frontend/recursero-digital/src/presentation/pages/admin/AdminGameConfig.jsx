@@ -318,7 +318,6 @@ function ConfigEditor({ gameId, config, onChange }) {
                 setLocalConfig(parsed);
                 onChange(parsed);
               } catch {
-                // Invalid JSON, don't update
               }
                         }}
                         className="config-json"

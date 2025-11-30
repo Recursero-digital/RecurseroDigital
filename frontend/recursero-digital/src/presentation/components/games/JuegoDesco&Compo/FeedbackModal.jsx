@@ -1,26 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 
 const FeedbackModal = ({ feedback, onContinue }) => {
-    // Referencia para el botón
     const buttonRef = useRef(null);
 
     useEffect(() => {
-        // 1. Enfocar el botón automáticamente cuando se abre el modal
         if (buttonRef.current) {
             buttonRef.current.focus();
         }
 
-        // 2. Función para manejar el evento de teclado
         const handleKeyDown = (event) => {
             if (event.key === 'Enter') {
                 onContinue();
             }
         };
 
-        // Escuchar el evento en toda la ventana
         window.addEventListener('keydown', handleKeyDown);
 
-        // Limpiar el evento cuando el modal se cierra (desmonta)
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };

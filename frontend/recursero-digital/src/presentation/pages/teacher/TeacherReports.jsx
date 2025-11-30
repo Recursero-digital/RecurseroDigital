@@ -16,22 +16,18 @@ export default function TeacherReports() {
       const curso = JSON.parse(cursoGuardado);
       setCursoActual(curso);
     } else {
-      // Si no hay curso seleccionado, redirigir a la selección
       navigate('/docente');
     }
   }, [navigate]);
 
-  // Cargar estudiantes del backend
   useEffect(() => {
     const cargarEstudiantes = async () => {
       try {
         setLoading(true);
         setError(null);
         
-        // Usar el endpoint específico para obtener estudiantes del curso
         const response = await getCourseStudents(cursoActual.id);
         
-        // Mapear los datos del backend al formato esperado por la UI
         if (response.students && Array.isArray(response.students)) {
           const estudiantesFormateados = response.students.map(estudiante => ({
             id: estudiante.id,
@@ -53,7 +49,6 @@ export default function TeacherReports() {
       }
     };
 
-    // Solo cargar estudiantes si hay un curso seleccionado
     if (cursoActual && cursoActual.id) {
       cargarEstudiantes();
     }

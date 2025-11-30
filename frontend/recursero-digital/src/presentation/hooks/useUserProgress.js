@@ -137,7 +137,6 @@ const mergeProgress = (baseProgress, backendProgress) => {
       return;
     }
     
-    // Para otros juegos, usar la lógica original
     const progressKey = mapGameIdToProgressKey(progressItem.gameId);
     if (!progressKey) {
       return;

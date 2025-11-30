@@ -1,17 +1,4 @@
-/* ================================================================
-   NOTA IMPORTANTE:
-   Los estilos de .header-controls, .game-status y .game-content
-   están definidos globalmente en: presentation/styles/globals/games.css
-   
-   Esto permite reutilizar estos componentes en todos los juegos.
-   ================================================================ */
 
-/* Estilos específicos para JuegoOrdenamiento - Desktop only */
-/* Sobrescriben los estilos globales responsivos de games.css */
-
-/* .game-instruction ahora está definido globalmente en games.css */
-
-/* Highlight text for MAYOR and MENOR in game instruction */
 .game-instruction .highlight-text {
   color: var(--space-yellow);
   font-weight: 900;
@@ -159,9 +146,6 @@
   margin: 0;
 }
 
-/* Permanent Hint - Los estilos están definidos globalmente en games.css */
-
-/* Botones generales - Los estilos .btn están definidos globalmente en games.css */
 
 .modal {
   background: var(--main-gradient);

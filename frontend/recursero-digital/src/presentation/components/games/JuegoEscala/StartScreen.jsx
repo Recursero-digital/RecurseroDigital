@@ -6,7 +6,6 @@ const StartScreen = ({ onStart }) => {
 
     return (
         <div className="game-container">
-            {/* Usar estructura global de start-screen */}
             <div className="start-screen">
                 <div className="header-controls">
                     <button 

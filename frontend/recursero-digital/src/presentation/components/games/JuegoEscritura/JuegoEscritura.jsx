@@ -153,7 +153,6 @@ const JuegoEscritura = () => {
                 [wordPairIndex]: draggedNumber
             }));
         } else {
-            // Si no es correcto, incrementamos intentos y mostramos popup de error
             incrementAttempts();
             setShowErrorPopup(true);
         }

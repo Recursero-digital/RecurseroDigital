@@ -20,7 +20,6 @@ export default function AdminCourses() {
         setLoading(true);
         setError(null);
         
-        // Cargar cursos y docentes
         const [coursesData, teachersData] = await Promise.all([
           getAllCourses(),
           getAllTeachers()
@@ -31,7 +30,6 @@ export default function AdminCourses() {
             let studentsCount = 0;
             try {
               const courseStudents = await getCourseStudents(course.id);
-              // El servicio devuelve un array directamente
               studentsCount = courseStudents ? courseStudents.length : 0;
             } catch (err) {
               console.warn(`No se pudieron obtener estudiantes del curso ${course.id}:`, err);
@@ -81,7 +79,6 @@ export default function AdminCourses() {
       setError(null);
       await createCourse({ name: courseData.name });
 
-      // Recargar todos los cursos para obtener datos actualizados
       const [coursesData, teachersData] = await Promise.all([
         getAllCourses(),
         getAllTeachers()
@@ -136,7 +133,6 @@ export default function AdminCourses() {
         name: courseData.name 
       });
       
-      // Recargar todos los cursos para obtener datos actualizados
       const [coursesData, teachersData] = await Promise.all([
         getAllCourses(),
         getAllTeachers()
@@ -189,7 +185,6 @@ export default function AdminCourses() {
       setError(null);
       await deleteCourse(course.id);
       
-      // Actualizar el estado local eliminando el curso
       setCourses(prev => prev.filter(c => c.id !== course.id));
       setShowDeleteCourseForm(false);
       setSelectedCourse(null);

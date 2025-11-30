@@ -2,16 +2,7 @@ import React, { useState } from "react";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import "../../styles/pages/perfilAlumno.css";
 
-/**
- * Componente de perfil del estudiante
- * 
- * TODO BACKEND: Una vez implementados los endpoints reales:
- * 1. Los datos vendrán automáticamente del backend vía useStudentProfile
- * 2. Verificar que la estructura de datos del backend coincida con la UI
- * 3. Ajustar manejo de estados de loading y error según necesidades
- */
 export default function PerfilAlumno() {
-  // TODO BACKEND: Este hook ya estará conectado al API real
   const { data: studentData, loading, error } = useStudentProfile();
   const [selectedAvatar, setSelectedAvatar] = useState('🚀');
 
@@ -20,7 +11,6 @@ export default function PerfilAlumno() {
     setSelectedAvatar(prevAvatar => prevAvatar === '🚀' ? '⭐' : '🚀');
   };
 
-  // TODO BACKEND: Personalizar mensajes según errores específicos del API
   if (loading) {
     return (
       <div className="perfil-container">
@@ -34,7 +24,6 @@ export default function PerfilAlumno() {
     );
   }
 
-  // TODO BACKEND: Personalizar manejo de errores según respuestas del API
   if (error) {
     return (
       <div className="perfil-container">
@@ -49,7 +38,6 @@ export default function PerfilAlumno() {
     );
   }
 
-  // TODO BACKEND: Verificar que studentData tenga la estructura esperada
   if (!studentData) {
     return (
       <div className="perfil-container">
@@ -93,7 +81,6 @@ export default function PerfilAlumno() {
       
         <div className="games-grid">
           {studentData.stats && Object.entries(studentData.stats).map(([gameKey, gameStats]) => {
-            // Mapeo de información de juegos
 const gameInfo = {
   'ordenamiento': { name: 'Ordenamiento de Números', icon: '🔢' },
   'escritura': { name: 'Números en Palabras', icon: '✍️' },

@@ -1,8 +1,4 @@
-// Utility functions and data for JuegoCalculos
 
-/**
- * Game data containing all operations, levels and questions
- */
 export const gameData = {
     suma: {
         nivel1: [
@@ -75,9 +71,7 @@ export const gameData = {
     }
 };
 
-/**
- * Operation configurations with display names and icons
- */
+
 export const operationConfig = {
     suma: {
         name: 'Sumas',
@@ -99,9 +93,7 @@ export const operationConfig = {
     }
 };
 
-/**
- * Level configurations
- */
+
 export const levelConfig = [
     {
         name: 'Nivel 1',
@@ -126,50 +118,24 @@ export const levelConfig = [
     }
 ];
 
-/**
- * Get the total number of activities per level
- * @param {string} operation - The operation type (suma, resta, multiplicacion)
- * @param {string} level - The level (nivel1, nivel2, nivel3)
- * @returns {number} - Total number of questions for the level
- */
+
 export const getTotalActivities = (operation, level) => {
     return gameData[operation]?.[level]?.length || 0;
 };
 
-/**
- * Get questions for a specific operation and level
- * @param {string} operation - The operation type
- * @param {string} level - The level
- * @returns {Array} - Array of questions for the specified operation and level
- */
 export const getQuestionsForLevel = (operation, level) => {
     return gameData[operation]?.[level] || [];
 };
 
-/**
- * Validate if a user answer is correct
- * @param {number} userAnswer - The user's answer
- * @param {number} correctAnswer - The correct answer
- * @returns {boolean} - True if the answer is correct
- */
+
 export const validateAnswer = (userAnswer, correctAnswer) => {
     return parseInt(userAnswer) === correctAnswer;
 };
 
-/**
- * Get operation display name
- * @param {string} operation - The operation type
- * @returns {string} - Display name for the operation
- */
 export const getOperationName = (operation) => {
     return operationConfig[operation]?.name || operation;
 };
 
-/**
- * Get level display name
- * @param {string} level - The level key (nivel1, nivel2, nivel3)
- * @returns {string} - Display name for the level
- */
 export const getLevelName = (level) => {
     const levelNumber = level.replace('nivel', '');
     return `Nivel ${levelNumber}`;
@@ -180,12 +146,6 @@ export const getLevelNumber = (level) => {
     return levelNumber;
 };
 
-/**
- * Calculate score based on level and attempts
- * @param {string} level - The level key
- * @param {number} attempts - Number of attempts made
- * @returns {number} - Calculated score
- */
 export const calculateScore = (level, attempts = 1) => {
     const levelNumber = parseInt(level.replace('nivel', ''));
     const baseScore = 50 * levelNumber;
@@ -193,10 +153,7 @@ export const calculateScore = (level, attempts = 1) => {
     return Math.max(10, baseScore - penalty);
 };
 
-/**
- * Get random encouragement messages for correct answers
- * @returns {string} - Random encouragement message
- */
+
 export const getRandomEncouragement = () => {
     const messages = [
         '¡Excelente! 🎉',
@@ -210,10 +167,6 @@ export const getRandomEncouragement = () => {
     return messages[Math.floor(Math.random() * messages.length)];
 };
 
-/**
- * Get random motivation messages for incorrect answers
- * @returns {string} - Random motivation message
- */
 export const getRandomMotivation = () => {
     const messages = [
         '¡Sigue intentando! 💪',
@@ -227,11 +180,6 @@ export const getRandomMotivation = () => {
     return messages[Math.floor(Math.random() * messages.length)];
 };
 
-/**
- * Get the next level key
- * @param {string} currentLevel - Current level key
- * @returns {string|null} - Next level key or null if it's the last level
- */
 export const getNextLevel = (currentLevel) => {
     switch(currentLevel) {
         case 'nivel1': return 'nivel2';
@@ -241,20 +189,10 @@ export const getNextLevel = (currentLevel) => {
     }
 };
 
-/**
- * Check if it's the last level
- * @param {string} level - Level key to check
- * @returns {boolean} - True if it's the last level
- */
 export const isLastLevel = (level) => {
     return level === 'nivel3';
 };
 
-/**
- * Format number for display (adds thousand separators)
- * @param {number} num - Number to format
- * @returns {string} - Formatted number
- */
 export const formatNumber = (num) => {
     return num.toLocaleString('es-ES');
 };

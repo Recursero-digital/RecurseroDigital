@@ -13,7 +13,6 @@ const TeacherStatistics = () => {
       const curso = JSON.parse(cursoGuardado);
       setSelectedCourse(curso.id);
     } else {
-      // Si no hay curso seleccionado, redirigir al dashboard
       navigate('/docente');
     }
   }, [navigate]);

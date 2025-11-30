@@ -4,7 +4,6 @@ import '../../styles/pages/adminTeachers.css';
 export default function AdminTeachers({ teachers = [], onEdit, onToggleStatus }) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filtrar docentes según búsqueda
   const filteredTeachers = useMemo(() => {
     return teachers.filter(teacher => {
       const matchesSearch = searchTerm === '' ||

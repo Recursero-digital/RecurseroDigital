@@ -42,10 +42,9 @@ export default function LoginForm() {
         })
       });
 
-      console.log('Respuesta del login:', response); // Debug
+      console.log('Respuesta del login:', response);
 
       if (response.ok) {
-        // Validar que el token exista en la respuesta
         if (!response.data || !response.data.token) {
           console.error('No se recibió token en la respuesta:', response.data);
           setError('Error: No se recibió token del servidor. Verifica la respuesta del backend.');
@@ -53,14 +52,12 @@ export default function LoginForm() {
         }
 
         const token = response.data.token;
-        console.log('Token recibido:', token ? 'Token presente' : 'Token vacío'); // Debug
+        console.log('Token recibido:', token ? 'Token presente' : 'Token vacío');
         
-        // Guardar el token
         localStorage.setItem('token', token);
         localStorage.setItem('userType', activeTab);
         localStorage.setItem('userEmail', email);
         
-        // Verificar que se guardó correctamente
         const savedToken = localStorage.getItem('token');
         console.log('Token guardado en localStorage:', savedToken ? 'Sí' : 'No'); // Debug
         

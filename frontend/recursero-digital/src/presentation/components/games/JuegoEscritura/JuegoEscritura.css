@@ -1,16 +1,3 @@
-/* ========================================
-   ESTILOS ESPECÍFICOS PARA JUEGO DE ESCRITURA
-   Las variables y estilos globales están en: 
-   presentation/styles/globals/games.css
-   ======================================== */
-
-/* ========================================
-   LAYOUT COMPONENTS ESPECÍFICOS
-   ======================================== */
-
-/* ========================================
-   COMPONENTES DEL JUEGO
-   ======================================== */
 
 .escritura-game-header {
   text-align: center;
@@ -182,10 +169,6 @@
   display: inline-block;
 }
 
-/* ========================================
-   ERROR POPUP
-   ======================================== */
-
 .error-popup-overlay {
   position: fixed;
   top: 0;
@@ -255,9 +238,7 @@
   }
 }
 
-/* ========================================
-   MODAL BUTTONS
-   ======================================== */
+
 
 .escritura-modal-buttons {
   display: flex;

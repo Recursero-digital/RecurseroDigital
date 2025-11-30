@@ -59,15 +59,13 @@ export default function AddUserForm({
       [name]: value,
     }));
 
-    // Limpiar error cuando el usuario empiece a escribir
-    // PERO mantener el error de username duplicado hasta que se intente enviar de nuevo
+
     if (errors[name] && !(name === 'username' && errors[name] === "Ya existe el usuario con ese username")) {
       setErrors((prev) => ({
         ...prev,
         [name]: "",
       }));
     }
-    // Si el usuario cambia el username, limpiar el error de duplicado
     if (name === 'username' && errors.username === "Ya existe el usuario con ese username") {
       setErrors((prev) => ({
         ...prev,
@@ -91,7 +89,6 @@ export default function AddUserForm({
       newErrors.username = "El username es requerido";
     }
 
-    // Solo validar password y DNI para estudiantes
 
     if (!formData.password.trim()) {
       newErrors.password = "La contraseña es requerida";
@@ -105,7 +102,6 @@ export default function AddUserForm({
         newErrors.dni = "El DNI debe tener 8 dígitos";
       }
     } else {
-      // Validar email para docentes
       if (!formData.email.trim()) {
         newErrors.email = "El email es requerido";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -121,7 +117,6 @@ export default function AddUserForm({
     e.preventDefault();
 
     if (validateForm()) {
-      // Preparar datos según el tipo de usuario
       const userData = {
         nombre: formData.nombre,
         apellido: formData.apellido,
@@ -130,19 +125,14 @@ export default function AddUserForm({
         userType,
       };
 
-      // Solo agregar DNI para estudiantes
       if (isStudent) {
         userData.dni = formData.dni;
       } else {
-        // Para docentes, agregar email
         userData.email = formData.email;
       }
 
-      // onSubmit puede lanzar un error, no cerramos el formulario aquí
-      // El componente padre manejará el cierre solo si es exitoso
       try {
         await onSubmit(userData);
-        // Solo limpiar y cerrar si no hay error
         setFormData({
           nombre: "",
           apellido: "",
@@ -154,8 +144,7 @@ export default function AddUserForm({
         setErrors({});
         onClose();
       } catch (error) {
-        // El error será manejado por el componente padre y pasado como prop
-        // No cerramos el formulario si hay error
+
       }
     }
   };
@@ -246,7 +235,6 @@ export default function AddUserForm({
             )}
           </div>
 
-          {/* Solo mostrar DNI para estudiantes, email para docentes */}
           {isStudent ? (
             <div className="form-group">
               <label htmlFor="dni">DNI *</label>

@@ -18,7 +18,6 @@ export default function ReporteDetalle() {
       setLoading(true);
       setError(null);
       
-      // Obtener token del localStorage
       const token = localStorage.getItem('token');
       
       const response = await fetch(`${API_BASE_URL}/statistics/student/${studentId}/report`, {
@@ -49,7 +48,7 @@ export default function ReporteDetalle() {
 
   useEffect(() => {
     generarReporte();
-  }, [studentId]); //ver lo del array de alumnos.
+  }, [studentId]);
 
   const handleVolver = () => {
     navigate('/docente/reportes');

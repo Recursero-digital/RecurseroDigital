@@ -101,7 +101,6 @@ const DashboardStats = ({ courseId }) => {
     calculos: 'Cálculos'
   };
 
-  // Calcular progreso promedio del curso
   const calculateCourseAverageProgress = () => {
     if (students.length === 0) {
       return 0;
@@ -115,7 +114,6 @@ const DashboardStats = ({ courseId }) => {
 
   const courseAverageProgress = calculateCourseAverageProgress();
 
-  // Calcular total de reintentos y tiempo total por estudiante
   const calculateTotalAttempts = (student) => {
     if (!student?.progressByGame || Object.keys(student.progressByGame).length === 0) {
       return 0;
@@ -139,15 +137,12 @@ const DashboardStats = ({ courseId }) => {
       totalTime: calculateTotalTime(student)
     }))
     .sort((a, b) => {
-      // Primero por progreso total (mayor es mejor)
       if (b.totalProgress !== a.totalProgress) {
         return b.totalProgress - a.totalProgress;
       }
-      // Desempate 1: menos reintentos (menos errores es mejor)
       if (a.totalAttempts !== b.totalAttempts) {
         return a.totalAttempts - b.totalAttempts;
       }
-      // Desempate 2: menos tiempo total (menos tiempo es mejor)
       return a.totalTime - b.totalTime;
     })
     .slice(0, 5);
@@ -161,15 +156,12 @@ const DashboardStats = ({ courseId }) => {
       totalTime: calculateTotalTime(student)
     }))
     .sort((a, b) => {
-      // Primero por progreso total (menor es peor, necesita más refuerzo)
       if (a.totalProgress !== b.totalProgress) {
         return a.totalProgress - b.totalProgress;
       }
-      // Desempate 1: más reintentos (más errores = necesita más refuerzo)
       if (b.totalAttempts !== a.totalAttempts) {
         return b.totalAttempts - a.totalAttempts;
       }
-      // Desempate 2: más tiempo total (más tiempo = necesita más refuerzo)
       return b.totalTime - a.totalTime;
     })
     .slice(0, 5);
