@@ -1,0 +1,90 @@
+.heart-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999 !important; /* Asegurar que esté por encima de todo */
+  overflow: visible; /* Cambiar a visible para ver los corazones */
+  margin: 0;
+  padding: 0;
+}
+
+.heart {
+  position: absolute;
+  bottom: 0;
+  animation: float-up linear forwards;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+  line-height: 1;
+  will-change: transform, opacity;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  50% {
+    transform: translateY(-200px) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-400px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Animación adicional para hacer los corazones más dinámicos */
+.heart:nth-child(odd) {
+  animation-name: float-up-left;
+}
+
+.heart:nth-child(even) {
+  animation-name: float-up-right;
+}
+
+@keyframes float-up-left {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-10px) translateX(-10px) scale(1) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-200px) translateX(-30px) scale(1.2) rotate(-10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-400px) translateX(-50px) scale(0.8) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+@keyframes float-up-right {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-10px) translateX(10px) scale(1) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-200px) translateX(30px) scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-400px) translateX(50px) scale(0.8) rotate(15deg);
+    opacity: 0;
+  }
+}
+
