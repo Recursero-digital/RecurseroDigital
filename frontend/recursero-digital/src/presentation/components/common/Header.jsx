@@ -25,9 +25,9 @@ export function Header() {
     return (
       <header className="header bg-space-ui bg-stars-ui">
        <div className="logo">
-        <img src={Logo} alt="Recursero Digital" className='app-logo' /></div>
+        <img src={Logo} alt="ReDa Kids" className='app-logo' /></div>
         <div className="header-title">
-          <h1>Recursero Digital</h1>
+          <h1>ReDa Kids</h1>
         </div>
         <div className="search-and-mode">
         <div className='boton-cerrar'>

@@ -16,7 +16,7 @@ export default function RoleSelection() {
       <div className="role-selection-container bg-space bg-space-gradient bg-stars">
       <div className="role-selection-content">
         <div className="header-section">
-          <img src={Logo} alt="Recursero Digital" className="logo-image" />
+          <img src={Logo} alt="ReDa Kids" className="logo-image" />
 
         </div>
 
