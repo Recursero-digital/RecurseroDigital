@@ -102,8 +102,8 @@ export default function LoginForm() {
       </button>
       <div className="login-form-content">
         <div className="header-section">
-          <img src={Logo} alt="Recursero Digital" className="imagen-logo" />
-          <h1 className="titulo">Recursero Digital</h1>
+          <img src={Logo} alt="ReDa Kids" className="imagen-logo" />
+          <h1 className="titulo">ReDa Kids</h1>
           <p className="subtitulo">Inicia sesión para continuar</p>
         </div>
 

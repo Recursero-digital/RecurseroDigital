@@ -17,7 +17,7 @@ export default function HomeAlumno() {
       <section className="welcome-card">
         <h1>¡ Hola {userNameOrEmail} !</h1>
         <p>
-          ¡ Bienvenido a Recursero Digital ! Una plataforma educativa diseñada para hacer que el aprendizaje de las
+          ¡ Bienvenido a ReDa Kids ! Una plataforma educativa diseñada para hacer que el aprendizaje de las
           matemáticas sea una experiencia divertida y emocionante.
         </p>
         <p>¡ Descubre el mundo mágico de los números mientras te divertís !</p>

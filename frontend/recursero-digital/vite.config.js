@@ -11,8 +11,8 @@ export default defineConfig({
             registerType: 'autoUpdate',
             includeAssets: ['vite.svg', 'robots.txt'],
             manifest: {
-                name: 'Recursero Digital',
-                short_name: 'Recursero Digital',
+                name: 'ReDa Kids',
+                short_name: 'ReDa Kids',
                 description: 'Plataforma educativa digital de matemáticas',
                 theme_color: '#ffffff',
                 background_color: '#ffffff',
